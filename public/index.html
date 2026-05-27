@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>White Rock Basketball</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#070F1D;--navy2:#0A1B33;--navy3:#23385F;
+  --blue:#4DA6FF;--blue2:#1E6FCC;--white:#FFFFFF;
+  --gray:#8899BB;--gray2:#1A2A45;--gray3:#243350;
+  --success:#2ECC71;--warning:#F39C12;--danger:#E74C3C;
+  --text:#E8EFF8;--text2:#8899BB;
+}
+body{background:var(--navy);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh}
+
+/* ---- LOGIN ---- */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:var(--navy2);border:1px solid var(--navy3);border-radius:16px;padding:36px;width:100%;max-width:400px}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo .circle{width:72px;height:72px;background:var(--blue2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#fff;margin:0 auto 12px}
+.login-logo h1{font-size:22px;font-weight:700;color:#fff}
+.login-logo p{font-size:13px;color:var(--text2);margin-top:4px}
+.login-error{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:var(--danger);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
+
+/* ---- APP ---- */
+#app{display:none}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--navy2);border-bottom:1px solid var(--navy3);position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo-circle{width:36px;height:36px;background:var(--blue2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+.nav-title{font-size:16px;font-weight:700;color:#fff}
+.nav-title span{color:var(--blue);font-size:11px;display:block;font-weight:400}
+.nav-tabs{display:flex;gap:4px;flex-wrap:wrap}
+.nav-tab{padding:7px 13px;border-radius:8px;font-size:13px;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:.2s;display:flex;align-items:center;gap:5px}
+.nav-tab:hover{background:var(--gray2);color:var(--text)}
+.nav-tab.active{background:var(--blue2);color:#fff}
+.nav-right{display:flex;align-items:center;gap:10px}
+.user-badge{display:flex;align-items:center;gap:8px;background:var(--gray2);border-radius:20px;padding:5px 12px;font-size:12px}
+.user-badge .role{font-size:10px;color:var(--text2)}
+.btn-logout{background:transparent;border:1px solid var(--navy3);color:var(--text2);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer}
+.btn-logout:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+
+/* MOBILE NAV */
+.mobile-menu{display:none;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--navy2);border-bottom:1px solid var(--navy3);overflow-x:auto}
+.mobile-tab{padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--navy3);background:transparent;color:var(--text2);white-space:nowrap}
+.mobile-tab.active{background:var(--blue2);color:#fff;border-color:var(--blue2)}
+@media(max-width:700px){.nav-tabs{display:none}.mobile-menu{display:flex}.nav-right .user-badge span:not(.role){display:none}}
+
+/* PAGES */
+.page{display:none;padding:20px;max-width:1200px;margin:0 auto}
+.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--navy2);border:1px solid var(--navy3);border-radius:12px;padding:16px}
+.card-title{font-size:13px;color:var(--text2);margin-bottom:4px}
+.card-value{font-size:26px;font-weight:700;color:#fff}
+.card-sub{font-size:12px;margin-top:4px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:700px){.grid4,.grid3,.grid2{grid-template-columns:1fr}}
+
+.sec-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-title i{color:var(--blue)}
+
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block}
+.badge-blue{background:rgba(77,166,255,.15);color:var(--blue)}
+.badge-green{background:rgba(46,204,113,.15);color:var(--success)}
+.badge-red{background:rgba(231,76,60,.15);color:var(--danger)}
+.badge-orange{background:rgba(243,156,18,.15);color:var(--warning)}
+.badge-gray{background:rgba(136,153,187,.15);color:var(--gray)}
+.badge-purple{background:rgba(155,89,182,.15);color:#9B59B6}
+
+/* PLAYER CARDS */
+.player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.player-card{background:var(--navy2);border:1px solid var(--navy3);border-radius:12px;padding:16px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.player-card:hover{border-color:var(--blue2);transform:translateY(-2px)}
+.player-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue2)}
+.player-card.lesao::before{background:var(--danger)}
+.player-card.suspenso::before{background:var(--warning)}
+.player-avatar{width:52px;height:52px;border-radius:50%;background:var(--navy3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:10px}
+.player-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:2px}
+.player-pos{font-size:12px;color:var(--text2);margin-bottom:8px}
+.player-num{position:absolute;top:12px;right:14px;font-size:22px;font-weight:800;color:rgba(77,166,255,.2)}
+.player-stats{display:flex;gap:12px}
+.ps{text-align:center}
+.ps-val{font-size:15px;font-weight:700;color:#fff}
+.ps-lbl{font-size:10px;color:var(--text2)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{padding:10px 12px;text-align:left;color:var(--text2);font-weight:500;border-bottom:1px solid var(--navy3);background:var(--navy2)}
+.tbl td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tbl-wrap{background:var(--navy2);border:1px solid var(--navy3);border-radius:12px;overflow:hidden;margin-bottom:16px;overflow-x:auto}
+
+.prog-bar{background:var(--navy3);border-radius:4px;height:6px;overflow:hidden;margin-top:4px}
+.prog-fill{height:100%;border-radius:4px;background:var(--blue2)}
+
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:none;font-weight:500;transition:.2s;display:inline-flex;align-items:center;gap:5px}
+.btn-primary{background:var(--blue2);color:#fff}
+.btn-primary:hover{background:#1a5db0}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--navy3)}
+.btn-ghost:hover{background:var(--navy3);color:var(--text)}
+.btn-danger{background:rgba(231,76,60,.15);color:var(--danger);border:1px solid rgba(231,76,60,.3)}
+.btn-success{background:rgba(46,204,113,.15);color:var(--success);border:1px solid rgba(46,204,113,.3)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block}
+.form-input{width:100%;background:var(--navy3);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:.2s}
+.form-input:focus{border-color:var(--blue2)}
+select.form-input option{background:var(--navy2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+
+/* GAME CARD */
+.game-card{background:var(--navy2);border:1px solid var(--navy3);border-radius:12px;padding:16px;margin-bottom:10px}
+.game-teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.game-team{text-align:center;flex:1}
+.game-team-name{font-size:14px;font-weight:600;color:#fff}
+.game-info{display:flex;gap:16px;font-size:12px;color:var(--text2);flex-wrap:wrap}
+.game-info span{display:flex;align-items:center;gap:4px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--navy2);border:1px solid var(--navy3);border-radius:16px;padding:24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:20px}
+
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.alert-warning{background:rgba(243,156,18,.1);border:1px solid rgba(243,156,18,.3);color:var(--warning)}
+.alert-danger{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:var(--danger)}
+.alert-success{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);color:var(--success)}
+.alert-info{background:rgba(77,166,255,.1);border:1px solid rgba(77,166,255,.3);color:var(--blue)}
+
+.aviso-card{background:var(--navy2);border:1px solid var(--navy3);border-radius:12px;padding:14px;margin-bottom:10px}
+.aviso-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.aviso-title{font-size:14px;font-weight:600;color:#fff}
+.aviso-body{font-size:13px;color:var(--text2);line-height:1.5}
+.aviso-meta{font-size:11px;color:var(--gray);margin-top:6px}
+
+.stat-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.stat-name{font-size:13px;color:var(--text);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-bar-wrap{flex:1;background:var(--navy3);border-radius:4px;height:8px;overflow:hidden}
+.stat-bar{height:100%;border-radius:4px;background:var(--blue2)}
+.stat-val{font-size:13px;font-weight:600;color:#fff;width:30px;text-align:right}
+
+.pres-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pres-card{background:var(--navy2);border:1px solid var(--navy3);border-radius:10px;padding:14px}
+.pres-pct{font-size:16px;font-weight:700}
+.pres-pct.high{color:var(--success)}
+.pres-pct.mid{color:var(--warning)}
+.pres-pct.low{color:var(--danger)}
+
+.fin-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.fin-item:last-child{border:none}
+.fin-val.entrada{color:var(--success)}
+.fin-val.saida{color:var(--danger)}
+
+.role-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.role-admin{background:rgba(155,89,182,.15);color:#9B59B6}
+.role-capitao{background:rgba(77,166,255,.15);color:var(--blue)}
+.role-atleta{background:rgba(46,204,113,.15);color:var(--success)}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--text2);font-size:14px}
+.spinner{width:32px;height:32px;border:3px solid var(--navy3);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--navy2);border:1px solid var(--navy3);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text);z-index:9999;transform:translateY(80px);opacity:0;transition:.3s;max-width:300px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{border-color:var(--success);color:var(--success)}
+#toast.error{border-color:var(--danger);color:var(--danger)}
+#toast.warning{border-color:var(--warning);color:var(--warning)}
+
+/* LOCK OVERLAY */
+.locked{opacity:.5;pointer-events:none;position:relative}
+.lock-msg{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:5px}
+</style>
+</head>
+<body>
+
+<!-- ======== LOGIN SCREEN ======== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="circle">WR</div>
+      <h1>White Rock</h1>
+      <p>Basketball Management System</p>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="inp-email" type="email" placeholder="seu@email.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Senha</label>
+      <input class="form-input" id="inp-senha" type="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" id="btn-login" onclick="doLogin()">
+      <i class="ti ti-login"></i> Entrar
+    </button>
+    <div style="margin-top:20px;padding:14px;background:var(--navy3);border-radius:8px;font-size:12px;color:var(--text2)">
+      <div style="font-weight:600;color:var(--text);margin-bottom:8px">Credenciais de demonstração:</div>
+      <div>Admin: <code style="color:var(--blue)">admin@whiterock.com</code> / <code style="color:var(--blue)">admin123</code></div>
+      <div style="margin-top:4px">Capitão: <code style="color:var(--blue)">lucas@whiterock.com</code> / <code style="color:var(--blue)">lucas123</code></div>
+      <div style="margin-top:4px">Atleta: <code style="color:var(--blue)">rafael@whiterock.com</code> / <code style="color:var(--blue)">rafael123</code></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== APP ======== -->
+<div id="app">
+
+<!-- NAV DESKTOP -->
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('dashboard')">
+    <div class="logo-circle">WR</div>
+    <div class="nav-title">White Rock <span id="nav-role-label">Basketball</span></div>
+  </div>
+  <div class="nav-tabs" id="nav-tabs"></div>
+  <div class="nav-right">
+    <div class="user-badge">
+      <i class="ti ti-user" style="color:var(--blue)"></i>
+      <div>
+        <div id="nav-user-name" style="font-size:13px;font-weight:500">—</div>
+        <div class="role" id="nav-user-role">—</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()"><i class="ti ti-logout"></i></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu"></div>
+
+<!-- PAGES -->
+<div class="page active" id="page-dashboard">
+  <div class="grid4" id="dash-cards"></div>
+  <div class="grid2">
+    <div>
+      <div class="sec-title"><i class="ti ti-alert-triangle"></i> Alertas</div>
+      <div id="dash-alertas"></div>
+      <div class="sec-title" style="margin-top:16px"><i class="ti ti-trophy"></i> Últimos resultados</div>
+      <div id="dash-resultados"></div>
+    </div>
+    <div>
+      <div class="sec-title"><i class="ti ti-star"></i> Destaques</div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Cestinhas</div>
+        <div id="rank-pts"></div>
+        <div style="font-size:12px;color:var(--text2);margin:10px 0 8px">Assistências</div>
+        <div id="rank-ast"></div>
+        <div style="font-size:12px;color:var(--text2);margin:10px 0 8px">Rebotes</div>
+        <div id="rank-reb"></div>
+      </div>
+      <div class="sec-title"><i class="ti ti-calendar-event"></i> Próximo treino</div>
+      <div class="card" id="dash-treino"></div>
+    </div>
+  </div>
+  <div class="sec-title"><i class="ti ti-percentage"></i> Frequência</div>
+  <div class="card" id="dash-presenca"></div>
+</div>
+
+<div class="page" id="page-jogadores">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-users"></i> Elenco</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <select class="form-input" style="width:auto;font-size:12px" id="filtro-status" onchange="renderJogadores()">
+        <option value="">Todos</option>
+        <option value="Ativo">Ativos</option>
+        <option value="Lesão">Lesionados</option>
+        <option value="Suspenso">Suspensos</option>
+        <option value="Inativo">Inativos</option>
+      </select>
+      <button class="btn btn-primary btn-sm" id="btn-add-jogador" onclick="openModal('modal-add-jogador')" style="display:none"><i class="ti ti-plus"></i> Cadastrar</button>
+    </div>
+  </div>
+  <div class="alert alert-danger" id="lesao-alert" style="display:none">
+    <i class="ti ti-first-aid-kit"></i><span id="lesao-txt"></span>
+  </div>
+  <div class="player-grid" id="player-grid">
+    <div class="loading"><div class="spinner"></div>Carregando...</div>
+  </div>
+</div>
+
+<div class="page" id="page-jogos">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-trophy"></i> Jogos</div>
+    <button class="btn btn-primary btn-sm" id="btn-add-jogo" onclick="openModal('modal-add-jogo')" style="display:none"><i class="ti ti-plus"></i> Cadastrar jogo</button>
+  </div>
+  <div class="grid3" id="jogos-stats"></div>
+  <div class="sec-title"><i class="ti ti-clock"></i> Próximos jogos</div>
+  <div id="proximos-jogos"></div>
+  <div class="sec-title"><i class="ti ti-history"></i> Resultados</div>
+  <div id="resultados-lista"></div>
+</div>
+
+<div class="page" id="page-treinos">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-calendar"></i> Treinos</div>
+    <button class="btn btn-primary btn-sm" id="btn-add-treino" onclick="openModal('modal-add-treino')" style="display:none"><i class="ti ti-plus"></i> Agendar</button>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="sec-title"><i class="ti ti-calendar-event"></i> Próximos treinos</div>
+      <div id="treinos-lista"></div>
+    </div>
+    <div>
+      <div class="sec-title"><i class="ti ti-percentage"></i> Frequência</div>
+      <div class="pres-grid" id="presenca-lista"></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-financeiro">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-cash"></i> Financeiro</div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-lancamento')"><i class="ti ti-plus"></i> Lançamento</button>
+  </div>
+  <div class="grid4" id="fin-cards"></div>
+  <div class="grid2">
+    <div>
+      <div class="sec-title"><i class="ti ti-list"></i> Extrato</div>
+      <div class="tbl-wrap"><div style="padding:14px" id="extrato-lista"></div></div>
+    </div>
+    <div>
+      <div class="sec-title"><i class="ti ti-alert-circle"></i> Mensalidades pendentes</div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Jogador</th><th>Atraso</th><th>Status</th><th></th></tr></thead>
+          <tbody id="mens-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-estatisticas">
+  <div class="sec-title"><i class="ti ti-chart-bar"></i> Estatísticas</div>
+  <div class="grid2" style="margin-bottom:16px">
+    <div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Categoria</div>
+      <select class="form-input" id="stat-cat" onchange="renderStats()">
+        <option value="pts">Pontos por jogo</option>
+        <option value="ast">Assistências por jogo</option>
+        <option value="reb">Rebotes por jogo</option>
+        <option value="tpt">Bolas de 3</option>
+        <option value="flt">Faltas</option>
+      </select>
+    </div>
+    <div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Jogos registrados</div>
+      <div class="card" style="padding:9px 12px"><span id="stat-jg-count" style="font-size:18px;font-weight:700">0</span> <span style="font-size:12px;color:var(--text2)">partidas</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:16px"><div id="stats-bars"></div></div>
+  <div class="sec-title"><i class="ti ti-table"></i> Tabela completa</div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Jogador</th><th>JG</th><th>PTS</th><th>AST</th><th>REB</th><th>3PT</th><th>FLT</th></tr></thead>
+      <tbody id="stats-tbl"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="page" id="page-comunicacao">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-bell"></i> Mural de avisos</div>
+    <button class="btn btn-primary btn-sm" id="btn-add-aviso" onclick="openModal('modal-add-aviso')" style="display:none"><i class="ti ti-plus"></i> Publicar aviso</button>
+  </div>
+  <div id="avisos-lista"></div>
+</div>
+
+<div class="page" id="page-usuarios">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-settings"></i> Usuários do sistema</div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-user')"><i class="ti ti-plus"></i> Criar usuário</button>
+  </div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Nome</th><th>Email</th><th>Função</th><th>Nº</th><th>Status</th><th></th></tr></thead>
+      <tbody id="users-body"></tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end #app -->
+
+<!-- ======== MODAIS ======== -->
+
+<div class="modal-overlay" id="modal-add-jogador">
+  <div class="modal">
+    <div class="modal-title">Cadastrar jogador <button class="modal-close" onclick="closeModal('modal-add-jogador')"><i class="ti ti-x"></i></button></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="j-nome" placeholder="Ex: Carlos Silva"></div>
+      <div class="form-group"><label class="form-label">Nº da camisa *</label><input class="form-input" id="j-num" type="number" placeholder="Ex: 10"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Posição</label>
+        <select class="form-input" id="j-pos"><option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="j-idade" type="number" placeholder="Ex: 24"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="j-altura" type="number" placeholder="Ex: 185"></div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-input" id="j-status"><option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Telefone (WhatsApp)</label><input class="form-input" id="j-tel" placeholder="(21) 99999-9999"></div>
+    <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="j-obs" placeholder="Ex: Torção no tornozelo"></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="addJogador()">Cadastrar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-jogador')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-jogo">
+  <div class="modal">
+    <div class="modal-title">Cadastrar jogo <button class="modal-close" onclick="closeModal('modal-add-jogo')"><i class="ti ti-x"></i></button></div>
+    <div class="form-group"><label class="form-label">Adversário *</label><input class="form-input" id="jo-adv" placeholder="Nome do time adversário"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data *</label><input class="form-input" id="jo-data" type="date"></div>
+      <div class="form-group"><label class="form-label">Horário</label><input class="form-input" id="jo-hora" type="time" value="19:00"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Local</label><input class="form-input" id="jo-local" placeholder="Ginásio / Quadra"></div>
+      <div class="form-group"><label class="form-label">Campeonato</label><input class="form-input" id="jo-camp" placeholder="Ex: Liga Carioca"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="addJogo()">Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-jogo')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-treino">
+  <div class="modal">
+    <div class="modal-title">Agendar treino <button class="modal-close" onclick="closeModal('modal-add-treino')"><i class="ti ti-x"></i></button></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data *</label><input class="form-input" id="tr-data" type="date"></div>
+      <div class="form-group"><label class="form-label">Horário</label><input class="form-input" id="tr-hora" type="time" value="20:00"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Local</label><input class="form-input" id="tr-local" placeholder="Quadra / Ginásio"></div>
+      <div class="form-group"><label class="form-label">Tipo</label>
+        <select class="form-input" id="tr-tipo"><option>Treino técnico</option><option>Treino físico</option><option>Coletivo</option><option>Tático</option></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="addTreino()">Agendar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-treino')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-lancamento">
+  <div class="modal">
+    <div class="modal-title">Lançamento financeiro <button class="modal-close" onclick="closeModal('modal-add-lancamento')"><i class="ti ti-x"></i></button></div>
+    <div class="form-group"><label class="form-label">Descrição *</label><input class="form-input" id="lan-desc" placeholder="Ex: Mensalidade João, Aluguel quadra..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tipo *</label>
+        <select class="form-input" id="lan-tipo"><option value="entrada">Entrada</option><option value="saida">Saída</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Valor (R$) *</label><input class="form-input" id="lan-valor" type="number" placeholder="0,00"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Categoria</label>
+      <select class="form-input" id="lan-cat"><option>Mensalidade</option><option>Patrocínio</option><option>Aluguel quadra</option><option>Uniforme</option><option>Arbitragem</option><option>Campeonato</option><option>Outros</option></select>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="addLancamento()">Registrar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-lancamento')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-aviso">
+  <div class="modal">
+    <div class="modal-title">Publicar aviso <button class="modal-close" onclick="closeModal('modal-add-aviso')"><i class="ti ti-x"></i></button></div>
+    <div class="form-group"><label class="form-label">Título *</label><input class="form-input" id="av-titulo" placeholder="Ex: Treino cancelado"></div>
+    <div class="form-group"><label class="form-label">Mensagem *</label><textarea class="form-input" id="av-msg" rows="4" placeholder="Descreva o aviso..."></textarea></div>
+    <div class="form-group"><label class="form-label">Tipo</label>
+      <select class="form-input" id="av-tipo"><option value="info">Informativo</option><option value="warning">Atenção</option><option value="danger">Urgente</option></select>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="addAviso()">Publicar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-aviso')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-user">
+  <div class="modal">
+    <div class="modal-title">Criar usuário <button class="modal-close" onclick="closeModal('modal-add-user')"><i class="ti ti-x"></i></button></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome *</label><input class="form-input" id="u-nome" placeholder="Nome completo"></div>
+      <div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="u-email" type="email" placeholder="email@example.com"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Senha *</label><input class="form-input" id="u-senha" type="password" placeholder="Mínimo 6 caracteres"></div>
+      <div class="form-group"><label class="form-label">Função *</label>
+        <select class="form-input" id="u-role"><option value="atleta">Atleta</option><option value="capitao">Capitão</option><option value="admin">Admin</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Nº da camisa (se atleta)</label><input class="form-input" id="u-num" type="number" placeholder="Ex: 10"></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="addUser()">Criar usuário</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-user')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-jogador-detail">
+  <div class="modal">
+    <div class="modal-title" id="modal-j-title">Jogador <button class="modal-close" onclick="closeModal('modal-jogador-detail')"><i class="ti ti-x"></i></button></div>
+    <div id="modal-j-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-stat-jogo">
+  <div class="modal">
+    <div class="modal-title" id="modal-stat-title">Registrar resultado <button class="modal-close" onclick="closeModal('modal-stat-jogo')"><i class="ti ti-x"></i></button></div>
+    <div id="modal-stat-content"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ==================== CONFIG ====================
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000/api'
+  : '/api';
+
+// ==================== STATE ====================
+let currentUser = null;
+let token = null;
+let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [] };
+
+// ==================== AUTH ====================
+function saveSession(t, u) {
+  token = t; currentUser = u;
+  localStorage.setItem('wr_token', t);
+  localStorage.setItem('wr_user', JSON.stringify(u));
+}
+function loadSession() {
+  token = localStorage.getItem('wr_token');
+  const u = localStorage.getItem('wr_user');
+  if (u) currentUser = JSON.parse(u);
+  return !!(token && currentUser);
+}
+function clearSession() {
+  token = null; currentUser = null;
+  localStorage.removeItem('wr_token');
+  localStorage.removeItem('wr_user');
+}
+
+async function doLogin() {
+  const email = document.getElementById('inp-email').value.trim();
+  const senha = document.getElementById('inp-senha').value;
+  const btn = document.getElementById('btn-login');
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  if (!email || !senha) { showLoginError('Preencha email e senha'); return; }
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader"></i> Entrando...';
+  try {
+    const r = await fetch(`${API}/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, senha}) });
+    const d = await r.json();
+    if (!r.ok) { showLoginError(d.error || 'Erro ao entrar'); return; }
+    saveSession(d.token, d.user);
+    initApp();
+  } catch(e) {
+    showLoginError('Erro de conexão. Verifique a internet.');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="ti ti-login"></i> Entrar';
+  }
+}
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg; el.style.display = 'flex';
+}
+function doLogout() {
+  clearSession();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+document.getElementById('inp-senha').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('inp-email').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('inp-senha').focus(); });
+
+// ==================== API CALLS ====================
+async function api(method, path, body) {
+  const opts = { method, headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(`${API}/${path}`, opts);
+  if (r.status === 401) { doLogout(); return null; }
+  return r.json();
+}
+
+// ==================== ROLES ====================
+const ROLES = { admin: 'Administrador', capitao: 'Capitão', atleta: 'Atleta' };
+const can = (roles) => roles.includes(currentUser?.role);
+
+// ==================== TOAST ====================
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `show ${type}`;
+  setTimeout(() => t.className = '', 2800);
+}
+
+// ==================== MODAIS ====================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
+});
+
+// ==================== INIT APP ====================
+function initApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  document.getElementById('nav-user-name').textContent = currentUser.nome.split(' ')[0];
+  document.getElementById('nav-user-role').textContent = ROLES[currentUser.role] || currentUser.role;
+  document.getElementById('nav-role-label').textContent = ROLES[currentUser.role] || 'Basketball';
+
+  buildNav();
+  loadAll();
+}
+
+function buildNav() {
+  const tabs = [
+    { id:'dashboard', label:'Dashboard', icon:'ti-home', roles:['admin','capitao','atleta'] },
+    { id:'jogadores', label:'Jogadores', icon:'ti-users', roles:['admin','capitao','atleta'] },
+    { id:'jogos', label:'Jogos', icon:'ti-trophy', roles:['admin','capitao','atleta'] },
+    { id:'treinos', label:'Treinos', icon:'ti-calendar', roles:['admin','capitao','atleta'] },
+    { id:'financeiro', label:'Financeiro', icon:'ti-cash', roles:['admin','capitao'] },
+    { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar', roles:['admin','capitao','atleta'] },
+    { id:'comunicacao', label:'Avisos', icon:'ti-bell', roles:['admin','capitao','atleta'] },
+    { id:'usuarios', label:'Usuários', icon:'ti-settings', roles:['admin'] },
+  ].filter(t => can(t.roles));
+
+  const html = tabs.map(t => `<button class="nav-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')"><i class="ti ${t.icon}"></i> ${t.label}</button>`).join('');
+  const htmlM = tabs.map(t => `<button class="mobile-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')">${t.label}</button>`).join('');
+  document.getElementById('nav-tabs').innerHTML = html;
+  document.getElementById('mobile-menu').innerHTML = htmlM;
+
+  // Show/hide role-specific buttons
+  if (can(['admin','capitao'])) {
+    ['btn-add-jogador','btn-add-jogo','btn-add-treino','btn-add-aviso'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.style.display = 'inline-flex';
+    });
+  }
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab,.mobile-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll(`[onclick*="showPage('${id}')"]`).forEach(t => t.classList.add('active'));
+  const renders = { jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers };
+  if (renders[id]) renders[id]();
+}
+
+// ==================== LOAD ALL ====================
+async function loadAll() {
+  const [j, jo, tr, fin, av] = await Promise.all([
+    api('GET','jogadores'), api('GET','jogos'), api('GET','treinos'),
+    can(['admin','capitao']) ? api('GET','financeiro') : Promise.resolve({lancamentos:[],mensalidades:{}}),
+    api('GET','avisos'),
+  ]);
+  if (j) cache.jogadores = j;
+  if (jo) cache.jogos = jo;
+  if (tr) cache.treinos = tr;
+  if (fin) cache.financeiro = fin;
+  if (av) cache.avisos = av;
+  renderDashboard();
+  renderJogadores();
+}
+
+// ==================== UTILS ====================
+function fmt(d) { if(!d) return '—'; const [y,m,dy]=d.split('-'); return `${dy}/${m}/${y}`; }
+function today() { return new Date().toISOString().split('T')[0]; }
+function isUpcoming(d) { return d >= today(); }
+function initials(n) { return n.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase(); }
+
+// ==================== DASHBOARD ====================
+function renderDashboard() {
+  const ativos = cache.jogadores.filter(j=>j.status==='Ativo').length;
+  const lesionados = cache.jogadores.filter(j=>j.status==='Lesão');
+  const proxJogo = cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).sort((a,b)=>a.data.localeCompare(b.data))[0];
+
+  let saldoHTML = '';
+  if (can(['admin','capitao'])) {
+    const ent = cache.financeiro.lancamentos.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
+    const sai = cache.financeiro.lancamentos.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
+    const saldo = ent - sai;
+    saldoHTML = `<div class="card"><div class="card-title">Saldo do caixa</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'};font-size:20px">R$ ${saldo}</div><div class="card-sub" style="color:var(--text2)">Entradas: R$ ${ent} / Saídas: R$ ${sai}</div></div>`;
+  }
+
+  document.getElementById('dash-cards').innerHTML = `
+    <div class="card"><div class="card-title">Jogadores ativos</div><div class="card-value">${ativos}</div><div class="card-sub" style="color:var(--text2)">${cache.jogadores.length} cadastrados</div></div>
+    <div class="card"><div class="card-title">Próximo jogo</div><div class="card-value" style="font-size:16px">${proxJogo?`vs ${proxJogo.adv}`:'—'}</div><div class="card-sub" style="color:var(--text2)">${proxJogo?`${fmt(proxJogo.data)} às ${proxJogo.hora}`:''}</div></div>
+    ${saldoHTML}
+    <div class="card"><div class="card-title">Afastados por lesão</div><div class="card-value" style="color:var(--danger)">${lesionados.length}</div><div class="card-sub" style="color:var(--text2)">${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')||'Elenco completo'}</div></div>
+  `;
+
+  // alertas
+  const alertas = [];
+  if (lesionados.length) alertas.push({ tipo:'danger', msg:`${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')}` });
+  if (can(['admin','capitao'])) {
+    const inad = Object.keys(cache.financeiro.mensalidades || {}).length;
+    if (inad) alertas.push({ tipo:'warning', msg:`${inad} jogador(es) com mensalidade em atraso` });
+  }
+  document.getElementById('dash-alertas').innerHTML = alertas.length
+    ? alertas.map(a=>`<div class="alert alert-${a.tipo}"><i class="ti ti-alert-triangle"></i> ${a.msg}</div>`).join('')
+    : '<div class="alert alert-success"><i class="ti ti-check"></i> Tudo em ordem!</div>';
+
+  // resultados
+  const past = cache.jogos.filter(j=>j.wr!==null).sort((a,b)=>b.data.localeCompare(a.data)).slice(0,3);
+  document.getElementById('dash-resultados').innerHTML = past.length
+    ? past.map(j=>`<div class="game-card" style="padding:12px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px">WR <strong>${j.wr}</strong> × <strong>${j.advPl}</strong> ${j.adv}</div><span class="badge ${j.wr>j.advPl?'badge-green':'badge-red'}">${j.wr>j.advPl?'Vitória':'Derrota'}</span></div><div style="font-size:11px;color:var(--text2);margin-top:4px">${fmt(j.data)} · ${j.camp||'Amistoso'}</div></div>`).join('')
+    : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum resultado ainda.</div>';
+
+  // ranking
+  const byPts = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.pts-a.pts).slice(0,3);
+  const byAst = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.ast-a.ast).slice(0,3);
+  const byReb = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.reb-a.reb).slice(0,3);
+  ['rank-pts','rank-ast','rank-reb'].forEach((id,i)=>{
+    const list=[byPts,byAst,byReb][i], key=['pts','ast','reb'][i];
+    document.getElementById(id).innerHTML = list.map((j,idx)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:var(--text2);width:16px">${idx+1}</span><div style="flex:1;font-size:13px">${j.nome.split(' ')[0]}</div><span style="font-weight:700;color:var(--blue)">${j[key]}</span></div>`).join('');
+  });
+
+  // próximo treino
+  const prtr = cache.treinos.filter(t=>isUpcoming(t.data)).sort((a,b)=>a.data.localeCompare(b.data))[0];
+  document.getElementById('dash-treino').innerHTML = prtr
+    ? `<div style="font-size:14px;font-weight:600">${prtr.tipo}</div><div style="font-size:12px;color:var(--text2);margin-top:4px"><i class="ti ti-calendar"></i> ${fmt(prtr.data)} às ${prtr.hora}</div><div style="font-size:12px;color:var(--text2)"><i class="ti ti-map-pin"></i> ${prtr.local||'A definir'}</div>`
+    : '<span style="color:var(--text2);font-size:13px">Nenhum treino agendado</span>';
+
+  // presença
+  document.getElementById('dash-presenca').innerHTML = [...cache.jogadores].sort((a,b)=>b.presenca-a.presenca).map(j=>`
+    <div class="stat-row">
+      <div class="stat-name">${j.nome.split(' ')[0]} #${j.num}</div>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
+      <div class="stat-val" style="color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</div>
+    </div>
+  `).join('');
+}
+
+// ==================== JOGADORES ====================
+function renderJogadores() {
+  const filtro = document.getElementById('filtro-status')?.value || '';
+  const lista = cache.jogadores.filter(j=>!filtro||j.status===filtro);
+  const lesionados = cache.jogadores.filter(j=>j.status==='Lesão');
+  const la = document.getElementById('lesao-alert');
+  if (lesionados.length) {
+    la.style.display='flex';
+    document.getElementById('lesao-txt').textContent = `${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')}`;
+  } else la.style.display='none';
+
+  document.getElementById('player-grid').innerHTML = lista.length
+    ? lista.map(j=>`
+      <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})">
+        <div class="player-num">#${j.num}</div>
+        <div class="player-avatar">${initials(j.nome)}</div>
+        <div class="player-name">${j.nome}</div>
+        <div class="player-pos">${j.pos}</div>
+        <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}">${j.status}</span>
+        ${j.obs?`<div style="font-size:11px;color:var(--danger);margin-top:6px"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
+        <div class="player-stats" style="margin-top:10px">
+          <div class="ps"><div class="ps-val">${j.pts}</div><div class="ps-lbl">PTS</div></div>
+          <div class="ps"><div class="ps-val">${j.ast}</div><div class="ps-lbl">AST</div></div>
+          <div class="ps"><div class="ps-val">${j.reb}</div><div class="ps-lbl">REB</div></div>
+        </div>
+      </div>`).join('')
+    : '<div style="color:var(--text2);font-size:13px">Nenhum jogador encontrado.</div>';
+}
+
+function openPlayerDetail(id) {
+  const j = cache.jogadores.find(x=>x.id===id);
+  document.getElementById('modal-j-title').childNodes[0].textContent = j.nome + ' ';
+  const canEdit = can(['admin','capitao']);
+  document.getElementById('modal-j-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div class="player-avatar" style="width:60px;height:60px;font-size:22px">${initials(j.nome)}</div>
+      <div>
+        <div style="font-size:18px;font-weight:700">${j.nome}</div>
+        <div style="color:var(--text2);font-size:13px">#${j.num} · ${j.pos}</div>
+        <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}" style="margin-top:4px">${j.status}</span>
+      </div>
+    </div>
+    <div class="grid2" style="font-size:13px;margin-bottom:14px">
+      <div><span style="color:var(--text2)">Idade:</span> ${j.idade} anos</div>
+      <div><span style="color:var(--text2)">Altura:</span> ${j.altura} cm</div>
+      <div><span style="color:var(--text2)">WhatsApp:</span> <a href="https://wa.me/55${(j.tel||'').replace(/\D/g,'')}" style="color:var(--success)">${j.tel||'—'}</a></div>
+      <div><span style="color:var(--text2)">Jogos:</span> ${j.jg}</div>
+    </div>
+    ${j.obs?`<div class="alert alert-danger"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;margin-bottom:16px">
+      ${[['PTS',j.pts],['AST',j.ast],['REB',j.reb],['3PT',j.tpt],['FLT',j.flt]].map(([l,v])=>`<div class="card" style="padding:10px"><div style="font-size:18px;font-weight:700">${v}</div><div style="font-size:10px;color:var(--text2)">${l}</div></div>`).join('')}
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:6px">Presença</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div class="prog-bar" style="flex:1"><div class="prog-fill" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
+      <span style="font-weight:700;color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</span>
+    </div>
+    ${canEdit?`
+      <div style="display:flex;gap:8px">
+        <select class="form-input" id="edit-status-${j.id}" style="flex:1">
+          <option ${j.status==='Ativo'?'selected':''}>Ativo</option>
+          <option ${j.status==='Lesão'?'selected':''}>Lesão</option>
+          <option ${j.status==='Suspenso'?'selected':''}>Suspenso</option>
+          <option ${j.status==='Inativo'?'selected':''}>Inativo</option>
+        </select>
+        <input class="form-input" id="edit-obs-${j.id}" value="${j.obs||''}" placeholder="Observação / lesão" style="flex:2">
+        <button class="btn btn-primary btn-sm" onclick="updateJogador(${j.id})">Salvar</button>
+      </div>
+    `:''}
+  `;
+  openModal('modal-jogador-detail');
+}
+
+async function addJogador() {
+  const nome = document.getElementById('j-nome').value.trim();
+  if (!nome) { toast('Nome obrigatório','error'); return; }
+  const r = await api('POST','jogadores',{
+    nome, num:+document.getElementById('j-num').value||0,
+    pos:document.getElementById('j-pos').value,
+    idade:+document.getElementById('j-idade').value||0,
+    altura:+document.getElementById('j-altura').value||0,
+    status:document.getElementById('j-status').value,
+    tel:document.getElementById('j-tel').value,
+    obs:document.getElementById('j-obs').value,
+  });
+  if (r && r.id) {
+    cache.jogadores.push(r);
+    closeModal('modal-add-jogador');
+    renderJogadores(); renderDashboard();
+    toast('Jogador cadastrado!');
+    ['j-nome','j-num','j-idade','j-altura','j-tel','j-obs'].forEach(id=>document.getElementById(id).value='');
+  } else toast('Erro ao cadastrar','error');
+}
+
+async function updateJogador(id) {
+  const status = document.getElementById(`edit-status-${id}`)?.value;
+  const obs = document.getElementById(`edit-obs-${id}`)?.value || '';
+  const r = await api('PUT','jogadores',{id,status,obs});
+  if (r && r.id) {
+    const idx = cache.jogadores.findIndex(j=>j.id===id);
+    if (idx!==-1) cache.jogadores[idx] = r;
+    closeModal('modal-jogador-detail');
+    renderJogadores(); renderDashboard();
+    toast('Jogador atualizado!');
+  } else toast('Erro ao atualizar','error');
+}
+
+// ==================== JOGOS ====================
+function renderJogos() {
+  const upcoming = cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).sort((a,b)=>a.data.localeCompare(b.data));
+  const past = cache.jogos.filter(j=>j.wr!==null||(!isUpcoming(j.data)&&j.wr!==null)).sort((a,b)=>b.data.localeCompare(a.data));
+  const wins = past.filter(j=>j.wr!==null&&j.wr>j.advPl).length;
+  const losses = past.filter(j=>j.wr!==null&&j.wr<j.advPl).length;
+  const total = wins + losses;
+  document.getElementById('jogos-stats').innerHTML = `
+    <div class="card"><div class="card-title">Vitórias</div><div class="card-value" style="color:var(--success)">${wins}</div></div>
+    <div class="card"><div class="card-title">Derrotas</div><div class="card-value" style="color:var(--danger)">${losses}</div></div>
+    <div class="card"><div class="card-title">Aproveitamento</div><div class="card-value">${total?Math.round(wins/total*100)+'%':'—'}</div></div>
+  `;
+  const canEdit = can(['admin','capitao']);
+  document.getElementById('proximos-jogos').innerHTML = upcoming.length
+    ? upcoming.map(j=>gameCard(j,canEdit)).join('')
+    : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum jogo agendado.</div>';
+  document.getElementById('resultados-lista').innerHTML = past.length
+    ? past.map(j=>gameCard(j,false)).join('')
+    : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum resultado registrado.</div>';
+}
+
+function gameCard(j, showEdit) {
+  const resultado = j.wr!==null?(j.wr>j.advPl?'VITÓRIA':'DERROTA'):null;
+  const resCor = resultado==='VITÓRIA'?'var(--success)':'var(--danger)';
+  return `<div class="game-card">
+    <div class="game-teams">
+      <div class="game-team"><div class="game-team-name">White Rock</div><div style="font-size:30px;font-weight:800;color:${j.wr!==null?'var(--blue)':'var(--text2)'}">${j.wr!==null?j.wr:'?'}</div></div>
+      <div style="text-align:center">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px">${j.camp||'Amistoso'}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text2)">VS</div>
+        ${resultado?`<div style="font-size:11px;font-weight:700;color:${resCor};margin-top:4px">${resultado}</div>`:''}
+      </div>
+      <div class="game-team"><div class="game-team-name">${j.adv}</div><div style="font-size:30px;font-weight:800;color:${j.advPl!==null?'var(--blue)':'var(--text2)'}">${j.advPl!==null?j.advPl:'?'}</div></div>
+    </div>
+    <div class="game-info">
+      <span><i class="ti ti-calendar"></i> ${fmt(j.data)} ${j.hora}</span>
+      <span><i class="ti ti-map-pin"></i> ${j.local||'A definir'}</span>
+    </div>
+    ${showEdit?`<div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="openStatJogo(${j.id})"><i class="ti ti-edit"></i> Registrar resultado</button></div>`:''}
+  </div>`;
+}
+
+async function addJogo() {
+  const adv = document.getElementById('jo-adv').value.trim();
+  const data = document.getElementById('jo-data').value;
+  if (!adv || !data) { toast('Adversário e data obrigatórios','error'); return; }
+  const r = await api('POST','jogos',{ adv, data, hora:document.getElementById('jo-hora').value, local:document.getElementById('jo-local').value, camp:document.getElementById('jo-camp').value });
+  if (r && r.id) {
+    cache.jogos.push(r);
+    closeModal('modal-add-jogo');
+    renderJogos(); renderDashboard();
+    toast('Jogo cadastrado!');
+  } else toast('Erro ao cadastrar jogo','error');
+}
+
+function openStatJogo(id) {
+  const j = cache.jogos.find(x=>x.id===id);
+  document.getElementById('modal-stat-title').childNodes[0].textContent = `vs ${j.adv} - ${fmt(j.data)} `;
+  const ativos = cache.jogadores.filter(p=>p.status==='Ativo');
+  document.getElementById('modal-stat-content').innerHTML = `
+    <div class="form-row" style="margin-bottom:14px">
+      <div class="form-group"><label class="form-label">Placar WR *</label><input class="form-input" id="rs-wr" type="number" value="${j.wr||''}"></div>
+      <div class="form-group"><label class="form-label">Placar ${j.adv} *</label><input class="form-input" id="rs-adv" type="number" value="${j.advPl||''}"></div>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:10px">Estatísticas por jogador (média por jogo)</div>
+    ${ativos.map(p=>`
+      <div style="background:var(--navy3);border-radius:8px;padding:10px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">#${p.num} ${p.nome}</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+          ${[['pts','PTS'],['ast','AST'],['reb','REB'],['tpt','3PT'],['flt','FLT']].map(([k,l])=>`<div><div style="font-size:10px;color:var(--text2)">${l}</div><input type="number" class="form-input" style="padding:6px;font-size:13px" id="stat-${j.id}-${p.id}-${k}" value="0" min="0"></div>`).join('')}
+        </div>
+      </div>
+    `).join('')}
+    <button class="btn btn-primary" style="width:100%;margin-top:8px;justify-content:center" onclick="saveStatJogo(${j.id})"><i class="ti ti-device-floppy"></i> Salvar resultado</button>
+  `;
+  openModal('modal-stat-jogo');
+}
+
+async function saveStatJogo(jId) {
+  const wr = +document.getElementById('rs-wr').value;
+  const advPl = +document.getElementById('rs-adv').value;
+  const ativos = cache.jogadores.filter(p=>p.status==='Ativo');
+  const statsJogadores = ativos.map(p => ({
+    id: p.id,
+    pts: +document.getElementById(`stat-${jId}-${p.id}-pts`)?.value||0,
+    ast: +document.getElementById(`stat-${jId}-${p.id}-ast`)?.value||0,
+    reb: +document.getElementById(`stat-${jId}-${p.id}-reb`)?.value||0,
+    tpt: +document.getElementById(`stat-${jId}-${p.id}-tpt`)?.value||0,
+    flt: +document.getElementById(`stat-${jId}-${p.id}-flt`)?.value||0,
+  }));
+  const r = await api('PUT','jogos',{id:jId, wr, advPl, statsJogadores});
+  if (r && r.id) {
+    const idx = cache.jogos.findIndex(x=>x.id===jId);
+    if (idx!==-1) { cache.jogos[idx].wr = wr; cache.jogos[idx].advPl = advPl; }
+    // Reload jogadores
+    const j2 = await api('GET','jogadores');
+    if (j2) cache.jogadores = j2;
+    closeModal('modal-stat-jogo');
+    renderJogos(); renderDashboard(); renderStats();
+    toast('Resultado salvo!');
+  } else toast('Erro ao salvar resultado','error');
+}
+
+// ==================== TREINOS ====================
+function renderTreinos() {
+  const upcoming = cache.treinos.filter(t=>isUpcoming(t.data)).sort((a,b)=>a.data.localeCompare(b.data));
+  const canEdit = can(['admin','capitao']);
+  document.getElementById('treinos-lista').innerHTML = upcoming.length
+    ? upcoming.map(t=>`<div class="game-card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:14px;font-weight:600">${t.tipo}</div><div style="font-size:12px;color:var(--text2);margin-top:4px"><i class="ti ti-calendar"></i> ${fmt(t.data)} às ${t.hora}</div><div style="font-size:12px;color:var(--text2)"><i class="ti ti-map-pin"></i> ${t.local||'A definir'}</div></div><span class="badge badge-blue">${fmt(t.data)}</span></div></div>`).join('')
+    : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum treino agendado.</div>';
+
+  document.getElementById('presenca-lista').innerHTML = cache.jogadores.map(j=>`
+    <div class="pres-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:600">${j.nome.split(' ')[0]} #${j.num}</div>
+        <div class="pres-pct ${j.presenca>=80?'high':j.presenca>=60?'mid':'low'}">${j.presenca}%</div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
+    </div>
+  `).join('');
+}
+
+async function addTreino() {
+  const data = document.getElementById('tr-data').value;
+  if (!data) { toast('Data obrigatória','error'); return; }
+  const r = await api('POST','treinos',{ data, hora:document.getElementById('tr-hora').value, local:document.getElementById('tr-local').value, tipo:document.getElementById('tr-tipo').value });
+  if (r && r.id) {
+    cache.treinos.push(r);
+    closeModal('modal-add-treino');
+    renderTreinos(); renderDashboard();
+    toast('Treino agendado!');
+  } else toast('Erro ao agendar','error');
+}
+
+// ==================== FINANCEIRO ====================
+function renderFinanceiro() {
+  const fin = cache.financeiro.lancamentos || [];
+  const mens = cache.financeiro.mensalidades || {};
+  const ent = fin.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
+  const sai = fin.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
+  const saldo = ent-sai;
+  const inad = Object.keys(mens).length;
+
+  document.getElementById('fin-cards').innerHTML = `
+    <div class="card"><div class="card-title">Saldo atual</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'}">R$ ${saldo}</div></div>
+    <div class="card"><div class="card-title">Entradas</div><div class="card-value" style="color:var(--success)">R$ ${ent}</div></div>
+    <div class="card"><div class="card-title">Saídas</div><div class="card-value" style="color:var(--danger)">R$ ${sai}</div></div>
+    <div class="card"><div class="card-title">Inadimplentes</div><div class="card-value" style="color:var(--warning)">${inad}</div></div>
+  `;
+
+  document.getElementById('extrato-lista').innerHTML = [...fin].sort((a,b)=>b.data.localeCompare(a.data)).map(f=>`
+    <div class="fin-item">
+      <div><div style="font-size:13px">${f.desc}</div><div style="font-size:11px;color:var(--text2)">${fmt(f.data)} · ${f.cat}</div></div>
+      <div class="fin-val ${f.tipo}" style="font-size:14px;font-weight:600">${f.tipo==='entrada'?'+':'-'}R$ ${f.valor}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('mens-body').innerHTML = cache.jogadores.filter(j=>mens[j.id]).map(j=>`
+    <tr>
+      <td>${j.nome.split(' ')[0]}</td>
+      <td><span class="badge badge-orange">${mens[j.id]} mês(es)</span></td>
+      <td><span class="badge badge-red">Inadimplente</span></td>
+      <td><button class="btn btn-success btn-sm" onclick="quitarMens(${j.id})"><i class="ti ti-check"></i> Quitar</button></td>
+    </tr>
+  `).join('');
+}
+
+async function addLancamento() {
+  const desc = document.getElementById('lan-desc').value.trim();
+  const valor = +document.getElementById('lan-valor').value;
+  if (!desc || !valor) { toast('Preencha descrição e valor','error'); return; }
+  const r = await api('POST','financeiro',{ desc, tipo:document.getElementById('lan-tipo').value, valor, cat:document.getElementById('lan-cat').value });
+  if (r && r.id) {
+    cache.financeiro.lancamentos.push(r);
+    closeModal('modal-add-lancamento');
+    renderFinanceiro(); renderDashboard();
+    toast('Lançamento registrado!');
+    ['lan-desc','lan-valor'].forEach(id=>document.getElementById(id).value='');
+  } else toast('Erro ao registrar','error');
+}
+
+async function quitarMens(id) {
+  const r = await api('PUT','financeiro',{ jogadorId:id, quitar:true });
+  if (r && r.success) {
+    delete cache.financeiro.mensalidades[id];
+    // reload
+    const fin = await api('GET','financeiro');
+    if (fin) cache.financeiro = fin;
+    renderFinanceiro(); renderDashboard();
+    toast('Mensalidade quitada!');
+  } else toast('Erro ao quitar','error');
+}
+
+// ==================== ESTATÍSTICAS ====================
+function renderStats() {
+  const cat = document.getElementById('stat-cat')?.value || 'pts';
+  const key = cat;
+  const ativos = cache.jogadores.filter(j=>j.status!=='Inativo').sort((a,b)=>b[key]-a[key]);
+  const max = ativos.length ? ativos[0][key] : 1;
+  document.getElementById('stat-jg-count').textContent = cache.jogos.filter(j=>j.wr!==null).length;
+  document.getElementById('stats-bars').innerHTML = ativos.map((j,i)=>`
+    <div class="stat-row">
+      <div class="stat-name">${i+1}. ${j.nome.split(' ')[0]}</div>
+      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${max?Math.round(j[key]/max*100):0}%"></div></div>
+      <div class="stat-val">${j[key]}</div>
+    </div>
+  `).join('');
+  document.getElementById('stats-tbl').innerHTML = [...cache.jogadores].sort((a,b)=>b.pts-a.pts).map(j=>`
+    <tr>
+      <td style="color:var(--text2)">#${j.num}</td>
+      <td style="font-weight:500">${j.nome}</td>
+      <td>${j.jg}</td>
+      <td style="font-weight:600;color:var(--blue)">${j.pts}</td>
+      <td>${j.ast}</td><td>${j.reb}</td><td>${j.tpt}</td><td>${j.flt}</td>
+    </tr>
+  `).join('');
+}
+
+// ==================== AVISOS ====================
+function renderAvisos() {
+  document.getElementById('avisos-lista').innerHTML = cache.avisos.length
+    ? cache.avisos.map(a=>`
+      <div class="aviso-card" style="border-left:3px solid ${a.tipo==='danger'?'var(--danger)':a.tipo==='warning'?'var(--warning)':'var(--blue)'}">
+        <div class="aviso-top">
+          <div class="aviso-title">${a.titulo}</div>
+          <span class="badge ${a.tipo==='danger'?'badge-red':a.tipo==='warning'?'badge-orange':'badge-blue'}">${a.tipo==='danger'?'Urgente':a.tipo==='warning'?'Atenção':'Info'}</span>
+        </div>
+        <div class="aviso-body">${a.msg}</div>
+        <div class="aviso-meta"><i class="ti ti-user"></i> ${a.autor||'Admin'} · <i class="ti ti-clock"></i> ${fmt(a.data)}</div>
+      </div>
+    `).join('')
+    : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum aviso publicado.</div>';
+}
+
+async function addAviso() {
+  const titulo = document.getElementById('av-titulo').value.trim();
+  const msg = document.getElementById('av-msg').value.trim();
+  if (!titulo || !msg) { toast('Preencha título e mensagem','error'); return; }
+  const r = await api('POST','avisos',{ titulo, msg, tipo:document.getElementById('av-tipo').value });
+  if (r && r.id) {
+    cache.avisos.unshift(r);
+    closeModal('modal-add-aviso');
+    renderAvisos();
+    toast('Aviso publicado!');
+    ['av-titulo','av-msg'].forEach(id=>document.getElementById(id).value='');
+  } else toast('Erro ao publicar','error');
+}
+
+// ==================== USERS ====================
+async function renderUsers() {
+  const users = await api('GET','users');
+  if (!users) return;
+  document.getElementById('users-body').innerHTML = users.map(u=>`
+    <tr>
+      <td style="font-weight:500">${u.nome}</td>
+      <td style="color:var(--text2)">${u.email}</td>
+      <td><span class="role-tag role-${u.role}">${ROLES[u.role]||u.role}</span></td>
+      <td>${u.num||'—'}</td>
+      <td><span class="badge ${u.ativo?'badge-green':'badge-gray'}">${u.ativo?'Ativo':'Inativo'}</span></td>
+      <td>${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="toggleUser(${u.id},${!u.ativo})">${u.ativo?'Desativar':'Ativar'}</button>`:''}</td>
+    </tr>
+  `).join('');
+}
+
+async function addUser() {
+  const nome = document.getElementById('u-nome').value.trim();
+  const email = document.getElementById('u-email').value.trim();
+  const senha = document.getElementById('u-senha').value;
+  const role = document.getElementById('u-role').value;
+  if (!nome || !email || !senha) { toast('Preencha todos os campos','error'); return; }
+  const r = await api('POST','users',{ nome, email, senha, role, num:+document.getElementById('u-num').value||null });
+  if (r && r.id) {
+    closeModal('modal-add-user');
+    renderUsers();
+    toast('Usuário criado! Login: '+email);
+  } else toast((r&&r.error)||'Erro ao criar usuário','error');
+}
+
+async function toggleUser(id, ativo) {
+  const r = await api('PUT','users',{ id, ativo });
+  if (r && r.id) { renderUsers(); toast('Usuário atualizado!'); }
+  else toast('Erro','error');
+}
+
+// ==================== AUTO-LOGIN ====================
+if (loadSession()) {
+  initApp();
+}
+</script>
+</body>
+</html>
