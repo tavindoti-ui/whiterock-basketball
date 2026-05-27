@@ -511,6 +511,40 @@ select.form-input option{background:var(--navy2)}
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-edit-user">
+  <div class="modal">
+    <div class="modal-title">Editar usuário <button class="modal-close" onclick="closeModal('modal-edit-user')"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="eu-id">
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome *</label><input class="form-input" id="eu-nome" placeholder="Nome completo"></div>
+      <div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="eu-email" type="email"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nova senha <span style="color:var(--text2);font-size:11px">(vazio = manter)</span></label><input class="form-input" id="eu-senha" type="password" placeholder="Nova senha"></div>
+      <div class="form-group"><label class="form-label">Função *</label>
+        <select class="form-input" id="eu-role">
+          <option value="atleta">Atleta</option>
+          <option value="capitao">Capitão</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nº da camisa</label><input class="form-input" id="eu-num" type="number" placeholder="Ex: 10"></div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-input" id="eu-ativo">
+          <option value="true">Ativo</option>
+          <option value="false">Inativo</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveEditUser()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-user')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-jogador-detail">
   <div class="modal">
     <div class="modal-title" id="modal-j-title">Jogador <button class="modal-close" onclick="closeModal('modal-jogador-detail')"><i class="ti ti-x"></i></button></div>
@@ -536,7 +570,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [] };
+let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [] };
 
 // ==================== AUTH ====================
 function saveSession(t, u) {
@@ -816,6 +850,7 @@ function openPlayerDetail(id) {
         <input class="form-input" id="edit-obs-${j.id}" value="${j.obs||''}" placeholder="Observação / lesão" style="flex:2">
         <button class="btn btn-primary btn-sm" onclick="updateJogador(${j.id})">Salvar</button>
       </div>
+      ${can(['admin'])?`<button class="btn btn-danger btn-sm" onclick="deleteJogador(${j.id})" style="width:100%;margin-top:8px"><i class="ti ti-trash"></i> Excluir jogador</button>`:''}
     `:''}
   `;
   openModal('modal-jogador-detail');
@@ -853,6 +888,18 @@ async function updateJogador(id) {
     renderJogadores(); renderDashboard();
     toast('Jogador atualizado!');
   } else toast('Erro ao atualizar','error');
+}
+
+async function deleteJogador(id) {
+  const j = cache.jogadores.find(x=>x.id===id);
+  if (!confirm(`Excluir ${j?.nome}? Esta ação não pode ser desfeita.`)) return;
+  const r = await api('DELETE','jogadores',{id});
+  if (r && r.success) {
+    cache.jogadores = cache.jogadores.filter(x=>x.id!==id);
+    closeModal('modal-jogador-detail');
+    renderJogadores(); renderDashboard();
+    toast('Jogador excluído!');
+  } else toast('Erro ao excluir','error');
 }
 
 // ==================== JOGOS ====================
@@ -1107,6 +1154,7 @@ async function addAviso() {
 async function renderUsers() {
   const users = await api('GET','users');
   if (!users) return;
+  cache.users = users;
   document.getElementById('users-body').innerHTML = users.map(u=>`
     <tr>
       <td style="font-weight:500">${u.nome}</td>
@@ -1114,7 +1162,10 @@ async function renderUsers() {
       <td><span class="role-tag role-${u.role}">${ROLES[u.role]||u.role}</span></td>
       <td>${u.num||'—'}</td>
       <td><span class="badge ${u.ativo?'badge-green':'badge-gray'}">${u.ativo?'Ativo':'Inativo'}</span></td>
-      <td>${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="toggleUser(${u.id},${!u.ativo})">${u.ativo?'Desativar':'Ativar'}</button>`:''}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="editUser(${u.id})"><i class="ti ti-pencil"></i> Editar</button>
+        ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="toggleUser(${u.id},${!u.ativo})">${u.ativo?'Desativar':'Ativar'}</button>`:''}
+      </td>
     </tr>
   `).join('');
 }
@@ -1137,6 +1188,38 @@ async function toggleUser(id, ativo) {
   const r = await api('PUT','users',{ id, ativo });
   if (r && r.id) { renderUsers(); toast('Usuário atualizado!'); }
   else toast('Erro','error');
+}
+
+function editUser(id) {
+  const u = cache.users.find(x=>x.id===id);
+  if (!u) return;
+  document.getElementById('eu-id').value = u.id;
+  document.getElementById('eu-nome').value = u.nome;
+  document.getElementById('eu-email').value = u.email;
+  document.getElementById('eu-senha').value = '';
+  document.getElementById('eu-role').value = u.role;
+  document.getElementById('eu-num').value = u.num || '';
+  document.getElementById('eu-ativo').value = String(u.ativo);
+  openModal('modal-edit-user');
+}
+
+async function saveEditUser() {
+  const id = +document.getElementById('eu-id').value;
+  const nome = document.getElementById('eu-nome').value.trim();
+  const email = document.getElementById('eu-email').value.trim();
+  const senha = document.getElementById('eu-senha').value;
+  const role = document.getElementById('eu-role').value;
+  const num = +document.getElementById('eu-num').value || null;
+  const ativo = document.getElementById('eu-ativo').value === 'true';
+  if (!nome || !email) { toast('Nome e email são obrigatórios','error'); return; }
+  const payload = { id, nome, email, role, num, ativo };
+  if (senha) payload.senha = senha;
+  const r = await api('PUT','users', payload);
+  if (r && r.id) {
+    closeModal('modal-edit-user');
+    renderUsers();
+    toast('Usuário atualizado!');
+  } else toast((r&&r.error)||'Erro ao atualizar','error');
 }
 
 // ==================== AUTO-LOGIN ====================
