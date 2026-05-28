@@ -1748,12 +1748,25 @@ async function deleteJogo(id) {
   } else toast('Erro ao excluir jogo','error');
 }
 
+async function deleteTreino(id) {
+  const t = cache.treinos.find(x=>x.id===id);
+  if (!confirm(`Excluir treino "${t?.tipo}" de ${fmt(t?.data)}? Esta ação não pode ser desfeita.`)) return;
+  const r = await api('DELETE','treinos',{id});
+  if (r && r.success) {
+    cache.treinos = cache.treinos.filter(x=>x.id!==id);
+    renderTreinos(); renderDashboard();
+    toast('Treino excluído!');
+  } else toast('Erro ao excluir treino','error');
+}
+
 // ==================== TREINOS ====================
 function renderTreinos() {
   const upcoming = cache.treinos.filter(t=>isUpcoming(t.data)).sort((a,b)=>a.data.localeCompare(b.data));
   const past = cache.treinos.filter(t=>!isUpcoming(t.data)).sort((a,b)=>b.data.localeCompare(a.data));
   const canEdit = can(['admin','tecnico','comissao','capitao']);
   const totalJog = cache.jogadores.length;
+
+  const canDelete = can(['admin']);
 
   // Próximos treinos
   document.getElementById('treinos-lista').innerHTML = upcoming.length
@@ -1767,7 +1780,10 @@ function renderTreinos() {
           </div>
           <span class="badge badge-blue">${fmt(t.data)}</span>
         </div>
-        ${canEdit?`<button class="btn btn-ghost btn-sm" onclick="openPresenca(${t.id})" style="margin-top:10px;width:100%"><i class="ti ti-clipboard-check"></i> Registrar presença</button>`:''}
+        <div style="display:flex;gap:8px;margin-top:10px">
+          ${canEdit?`<button class="btn btn-ghost btn-sm" onclick="openPresenca(${t.id})" style="flex:1"><i class="ti ti-clipboard-check"></i> Registrar presença</button>`:''}
+          ${canDelete?`<button class="btn btn-danger btn-sm" onclick="deleteTreino(${t.id})"><i class="ti ti-trash"></i></button>`:''}
+        </div>
       </div>`).join('')
     : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum treino agendado.</div>';
 
@@ -1800,7 +1816,10 @@ function renderTreinos() {
             </div>
           </div>
           ${presentes>0?`<div style="margin-bottom:10px"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pct>=80?'var(--success)':pct>=60?'var(--warning)':'var(--danger)'}"></div></div><div style="font-size:11px;color:var(--text2);margin-top:4px">${pct}% de presença no treino</div></div>`:''}
-          ${canEdit?`<button class="btn btn-primary btn-sm" onclick="openPresenca(${t.id})" style="width:100%"><i class="ti ti-clipboard-check"></i> ${presentes>0?'Editar presença':'Marcar presença'}</button>`:''}
+          <div style="display:flex;gap:8px">
+            ${canEdit?`<button class="btn btn-primary btn-sm" onclick="openPresenca(${t.id})" style="flex:1"><i class="ti ti-clipboard-check"></i> ${presentes>0?'Editar presença':'Marcar presença'}</button>`:''}
+            ${canDelete?`<button class="btn btn-danger btn-sm" onclick="deleteTreino(${t.id})"><i class="ti ti-trash"></i></button>`:''}
+          </div>
         </div>`;
       }).join('')
     : '<div class="card" style="color:var(--text2);font-size:13px;padding:16px">Nenhum treino passado ainda.</div>';
