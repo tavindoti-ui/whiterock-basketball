@@ -1914,12 +1914,16 @@ function renderFinanceiro() {
     <div class="card"><div class="card-title">Inadimplentes</div><div class="card-value" style="color:var(--warning)">${inad}</div></div>
   `;
 
+  const canDelFin = can(['admin']);
   document.getElementById('extrato-lista').innerHTML = [...fin].sort((a,b)=>b.data.localeCompare(a.data)).map(f=>`
     <div class="fin-item">
-      <div><div style="font-size:13px">${f.desc}</div><div style="font-size:11px;color:var(--text2)">${fmt(f.data)} · ${f.cat}</div></div>
-      <div class="fin-val ${f.tipo}" style="font-size:14px;font-weight:600">${f.tipo==='entrada'?'+':'-'}R$ ${f.valor}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:13px">${f.desc}</div><div style="font-size:11px;color:var(--text2)">${fmt(f.data)} · ${f.cat}</div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <span class="fin-val ${f.tipo}" style="font-size:14px;font-weight:600">${f.tipo==='entrada'?'+':'-'}R$ ${f.valor}</span>
+        ${canDelFin ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px" onclick="deleteLancamento(${f.id})" title="Excluir lançamento"><i class="ti ti-trash"></i></button>` : ''}
+      </div>
     </div>
-  `).join('');
+  `).join('') || '<div style="color:var(--text2);font-size:13px;padding:16px">Nenhum lançamento registrado.</div>';
 
   document.getElementById('mens-body').innerHTML = cache.jogadores.filter(j=>mens[j.id]).map(j=>`
     <tr>
@@ -1954,6 +1958,17 @@ async function quitarMens(id) {
     renderFinanceiro(); renderDashboard();
     toast('Mensalidade quitada!');
   } else toast('Erro ao quitar','error');
+}
+
+async function deleteLancamento(id) {
+  const f = cache.financeiro.lancamentos.find(x => x.id === id);
+  if (!confirm(`Excluir lançamento?\n\n"${f?.desc}" — R$ ${f?.valor}\n\nEsta ação não pode ser desfeita.`)) return;
+  const r = await api('DELETE','financeiro',{ id });
+  if (r && r.success) {
+    cache.financeiro.lancamentos = cache.financeiro.lancamentos.filter(x => x.id !== id);
+    renderFinanceiro(); renderDashboard();
+    toast('Lançamento excluído!');
+  } else toast('Erro ao excluir','error');
 }
 
 async function zerarCaixa() {
