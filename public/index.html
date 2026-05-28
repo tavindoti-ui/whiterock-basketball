@@ -372,15 +372,71 @@ select.form-input option{background:#0D1526;color:var(--text)}
 .kit-badge-aguardando{background:rgba(45,140,255,.10);color:var(--blue);border:1px solid rgba(45,140,255,.2)}
 .kit-badge-reserva{background:rgba(174,184,199,.08);color:var(--text2);border:1px solid rgba(174,184,199,.12)}
 
+/* ==================== SIDEBAR ==================== */
+.nav{
+  flex-direction:column;align-items:stretch;justify-content:flex-start;
+  padding:0;width:230px;height:100vh;
+  position:fixed;left:0;top:0;
+  border-bottom:none;border-right:1px solid var(--border);
+  overflow:hidden;
+}
+.nav-logo{
+  padding:20px 18px 18px;border-bottom:1px solid var(--border);
+  flex-shrink:0;gap:12px;
+}
+.nav-logo .logo-circle{width:38px;height:38px;flex-shrink:0}
+.nav-tabs{
+  flex-direction:column;flex:1;padding:10px;gap:2px;
+  overflow-y:auto;flex-wrap:nowrap;
+  scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{
+  width:100%;height:auto;min-height:42px;padding:10px 14px;
+  justify-content:flex-start;font-size:13px;border-radius:10px;
+  gap:10px;
+}
+.nav-tab.active::after{
+  top:8px;bottom:8px;left:0;right:auto;
+  width:3px;height:auto;
+  border-radius:0 3px 3px 0;
+}
+.nav-right{
+  flex-direction:column;align-items:stretch;
+  padding:12px;border-top:1px solid var(--border);
+  gap:8px;flex-shrink:0;
+}
+.user-badge{
+  width:100%;border-radius:10px;padding:10px 12px;
+  background:rgba(45,140,255,0.06);
+}
+.btn-logout{
+  width:100%;display:flex;align-items:center;justify-content:center;
+  gap:8px;padding:8px 14px;border-radius:9px;font-size:13px;
+}
+#app{margin-left:230px}
+
 /* ==================== MOBILE ==================== */
 @media(max-width:700px){
+  /* Revert sidebar → top bar */
+  .nav{
+    flex-direction:row;align-items:center;justify-content:space-between;
+    width:100%;height:52px;padding:0 12px;
+    position:fixed;top:0;left:0;bottom:auto;
+    border-right:none;border-bottom:1px solid var(--border);
+    overflow:visible;
+  }
+  .nav-tabs{display:none;flex-direction:row;flex:0;padding:0;overflow:visible}
+  .nav-right{flex-direction:row;border-top:none;padding:0;gap:10px;align-items:center}
+  .user-badge{width:auto;border-radius:20px;padding:4px 9px;font-size:11px}
+  .btn-logout{width:auto;padding:5px 9px;font-size:11px;justify-content:center}
+  .logout-txt{display:none}
+  .mobile-menu{display:flex;position:sticky;top:52px;z-index:99}
+  #app{margin-left:0;padding-top:52px}
+
   .page{padding:12px}
-  .nav{padding:0 12px;height:52px}
   .nav-logo .nav-title{font-size:13px}
   .nav-logo .nav-title span{display:none}
-  .user-badge{padding:4px 9px;font-size:11px}
-  .btn-logout{padding:5px 9px;font-size:11px}
-  .mobile-menu{position:sticky;top:52px;z-index:99}
 
   /* Modals as bottom sheets */
   .modal-overlay{align-items:flex-end;padding:0}
@@ -410,23 +466,15 @@ select.form-input option{background:#0D1526;color:var(--text)}
   .tbl th{padding:8px 10px;font-size:10px;letter-spacing:0.5px}
   .tbl td{padding:8px 10px;font-size:12px}
 
-  /* Sec title */
   .sec-title{font-size:10px}
-
-  /* Login */
   .login-box{padding:28px 18px}
-
-  /* Pres grid */
   .pres-grid{grid-template-columns:1fr 1fr}
-
-  /* Jersey catalog */
   .jersey-card{padding:18px}
 }
 @media(max-width:420px){
   .page{padding:8px}
   .nav{padding:0 8px}
   .nav-logo .nav-title{display:none}
-  .user-badge span:not(.role){font-size:12px}
   .player-grid{grid-template-columns:1fr 1fr;gap:8px}
   .player-card{padding:12px}
   .modal{padding:14px 12px}
@@ -483,7 +531,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
         <div class="role" id="nav-user-role">—</div>
       </div>
     </div>
-    <button class="btn-logout" onclick="doLogout()"><i class="ti ti-logout"></i></button>
+    <button class="btn-logout" onclick="doLogout()"><i class="ti ti-logout"></i> <span class="logout-txt">Sair</span></button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu"></div>
