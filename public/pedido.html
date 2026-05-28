@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peça sua Camisa — White Rock Basketball</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#050B16;--navy2:#081224;--navy3:#0E1828;
+  --blue:#4DA6FF;--blue2:#2D8CFF;
+  --white:#F4F7FB;--gray:#AEB8C7;--gray2:#0D1526;
+  --success:#00C87A;--warning:#F59E0B;--danger:#EF4444;
+  --text:#F4F7FB;--text2:#AEB8C7;--text3:#4A5A72;
+  --border:rgba(77,166,255,0.12);
+  --card-shadow:0 0 0 1px rgba(77,166,255,0.04),0 10px 40px rgba(0,0,0,0.5);
+}
+body{
+  background:var(--navy);
+  background-image:radial-gradient(ellipse 90% 40% at 50% -5%,rgba(45,140,255,0.08) 0%,transparent 60%);
+  color:var(--text);font-family:'Inter',system-ui,sans-serif;
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+
+/* ─── TOP BAR ─── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:60px;
+  background:rgba(5,11,22,0.95);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-circle{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,#2D8CFF,#0066cc);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:13px;color:#fff;
+  box-shadow:0 0 14px rgba(45,140,255,0.35);
+  flex-shrink:0;
+}
+.logo-text{font-weight:800;font-size:15px;color:#fff}
+.logo-sub{font-size:10px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.topbar-links{display:flex;gap:6px}
+.topbar-links a{
+  font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;
+  padding:6px 12px;border-radius:8px;transition:all .15s;
+}
+.topbar-links a:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.topbar-links a.active{color:var(--blue);background:rgba(77,166,255,0.08)}
+
+/* ─── CONTENT ─── */
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+
+/* ─── HERO ─── */
+.hero{text-align:center;margin-bottom:44px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(77,166,255,0.1);border:1px solid rgba(77,166,255,0.22);
+  border-radius:20px;padding:5px 14px;
+  font-size:11px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.hero h1{font-size:clamp(28px,6vw,44px);font-weight:900;line-height:1.1;margin-bottom:12px}
+.hero h1 span{color:var(--blue)}
+.hero p{color:var(--text2);font-size:15px;max-width:480px;margin:0 auto}
+
+/* ─── TABS ─── */
+.tabs{display:flex;gap:4px;background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:32px}
+.tab-btn{
+  flex:1;padding:10px 16px;border-radius:9px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:600;
+  background:transparent;color:var(--text2);transition:all .18s;
+}
+.tab-btn.active{background:var(--blue2);color:#fff;box-shadow:0 2px 8px rgba(45,140,255,0.3)}
+
+/* ─── CARD ─── */
+.card{
+  background:linear-gradient(180deg,#0D1526 0%,#081224 100%);
+  border:1px solid var(--border);border-radius:16px;padding:28px;
+  box-shadow:var(--card-shadow);position:relative;overflow:hidden;margin-bottom:24px;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(45,140,255,0.4),transparent);
+}
+.card-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.card-title i{color:var(--blue);font-size:18px}
+
+/* ─── FORM ─── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:0.6px;text-transform:uppercase}
+input,select,textarea{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:9px;padding:10px 12px;color:#fff;
+  font-family:inherit;font-size:14px;outline:none;transition:border .15s;
+  width:100%;
+}
+input:focus,select:focus,textarea:focus{border-color:rgba(77,166,255,0.45);background:rgba(77,166,255,0.04)}
+select option{background:#0D1526;color:#fff}
+textarea{resize:vertical;min-height:72px}
+input::placeholder{color:var(--text3)}
+
+/* Modelo cards */
+.modelo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.modelo-card{
+  border:2px solid rgba(255,255,255,0.08);border-radius:11px;
+  padding:14px;cursor:pointer;transition:all .18s;text-align:center;
+}
+.modelo-card:hover{border-color:rgba(77,166,255,0.3)}
+.modelo-card.selected{border-color:var(--blue2);background:rgba(45,140,255,0.08)}
+.modelo-card input[type=radio]{display:none}
+.modelo-dot{width:10px;height:3px;border-radius:2px;margin:0 auto 6px;transition:background .18s}
+.modelo-card.selected .modelo-dot.azul{background:#4DA6FF}
+.modelo-card.selected .modelo-dot.verde{background:#2ECC71}
+.modelo-dot.azul{background:rgba(77,166,255,0.3)}
+.modelo-dot.verde{background:rgba(46,204,113,0.3)}
+.modelo-name{font-weight:700;font-size:12px;color:#fff;margin-bottom:2px}
+.modelo-sub{font-size:10px;color:var(--text3)}
+
+/* ─── BUTTON ─── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:10px;border:none;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:700;transition:all .18s;
+}
+.btn-primary{background:linear-gradient(135deg,#2D8CFF,#1a6fe8);color:#fff;box-shadow:0 4px 16px rgba(45,140,255,0.3)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(45,140,255,0.4)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn-ghost{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff}
+.btn-full{width:100%;justify-content:center;padding:14px}
+
+/* ─── ALERTS ─── */
+.alert{border-radius:10px;padding:12px 16px;font-size:13px;display:flex;gap:10px;align-items:flex-start;margin-bottom:20px}
+.alert i{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-success{background:rgba(0,200,122,0.08);border:1px solid rgba(0,200,122,0.22);color:var(--success)}
+.alert-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.22);color:var(--danger)}
+.alert-info{background:rgba(77,166,255,0.08);border:1px solid rgba(77,166,255,0.2);color:var(--blue)}
+
+/* ─── ORDER SUCCESS ─── */
+#success-box{display:none}
+.success-inner{text-align:center;padding:16px 0}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(0,200,122,0.12);border:2px solid rgba(0,200,122,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;color:var(--success);margin:0 auto 20px;
+}
+.codigo-box{
+  background:rgba(77,166,255,0.08);border:1px solid rgba(77,166,255,0.2);
+  border-radius:12px;padding:16px 24px;margin:20px 0;display:inline-block;
+}
+.codigo-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.codigo-val{font-size:32px;font-weight:900;color:var(--blue);letter-spacing:3px}
+
+/* ─── TRACKING ─── */
+.status-timeline{margin-top:24px}
+.timeline-item{
+  display:flex;align-items:flex-start;gap:12px;padding:10px 0;position:relative;
+}
+.timeline-item:not(:last-child)::after{
+  content:'';position:absolute;left:11px;top:32px;bottom:-10px;width:2px;
+  background:rgba(255,255,255,0.06);
+}
+.tl-dot{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+}
+.tl-dot.done{background:rgba(0,200,122,0.15);border:2px solid var(--success);color:var(--success)}
+.tl-dot.current{background:rgba(77,166,255,0.15);border:2px solid var(--blue);color:var(--blue)}
+.tl-dot.pending{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.1);color:var(--text3)}
+.tl-label{font-size:13px;font-weight:600;padding-top:3px}
+.tl-label.done{color:var(--success)}
+.tl-label.current{color:#fff}
+.tl-label.pending{color:var(--text3)}
+
+/* ─── ORDER DETAIL ─── */
+.detail-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.detail-row:last-child{border:none}
+.detail-label{font-size:12px;color:var(--text2)}
+.detail-val{font-size:13px;font-weight:600;color:#fff}
+
+/* ─── STATUS BADGE ─── */
+.status-badge{
+  display:inline-block;padding:4px 10px;border-radius:20px;
+  font-size:11px;font-weight:700;letter-spacing:0.3px;
+}
+.s-recebido{background:rgba(77,166,255,0.12);color:var(--blue)}
+.s-aguardando{background:rgba(245,158,11,0.12);color:var(--warning)}
+.s-confirmado{background:rgba(0,200,122,0.12);color:var(--success)}
+.s-producao{background:rgba(139,92,246,0.12);color:#A78BFA}
+.s-personalizacao{background:rgba(236,72,153,0.12);color:#F472B6}
+.s-pronto{background:rgba(34,211,238,0.12);color:#22D3EE}
+.s-enviado{background:rgba(99,102,241,0.12);color:#818CF8}
+.s-entregue{background:rgba(0,200,122,0.18);color:var(--success);font-weight:800}
+.s-cancelado{background:rgba(239,68,68,0.12);color:var(--danger)}
+
+/* ─── FOOTER ─── */
+footer{text-align:center;padding:32px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:40px}
+footer a{color:var(--text3);text-decoration:none}
+footer a:hover{color:var(--blue)}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="logo" href="#">
+    <div class="logo-circle">WR</div>
+    <div>
+      <div class="logo-text">White Rock</div>
+      <div class="logo-sub">Basketball</div>
+    </div>
+  </a>
+  <div class="topbar-links">
+    <a href="#order" id="link-order" class="active" onclick="switchTab('order');return false">Fazer pedido</a>
+    <a href="#track" id="link-track" onclick="switchTab('track');return false">Acompanhar</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge"><i class="ti ti-shirt"></i> Camisas 2026</div>
+    <h1>Vista as cores do<br><span>White Rock</span></h1>
+    <p>Faça seu pedido de camisa personalizada e acompanhe o status diretamente aqui.</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-order" onclick="switchTab('order')">
+      <i class="ti ti-shopping-cart"></i> Fazer pedido
+    </button>
+    <button class="tab-btn" id="tab-track" onclick="switchTab('track')">
+      <i class="ti ti-search"></i> Acompanhar pedido
+    </button>
+  </div>
+
+  <!-- ══ PANEL: ORDER ══ -->
+  <div id="panel-order">
+
+    <!-- Success box -->
+    <div id="success-box" class="card">
+      <div class="success-inner">
+        <div class="success-icon"><i class="ti ti-check"></i></div>
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Pedido recebido!</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:4px">Guarde seu código de acompanhamento</p>
+        <div class="codigo-box">
+          <div class="codigo-label">Código do pedido</div>
+          <div class="codigo-val" id="codigo-display">WR-0000</div>
+        </div>
+        <p style="color:var(--text2);font-size:13px;margin-bottom:24px">
+          Use este código (ou seu WhatsApp) para acompanhar o pedido.
+        </p>
+        <button class="btn btn-ghost" onclick="resetForm()">
+          <i class="ti ti-plus"></i> Novo pedido
+        </button>
+      </div>
+    </div>
+
+    <!-- Order form -->
+    <div id="order-form-wrap">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-user"></i> Seus dados</div>
+        <div id="form-error" class="alert alert-error" style="display:none">
+          <i class="ti ti-alert-circle"></i> <span id="form-error-msg"></span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Nome completo *</label>
+            <input type="text" id="f-nome" placeholder="Seu nome" autocomplete="name">
+          </div>
+          <div class="form-group full">
+            <label>WhatsApp *</label>
+            <input type="tel" id="f-wpp" placeholder="(21) 99999-9999" autocomplete="tel">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i class="ti ti-shirt"></i> Camisa</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Modelo *</label>
+            <div class="modelo-grid">
+              <label class="modelo-card selected" id="mc-principal" onclick="selectModelo('principal')">
+                <input type="radio" name="modelo" value="principal" checked>
+                <div class="modelo-dot azul"></div>
+                <div class="modelo-name">Principal</div>
+                <div class="modelo-sub">Midnight Elite · Azul</div>
+              </label>
+              <label class="modelo-card" id="mc-secundario" onclick="selectModelo('secundario')">
+                <input type="radio" name="modelo" value="secundario">
+                <div class="modelo-dot verde"></div>
+                <div class="modelo-name">Secundária</div>
+                <div class="modelo-sub">Dark Navy · Verde</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tamanho *</label>
+            <select id="f-tam">
+              <option value="">Selecione</option>
+              <option>PP</option><option>P</option><option>M</option>
+              <option>G</option><option>GG</option><option>XG</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Quantidade</label>
+            <select id="f-qtd">
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Número na camisa</label>
+            <input type="number" id="f-num" placeholder="Ex: 23" min="0" max="99">
+          </div>
+
+          <div class="form-group">
+            <label>Nome nas costas</label>
+            <input type="text" id="f-nomecam" placeholder="Ex: SILVA" style="text-transform:uppercase" maxlength="16">
+          </div>
+
+          <div class="form-group full">
+            <label>Observações</label>
+            <textarea id="f-obs" placeholder="Alguma observação ou pedido especial?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="btn-submit" onclick="submitOrder()">
+        <i class="ti ti-send"></i> Enviar pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: TRACK ══ -->
+  <div id="panel-track" style="display:none">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-search"></i> Consultar pedido</div>
+      <div id="track-error" class="alert alert-error" style="display:none">
+        <i class="ti ti-alert-circle"></i> <span id="track-error-msg">Pedido não encontrado.</span>
+      </div>
+      <div class="form-grid" style="margin-bottom:16px">
+        <div class="form-group full">
+          <label>Código do pedido</label>
+          <input type="text" id="t-codigo" placeholder="WR-0001" style="text-transform:uppercase"
+            oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div class="form-group full" style="position:relative">
+          <label>— ou —</label>
+        </div>
+        <div class="form-group full">
+          <label>WhatsApp</label>
+          <input type="tel" id="t-wpp" placeholder="(21) 99999-9999">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="trackOrder()">
+        <i class="ti ti-search"></i> Buscar pedido
+      </button>
+    </div>
+
+    <!-- Tracking result -->
+    <div id="track-result" style="display:none"></div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>White Rock Basketball · <a href="/">Área do time</a></p>
+</footer>
+
+<script>
+const API = '/api/pedidos-torcedor';
+
+// ── TABS ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  ['order','track'].forEach(t => {
+    document.getElementById('panel-' + t).style.display = t === tab ? 'block' : 'none';
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('link-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'track') {
+    document.getElementById('track-error').style.display = 'none';
+    document.getElementById('track-result').style.display = 'none';
+  }
+}
+
+// Check URL hash
+if (location.hash === '#track') switchTab('track');
+
+// ── ORDER FORM ────────────────────────────────────────────────────
+let selectedModelo = 'principal';
+
+function selectModelo(m) {
+  selectedModelo = m;
+  document.getElementById('mc-principal').classList.toggle('selected', m === 'principal');
+  document.getElementById('mc-secundario').classList.toggle('selected', m === 'secundario');
+}
+
+function showError(msg) {
+  const el = document.getElementById('form-error');
+  document.getElementById('form-error-msg').textContent = msg;
+  el.style.display = 'flex';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetForm() {
+  document.getElementById('success-box').style.display = 'none';
+  document.getElementById('order-form-wrap').style.display = 'block';
+  ['f-nome','f-wpp','f-tam','f-num','f-nomecam','f-obs'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-qtd').value = '1';
+  selectModelo('principal');
+  document.getElementById('form-error').style.display = 'none';
+}
+
+async function submitOrder() {
+  const nome    = document.getElementById('f-nome').value.trim();
+  const whatsapp= document.getElementById('f-wpp').value.trim();
+  const tamanho = document.getElementById('f-tam').value;
+  const qtd     = parseInt(document.getElementById('f-qtd').value) || 1;
+  const numCam  = document.getElementById('f-num').value;
+  const nomeCam = document.getElementById('f-nomecam').value.trim().toUpperCase();
+  const obs     = document.getElementById('f-obs').value.trim();
+
+  if (!nome) { showError('Informe seu nome.'); return; }
+  if (!whatsapp) { showError('Informe seu WhatsApp.'); return; }
+  if (!tamanho) { showError('Selecione o tamanho.'); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Enviando...';
+
+  try {
+    const r = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome, whatsapp, tamanho,
+        numCamisa: numCam !== '' ? +numCam : null,
+        nomeCamisa: nomeCam || null,
+        modelo: selectedModelo,
+        quantidade: qtd,
+        obs: obs || null,
+      })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Erro ao enviar pedido');
+
+    document.getElementById('codigo-display').textContent = data.codigo;
+    document.getElementById('order-form-wrap').style.display = 'none';
+    document.getElementById('success-box').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (e) {
+    showError(e.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Enviar pedido';
+  }
+}
+
+// ── TRACKING ──────────────────────────────────────────────────────
+const STATUS_ALL = [
+  'Pedido recebido','Aguardando pagamento','Pagamento confirmado',
+  'Em produção','Em personalização','Pronto para entrega',
+  'Enviado','Entregue','Cancelado'
+];
+
+const STATUS_CLS = {
+  'Pedido recebido':        's-recebido',
+  'Aguardando pagamento':   's-aguardando',
+  'Pagamento confirmado':   's-confirmado',
+  'Em produção':            's-producao',
+  'Em personalização':      's-personalizacao',
+  'Pronto para entrega':    's-pronto',
+  'Enviado':                's-enviado',
+  'Entregue':               's-entregue',
+  'Cancelado':              's-cancelado',
+};
+
+function statusBadge(s) {
+  return `<span class="status-badge ${STATUS_CLS[s] || ''}">${s}</span>`;
+}
+
+function buildTimeline(currentStatus) {
+  if (currentStatus === 'Cancelado') {
+    return `<div class="timeline-item">
+      <div class="tl-dot done"><i class="ti ti-x"></i></div>
+      <div class="tl-label" style="color:var(--danger)">Pedido cancelado</div>
+    </div>`;
+  }
+  const steps = STATUS_ALL.filter(s => s !== 'Cancelado');
+  const currentIdx = steps.indexOf(currentStatus);
+  return steps.map((s, i) => {
+    const cls = i < currentIdx ? 'done' : i === currentIdx ? 'current' : 'pending';
+    const icon = i < currentIdx ? 'ti-check' : i === currentIdx ? 'ti-point' : 'ti-circle';
+    return `<div class="timeline-item">
+      <div class="tl-dot ${cls}"><i class="ti ${icon}" style="font-size:10px"></i></div>
+      <div class="tl-label ${cls}">${s}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderOrderCard(p) {
+  const modeloName = p.modelo === 'principal' ? 'Principal (Midnight Elite)' : 'Secundária (Dark Navy)';
+  return `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+        <div>
+          <div style="font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Pedido</div>
+          <div style="font-size:22px;font-weight:900;color:var(--blue);letter-spacing:2px">${p.codigo}</div>
+        </div>
+        ${statusBadge(p.status)}
+      </div>
+
+      <div class="status-timeline">${buildTimeline(p.status)}</div>
+
+      <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Detalhes</div>
+        <div class="detail-row"><span class="detail-label">Nome</span><span class="detail-val">${p.nome}</span></div>
+        <div class="detail-row"><span class="detail-label">Modelo</span><span class="detail-val">${modeloName}</span></div>
+        <div class="detail-row"><span class="detail-label">Tamanho</span><span class="detail-val">${p.tamanho}</span></div>
+        <div class="detail-row"><span class="detail-label">Quantidade</span><span class="detail-val">${p.quantidade}</span></div>
+        ${p.numCamisa !== null ? `<div class="detail-row"><span class="detail-label">Número</span><span class="detail-val">${p.numCamisa}</span></div>` : ''}
+        ${p.nomeCamisa ? `<div class="detail-row"><span class="detail-label">Nome nas costas</span><span class="detail-val">${p.nomeCamisa}</span></div>` : ''}
+        ${p.valor !== null ? `<div class="detail-row"><span class="detail-label">Valor</span><span class="detail-val" style="color:var(--success)">R$ ${Number(p.valor).toFixed(2).replace('.',',')}</span></div>` : ''}
+        <div class="detail-row"><span class="detail-label">Pagamento</span><span class="detail-val">${p.pagamento}</span></div>
+        <div class="detail-row"><span class="detail-label">Data do pedido</span><span class="detail-val">${fmtDate(p.dataPedido)}</span></div>
+        ${p.obs ? `<div class="detail-row"><span class="detail-label">Obs</span><span class="detail-val" style="font-size:12px;color:var(--text2)">${p.obs}</span></div>` : ''}
+      </div>
+    </div>`;
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,dy] = d.split('-');
+  return `${dy}/${m}/${y}`;
+}
+
+async function trackOrder() {
+  const codigo = document.getElementById('t-codigo').value.trim().toUpperCase();
+  const wpp    = document.getElementById('t-wpp').value.trim();
+  const errEl  = document.getElementById('track-error');
+  const resEl  = document.getElementById('track-result');
+
+  errEl.style.display = 'none';
+  resEl.style.display = 'none';
+  resEl.innerHTML = '';
+
+  if (!codigo && !wpp) {
+    document.getElementById('track-error-msg').textContent = 'Informe o código do pedido ou seu WhatsApp.';
+    errEl.style.display = 'flex';
+    return;
+  }
+
+  const qs = codigo ? `?codigo=${encodeURIComponent(codigo)}` : `?whatsapp=${encodeURIComponent(wpp)}`;
+  try {
+    const r = await fetch(API + qs);
+    if (r.status === 404) throw new Error('Pedido não encontrado. Verifique o código ou WhatsApp.');
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Erro ao buscar pedido');
+
+    if (Array.isArray(data)) {
+      if (!data.length) throw new Error('Nenhum pedido encontrado para este WhatsApp.');
+      resEl.innerHTML = `
+        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">${data.length} pedido(s) encontrado(s):</div>
+        ${data.map(p => renderOrderCard(p)).join('')}`;
+    } else {
+      resEl.innerHTML = renderOrderCard(data);
+    }
+    resEl.style.display = 'block';
+    resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (e) {
+    document.getElementById('track-error-msg').textContent = e.message;
+    errEl.style.display = 'flex';
+  }
+}
+</script>
+</body>
+</html>

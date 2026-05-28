@@ -526,6 +526,17 @@ body.sidebar-mini .btn-logout{justify-content:center}
   body.sidebar-mini .nav{width:100%}
   body.sidebar-mini #app{margin-left:0;padding-top:52px}
 }
+/* ─── FAN ORDER STATUS BADGES ─── */
+.fsb{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;white-space:nowrap}
+.fsb-recebido{background:rgba(77,166,255,0.12);color:var(--blue)}
+.fsb-aguardando{background:rgba(245,158,11,0.12);color:var(--warning)}
+.fsb-confirmado{background:rgba(0,200,122,0.12);color:var(--success)}
+.fsb-producao{background:rgba(139,92,246,0.12);color:#A78BFA}
+.fsb-personalizacao{background:rgba(236,72,153,0.12);color:#F472B6}
+.fsb-pronto{background:rgba(34,211,238,0.12);color:#22D3EE}
+.fsb-enviado{background:rgba(99,102,241,0.12);color:#818CF8}
+.fsb-entregue{background:rgba(0,200,122,0.18);color:var(--success)}
+.fsb-cancelado{background:rgba(239,68,68,0.12);color:var(--danger)}
 </style>
 </head>
 <body>
@@ -1024,7 +1035,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [] };
+let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -1219,11 +1230,13 @@ function showPage(id) {
 
 // ==================== LOAD ALL ====================
 async function loadAll() {
-  const [j, jo, tr, fin, av, unif] = await Promise.all([
+  const isManager = can(['admin','tecnico','capitao']);
+  const [j, jo, tr, fin, av, unif, fant] = await Promise.all([
     api('GET','jogadores'), api('GET','jogos'), api('GET','treinos'),
-    can(['admin','tecnico','capitao']) ? api('GET','financeiro') : Promise.resolve({lancamentos:[],mensalidades:{}}),
+    isManager ? api('GET','financeiro') : Promise.resolve({lancamentos:[],mensalidades:{}}),
     api('GET','avisos'),
     api('GET','uniformes'),
+    isManager ? api('GET','pedidos-torcedor') : Promise.resolve([]),
   ]);
   if (j) cache.jogadores = j;
   if (jo) cache.jogos = jo;
@@ -1231,6 +1244,7 @@ async function loadAll() {
   if (fin) cache.financeiro = fin;
   if (av) cache.avisos = av;
   if (unif) cache.uniformes = unif;
+  if (Array.isArray(fant)) cache.pedidosTorcedor = fant;
   renderDashboard();
   renderJogadores();
 }
@@ -2326,6 +2340,15 @@ function renderUniformes() {
     // ── ADMIN ONLY ────────────────────────────────────────────
     el.innerHTML = buildManagementSection(pedidos);
   }
+
+  // ── FAN ORDERS (admin / tecnico / capitao) ────────────────
+  if (can(['admin','tecnico','capitao'])) {
+    const fanSection = document.createElement('div');
+    fanSection.dataset.fanSection = 'true';
+    fanSection.style.cssText = 'margin-top:44px;border-top:1px solid var(--border);padding-top:36px';
+    fanSection.innerHTML = buildFanOrdersSection(cache.pedidosTorcedor || []);
+    el.appendChild(fanSection);
+  }
 }
 
 function buildManagementSection(pedidos) {
@@ -2414,6 +2437,175 @@ function buildManagementSection(pedidos) {
       <div class="card" style="color:var(--text2);font-size:13px">Nenhum pedido recebido ainda.</div>`}`;
 }
 
+// ── FAN ORDERS HELPERS ──────────────────────────────────────────
+const FAN_STATUS_ALL = [
+  'Pedido recebido','Aguardando pagamento','Pagamento confirmado',
+  'Em produção','Em personalização','Pronto para entrega',
+  'Enviado','Entregue','Cancelado'
+];
+
+function fanStatusCls(s) {
+  const map = {
+    'Pedido recebido':'fsb-recebido','Aguardando pagamento':'fsb-aguardando',
+    'Pagamento confirmado':'fsb-confirmado','Em produção':'fsb-producao',
+    'Em personalização':'fsb-personalizacao','Pronto para entrega':'fsb-pronto',
+    'Enviado':'fsb-enviado','Entregue':'fsb-entregue','Cancelado':'fsb-cancelado',
+  };
+  return map[s] || 'fsb-recebido';
+}
+
+function buildFanOrdersSection(pedidos) {
+  const canDel = can(['admin']);
+  const total    = pedidos.length;
+  const pendentes = pedidos.filter(p => !['Entregue','Cancelado'].includes(p.status)).length;
+  const entregues = pedidos.filter(p => p.status === 'Entregue').length;
+  const receita  = pedidos
+    .filter(p => p.valor !== null && p.pagamento === 'Pago')
+    .reduce((s, p) => s + (p.valor || 0), 0);
+
+  // Search state from DOM (preserved across re-renders via hidden input trick)
+  const searchVal = document.getElementById('fan-search-val')?.value || '';
+  const filterVal = document.getElementById('fan-filter-val')?.value || '';
+  let shown = pedidos.filter(p => {
+    const matchSearch = !searchVal ||
+      p.nome.toLowerCase().includes(searchVal.toLowerCase()) ||
+      p.whatsapp.includes(searchVal) ||
+      p.codigo.includes(searchVal.toUpperCase());
+    const matchFilter = !filterVal || p.status === filterVal;
+    return matchSearch && matchFilter;
+  }).sort((a, b) => b.id - a.id);
+
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+      <div class="sec-title" style="margin:0"><i class="ti ti-shopping-bag"></i> Pedidos de Torcedores</div>
+      <a href="/pedido.html" target="_blank" class="btn btn-primary btn-sm">
+        <i class="ti ti-external-link"></i> Página de pedidos
+      </a>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid4" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-title">Total</div>
+        <div class="card-value" style="color:var(--blue)">${total}</div>
+        <div class="card-sub">pedidos</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Em andamento</div>
+        <div class="card-value" style="color:var(--warning)">${pendentes}</div>
+        <div class="card-sub">pendentes</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Entregues</div>
+        <div class="card-value" style="color:var(--success)">${entregues}</div>
+        <div class="card-sub">concluídos</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Receita</div>
+        <div class="card-value" style="color:var(--success);font-size:18px">R$&nbsp;${receita.toFixed(2).replace('.',',')}</div>
+        <div class="card-sub">pagamentos confirmados</div>
+      </div>
+    </div>
+
+    <!-- Hidden state inputs -->
+    <input type="hidden" id="fan-search-val" value="${searchVal}">
+    <input type="hidden" id="fan-filter-val" value="${filterVal}">
+
+    <!-- Filters -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+      <input class="form-input" style="flex:1;min-width:160px;max-width:260px;font-size:13px"
+        placeholder="Buscar nome, WhatsApp, código..."
+        value="${searchVal}"
+        oninput="document.getElementById('fan-search-val').value=this.value;rerenderFanOrders()">
+      <select class="form-input" style="width:auto;font-size:13px"
+        onchange="document.getElementById('fan-filter-val').value=this.value;rerenderFanOrders()">
+        <option value="" ${!filterVal?'selected':''}>Todos os status</option>
+        ${FAN_STATUS_ALL.map(s => `<option ${filterVal===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Código</th><th>Nome</th><th>WhatsApp</th>
+            <th>Modelo</th><th>Tam</th><th>Qtd</th><th>Camisa</th>
+            <th>Valor</th><th>Pgto</th><th>Status</th><th>Data</th>
+            ${canDel ? '<th></th>' : ''}
+          </tr>
+        </thead>
+        <tbody>
+          ${shown.length ? shown.map(p => `
+          <tr>
+            <td style="font-weight:700;color:var(--blue);font-size:12px;letter-spacing:1px">${p.codigo}</td>
+            <td style="font-weight:600">${p.nome}</td>
+            <td style="font-size:12px;color:var(--text2)">${p.whatsapp}</td>
+            <td>
+              <span style="font-size:11px;font-weight:700;color:${p.modelo==='principal'?'var(--blue)':'#2ECC71'}">
+                ${p.modelo === 'principal' ? 'Principal' : 'Secundária'}
+              </span>
+            </td>
+            <td style="font-weight:700">${p.tamanho}</td>
+            <td style="color:var(--text2)">${p.quantidade}</td>
+            <td style="font-size:11px;color:var(--text2)">${[p.numCamisa !== null ? '#'+p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' · ') || '—'}</td>
+            <td>
+              <input type="number" step="0.01" min="0"
+                class="form-input" style="width:80px;padding:4px 6px;font-size:12px"
+                value="${p.valor !== null ? p.valor : ''}"
+                placeholder="R$"
+                onchange="updateFanOrderField(${p.id},'valor',this.value===''?null:+this.value)">
+            </td>
+            <td>
+              <select class="form-input" style="padding:3px 6px;font-size:11px;width:auto"
+                onchange="updateFanOrderField(${p.id},'pagamento',this.value)">
+                <option ${p.pagamento==='Pendente'?'selected':''}>Pendente</option>
+                <option ${p.pagamento==='Pago'?'selected':''}>Pago</option>
+              </select>
+            </td>
+            <td>
+              <select class="form-input" style="padding:3px 6px;font-size:11px;width:auto"
+                onchange="updateFanOrderField(${p.id},'status',this.value)">
+                ${FAN_STATUS_ALL.map(s=>`<option ${p.status===s?'selected':''}>${s}</option>`).join('')}
+              </select>
+            </td>
+            <td style="color:var(--text2);font-size:11px">${fmt(p.dataPedido)}</td>
+            ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteFanOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
+          </tr>`).join('') : `
+          <tr><td colspan="${canDel?12:11}" style="text-align:center;color:var(--text2);padding:24px">
+            ${total ? 'Nenhum pedido corresponde ao filtro.' : 'Nenhum pedido recebido ainda. <a href="/pedido.html" target="_blank" style="color:var(--blue)">Abrir página de pedidos →</a>'}
+          </td></tr>`}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function rerenderFanOrders() {
+  const fanDiv = document.querySelector('[data-fan-section]');
+  if (fanDiv) fanDiv.innerHTML = buildFanOrdersSection(cache.pedidosTorcedor || []);
+}
+
+async function updateFanOrderField(id, field, value) {
+  const payload = { id, [field]: value };
+  const r = await api('PUT','pedidos-torcedor', payload);
+  if (r && r.id) {
+    const idx = cache.pedidosTorcedor.findIndex(x => x.id === id);
+    if (idx !== -1) cache.pedidosTorcedor[idx] = r;
+    toast('Atualizado!');
+  } else toast('Erro ao atualizar','error');
+}
+
+async function deleteFanOrder(id) {
+  const p = cache.pedidosTorcedor.find(x => x.id === id);
+  if (!confirm(`Remover pedido ${p?.codigo} de ${p?.nome}?`)) return;
+  const r = await api('DELETE','pedidos-torcedor',{ id });
+  if (r && r.success) {
+    cache.pedidosTorcedor = cache.pedidosTorcedor.filter(x => x.id !== id);
+    renderUniformes();
+    toast('Pedido removido!');
+  } else toast('Erro ao remover','error');
+}
+
 function toggleUnifTam(tipo) {
   const checked = document.getElementById(`unif-check-${tipo}`)?.checked;
   const wrap = document.getElementById(`unif-tam-${tipo}-wrap`);
@@ -2428,7 +2620,8 @@ async function saveMyOrder() {
   if (!tamP && !tamS) { toast('Selecione pelo menos um uniforme','error'); return; }
   const r = await api('POST','uniformes',{ tamPrincipal:tamP, tamSecundario:tamS });
   if (r && r.id) {
-    cache.uniformes = [r];
+    const idx = cache.uniformes.findIndex(x => x.id === r.id || x.userId === r.userId);
+    if (idx !== -1) cache.uniformes[idx] = r; else cache.uniformes.push(r);
     renderUniformes();
     toast('Pedido salvo!');
   } else toast('Erro ao salvar pedido','error');
