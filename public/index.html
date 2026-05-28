@@ -664,7 +664,10 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <div class="page" id="page-financeiro">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
     <div class="sec-title" style="margin:0"><i class="ti ti-cash"></i> Financeiro</div>
-    <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-lancamento')"><i class="ti ti-plus"></i> Lançamento</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-lancamento')"><i class="ti ti-plus"></i> Lançamento</button>
+      <button id="btn-zerar-caixa" class="btn btn-danger btn-sm" onclick="zerarCaixa()" style="display:none"><i class="ti ti-trash"></i> Zerar caixa</button>
+    </div>
   </div>
   <div class="grid4" id="fin-cards"></div>
   <div class="grid2">
@@ -720,35 +723,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
 </div>
 
 <div class="page" id="page-uniformes">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-shirt"></i> Uniformes</div>
-    <button class="btn btn-primary btn-sm" id="btn-add-kit" onclick="openAddKit()" style="display:none"><i class="ti ti-plus"></i> Registrar kit</button>
-  </div>
-
-  <div class="grid4" id="unif-cards" style="margin-bottom:20px"></div>
-
-  <div class="sec-title"><i class="ti ti-palette"></i> Catálogo de modelos</div>
-  <div class="grid3" id="unif-catalog" style="margin-bottom:20px"></div>
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-list"></i> Kits por jogador</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input class="form-input" id="unif-search" placeholder="Buscar jogador..." style="width:150px;font-size:12px" oninput="renderUniformes()">
-      <select class="form-input" id="unif-filtro" style="width:auto;font-size:12px" onchange="renderUniformes()">
-        <option value="">Todos os status</option>
-        <option value="Entregue">Entregue</option>
-        <option value="Pendente">Pendente</option>
-        <option value="Aguardando Produção">Aguardando produção</option>
-        <option value="Reserva">Reserva</option>
-      </select>
-    </div>
-  </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <thead><tr><th>Jogador</th><th>Nº</th><th>Tam. Jogo</th><th>Tam. Treino</th><th>Kit Jogo</th><th>Kit Treino</th><th>Valor</th><th>Pago</th><th>Restante</th><th></th></tr></thead>
-      <tbody id="unif-body"></tbody>
-    </table>
-  </div>
+  <div id="unif-content"><div class="loading"><div class="spinner"></div>Carregando...</div></div>
 </div>
 
 <div class="page" id="page-usuarios">
@@ -929,73 +904,6 @@ body.sidebar-mini .btn-logout{justify-content:center}
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-add-kit">
-  <div class="modal">
-    <div class="modal-title">Registrar kit <button class="modal-close" onclick="closeModal('modal-add-kit')"><i class="ti ti-x"></i></button></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Jogador *</label><select class="form-input" id="kit-jogador"></select></div>
-      <div class="form-group"><label class="form-label">Temporada</label><input class="form-input" id="kit-temporada" value="2026"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Tamanho kit jogo</label>
-        <select class="form-input" id="kit-tam-jogo"><option>PP</option><option>P</option><option selected>M</option><option>G</option><option>GG</option><option>XG</option></select>
-      </div>
-      <div class="form-group"><label class="form-label">Tamanho kit treino</label>
-        <select class="form-input" id="kit-tam-treino"><option>PP</option><option>P</option><option selected>M</option><option>G</option><option>GG</option><option>XG</option></select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Status kit jogo</label>
-        <select class="form-input" id="kit-status-jogo"><option>Pendente</option><option>Aguardando Produção</option><option>Entregue</option><option>Reserva</option></select>
-      </div>
-      <div class="form-group"><label class="form-label">Status kit treino</label>
-        <select class="form-input" id="kit-status-treino"><option>Pendente</option><option>Aguardando Produção</option><option>Entregue</option><option>Reserva</option></select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Valor do uniforme (R$)</label><input class="form-input" id="kit-valor" type="number" value="150" min="0"></div>
-      <div class="form-group"><label class="form-label">Valor já pago (R$)</label><input class="form-input" id="kit-pago" type="number" value="0" min="0"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Observação</label><input class="form-input" id="kit-obs" placeholder="Ex: aguardando confirmação de tamanho"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addKit()"><i class="ti ti-plus"></i> Registrar</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-add-kit')">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-edit-kit">
-  <div class="modal">
-    <div class="modal-title">Editar kit <button class="modal-close" onclick="closeModal('modal-edit-kit')"><i class="ti ti-x"></i></button></div>
-    <input type="hidden" id="ek-id">
-    <div id="ek-jogador-info" style="background:var(--navy3);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;font-weight:500"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Tamanho kit jogo</label>
-        <select class="form-input" id="ek-tam-jogo"><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>XG</option></select>
-      </div>
-      <div class="form-group"><label class="form-label">Tamanho kit treino</label>
-        <select class="form-input" id="ek-tam-treino"><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>XG</option></select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Status kit jogo</label>
-        <select class="form-input" id="ek-status-jogo"><option>Pendente</option><option>Aguardando Produção</option><option>Entregue</option><option>Reserva</option></select>
-      </div>
-      <div class="form-group"><label class="form-label">Status kit treino</label>
-        <select class="form-input" id="ek-status-treino"><option>Pendente</option><option>Aguardando Produção</option><option>Entregue</option><option>Reserva</option></select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Valor do uniforme (R$)</label><input class="form-input" id="ek-valor" type="number" min="0"></div>
-      <div class="form-group"><label class="form-label">Valor já pago (R$)</label><input class="form-input" id="ek-pago" type="number" min="0"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Observação</label><input class="form-input" id="ek-obs" placeholder="Observações sobre o kit"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="saveEditKit()"><i class="ti ti-device-floppy"></i> Salvar</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-edit-kit')">Cancelar</button>
-    </div>
-  </div>
-</div>
 
 <div class="modal-overlay" id="modal-edit-user">
   <div class="modal">
@@ -1290,9 +1198,13 @@ function buildNav() {
 
   // Show/hide role-specific buttons
   if (can(['admin','tecnico','capitao'])) {
-    ['btn-add-jogador','btn-add-jogo','btn-add-treino','btn-add-aviso','btn-add-kit'].forEach(id => {
+    ['btn-add-jogador','btn-add-jogo','btn-add-treino','btn-add-aviso'].forEach(id => {
       const el = document.getElementById(id); if(el) el.style.display = 'inline-flex';
     });
+  }
+  if (can(['admin'])) {
+    const elZ = document.getElementById('btn-zerar-caixa');
+    if (elZ) elZ.style.display = 'inline-flex';
   }
 }
 
@@ -2023,12 +1935,21 @@ async function quitarMens(id) {
   const r = await api('PUT','financeiro',{ jogadorId:id, quitar:true });
   if (r && r.success) {
     delete cache.financeiro.mensalidades[id];
-    // reload
     const fin = await api('GET','financeiro');
     if (fin) cache.financeiro = fin;
     renderFinanceiro(); renderDashboard();
     toast('Mensalidade quitada!');
   } else toast('Erro ao quitar','error');
+}
+
+async function zerarCaixa() {
+  if (!confirm('Zerar o caixa?\n\nTodos os lançamentos e mensalidades serão apagados permanentemente.\nEsta ação não pode ser desfeita.')) return;
+  const r = await api('DELETE','financeiro',{ zerarCaixa:true });
+  if (r && r.success) {
+    cache.financeiro = { lancamentos:[], mensalidades:{} };
+    renderFinanceiro(); renderDashboard();
+    toast('Caixa zerado!');
+  } else toast('Erro ao zerar caixa','error');
 }
 
 // ==================== ESTATÍSTICAS ====================
@@ -2287,181 +2208,242 @@ async function clearLog() {
 }
 
 // ==================== UNIFORMES ====================
-function kitStatusBadge(status) {
-  const cls = status==='Entregue'?'kit-badge-entregue':status==='Pendente'?'kit-badge-pendente':status==='Aguardando Produção'?'kit-badge-aguardando':'kit-badge-reserva';
-  return `<span class="badge ${cls}">${status}</span>`;
-}
-
-const LOGO_URL = 'https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz';
-const UNIF_PRINCIPAL = 'https://lh3.googleusercontent.com/d/1MmeNehU50XwG0TNhW3Zb0zV94Z7KOP8y';
+const UNIF_PRINCIPAL  = 'https://lh3.googleusercontent.com/d/1MmeNehU50XwG0TNhW3Zb0zV94Z7KOP8y';
 const UNIF_SECUNDARIO = 'https://lh3.googleusercontent.com/d/1zZ1vgKcDf7poxs_iMOHQGSWzaQHvK1rA';
 
-function imageCardHTML(modelo, subtitulo, tipo, temporada, accentColor, imgUrl) {
-  return `
-  <div class="jersey-card">
-    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${accentColor}"></div>
-    <div style="width:100%;border-radius:10px;margin-bottom:16px;background:#070F1D;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:200px">
-      <img src="${imgUrl}" alt="${modelo}"
-        style="max-width:100%;max-height:260px;object-fit:contain;display:block;transition:.3s"
-        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;flex-direction:column;align-items:center;gap:8px;padding:32px;color:var(--text2);font-size:12px">
-        <i class="ti ti-photo-off" style="font-size:28px"></i>Imagem indisponível
-      </div>
-    </div>
-    <div style="font-weight:800;color:#fff;font-size:13px;letter-spacing:1.5px;text-transform:uppercase">${modelo}</div>
-    <div style="color:${accentColor};font-size:10px;font-weight:700;letter-spacing:2.5px;margin-top:3px;text-transform:uppercase">${subtitulo}</div>
-    <div style="color:var(--text2);font-size:11px;margin-top:8px">${tipo} · Temporada ${temporada}</div>
-  </div>`;
+function statusBadgeCls(s) {
+  if (s === 'Entregue')    return 'badge-green';
+  if (s === 'Em Produção') return 'badge-blue';
+  return 'badge-orange';
 }
 
-function jerseyCardHTML(modelo, subtitulo, tipo, temporada, accentColor, gradId) {
-  return `
-  <div class="jersey-card" style="--accent:${accentColor}">
-    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${accentColor}"></div>
-    <svg viewBox="0 0 160 180" xmlns="http://www.w3.org/2000/svg" style="width:88px;height:auto;margin:0 auto 16px;display:block;filter:drop-shadow(0 6px 18px ${accentColor}55)">
-      <defs><linearGradient id="${gradId}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0D2347"/><stop offset="100%" stop-color="#070F1D"/></linearGradient></defs>
-      <path d="M48,4 L22,15 L0,43 L22,63 L36,53 L36,176 L124,176 L124,53 L138,63 L160,43 L138,15 L112,4 Q80,27 48,4Z" fill="url(#${gradId})" stroke="#1E3A6E" stroke-width="1.5"/>
-      <path d="M48,4 Q80,27 112,4" fill="none" stroke="${accentColor}" stroke-width="2.5"/>
-      <rect x="36" y="76" width="5" height="100" fill="${accentColor}" opacity="0.55"/>
-      <rect x="119" y="76" width="5" height="100" fill="${accentColor}" opacity="0.55"/>
-      <text x="80" y="114" text-anchor="middle" fill="${accentColor}" font-size="27" font-weight="900" font-family="Impact,Arial Black,sans-serif">WR</text>
-      <text x="80" y="163" text-anchor="middle" fill="rgba(255,255,255,.92)" font-size="40" font-weight="900" font-family="Impact,Arial Black,sans-serif">23</text>
-    </svg>
-    <div style="font-weight:800;color:#fff;font-size:13px;letter-spacing:1.5px;text-transform:uppercase">${modelo}</div>
-    <div style="color:${accentColor};font-size:10px;font-weight:700;letter-spacing:2.5px;margin-top:3px;text-transform:uppercase">${subtitulo}</div>
-    <div style="color:var(--text2);font-size:11px;margin-top:8px">${tipo} · Temporada ${temporada}</div>
+function unifImgBox(src, minH) {
+  return `<div style="width:100%;border-radius:10px;margin-bottom:16px;background:#070F1D;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:${minH||160}px">
+    <img src="${src}" style="max-width:100%;max-height:${minH?minH+60:220}px;object-fit:contain"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div style="display:none;flex-direction:column;align-items:center;gap:8px;padding:28px;color:var(--text2);font-size:12px">
+      <i class="ti ti-photo-off" style="font-size:28px"></i>Indisponível
+    </div>
   </div>`;
 }
 
 function renderUniformes() {
-  const lista = cache.uniformes || [];
-  const search = (document.getElementById('unif-search')?.value || '').toLowerCase();
-  const filtro = document.getElementById('unif-filtro')?.value || '';
+  const el = document.getElementById('unif-content');
+  if (!el) return;
+  const pedidos = cache.uniformes || [];
+  const TAMANHOS = ['PP','P','M','G','GG','XG'];
+  const canManage = can(['admin','tecnico','capitao']);
 
-  // Overview cards
-  const total = lista.length;
-  const jogoEntregue = lista.filter(u => u.kitJogo === 'Entregue').length;
-  const treinoEntregue = lista.filter(u => u.kitTreino === 'Entregue').length;
-  const inadimplentes = lista.filter(u => +u.valorPago < +u.valorUniforme).length;
-  const aReceber = lista.reduce((s, u) => s + (+u.valorUniforme - +u.valorPago), 0);
+  if (can(['atleta']) && !canManage) {
+    // ── ATHLETE VIEW ──────────────────────────────────────────
+    const meu = pedidos[0] || null;
 
-  document.getElementById('unif-cards').innerHTML = `
-    <div class="card"><div class="card-title">Kit jogo entregues</div><div class="card-value" style="color:var(--success)">${jogoEntregue}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${total}</span></div><div class="card-sub" style="color:var(--text2)">${total-jogoEntregue} pendentes</div></div>
-    <div class="card"><div class="card-title">Kit treino entregues</div><div class="card-value" style="color:var(--blue)">${treinoEntregue}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${total}</span></div><div class="card-sub" style="color:var(--text2)">${total-treinoEntregue} pendentes</div></div>
-    <div class="card"><div class="card-title">Inadimplentes</div><div class="card-value" style="color:${inadimplentes>0?'var(--warning)':'var(--success)'}">${inadimplentes}</div><div class="card-sub" style="color:var(--text2)">jogadores com saldo</div></div>
-    <div class="card"><div class="card-title">A receber</div><div class="card-value" style="font-size:20px;color:${aReceber>0?'var(--warning)':'var(--success)'}">R$ ${aReceber.toFixed(2).replace('.',',')}</div><div class="card-sub" style="color:var(--text2)">saldo em aberto</div></div>
-  `;
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+        <div class="sec-title" style="margin:0"><i class="ti ti-shirt"></i> Meu Pedido de Uniforme</div>
+        <span class="badge badge-blue">Temporada 2026</span>
+      </div>
 
-  // Catalog
-  document.getElementById('unif-catalog').innerHTML =
-    imageCardHTML('Uniforme Principal','Midnight Elite','Uniforme de Jogo','2026','#4DA6FF', UNIF_PRINCIPAL) +
-    imageCardHTML('Uniforme Secundário','Dark Navy','Kit Treino / Reserva','2026','#2ECC71', UNIF_SECUNDARIO) +
-    jerseyCardHTML('Próximo Modelo','Em breve','A definir','2027','#9B59B6','jg3');
+      ${meu ? `
+        <div class="alert alert-success" style="margin-bottom:24px">
+          <i class="ti ti-check"></i> Pedido enviado em ${fmt(meu.dataPedido)} — atualize quando quiser.
+        </div>` : `
+        <div class="alert alert-info" style="margin-bottom:24px">
+          <i class="ti ti-info-circle"></i> Selecione os uniformes que deseja e clique em <strong>Enviar pedido</strong>.
+        </div>`}
 
-  // Table
-  const filtered = lista.filter(u => {
-    const matchSearch = !search || u.jogadorNome.toLowerCase().includes(search);
-    const matchFiltro = !filtro || u.kitJogo === filtro || u.kitTreino === filtro;
-    return matchSearch && matchFiltro;
-  });
+      <div class="grid2" style="margin-bottom:28px">
 
-  const canEdit = can(['admin','capitao']);
-  document.getElementById('unif-body').innerHTML = filtered.length ? filtered.map(u => {
-    const restante = +u.valorUniforme - +u.valorPago;
-    return `<tr>
-      <td style="font-weight:500">${u.jogadorNome}</td>
-      <td><span class="badge badge-blue">#${u.num}</span></td>
-      <td style="color:var(--text2)">${u.tamanhoJogo}</td>
-      <td style="color:var(--text2)">${u.tamanhoTreino}</td>
-      <td>${kitStatusBadge(u.kitJogo)}</td>
-      <td>${kitStatusBadge(u.kitTreino)}</td>
-      <td>R$ ${(+u.valorUniforme).toFixed(2).replace('.',',')}</td>
-      <td style="color:var(--success)">R$ ${(+u.valorPago).toFixed(2).replace('.',',')}</td>
-      <td style="color:${restante>0?'var(--danger)':'var(--success)'};font-weight:${restante>0?'600':'400'}">R$ ${restante.toFixed(2).replace('.',',')}</td>
-      <td>${canEdit?`<div style="display:flex;gap:4px">
-        <button class="btn btn-ghost btn-sm" onclick="editKit(${u.id})"><i class="ti ti-pencil"></i></button>
-        ${can(['admin'])?`<button class="btn btn-danger btn-sm" onclick="deleteKit(${u.id})"><i class="ti ti-trash"></i></button>`:''}
-      </div>`:''}
-      ${u.obs?`<div style="font-size:10px;color:var(--warning);margin-top:2px"><i class="ti ti-alert-circle"></i> ${u.obs}</div>`:''}</td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="10" style="color:var(--text2);text-align:center;padding:24px">Nenhum kit registrado.</td></tr>';
+        <!-- Uniforme Principal -->
+        <div class="jersey-card" style="padding:24px">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#4DA6FF"></div>
+          ${unifImgBox(UNIF_PRINCIPAL, 160)}
+          <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Uniforme Principal</div>
+          <div style="color:var(--blue);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">Midnight Elite · 2026</div>
+
+          <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+            <input type="checkbox" id="unif-check-principal" style="width:18px;height:18px;accent-color:var(--blue);cursor:pointer"
+              ${meu?.tamPrincipal ? 'checked' : ''} onchange="toggleUnifTam('principal')">
+            <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
+          </label>
+
+          <div id="unif-tam-principal-wrap" style="display:${meu?.tamPrincipal ? 'block' : 'none'}">
+            <label class="form-label">Tamanho</label>
+            <select class="form-input" id="unif-tam-principal">
+              ${TAMANHOS.map(t => `<option ${meu?.tamPrincipal===t?'selected':''}>${t}</option>`).join('')}
+            </select>
+          </div>
+
+          ${meu?.tamPrincipal ? `
+            <div style="margin-top:12px">
+              <span class="badge ${statusBadgeCls(meu.statusPrincipal)}">${meu.statusPrincipal}</span>
+            </div>` : ''}
+        </div>
+
+        <!-- Uniforme Secundário -->
+        <div class="jersey-card" style="padding:24px">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2ECC71"></div>
+          ${unifImgBox(UNIF_SECUNDARIO, 160)}
+          <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Uniforme Secundário</div>
+          <div style="color:#2ECC71;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">Dark Navy · 2026</div>
+
+          <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+            <input type="checkbox" id="unif-check-secundario" style="width:18px;height:18px;accent-color:#2ECC71;cursor:pointer"
+              ${meu?.tamSecundario ? 'checked' : ''} onchange="toggleUnifTam('secundario')">
+            <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
+          </label>
+
+          <div id="unif-tam-secundario-wrap" style="display:${meu?.tamSecundario ? 'block' : 'none'}">
+            <label class="form-label">Tamanho</label>
+            <select class="form-input" id="unif-tam-secundario">
+              ${TAMANHOS.map(t => `<option ${meu?.tamSecundario===t?'selected':''}>${t}</option>`).join('')}
+            </select>
+          </div>
+
+          ${meu?.tamSecundario ? `
+            <div style="margin-top:12px">
+              <span class="badge ${statusBadgeCls(meu.statusSecundario)}">${meu.statusSecundario}</span>
+            </div>` : ''}
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveMyOrder()" style="padding:12px 36px;font-size:14px">
+        <i class="ti ti-device-floppy"></i> ${meu ? 'Atualizar pedido' : 'Enviar pedido'}
+      </button>`;
+
+  } else {
+    // ── ADMIN / TECNICO / COMISSAO VIEW ──────────────────────
+    const ativos = cache.jogadores.filter(j => j.status === 'Ativo');
+    const totalP = pedidos.filter(p => p.tamPrincipal).length;
+    const totalS = pedidos.filter(p => p.tamSecundario).length;
+    const pedidosNums = new Set(pedidos.map(p => p.num));
+    const semPedido = ativos.filter(j => !pedidosNums.has(j.num));
+    const STATUS_OPTS = ['Pendente','Em Produção','Entregue'];
+
+    el.innerHTML = `
+      <div class="sec-title"><i class="ti ti-shirt"></i> Uniformes 2026</div>
+
+      <div class="grid3" style="margin-bottom:28px">
+        <div class="card">
+          <div class="card-title">Pediram Principal</div>
+          <div class="card-value" style="color:var(--blue)">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
+          <div class="card-sub" style="color:var(--text2)">${ativos.length - totalP} sem pedido</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Pediram Secundário</div>
+          <div class="card-value" style="color:#2ECC71">${totalS}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
+          <div class="card-sub" style="color:var(--text2)">${ativos.length - totalS} sem pedido</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Aguardando pedido</div>
+          <div class="card-value" style="color:${semPedido.length ? 'var(--warning)' : 'var(--success)'}">${semPedido.length}</div>
+          <div class="card-sub" style="color:var(--text2)">jogadores ativos</div>
+        </div>
+      </div>
+
+      ${semPedido.length ? `
+        <div class="sec-title"><i class="ti ti-clock"></i> Ainda não fizeram pedido</div>
+        <div class="card" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+          ${semPedido.map(j => `<span class="badge badge-gray">#${j.num} ${j.apelido||j.nome.split(' ')[0]}</span>`).join('')}
+        </div>` : `
+        <div class="alert alert-success" style="margin-bottom:28px">
+          <i class="ti ti-check"></i> Todos os jogadores ativos já fizeram seu pedido!
+        </div>`}
+
+      <div class="sec-title"><i class="ti ti-list"></i> Pedidos recebidos (${pedidos.length})</div>
+      ${pedidos.length ? `
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Jogador</th><th>#</th>
+                <th style="color:var(--blue)">Principal</th><th>Status</th>
+                <th style="color:#2ECC71">Secundário</th><th>Status</th>
+                <th>Pedido em</th>
+                ${canManage ? '<th></th>' : ''}
+              </tr>
+            </thead>
+            <tbody>
+              ${[...pedidos].sort((a,b)=>(a.num||0)-(b.num||0)).map(p => `
+              <tr>
+                <td style="font-weight:600">${p.jogadorNome}</td>
+                <td><span class="badge badge-blue">#${p.num||'—'}</span></td>
+                <td>${p.tamPrincipal
+                  ? `<span style="font-weight:700;color:var(--blue);font-size:14px">${p.tamPrincipal}</span>`
+                  : `<span style="color:var(--text3)">—</span>`}</td>
+                <td>
+                  ${p.tamPrincipal && canManage
+                    ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'principal',this.value)">
+                        ${STATUS_OPTS.map(s=>`<option ${p.statusPrincipal===s?'selected':''}>${s}</option>`).join('')}
+                       </select>`
+                    : p.tamPrincipal
+                      ? `<span class="badge ${statusBadgeCls(p.statusPrincipal)}">${p.statusPrincipal}</span>`
+                      : `<span style="color:var(--text3)">—</span>`}
+                </td>
+                <td>${p.tamSecundario
+                  ? `<span style="font-weight:700;color:#2ECC71;font-size:14px">${p.tamSecundario}</span>`
+                  : `<span style="color:var(--text3)">—</span>`}</td>
+                <td>
+                  ${p.tamSecundario && canManage
+                    ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'secundario',this.value)">
+                        ${STATUS_OPTS.map(s=>`<option ${p.statusSecundario===s?'selected':''}>${s}</option>`).join('')}
+                       </select>`
+                    : p.tamSecundario
+                      ? `<span class="badge ${statusBadgeCls(p.statusSecundario)}">${p.statusSecundario}</span>`
+                      : `<span style="color:var(--text3)">—</span>`}
+                </td>
+                <td style="color:var(--text2);font-size:12px">${fmt(p.dataPedido)}</td>
+                ${canManage ? `<td>
+                  ${can(['admin']) ? `<button class="btn btn-danger btn-sm" onclick="deleteUniformOrder(${p.id})"><i class="ti ti-trash"></i></button>` : ''}
+                </td>` : ''}
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>` : `
+        <div class="card" style="color:var(--text2);font-size:13px">Nenhum pedido recebido ainda.</div>`}`;
+  }
 }
 
-function openAddKit() {
-  document.getElementById('kit-jogador').innerHTML = cache.jogadores
-    .map(j => `<option value="${j.id}" data-num="${j.num}">${j.nome} (#${j.num})</option>`).join('');
-  openModal('modal-add-kit');
+function toggleUnifTam(tipo) {
+  const checked = document.getElementById(`unif-check-${tipo}`)?.checked;
+  const wrap = document.getElementById(`unif-tam-${tipo}-wrap`);
+  if (wrap) wrap.style.display = checked ? 'block' : 'none';
 }
 
-async function addKit() {
-  const sel = document.getElementById('kit-jogador');
-  const opt = sel.options[sel.selectedIndex];
-  if (!opt || !opt.value) { toast('Selecione um jogador','error'); return; }
-  const r = await api('POST','uniformes', {
-    jogadorId: +opt.value,
-    jogadorNome: opt.text.split(' (#')[0],
-    num: +opt.dataset.num || 0,
-    tamanhoJogo: document.getElementById('kit-tam-jogo').value,
-    tamanhoTreino: document.getElementById('kit-tam-treino').value,
-    kitJogo: document.getElementById('kit-status-jogo').value,
-    kitTreino: document.getElementById('kit-status-treino').value,
-    valorUniforme: +document.getElementById('kit-valor').value || 150,
-    valorPago: +document.getElementById('kit-pago').value || 0,
-    temporada: document.getElementById('kit-temporada').value || '2026',
-    obs: document.getElementById('kit-obs').value,
-  });
+async function saveMyOrder() {
+  const querP = document.getElementById('unif-check-principal')?.checked;
+  const querS = document.getElementById('unif-check-secundario')?.checked;
+  const tamP = querP ? document.getElementById('unif-tam-principal')?.value : null;
+  const tamS = querS ? document.getElementById('unif-tam-secundario')?.value : null;
+  if (!tamP && !tamS) { toast('Selecione pelo menos um uniforme','error'); return; }
+  const r = await api('POST','uniformes',{ tamPrincipal:tamP, tamSecundario:tamS });
   if (r && r.id) {
-    cache.uniformes.push(r);
-    closeModal('modal-add-kit');
+    cache.uniformes = [r];
     renderUniformes();
-    toast('Kit registrado!');
-  } else toast('Erro ao registrar kit','error');
+    toast('Pedido salvo!');
+  } else toast('Erro ao salvar pedido','error');
 }
 
-function editKit(id) {
-  const u = cache.uniformes.find(x => x.id === id);
-  if (!u) return;
-  document.getElementById('ek-id').value = u.id;
-  document.getElementById('ek-jogador-info').textContent = `${u.jogadorNome} · #${u.num} · Temporada ${u.temporada}`;
-  document.getElementById('ek-tam-jogo').value = u.tamanhoJogo;
-  document.getElementById('ek-tam-treino').value = u.tamanhoTreino;
-  document.getElementById('ek-status-jogo').value = u.kitJogo;
-  document.getElementById('ek-status-treino').value = u.kitTreino;
-  document.getElementById('ek-valor').value = u.valorUniforme;
-  document.getElementById('ek-pago').value = u.valorPago;
-  document.getElementById('ek-obs').value = u.obs || '';
-  openModal('modal-edit-kit');
-}
-
-async function saveEditKit() {
-  const id = +document.getElementById('ek-id').value;
-  const r = await api('PUT','uniformes', {
-    id,
-    tamanhoJogo: document.getElementById('ek-tam-jogo').value,
-    tamanhoTreino: document.getElementById('ek-tam-treino').value,
-    kitJogo: document.getElementById('ek-status-jogo').value,
-    kitTreino: document.getElementById('ek-status-treino').value,
-    valorUniforme: +document.getElementById('ek-valor').value,
-    valorPago: +document.getElementById('ek-pago').value,
-    obs: document.getElementById('ek-obs').value,
-  });
+async function updateOrderStatus(id, tipo, status) {
+  const payload = { id };
+  if (tipo === 'principal') payload.statusPrincipal = status;
+  else payload.statusSecundario = status;
+  const r = await api('PUT','uniformes', payload);
   if (r && r.id) {
     const idx = cache.uniformes.findIndex(x => x.id === id);
     if (idx !== -1) cache.uniformes[idx] = r;
-    closeModal('modal-edit-kit');
-    renderUniformes();
-    toast('Kit atualizado!');
+    toast('Status atualizado!');
   } else toast('Erro ao atualizar','error');
 }
 
-async function deleteKit(id) {
-  const u = cache.uniformes.find(x => x.id === id);
-  if (!confirm(`Remover kit de ${u?.jogadorNome}? Esta ação não pode ser desfeita.`)) return;
-  const r = await api('DELETE','uniformes', { id });
+async function deleteUniformOrder(id) {
+  const p = cache.uniformes.find(x => x.id === id);
+  if (!confirm(`Remover pedido de ${p?.jogadorNome}?`)) return;
+  const r = await api('DELETE','uniformes',{ id });
   if (r && r.success) {
     cache.uniformes = cache.uniformes.filter(x => x.id !== id);
     renderUniformes();
-    toast('Kit removido!');
+    toast('Pedido removido!');
   } else toast('Erro ao remover','error');
 }
 

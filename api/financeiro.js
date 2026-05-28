@@ -66,9 +66,16 @@ module.exports = async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const { id } = req.body;
+    const { id, zerarCaixa } = req.body;
+    if (zerarCaixa) {
+      await setData('financeiro', []);
+      await setData('mensalidades', {});
+      await logAction(user.id, user.nome, user.role, 'Zerou caixa', 'Todos os lançamentos e mensalidades foram removidos');
+      return res.json({ success: true });
+    }
     const fin = await getData('financeiro') || [];
     await setData('financeiro', fin.filter(f => f.id !== id));
+    await logAction(user.id, user.nome, user.role, 'Excluiu lançamento', `ID ${id}`);
     return res.json({ success: true });
   }
 
