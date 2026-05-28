@@ -435,22 +435,25 @@ select.form-input option{background:var(--navy2)}
   <div class="modal">
     <div class="modal-title">Cadastrar jogador <button class="modal-close" onclick="closeModal('modal-add-jogador')"><i class="ti ti-x"></i></button></div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="j-nome" placeholder="Ex: Carlos Silva"></div>
-      <div class="form-group"><label class="form-label">Nº da camisa *</label><input class="form-input" id="j-num" type="number" placeholder="Ex: 10"></div>
+      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="j-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
+      <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="j-apelido" placeholder="Ex: Tavin"></div>
     </div>
     <div class="form-row">
+      <div class="form-group"><label class="form-label">Nº da camisa *</label><input class="form-input" id="j-num" type="number" placeholder="Ex: 10"></div>
       <div class="form-group"><label class="form-label">Posição</label>
         <select class="form-input" id="j-pos"><option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option></select>
       </div>
-      <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="j-idade" type="number" placeholder="Ex: 24"></div>
     </div>
     <div class="form-row">
+      <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="j-idade" type="number" placeholder="Ex: 24"></div>
       <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="j-altura" type="number" placeholder="Ex: 185"></div>
+    </div>
+    <div class="form-row">
       <div class="form-group"><label class="form-label">Status</label>
         <select class="form-input" id="j-status"><option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option></select>
       </div>
+      <div class="form-group"><label class="form-label">Telefone (WhatsApp)</label><input class="form-input" id="j-tel" placeholder="(21) 99999-9999"></div>
     </div>
-    <div class="form-group"><label class="form-label">Telefone (WhatsApp)</label><input class="form-input" id="j-tel" placeholder="(21) 99999-9999"></div>
     <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="j-obs" placeholder="Ex: Torção no tornozelo"></div>
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn btn-primary" style="flex:1" onclick="addJogador()">Cadastrar</button>
@@ -927,8 +930,9 @@ function renderJogadores() {
     ? lista.map(j=>`
       <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})">
         <div class="player-num">#${j.num}</div>
-        <div class="player-avatar">${initials(j.nome)}</div>
-        <div class="player-name">${j.nome}</div>
+        <div class="player-avatar">${initials(j.apelido||j.nome)}</div>
+        <div class="player-name">${j.apelido||j.nome.split(' ')[0]}</div>
+        ${j.apelido?`<div style="font-size:10px;color:var(--text2);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${j.nome}</div>`:''}
         <div class="player-pos">${j.pos}</div>
         <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}">${j.status}</span>
         ${j.obs?`<div style="font-size:11px;color:var(--danger);margin-top:6px"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
@@ -949,8 +953,9 @@ function openPlayerDetail(id) {
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
       <div class="player-avatar" style="width:60px;height:60px;font-size:22px">${initials(j.nome)}</div>
       <div>
-        <div style="font-size:18px;font-weight:700">${j.nome}</div>
-        <div style="color:var(--text2);font-size:13px">#${j.num} · ${j.pos}</div>
+        <div style="font-size:18px;font-weight:700">${j.apelido||j.nome}</div>
+        ${j.apelido?`<div style="font-size:12px;color:var(--text2);margin-top:1px">${j.nome}</div>`:''}
+        <div style="color:var(--text2);font-size:13px;margin-top:2px">#${j.num} · ${j.pos}</div>
         <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}" style="margin-top:4px">${j.status}</span>
       </div>
     </div>
@@ -970,6 +975,9 @@ function openPlayerDetail(id) {
       <span style="font-weight:700;color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</span>
     </div>
     ${canEdit?`
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input class="form-input" id="edit-apelido-${j.id}" value="${j.apelido||''}" placeholder="Apelido (ex: Tavin)" style="flex:1">
+      </div>
       <div style="display:flex;gap:8px">
         <select class="form-input" id="edit-status-${j.id}" style="flex:1">
           <option ${j.status==='Ativo'?'selected':''}>Ativo</option>
@@ -990,27 +998,30 @@ async function addJogador() {
   const nome = document.getElementById('j-nome').value.trim();
   if (!nome) { toast('Nome obrigatório','error'); return; }
   const r = await api('POST','jogadores',{
-    nome, num:+document.getElementById('j-num').value||0,
-    pos:document.getElementById('j-pos').value,
-    idade:+document.getElementById('j-idade').value||0,
-    altura:+document.getElementById('j-altura').value||0,
-    status:document.getElementById('j-status').value,
-    tel:document.getElementById('j-tel').value,
-    obs:document.getElementById('j-obs').value,
+    nome,
+    apelido: document.getElementById('j-apelido').value.trim(),
+    num: +document.getElementById('j-num').value||0,
+    pos: document.getElementById('j-pos').value,
+    idade: +document.getElementById('j-idade').value||0,
+    altura: +document.getElementById('j-altura').value||0,
+    status: document.getElementById('j-status').value,
+    tel: document.getElementById('j-tel').value,
+    obs: document.getElementById('j-obs').value,
   });
   if (r && r.id) {
     cache.jogadores.push(r);
     closeModal('modal-add-jogador');
     renderJogadores(); renderDashboard();
     toast('Jogador cadastrado!');
-    ['j-nome','j-num','j-idade','j-altura','j-tel','j-obs'].forEach(id=>document.getElementById(id).value='');
+    ['j-nome','j-apelido','j-num','j-idade','j-altura','j-tel','j-obs'].forEach(id=>document.getElementById(id).value='');
   } else toast('Erro ao cadastrar','error');
 }
 
 async function updateJogador(id) {
   const status = document.getElementById(`edit-status-${id}`)?.value;
   const obs = document.getElementById(`edit-obs-${id}`)?.value || '';
-  const r = await api('PUT','jogadores',{id,status,obs});
+  const apelido = document.getElementById(`edit-apelido-${id}`)?.value.trim() || '';
+  const r = await api('PUT','jogadores',{id,status,obs,apelido});
   if (r && r.id) {
     const idx = cache.jogadores.findIndex(j=>j.id===id);
     if (idx!==-1) cache.jogadores[idx] = r;
