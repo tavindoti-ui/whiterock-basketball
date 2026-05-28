@@ -527,21 +527,13 @@ select.form-input option{background:#0D1526;color:var(--text)}
         <option value="Suspenso">Suspensos</option>
         <option value="Inativo">Inativos</option>
       </select>
-      <select class="form-input" style="width:auto;font-size:12px" id="filtro-pos" onchange="renderJogadores()">
-        <option value="">Todas posições</option>
-        <option value="Armador">Armador</option>
-        <option value="Ala-armador">Ala-armador</option>
-        <option value="Ala">Ala</option>
-        <option value="Ala-pivô">Ala-pivô</option>
-        <option value="Pivô">Pivô</option>
-      </select>
-      <button class="btn btn-primary btn-sm" id="btn-add-jogador" onclick="openAddJogador()" style="display:none"><i class="ti ti-plus"></i> Cadastrar</button>
+<button class="btn btn-primary btn-sm" id="btn-add-jogador" onclick="openAddJogador()" style="display:none"><i class="ti ti-plus"></i> Cadastrar</button>
     </div>
   </div>
   <div class="alert alert-danger" id="lesao-alert" style="display:none">
     <i class="ti ti-first-aid-kit"></i><span id="lesao-txt"></span>
   </div>
-  <div class="player-grid" id="player-grid">
+  <div id="player-grid">
     <div class="loading"><div class="spinner"></div>Carregando...</div>
   </div>
 </div>
@@ -1279,10 +1271,37 @@ function renderDashboard() {
 }
 
 // ==================== JOGADORES ====================
+const POS_LABEL = {
+  'Armador':    { plural:'Armadores',      icon:'ti-run' },
+  'Ala-armador':{ plural:'Alas-armadores', icon:'ti-run' },
+  'Ala':        { plural:'Alas',           icon:'ti-run' },
+  'Ala-pivô':   { plural:'Alas-pivôs',     icon:'ti-run' },
+  'Pivô':       { plural:'Pivôs',          icon:'ti-run' },
+};
+const POS_ORDER = ['Armador','Ala-armador','Ala','Ala-pivô','Pivô'];
+
+function playerCardHTML(j) {
+  return `
+    <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})">
+      <div class="player-num">#${j.num}</div>
+      <div class="player-avatar">${initials(j.apelido||j.nome)}</div>
+      <div class="player-name">${j.apelido||j.nome.split(' ')[0]}</div>
+      ${j.apelido?`<div style="font-size:10px;color:var(--text2);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${j.nome}</div>`:''}
+      <div class="player-pos">${j.pos}</div>
+      <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}">${j.status}</span>
+      ${j.obs?`<div style="font-size:11px;color:var(--danger);margin-top:6px"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
+      <div class="player-stats" style="margin-top:10px">
+        <div class="ps"><div class="ps-val">${j.pts}</div><div class="ps-lbl">PTS</div></div>
+        <div class="ps"><div class="ps-val">${j.ast}</div><div class="ps-lbl">AST</div></div>
+        <div class="ps"><div class="ps-val">${j.reb}</div><div class="ps-lbl">REB</div></div>
+      </div>
+    </div>`;
+}
+
 function renderJogadores() {
   const filtro = document.getElementById('filtro-status')?.value || '';
-  const filtroPos = document.getElementById('filtro-pos')?.value || '';
-  const lista = cache.jogadores.filter(j=>(!filtro||j.status===filtro)&&(!filtroPos||j.pos===filtroPos));
+  const lista = cache.jogadores.filter(j=>!filtro||j.status===filtro);
+
   const lesionados = cache.jogadores.filter(j=>j.status==='Lesão');
   const la = document.getElementById('lesao-alert');
   if (lesionados.length) {
@@ -1290,23 +1309,44 @@ function renderJogadores() {
     document.getElementById('lesao-txt').textContent = `${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')}`;
   } else la.style.display='none';
 
-  document.getElementById('player-grid').innerHTML = lista.length
-    ? lista.map(j=>`
-      <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})">
-        <div class="player-num">#${j.num}</div>
-        <div class="player-avatar">${initials(j.apelido||j.nome)}</div>
-        <div class="player-name">${j.apelido||j.nome.split(' ')[0]}</div>
-        ${j.apelido?`<div style="font-size:10px;color:var(--text2);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${j.nome}</div>`:''}
-        <div class="player-pos">${j.pos}</div>
-        <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}">${j.status}</span>
-        ${j.obs?`<div style="font-size:11px;color:var(--danger);margin-top:6px"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
-        <div class="player-stats" style="margin-top:10px">
-          <div class="ps"><div class="ps-val">${j.pts}</div><div class="ps-lbl">PTS</div></div>
-          <div class="ps"><div class="ps-val">${j.ast}</div><div class="ps-lbl">AST</div></div>
-          <div class="ps"><div class="ps-val">${j.reb}</div><div class="ps-lbl">REB</div></div>
+  if (!lista.length) {
+    document.getElementById('player-grid').innerHTML = '<div style="color:var(--text2);font-size:13px">Nenhum jogador encontrado.</div>';
+    return;
+  }
+
+  // Group by position in canonical order
+  let html = '';
+  POS_ORDER.forEach(pos => {
+    const grupo = lista.filter(j=>j.pos===pos);
+    if (!grupo.length) return;
+    const label = POS_LABEL[pos]?.plural || pos;
+    html += `
+      <div style="margin-bottom:28px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div style="height:1px;width:18px;background:var(--blue2);border-radius:2px;opacity:.7"></div>
+          <span style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;text-transform:uppercase">${label}</span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <span style="font-size:11px;color:var(--text3);font-weight:600">${grupo.length} jogador${grupo.length>1?'es':''}</span>
         </div>
-      </div>`).join('')
-    : '<div style="color:var(--text2);font-size:13px">Nenhum jogador encontrado.</div>';
+        <div class="player-grid">${grupo.map(j=>playerCardHTML(j)).join('')}</div>
+      </div>`;
+  });
+
+  // Players with unknown / unlisted position
+  const outros = lista.filter(j=>!POS_ORDER.includes(j.pos));
+  if (outros.length) {
+    html += `
+      <div style="margin-bottom:28px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div style="height:1px;width:18px;background:var(--blue2);border-radius:2px;opacity:.7"></div>
+          <span style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;text-transform:uppercase">Outros</span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+        <div class="player-grid">${outros.map(j=>playerCardHTML(j)).join('')}</div>
+      </div>`;
+  }
+
+  document.getElementById('player-grid').innerHTML = html;
 }
 
 function openPlayerDetail(id) {
