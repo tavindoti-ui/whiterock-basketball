@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>White Rock Basketball</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -30,7 +33,7 @@
 body{
   background:var(--navy);
   background-image:radial-gradient(ellipse 90% 40% at 50% -5%,rgba(45,140,255,0.06) 0%,transparent 60%);
-  color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;
+  color:var(--text);font-family:'Inter',system-ui,sans-serif;
   min-height:100vh;-webkit-font-smoothing:antialiased;
 }
 
@@ -50,14 +53,14 @@ body{
 }
 .login-logo{text-align:center;margin-bottom:32px}
 .login-logo .circle{
-  width:76px;height:76px;border-radius:50%;overflow:hidden;padding:0;
-  background:#081224;border:1px solid var(--border);
+  width:84px;height:84px;border-radius:50%;overflow:hidden;padding:0;
+  background:#081224;border:1px solid rgba(45,140,255,0.2);
   display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:22px;color:#fff;margin:0 auto 14px;
-  box-shadow:0 0 28px rgba(45,140,255,0.18);
+  font-weight:800;font-size:22px;color:#fff;margin:0 auto 16px;
+  box-shadow:0 0 40px rgba(45,140,255,0.22),0 0 0 4px rgba(45,140,255,0.06);
 }
-.login-logo h1{font-size:24px;font-weight:800;color:#fff;letter-spacing:0.3px}
-.login-logo p{font-size:13px;color:var(--text2);margin-top:5px}
+.login-logo h1{font-size:26px;font-weight:800;color:#fff;letter-spacing:0.3px}
+.login-logo p{font-size:12px;color:var(--text2);margin-top:5px;letter-spacing:0.8px;text-transform:uppercase}
 .login-error{
   background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
   color:var(--danger);border-radius:10px;padding:10px 14px;font-size:13px;
@@ -120,28 +123,29 @@ body{
 @media(max-width:700px){.nav-tabs{display:none}.mobile-menu{display:flex}.nav-right .user-badge span:not(.role){display:none}}
 
 /* PAGES */
-.page{display:none;padding:24px;max-width:1280px;margin:0 auto}
-.page.active{display:block}
+.page{display:none;padding:28px;max-width:1280px;margin:0 auto}
+.page.active{display:block;animation:pageFadeIn .22s ease}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
 /* CARDS */
 .card{
   background:linear-gradient(180deg,#0D1526 0%,#081224 100%);
-  border:1px solid var(--border);border-radius:14px;padding:18px;
+  border:1px solid var(--border);border-radius:14px;padding:20px;
   box-shadow:var(--card-shadow);transition:border-color .2s;
 }
 .card:hover{border-color:rgba(77,166,255,0.22)}
 .card-title{font-size:10px;color:var(--text2);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
 .card-value{font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px;line-height:1.1}
 .card-sub{font-size:12px;margin-top:6px;color:var(--text2)}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:26px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:26px}
 @media(max-width:700px){.grid4,.grid3,.grid2{grid-template-columns:1fr}}
 
 .sec-title{
-  font-size:11px;font-weight:700;color:#fff;margin-bottom:14px;
+  font-size:11px;font-weight:700;color:#fff;margin-bottom:16px;
   display:flex;align-items:center;gap:8px;
-  letter-spacing:1px;text-transform:uppercase;
+  letter-spacing:1.2px;text-transform:uppercase;
 }
 .sec-title i{color:var(--blue);font-size:14px}
 
@@ -215,7 +219,8 @@ body{
   background:linear-gradient(135deg,#2D8CFF 0%,#4DA6FF 100%);color:#fff;
   box-shadow:0 0 20px rgba(45,140,255,0.25);
 }
-.btn-primary:hover{filter:brightness(1.1);box-shadow:0 0 28px rgba(45,140,255,0.4);transform:translateY(-1px)}
+.btn-primary:hover{filter:brightness(1.12);box-shadow:0 0 28px rgba(45,140,255,0.4);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0);filter:brightness(1.05)}
 .btn-ghost{background:rgba(255,255,255,0.03);color:var(--text2);border:1px solid rgba(255,255,255,0.07)}
 .btn-ghost:hover{background:rgba(45,140,255,0.08);color:var(--text);border-color:rgba(45,140,255,0.22)}
 .btn-danger{background:rgba(239,68,68,.08);color:var(--danger);border:1px solid rgba(239,68,68,.2)}
@@ -483,6 +488,44 @@ select.form-input option{background:#0D1526;color:var(--text)}
   .btn-sm{padding:4px 9px;font-size:11px}
   .grid3{grid-template-columns:1fr 1fr}
 }
+
+/* ==================== SIDEBAR MINI + GROUPS ==================== */
+.nav-group-label{
+  font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.8px;
+  text-transform:uppercase;padding:20px 14px 6px;display:block;flex-shrink:0;
+}
+.nav-group-label:first-child{padding-top:10px}
+.sidebar-toggle{
+  background:transparent;border:none;color:var(--text2);cursor:pointer;
+  padding:5px 6px;border-radius:7px;font-size:16px;margin-left:auto;
+  transition:all .15s;display:flex;align-items:center;flex-shrink:0;
+}
+.sidebar-toggle:hover{color:var(--text);background:rgba(45,140,255,0.10)}
+.nav{transition:width .26s cubic-bezier(.4,0,.2,1)}
+#app{transition:margin-left .26s cubic-bezier(.4,0,.2,1)}
+body.sidebar-mini .nav{width:64px}
+body.sidebar-mini #app{margin-left:64px}
+body.sidebar-mini .nav-title,
+body.sidebar-mini .nav-group-label,
+body.sidebar-mini .nav-tab-txt{display:none!important}
+body.sidebar-mini .nav-tab{justify-content:center;padding:11px;min-height:40px}
+body.sidebar-mini .nav-tab i{font-size:18px;margin:0}
+body.sidebar-mini .nav-logo{padding:14px;justify-content:center;gap:0}
+body.sidebar-mini .sidebar-toggle{margin-left:0}
+body.sidebar-mini .user-badge>div{display:none}
+body.sidebar-mini .user-badge{justify-content:center;padding:10px}
+body.sidebar-mini .btn-logout{justify-content:center}
+
+/* ==================== PLAYER CARD ANIMATION ==================== */
+.player-card{animation:cardIn .2s ease both}
+@keyframes cardIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:700px){
+  .nav-group-label{display:none}
+  .sidebar-toggle{display:none}
+  body.sidebar-mini .nav{width:100%}
+  body.sidebar-mini #app{margin-left:0;padding-top:52px}
+}
 </style>
 </head>
 <body>
@@ -493,7 +536,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
     <div class="login-logo">
       <div class="circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
       <h1>White Rock</h1>
-      <p>Basketball Management System</p>
+      <p>Basketball · Sistema de Gestão</p>
     </div>
     <div class="login-error" id="login-error"></div>
     <div class="form-group">
@@ -521,6 +564,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
   <div class="nav-logo" onclick="showPage('dashboard')">
     <div class="logo-circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
     <div class="nav-title">White Rock <span id="nav-role-label">Basketball</span></div>
+    <button class="sidebar-toggle" onclick="event.stopPropagation();toggleSidebar()" title="Recolher sidebar"><i class="ti ti-layout-sidebar-left-collapse" id="sidebar-toggle-icon"></i></button>
   </div>
   <div class="nav-tabs" id="nav-tabs"></div>
   <div class="nav-right">
@@ -657,7 +701,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
       <div class="card" style="padding:9px 12px"><span id="stat-jg-count" style="font-size:18px;font-weight:700">0</span> <span style="font-size:12px;color:var(--text2)">partidas</span></div>
     </div>
   </div>
-  <div class="card" style="margin-bottom:16px"><div id="stats-bars"></div></div>
+  <div class="card" style="margin-bottom:16px;padding:16px 20px"><div style="position:relative;height:320px"><canvas id="stats-chart"></canvas></div></div>
   <div class="sec-title"><i class="ti ti-table"></i> Tabela completa</div>
   <div class="tbl-wrap">
     <table class="tbl">
@@ -1062,6 +1106,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
 
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 // ==================== CONFIG ====================
 const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -1073,6 +1118,7 @@ let currentUser = null;
 let token = null;
 let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [] };
 let _logCache = [];
+let _statsChart = null;
 
 // ==================== AUTH ====================
 function saveSession(t, u) {
@@ -1175,6 +1221,13 @@ function openAddUser() {
   openModal('modal-add-user');
 }
 
+function toggleSidebar() {
+  const mini = document.body.classList.toggle('sidebar-mini');
+  const icon = document.getElementById('sidebar-toggle-icon');
+  if (icon) icon.className = mini ? 'ti ti-layout-sidebar-left-expand' : 'ti ti-layout-sidebar-left-collapse';
+  localStorage.setItem('wr_sidebar_mini', mini);
+}
+
 // ==================== INIT APP ====================
 function initApp() {
   document.getElementById('login-screen').style.display = 'none';
@@ -1185,27 +1238,55 @@ function initApp() {
   document.getElementById('nav-role-label').textContent = ROLES[currentUser.role] || 'Basketball';
 
   buildNav();
+
+  // Restore sidebar collapse preference
+  if (localStorage.getItem('wr_sidebar_mini') === 'true') {
+    document.body.classList.add('sidebar-mini');
+    const icon = document.getElementById('sidebar-toggle-icon');
+    if (icon) icon.className = 'ti ti-layout-sidebar-left-expand';
+  }
+
   loadAll();
 }
 
 function buildNav() {
   const ALL = ['admin','tecnico','comissao','capitao','atleta'];
-  const tabs = [
-    { id:'dashboard',    label:'Dashboard',   icon:'ti-home',      roles: ALL },
-    { id:'jogadores',    label:'Jogadores',   icon:'ti-users',     roles: ALL },
-    { id:'jogos',        label:'Jogos',       icon:'ti-trophy',    roles: ALL },
-    { id:'treinos',      label:'Treinos',     icon:'ti-calendar',  roles: ALL },
-    { id:'financeiro',   label:'Financeiro',  icon:'ti-cash',      roles:['admin','tecnico','capitao'] },
-    { id:'estatisticas', label:'Estatísticas',icon:'ti-chart-bar', roles: ALL },
-    { id:'comunicacao',  label:'Avisos',      icon:'ti-bell',      roles: ALL },
-    { id:'uniformes',    label:'Uniformes',   icon:'ti-shirt',     roles: ALL },
-    { id:'usuarios',     label:'Usuários',    icon:'ti-settings',  roles:['admin'] },
-  ].filter(t => can(t.roles));
+  const groups = [
+    { label: 'Time', tabs: [
+      { id:'dashboard',    label:'Dashboard',    icon:'ti-home',      roles: ALL },
+      { id:'jogadores',    label:'Jogadores',    icon:'ti-users',     roles: ALL },
+    ]},
+    { label: 'Competição', tabs: [
+      { id:'jogos',        label:'Jogos',        icon:'ti-trophy',    roles: ALL },
+      { id:'treinos',      label:'Treinos',      icon:'ti-calendar',  roles: ALL },
+      { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar', roles: ALL },
+    ]},
+    { label: 'Gestão', tabs: [
+      { id:'financeiro',   label:'Financeiro',   icon:'ti-cash',      roles:['admin','tecnico','capitao'] },
+      { id:'comunicacao',  label:'Avisos',       icon:'ti-bell',      roles: ALL },
+      { id:'uniformes',    label:'Uniformes',    icon:'ti-shirt',     roles: ALL },
+    ]},
+    { label: 'Sistema', tabs: [
+      { id:'usuarios',     label:'Usuários',     icon:'ti-settings',  roles:['admin'] },
+    ]},
+  ];
 
-  const html = tabs.map(t => `<button class="nav-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')"><i class="ti ${t.icon}"></i> ${t.label}</button>`).join('');
-  const htmlM = tabs.map(t => `<button class="mobile-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')">${t.label}</button>`).join('');
+  let html = '';
+  let mobileTabs = [];
+  groups.forEach(g => {
+    const visible = g.tabs.filter(t => can(t.roles));
+    if (!visible.length) return;
+    html += `<div class="nav-group-label">${g.label}</div>`;
+    html += visible.map(t =>
+      `<button class="nav-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')"><i class="ti ${t.icon}"></i><span class="nav-tab-txt"> ${t.label}</span></button>`
+    ).join('');
+    mobileTabs.push(...visible);
+  });
+
   document.getElementById('nav-tabs').innerHTML = html;
-  document.getElementById('mobile-menu').innerHTML = htmlM;
+  document.getElementById('mobile-menu').innerHTML = mobileTabs.map(t =>
+    `<button class="mobile-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')">${t.label}</button>`
+  ).join('');
 
   // Show/hide role-specific buttons
   if (can(['admin','tecnico','capitao'])) {
@@ -1330,9 +1411,10 @@ const POS_LABEL = {
 };
 const POS_ORDER = ['Armador','Ala-armador','Ala','Ala-pivô','Pivô'];
 
-function playerCardHTML(j) {
+function playerCardHTML(j, idx) {
+  const delay = Math.min(idx * 0.04, 0.4);
   return `
-    <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})">
+    <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})" style="animation-delay:${delay}s">
       <div class="player-num">#${j.num}</div>
       <div class="player-avatar">${initials(j.apelido||j.nome)}</div>
       <div class="player-name">${j.apelido||j.nome.split(' ')[0]}</div>
@@ -1378,7 +1460,7 @@ function renderJogadores() {
           <div style="flex:1;height:1px;background:var(--border)"></div>
           <span style="font-size:11px;color:var(--text3);font-weight:600">${grupo.length} jogador${grupo.length>1?'es':''}</span>
         </div>
-        <div class="player-grid">${grupo.map(j=>playerCardHTML(j)).join('')}</div>
+        <div class="player-grid">${grupo.map((j,i)=>playerCardHTML(j,i)).join('')}</div>
       </div>`;
   });
 
@@ -1392,7 +1474,7 @@ function renderJogadores() {
           <span style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;text-transform:uppercase">Outros</span>
           <div style="flex:1;height:1px;background:var(--border)"></div>
         </div>
-        <div class="player-grid">${outros.map(j=>playerCardHTML(j)).join('')}</div>
+        <div class="player-grid">${outros.map((j,i)=>playerCardHTML(j,i)).join('')}</div>
       </div>`;
   }
 
@@ -1954,15 +2036,67 @@ function renderStats() {
   const cat = document.getElementById('stat-cat')?.value || 'pts';
   const key = cat;
   const ativos = cache.jogadores.filter(j=>j.status!=='Inativo').sort((a,b)=>b[key]-a[key]);
-  const max = ativos.length ? ativos[0][key] : 1;
+
   document.getElementById('stat-jg-count').textContent = cache.jogos.filter(j=>j.wr!==null).length;
-  document.getElementById('stats-bars').innerHTML = ativos.map((j,i)=>`
-    <div class="stat-row">
-      <div class="stat-name">${i+1}. ${j.nome.split(' ')[0]}</div>
-      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${max?Math.round(j[key]/max*100):0}%"></div></div>
-      <div class="stat-val">${j[key]}</div>
-    </div>
-  `).join('');
+
+  // Chart.js horizontal bar chart
+  const canvas = document.getElementById('stats-chart');
+  if (canvas && typeof Chart !== 'undefined') {
+    if (_statsChart) { _statsChart.destroy(); _statsChart = null; }
+    const labels = ativos.map(j => j.apelido || j.nome.split(' ')[0]);
+    const values = ativos.map(j => j[key]);
+    const n = ativos.length;
+    const bgColors = values.map((_, i) => {
+      const alpha = n > 1 ? 0.85 - (i / (n - 1)) * 0.55 : 0.85;
+      return `rgba(45,140,255,${alpha.toFixed(2)})`;
+    });
+    _statsChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: bgColors,
+          borderColor: 'transparent',
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0D1526',
+            borderColor: 'rgba(77,166,255,0.25)',
+            borderWidth: 1,
+            titleColor: '#F4F7FB',
+            bodyColor: '#AEB8C7',
+            padding: 10,
+            callbacks: {
+              label: ctx => ` ${ctx.parsed.x} por jogo`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+            ticks: { color: '#AEB8C7', font: { family: 'Inter', size: 11 } },
+            border: { color: 'rgba(255,255,255,0.05)' },
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: '#F4F7FB', font: { family: 'Inter', size: 12, weight: '600' } },
+            border: { display: false },
+          }
+        },
+        animation: { duration: 350, easing: 'easeOutQuart' }
+      }
+    });
+  }
+
   document.getElementById('stats-tbl').innerHTML = [...cache.jogadores].sort((a,b)=>b.pts-a.pts).map(j=>`
     <tr>
       <td style="color:var(--text2)">#${j.num}</td>
