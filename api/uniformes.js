@@ -24,6 +24,20 @@ module.exports = async function handler(req, res) {
     if (!tamPrincipal && !tamSecundario) {
       return res.status(400).json({ error: 'Selecione pelo menos um uniforme' });
     }
+
+    // Look up jogador record to get apelido and confirmed jersey number
+    const jogadores = await getData('jogadores') || [];
+    let jogadorRef = user.num
+      ? jogadores.find(j => j.num === user.num)
+      : null;
+    if (!jogadorRef) {
+      // Fallback: match by name (case-insensitive)
+      const searchName = (user.nome || '').toLowerCase();
+      jogadorRef = jogadores.find(j => j.nome.toLowerCase() === searchName);
+    }
+    const displayNome = jogadorRef?.apelido || jogadorRef?.nome || user.nome;
+    const displayNum  = jogadorRef?.num ?? user.num ?? 0;
+
     const pedidos = await getData('uniformes') || [];
     const counters = await getData('counters');
     const now = new Date().toISOString().split('T')[0];
@@ -33,6 +47,8 @@ module.exports = async function handler(req, res) {
       const old = pedidos[existingIdx];
       pedidos[existingIdx] = {
         ...old,
+        jogadorNome: displayNome,
+        num: displayNum,
         tamPrincipal: tamPrincipal || null,
         tamSecundario: tamSecundario || null,
         statusPrincipal: tamPrincipal ? (old.statusPrincipal || 'Pendente') : null,
@@ -41,7 +57,7 @@ module.exports = async function handler(req, res) {
       };
       await setData('uniformes', pedidos);
       await logAction(user.id, user.nome, user.role, 'Atualizou pedido de uniforme',
-        `Principal: ${tamPrincipal || '—'} / Secundário: ${tamSecundario || '—'}`);
+        `${displayNome} #${displayNum} — Principal: ${tamPrincipal || '—'} / Secundário: ${tamSecundario || '—'}`);
       return res.json(pedidos[existingIdx]);
     }
 
@@ -49,8 +65,8 @@ module.exports = async function handler(req, res) {
     const novo = {
       id: counters.uniformes,
       userId: user.id,
-      jogadorNome: user.nome,
-      num: user.num || 0,
+      jogadorNome: displayNome,
+      num: displayNum,
       tamPrincipal: tamPrincipal || null,
       tamSecundario: tamSecundario || null,
       statusPrincipal: tamPrincipal ? 'Pendente' : null,
@@ -61,7 +77,7 @@ module.exports = async function handler(req, res) {
     await setData('uniformes', pedidos);
     await setData('counters', counters);
     await logAction(user.id, user.nome, user.role, 'Fez pedido de uniforme',
-      `${user.nome} — Principal: ${tamPrincipal || '—'} / Secundário: ${tamSecundario || '—'}`);
+      `${displayNome} #${displayNum} — Principal: ${tamPrincipal || '—'} / Secundário: ${tamSecundario || '—'}`);
     return res.status(201).json(novo);
   }
 
