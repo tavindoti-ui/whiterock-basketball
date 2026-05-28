@@ -61,16 +61,15 @@ module.exports = async function handler(req, res) {
     return res.json(safeUser);
   }
 
-  // DELETE - deactivate user (admin only)
+  // DELETE - permanently remove user (admin only, cannot delete self)
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
     const { id } = req.body;
+    if (id === user.id) return res.status(400).json({ error: 'Você não pode excluir sua própria conta' });
     const users = await getData('users');
-    const idx = users.findIndex(u => u.id === id);
-    if (idx === -1) return res.status(404).json({ error: 'Usuário não encontrado' });
-    users[idx].ativo = false;
-    await setData('users', users);
+    if (!users.find(u => u.id === id)) return res.status(404).json({ error: 'Usuário não encontrado' });
+    await setData('users', users.filter(u => u.id !== id));
     return res.json({ success: true });
   }
 

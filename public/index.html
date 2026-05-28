@@ -1739,6 +1739,7 @@ async function renderUsers() {
       <td style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn btn-ghost btn-sm" onclick="editUser(${u.id})"><i class="ti ti-pencil"></i> Editar</button>
         ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="toggleUser(${u.id},${!u.ativo})">${u.ativo?'Desativar':'Ativar'}</button>`:''}
+        ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})" title="Excluir permanentemente"><i class="ti ti-trash"></i></button>`:''}
       </td>
     </tr>
   `).join('');
@@ -1794,6 +1795,16 @@ async function saveEditUser() {
     renderUsers();
     toast('Usuário atualizado!');
   } else toast((r&&r.error)||'Erro ao atualizar','error');
+}
+
+async function deleteUser(id) {
+  const u = cache.users.find(x=>x.id===id);
+  if (!confirm(`Excluir usuário "${u?.nome}" permanentemente? Esta ação não pode ser desfeita.`)) return;
+  const r = await api('DELETE','users',{id});
+  if (r && r.success) {
+    renderUsers();
+    toast('Usuário excluído!');
+  } else toast((r&&r.error)||'Erro ao excluir usuário','error');
 }
 
 // ==================== UNIFORMES ====================
