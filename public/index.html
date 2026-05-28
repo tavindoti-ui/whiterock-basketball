@@ -675,6 +675,42 @@ select.form-input option{background:var(--navy2)}
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-edit-jogador">
+  <div class="modal">
+    <div class="modal-title">Editar jogador <button class="modal-close" onclick="closeModal('modal-edit-jogador')"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="ej-id">
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="ej-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
+      <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="ej-apelido" placeholder="Ex: Tavin"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nº da camisa</label><input class="form-input" id="ej-num" type="number" placeholder="Ex: 10"></div>
+      <div class="form-group"><label class="form-label">Posição</label>
+        <select class="form-input" id="ej-pos">
+          <option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="ej-idade" type="number" placeholder="Ex: 24"></div>
+      <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="ej-altura" type="number" placeholder="Ex: 185"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Telefone (WhatsApp)</label><input class="form-input" id="ej-tel" placeholder="(21) 99999-9999"></div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-input" id="ej-status">
+          <option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="ej-obs" placeholder="Ex: Torção no tornozelo"></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveEditJogador()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogador')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-jogador-detail">
   <div class="modal">
     <div class="modal-title" id="modal-j-title">Jogador <button class="modal-close" onclick="closeModal('modal-jogador-detail')"><i class="ti ti-x"></i></button></div>
@@ -976,9 +1012,6 @@ function openPlayerDetail(id) {
     </div>
     ${canEdit?`
       <div style="display:flex;gap:8px;margin-bottom:8px">
-        <input class="form-input" id="edit-apelido-${j.id}" value="${j.apelido||''}" placeholder="Apelido (ex: Tavin)" style="flex:1">
-      </div>
-      <div style="display:flex;gap:8px">
         <select class="form-input" id="edit-status-${j.id}" style="flex:1">
           <option ${j.status==='Ativo'?'selected':''}>Ativo</option>
           <option ${j.status==='Lesão'?'selected':''}>Lesão</option>
@@ -988,7 +1021,10 @@ function openPlayerDetail(id) {
         <input class="form-input" id="edit-obs-${j.id}" value="${j.obs||''}" placeholder="Observação / lesão" style="flex:2">
         <button class="btn btn-primary btn-sm" onclick="updateJogador(${j.id})">Salvar</button>
       </div>
-      ${can(['admin'])?`<button class="btn btn-danger btn-sm" onclick="deleteJogador(${j.id})" style="width:100%;margin-top:8px"><i class="ti ti-trash"></i> Excluir jogador</button>`:''}
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-ghost btn-sm" onclick="editJogadorFull(${j.id})" style="flex:1"><i class="ti ti-pencil"></i> Editar dados completos</button>
+        ${can(['admin'])?`<button class="btn btn-danger btn-sm" onclick="deleteJogador(${j.id})"><i class="ti ti-trash"></i> Excluir</button>`:''}
+      </div>
     `:''}
   `;
   openModal('modal-jogador-detail');
@@ -1026,6 +1062,48 @@ async function updateJogador(id) {
     const idx = cache.jogadores.findIndex(j=>j.id===id);
     if (idx!==-1) cache.jogadores[idx] = r;
     closeModal('modal-jogador-detail');
+    renderJogadores(); renderDashboard();
+    toast('Jogador atualizado!');
+  } else toast('Erro ao atualizar','error');
+}
+
+function editJogadorFull(id) {
+  const j = cache.jogadores.find(x=>x.id===id);
+  if (!j) return;
+  document.getElementById('ej-id').value = j.id;
+  document.getElementById('ej-nome').value = j.nome;
+  document.getElementById('ej-apelido').value = j.apelido || '';
+  document.getElementById('ej-num').value = j.num;
+  document.getElementById('ej-pos').value = j.pos;
+  document.getElementById('ej-idade').value = j.idade;
+  document.getElementById('ej-altura').value = j.altura;
+  document.getElementById('ej-tel').value = j.tel || '';
+  document.getElementById('ej-status').value = j.status;
+  document.getElementById('ej-obs').value = j.obs || '';
+  closeModal('modal-jogador-detail');
+  openModal('modal-edit-jogador');
+}
+
+async function saveEditJogador() {
+  const id = +document.getElementById('ej-id').value;
+  const nome = document.getElementById('ej-nome').value.trim();
+  if (!nome) { toast('Nome obrigatório','error'); return; }
+  const r = await api('PUT','jogadores',{
+    id,
+    nome,
+    apelido: document.getElementById('ej-apelido').value.trim(),
+    num: +document.getElementById('ej-num').value || 0,
+    pos: document.getElementById('ej-pos').value,
+    idade: +document.getElementById('ej-idade').value || 0,
+    altura: +document.getElementById('ej-altura').value || 0,
+    tel: document.getElementById('ej-tel').value,
+    status: document.getElementById('ej-status').value,
+    obs: document.getElementById('ej-obs').value,
+  });
+  if (r && r.id) {
+    const idx = cache.jogadores.findIndex(x=>x.id===id);
+    if (idx!==-1) cache.jogadores[idx] = r;
+    closeModal('modal-edit-jogador');
     renderJogadores(); renderDashboard();
     toast('Jogador atualizado!');
   } else toast('Erro ao atualizar','error');
