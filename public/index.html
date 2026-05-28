@@ -371,6 +371,70 @@ select.form-input option{background:#0D1526;color:var(--text)}
 .kit-badge-pendente{background:rgba(245,158,11,.10);color:var(--warning);border:1px solid rgba(245,158,11,.2)}
 .kit-badge-aguardando{background:rgba(45,140,255,.10);color:var(--blue);border:1px solid rgba(45,140,255,.2)}
 .kit-badge-reserva{background:rgba(174,184,199,.08);color:var(--text2);border:1px solid rgba(174,184,199,.12)}
+
+/* ==================== MOBILE ==================== */
+@media(max-width:700px){
+  .page{padding:12px}
+  .nav{padding:0 12px;height:52px}
+  .nav-logo .nav-title{font-size:13px}
+  .nav-logo .nav-title span{display:none}
+  .user-badge{padding:4px 9px;font-size:11px}
+  .btn-logout{padding:5px 9px;font-size:11px}
+  .mobile-menu{position:sticky;top:52px;z-index:99}
+
+  /* Modals as bottom sheets */
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{max-width:100%;border-radius:18px 18px 0 0;max-height:92vh;padding:20px 18px}
+  .modal::before{left:16px;right:16px}
+
+  /* Toast */
+  #toast{right:14px;left:14px;bottom:14px;max-width:unset;text-align:center}
+
+  /* Player */
+  .player-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .player-card{padding:14px}
+  .player-avatar{width:44px;height:44px;font-size:15px;margin-bottom:8px}
+  .player-num{font-size:22px}
+  .player-name{font-size:13px}
+
+  /* Cards */
+  .card-value{font-size:22px}
+  .card{padding:14px}
+
+  /* Game cards */
+  .game-card{padding:14px}
+  .game-team-name{font-size:12px}
+  .game-info{flex-wrap:wrap;gap:8px;font-size:11px}
+
+  /* Tables */
+  .tbl th{padding:8px 10px;font-size:10px;letter-spacing:0.5px}
+  .tbl td{padding:8px 10px;font-size:12px}
+
+  /* Sec title */
+  .sec-title{font-size:10px}
+
+  /* Login */
+  .login-box{padding:28px 18px}
+
+  /* Pres grid */
+  .pres-grid{grid-template-columns:1fr 1fr}
+
+  /* Jersey catalog */
+  .jersey-card{padding:18px}
+}
+@media(max-width:420px){
+  .page{padding:8px}
+  .nav{padding:0 8px}
+  .nav-logo .nav-title{display:none}
+  .user-badge span:not(.role){font-size:12px}
+  .player-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .player-card{padding:12px}
+  .modal{padding:14px 12px}
+  .login-box{padding:22px 14px;border-radius:16px}
+  .badge{font-size:10px;padding:2px 7px}
+  .btn-sm{padding:4px 9px;font-size:11px}
+  .grid3{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
@@ -480,7 +544,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
     <button class="btn btn-primary btn-sm" id="btn-add-jogo" onclick="openModal('modal-add-jogo')" style="display:none"><i class="ti ti-plus"></i> Cadastrar jogo</button>
   </div>
   <div class="grid3" id="jogos-stats"></div>
-  <div class="sec-title"><i class="ti ti-clock"></i> Próximos jogos</div>
+  <div class="sec-title"><i class="ti ti-clock"></i> Agenda / Jogos pendentes</div>
   <div id="proximos-jogos"></div>
   <div class="sec-title"><i class="ti ti-history"></i> Resultados</div>
   <div id="resultados-lista"></div>
@@ -640,7 +704,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="j-idade" type="number" placeholder="Ex: 24"></div>
+      <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="j-datanasc" type="date"></div>
       <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="j-altura" type="number" placeholder="Ex: 185"></div>
     </div>
     <div class="form-row">
@@ -893,7 +957,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Idade</label><input class="form-input" id="ej-idade" type="number" placeholder="Ex: 24"></div>
+      <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="ej-datanasc" type="date"></div>
       <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="ej-altura" type="number" placeholder="Ex: 185"></div>
     </div>
     <div class="form-row">
@@ -1116,6 +1180,15 @@ function fmt(d) { if(!d) return '—'; const [y,m,dy]=d.split('-'); return `${dy
 function today() { return new Date().toISOString().split('T')[0]; }
 function isUpcoming(d) { return d >= today(); }
 function initials(n) { return n.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase(); }
+function calcAge(dataNasc) {
+  if (!dataNasc) return null;
+  const b = new Date(dataNasc + 'T12:00:00');
+  const t = new Date();
+  let age = t.getFullYear() - b.getFullYear();
+  const m = t.getMonth() - b.getMonth();
+  if (m < 0 || (m === 0 && t.getDate() < b.getDate())) age--;
+  return age;
+}
 
 // ==================== DASHBOARD ====================
 function renderDashboard() {
@@ -1225,7 +1298,7 @@ function openPlayerDetail(id) {
       </div>
     </div>
     <div class="grid2" style="font-size:13px;margin-bottom:14px">
-      <div><span style="color:var(--text2)">Idade:</span> ${j.idade} anos</div>
+      <div><span style="color:var(--text2)">Nascimento:</span> ${j.dataNasc ? fmt(j.dataNasc) + ' <span style="color:var(--text3)">(' + calcAge(j.dataNasc) + ' anos)</span>' : j.idade ? j.idade + ' anos' : '—'}</div>
       <div><span style="color:var(--text2)">Altura:</span> ${j.altura} cm</div>
       <div><span style="color:var(--text2)">WhatsApp:</span> <a href="https://wa.me/55${(j.tel||'').replace(/\D/g,'')}" style="color:var(--success)">${j.tel||'—'}</a></div>
       <div><span style="color:var(--text2)">Jogos:</span> ${j.jg}</div>
@@ -1267,7 +1340,7 @@ async function addJogador() {
     apelido: document.getElementById('j-apelido').value.trim(),
     num: +document.getElementById('j-num').value||0,
     pos: document.getElementById('j-pos').value,
-    idade: +document.getElementById('j-idade').value||0,
+    dataNasc: document.getElementById('j-datanasc').value,
     altura: +document.getElementById('j-altura').value||0,
     status: document.getElementById('j-status').value,
     tel: document.getElementById('j-tel').value,
@@ -1278,7 +1351,7 @@ async function addJogador() {
     closeModal('modal-add-jogador');
     renderJogadores(); renderDashboard();
     toast('Jogador cadastrado!');
-    ['j-nome','j-apelido','j-num','j-idade','j-altura','j-tel','j-obs'].forEach(id=>document.getElementById(id).value='');
+    ['j-nome','j-apelido','j-num','j-datanasc','j-altura','j-tel','j-obs'].forEach(id=>document.getElementById(id).value='');
   } else toast('Erro ao cadastrar','error');
 }
 
@@ -1304,7 +1377,7 @@ function editJogadorFull(id) {
   document.getElementById('ej-apelido').value = j.apelido || '';
   document.getElementById('ej-num').value = j.num;
   document.getElementById('ej-pos').value = j.pos;
-  document.getElementById('ej-idade').value = j.idade;
+  document.getElementById('ej-datanasc').value = j.dataNasc || '';
   document.getElementById('ej-altura').value = j.altura;
   document.getElementById('ej-tel').value = j.tel || '';
   document.getElementById('ej-status').value = j.status;
@@ -1323,7 +1396,7 @@ async function saveEditJogador() {
     apelido: document.getElementById('ej-apelido').value.trim(),
     num: +document.getElementById('ej-num').value || 0,
     pos: document.getElementById('ej-pos').value,
-    idade: +document.getElementById('ej-idade').value || 0,
+    dataNasc: document.getElementById('ej-datanasc').value,
     altura: +document.getElementById('ej-altura').value || 0,
     tel: document.getElementById('ej-tel').value,
     status: document.getElementById('ej-status').value,
@@ -1352,8 +1425,8 @@ async function deleteJogador(id) {
 
 // ==================== JOGOS ====================
 function renderJogos() {
-  const upcoming = cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).sort((a,b)=>a.data.localeCompare(b.data));
-  const past = cache.jogos.filter(j=>j.wr!==null||(!isUpcoming(j.data)&&j.wr!==null)).sort((a,b)=>b.data.localeCompare(a.data));
+  const upcoming = cache.jogos.filter(j=>j.wr===null).sort((a,b)=>a.data.localeCompare(b.data));
+  const past = cache.jogos.filter(j=>j.wr!==null).sort((a,b)=>b.data.localeCompare(a.data));
   const wins = past.filter(j=>j.wr!==null&&j.wr>j.advPl).length;
   const losses = past.filter(j=>j.wr!==null&&j.wr<j.advPl).length;
   const total = wins + losses;
