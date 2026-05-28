@@ -527,7 +527,15 @@ select.form-input option{background:#0D1526;color:var(--text)}
         <option value="Suspenso">Suspensos</option>
         <option value="Inativo">Inativos</option>
       </select>
-      <button class="btn btn-primary btn-sm" id="btn-add-jogador" onclick="openModal('modal-add-jogador')" style="display:none"><i class="ti ti-plus"></i> Cadastrar</button>
+      <select class="form-input" style="width:auto;font-size:12px" id="filtro-pos" onchange="renderJogadores()">
+        <option value="">Todas posições</option>
+        <option value="Armador">Armador</option>
+        <option value="Ala-armador">Ala-armador</option>
+        <option value="Ala">Ala</option>
+        <option value="Ala-pivô">Ala-pivô</option>
+        <option value="Pivô">Pivô</option>
+      </select>
+      <button class="btn btn-primary btn-sm" id="btn-add-jogador" onclick="openAddJogador()" style="display:none"><i class="ti ti-plus"></i> Cadastrar</button>
     </div>
   </div>
   <div class="alert alert-danger" id="lesao-alert" style="display:none">
@@ -662,7 +670,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
 <div class="page" id="page-usuarios">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
     <div class="sec-title" style="margin:0"><i class="ti ti-settings"></i> Usuários do sistema</div>
-    <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-user')"><i class="ti ti-plus"></i> Criar usuário</button>
+    <button class="btn btn-primary btn-sm" onclick="openAddUser()"><i class="ti ti-plus"></i> Criar usuário</button>
   </div>
   <div class="tbl-wrap">
     <table class="tbl">
@@ -1108,6 +1116,23 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
 });
 
+function openAddJogador() {
+  ['j-nome','j-apelido','j-num','j-datanasc','j-altura','j-tel','j-obs'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  const ps = document.getElementById('j-pos'); if(ps) ps.selectedIndex = 0;
+  const st = document.getElementById('j-status'); if(st) st.value = 'Ativo';
+  openModal('modal-add-jogador');
+}
+
+function openAddUser() {
+  ['u-nome','u-email','u-senha','u-num'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  const rl = document.getElementById('u-role'); if(rl) rl.value = 'atleta';
+  openModal('modal-add-user');
+}
+
 // ==================== INIT APP ====================
 function initApp() {
   document.getElementById('login-screen').style.display = 'none';
@@ -1256,7 +1281,8 @@ function renderDashboard() {
 // ==================== JOGADORES ====================
 function renderJogadores() {
   const filtro = document.getElementById('filtro-status')?.value || '';
-  const lista = cache.jogadores.filter(j=>!filtro||j.status===filtro);
+  const filtroPos = document.getElementById('filtro-pos')?.value || '';
+  const lista = cache.jogadores.filter(j=>(!filtro||j.status===filtro)&&(!filtroPos||j.pos===filtroPos));
   const lesionados = cache.jogadores.filter(j=>j.status==='Lesão');
   const la = document.getElementById('lesao-alert');
   if (lesionados.length) {
