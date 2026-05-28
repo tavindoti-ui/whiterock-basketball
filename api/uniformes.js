@@ -16,9 +16,9 @@ module.exports = async function handler(req, res) {
     return res.json(pedidos);
   }
 
-  // Place / update own order (upsert by userId)
+  // Place / update own order (upsert by userId) — all except admin
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['atleta', 'capitao', 'admin', 'tecnico', 'comissao']);
+    const user = requireAuth(req, res, ['atleta', 'capitao', 'tecnico', 'comissao']);
     if (!user) return;
     const { tamPrincipal, tamSecundario } = req.body;
     if (!tamPrincipal && !tamSecundario) {

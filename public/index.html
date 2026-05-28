@@ -2232,11 +2232,14 @@ function renderUniformes() {
   if (!el) return;
   const pedidos = cache.uniformes || [];
   const TAMANHOS = ['PP','P','M','G','GG','XG'];
+  const isAdmin   = can(['admin']);
+  const canOrder  = !isAdmin; // everyone except admin can place an order
   const canManage = can(['admin','tecnico','capitao']);
 
-  if (can(['atleta']) && !canManage) {
-    // ── ATHLETE VIEW ──────────────────────────────────────────
-    const meu = pedidos[0] || null;
+  if (canOrder) {
+    // ── ORDER FORM (atleta / tecnico / comissao / capitao) ────
+    // For tecnico/capitao the management table is appended after the form
+    const meu = pedidos.find(p => p.userId === currentUser?.id) || null;
 
     el.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:10px">
@@ -2311,97 +2314,102 @@ function renderUniformes() {
         <i class="ti ti-device-floppy"></i> ${meu ? 'Atualizar pedido' : 'Enviar pedido'}
       </button>`;
 
+    // tecnico / capitao also see the management panel below their form
+    if (canManage) {
+      el.innerHTML += '<div style="margin-top:44px;border-top:1px solid var(--border);padding-top:36px">' +
+        buildManagementSection(pedidos) + '</div>';
+    }
+
   } else {
-    // ── ADMIN / TECNICO / COMISSAO VIEW ──────────────────────
-    const ativos = cache.jogadores.filter(j => j.status === 'Ativo');
-    const totalP = pedidos.filter(p => p.tamPrincipal).length;
-    const totalS = pedidos.filter(p => p.tamSecundario).length;
-    const pedidosNums = new Set(pedidos.map(p => p.num));
-    const semPedido = ativos.filter(j => !pedidosNums.has(j.num));
-    const STATUS_OPTS = ['Pendente','Em Produção','Entregue'];
-
-    el.innerHTML = `
-      <div class="sec-title"><i class="ti ti-shirt"></i> Uniformes 2026</div>
-
-      <div class="grid3" style="margin-bottom:28px">
-        <div class="card">
-          <div class="card-title">Pediram Principal</div>
-          <div class="card-value" style="color:var(--blue)">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
-          <div class="card-sub" style="color:var(--text2)">${ativos.length - totalP} sem pedido</div>
-        </div>
-        <div class="card">
-          <div class="card-title">Pediram Secundário</div>
-          <div class="card-value" style="color:#2ECC71">${totalS}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
-          <div class="card-sub" style="color:var(--text2)">${ativos.length - totalS} sem pedido</div>
-        </div>
-        <div class="card">
-          <div class="card-title">Aguardando pedido</div>
-          <div class="card-value" style="color:${semPedido.length ? 'var(--warning)' : 'var(--success)'}">${semPedido.length}</div>
-          <div class="card-sub" style="color:var(--text2)">jogadores ativos</div>
-        </div>
-      </div>
-
-      ${semPedido.length ? `
-        <div class="sec-title"><i class="ti ti-clock"></i> Ainda não fizeram pedido</div>
-        <div class="card" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
-          ${semPedido.map(j => `<span class="badge badge-gray">#${j.num} ${j.apelido||j.nome.split(' ')[0]}</span>`).join('')}
-        </div>` : `
-        <div class="alert alert-success" style="margin-bottom:28px">
-          <i class="ti ti-check"></i> Todos os jogadores ativos já fizeram seu pedido!
-        </div>`}
-
-      <div class="sec-title"><i class="ti ti-list"></i> Pedidos recebidos (${pedidos.length})</div>
-      ${pedidos.length ? `
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead>
-              <tr>
-                <th>Jogador</th><th>#</th>
-                <th style="color:var(--blue)">Principal</th><th>Status</th>
-                <th style="color:#2ECC71">Secundário</th><th>Status</th>
-                <th>Pedido em</th>
-                ${canManage ? '<th></th>' : ''}
-              </tr>
-            </thead>
-            <tbody>
-              ${[...pedidos].sort((a,b)=>(a.num||0)-(b.num||0)).map(p => `
-              <tr>
-                <td style="font-weight:600">${p.jogadorNome}</td>
-                <td><span class="badge badge-blue">#${p.num||'—'}</span></td>
-                <td>${p.tamPrincipal
-                  ? `<span style="font-weight:700;color:var(--blue);font-size:14px">${p.tamPrincipal}</span>`
-                  : `<span style="color:var(--text3)">—</span>`}</td>
-                <td>
-                  ${p.tamPrincipal && canManage
-                    ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'principal',this.value)">
-                        ${STATUS_OPTS.map(s=>`<option ${p.statusPrincipal===s?'selected':''}>${s}</option>`).join('')}
-                       </select>`
-                    : p.tamPrincipal
-                      ? `<span class="badge ${statusBadgeCls(p.statusPrincipal)}">${p.statusPrincipal}</span>`
-                      : `<span style="color:var(--text3)">—</span>`}
-                </td>
-                <td>${p.tamSecundario
-                  ? `<span style="font-weight:700;color:#2ECC71;font-size:14px">${p.tamSecundario}</span>`
-                  : `<span style="color:var(--text3)">—</span>`}</td>
-                <td>
-                  ${p.tamSecundario && canManage
-                    ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'secundario',this.value)">
-                        ${STATUS_OPTS.map(s=>`<option ${p.statusSecundario===s?'selected':''}>${s}</option>`).join('')}
-                       </select>`
-                    : p.tamSecundario
-                      ? `<span class="badge ${statusBadgeCls(p.statusSecundario)}">${p.statusSecundario}</span>`
-                      : `<span style="color:var(--text3)">—</span>`}
-                </td>
-                <td style="color:var(--text2);font-size:12px">${fmt(p.dataPedido)}</td>
-                ${canManage ? `<td>
-                  ${can(['admin']) ? `<button class="btn btn-danger btn-sm" onclick="deleteUniformOrder(${p.id})"><i class="ti ti-trash"></i></button>` : ''}
-                </td>` : ''}
-              </tr>`).join('')}
-            </tbody>
-          </table>
-        </div>` : `
-        <div class="card" style="color:var(--text2);font-size:13px">Nenhum pedido recebido ainda.</div>`}`;
+    // ── ADMIN ONLY ────────────────────────────────────────────
+    el.innerHTML = buildManagementSection(pedidos);
   }
+}
+
+function buildManagementSection(pedidos) {
+  const ativos = cache.jogadores.filter(j => j.status === 'Ativo');
+  const totalP = pedidos.filter(p => p.tamPrincipal).length;
+  const totalS = pedidos.filter(p => p.tamSecundario).length;
+  const pedidosNums = new Set(pedidos.map(p => p.num));
+  const semPedido = ativos.filter(j => !pedidosNums.has(j.num));
+  const STATUS_OPTS = ['Pendente','Em Produção','Entregue'];
+  const canDel = can(['admin']);
+
+  return `
+    <div class="sec-title"><i class="ti ti-shirt"></i> Visão geral — Uniformes 2026</div>
+
+    <div class="grid3" style="margin-bottom:28px">
+      <div class="card">
+        <div class="card-title">Pediram Principal</div>
+        <div class="card-value" style="color:var(--blue)">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
+        <div class="card-sub" style="color:var(--text2)">${ativos.length - totalP} sem pedido</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Pediram Secundário</div>
+        <div class="card-value" style="color:#2ECC71">${totalS}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
+        <div class="card-sub" style="color:var(--text2)">${ativos.length - totalS} sem pedido</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Aguardando pedido</div>
+        <div class="card-value" style="color:${semPedido.length ? 'var(--warning)' : 'var(--success)'}">${semPedido.length}</div>
+        <div class="card-sub" style="color:var(--text2)">jogadores ativos</div>
+      </div>
+    </div>
+
+    ${semPedido.length ? `
+      <div class="sec-title"><i class="ti ti-clock"></i> Ainda não fizeram pedido</div>
+      <div class="card" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+        ${semPedido.map(j => `<span class="badge badge-gray">#${j.num} ${j.apelido||j.nome.split(' ')[0]}</span>`).join('')}
+      </div>` : `
+      <div class="alert alert-success" style="margin-bottom:28px">
+        <i class="ti ti-check"></i> Todos os jogadores ativos já fizeram seu pedido!
+      </div>`}
+
+    <div class="sec-title"><i class="ti ti-list"></i> Pedidos recebidos (${pedidos.length})</div>
+    ${pedidos.length ? `
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Jogador</th><th>#</th>
+              <th style="color:var(--blue)">Principal</th><th>Status</th>
+              <th style="color:#2ECC71">Secundário</th><th>Status</th>
+              <th>Pedido em</th>
+              ${canDel ? '<th></th>' : ''}
+            </tr>
+          </thead>
+          <tbody>
+            ${[...pedidos].sort((a,b)=>(a.num||0)-(b.num||0)).map(p => `
+            <tr>
+              <td style="font-weight:600">${p.jogadorNome}</td>
+              <td><span class="badge badge-blue">#${p.num||'—'}</span></td>
+              <td>${p.tamPrincipal
+                ? `<span style="font-weight:700;color:var(--blue);font-size:14px">${p.tamPrincipal}</span>`
+                : `<span style="color:var(--text3)">—</span>`}</td>
+              <td>
+                ${p.tamPrincipal
+                  ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'principal',this.value)">
+                      ${STATUS_OPTS.map(s=>`<option ${p.statusPrincipal===s?'selected':''}>${s}</option>`).join('')}
+                     </select>`
+                  : `<span style="color:var(--text3)">—</span>`}
+              </td>
+              <td>${p.tamSecundario
+                ? `<span style="font-weight:700;color:#2ECC71;font-size:14px">${p.tamSecundario}</span>`
+                : `<span style="color:var(--text3)">—</span>`}</td>
+              <td>
+                ${p.tamSecundario
+                  ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'secundario',this.value)">
+                      ${STATUS_OPTS.map(s=>`<option ${p.statusSecundario===s?'selected':''}>${s}</option>`).join('')}
+                     </select>`
+                  : `<span style="color:var(--text3)">—</span>`}
+              </td>
+              <td style="color:var(--text2);font-size:12px">${fmt(p.dataPedido)}</td>
+              ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteUniformOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : `
+      <div class="card" style="color:var(--text2);font-size:13px">Nenhum pedido recebido ainda.</div>`}`;
 }
 
 function toggleUnifTam(tipo) {
