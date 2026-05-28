@@ -25,9 +25,10 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Selecione pelo menos um uniforme' });
     }
 
-    // Look up jogador record to get apelido and confirmed jersey number
+    // Look up jogador record to get apelido/nome — num comes directly from the user account
     const jogadores = await getData('jogadores') || [];
-    let jogadorRef = user.num
+    const hasNum = user.num !== null && user.num !== undefined;
+    let jogadorRef = hasNum
       ? jogadores.find(j => j.num === user.num)
       : null;
     if (!jogadorRef) {
@@ -35,8 +36,9 @@ module.exports = async function handler(req, res) {
       const searchName = (user.nome || '').toLowerCase();
       jogadorRef = jogadores.find(j => j.nome.toLowerCase() === searchName);
     }
+    // Name: prefer apelido from jogadores; number: always use the one on the user account
     const displayNome = jogadorRef?.apelido || jogadorRef?.nome || user.nome;
-    const displayNum  = jogadorRef?.num ?? user.num ?? 0;
+    const displayNum  = hasNum ? user.num : (jogadorRef?.num ?? 0);
 
     const pedidos = await getData('uniformes') || [];
     const counters = await getData('counters');

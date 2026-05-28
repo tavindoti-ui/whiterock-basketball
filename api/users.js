@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
 
     const counters = await getData('counters');
     counters.users = (counters.users || 0) + 1;
-    const newUser = { id: counters.users, nome, email, senha: bcrypt.hashSync(senha, 10), role, num: num || null, ativo: true };
+    const newUser = { id: counters.users, nome, email, senha: bcrypt.hashSync(senha, 10), role, num: (num !== undefined && num !== null && num !== '') ? +num : null, ativo: true };
     users.push(newUser);
     await setData('users', users);
     await setData('counters', counters);
@@ -54,7 +54,7 @@ module.exports = async function handler(req, res) {
       ...(email && { email }),
       ...(senha && { senha: bcrypt.hashSync(senha, 10) }),
       ...(role && { role }),
-      ...(num !== undefined && { num }),
+      ...(num !== undefined && { num: (num !== null && num !== '') ? +num : null }),
       ...(ativo !== undefined && { ativo }),
     };
     await setData('users', users);

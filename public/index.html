@@ -2088,7 +2088,8 @@ async function addUser() {
   const senha = document.getElementById('u-senha').value;
   const role = document.getElementById('u-role').value;
   if (!nome || !email || !senha) { toast('Preencha todos os campos','error'); return; }
-  const r = await api('POST','users',{ nome, email, senha, role, num:+document.getElementById('u-num').value||null });
+  const numVal = document.getElementById('u-num').value;
+  const r = await api('POST','users',{ nome, email, senha, role, num: numVal !== '' ? +numVal : null });
   if (r && r.id) {
     closeModal('modal-add-user');
     renderUsers();
@@ -2121,7 +2122,8 @@ async function saveEditUser() {
   const email = document.getElementById('eu-email').value.trim();
   const senha = document.getElementById('eu-senha').value;
   const role = document.getElementById('eu-role').value;
-  const num = +document.getElementById('eu-num').value || null;
+  const numElVal = document.getElementById('eu-num').value;
+  const num = numElVal !== '' ? +numElVal : null;
   const ativo = document.getElementById('eu-ativo').value === 'true';
   if (!nome || !email) { toast('Nome e email são obrigatórios','error'); return; }
   const payload = { id, nome, email, role, num, ativo };
