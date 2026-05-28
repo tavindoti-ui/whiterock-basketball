@@ -2,6 +2,19 @@ const { requireAuth } = require('../lib/auth');
 const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
+// Recalculates presenca % for all players based on past/today treinos
+async function recalcPresenca(treinos) {
+  const today = new Date().toISOString().split('T')[0]; // UTC date string
+  const held = treinos.filter(t => t.data <= today);   // past + today
+  const total = held.length;
+  const jogadores = await getData('jogadores') || [];
+  jogadores.forEach((j, i) => {
+    const present = held.filter(t => (t.presentes || []).includes(j.id)).length;
+    jogadores[i].presenca = total > 0 ? Math.round((present / total) * 100) : 0;
+  });
+  await setData('jogadores', jogadores);
+}
+
 module.exports = async function handler(req, res) {
   if (cors(req, res)) return;
 
@@ -38,18 +51,11 @@ module.exports = async function handler(req, res) {
     treinos[idx] = { ...treinos[idx], ...rest };
     if (presentes !== undefined) {
       treinos[idx].presentes = presentes;
-      // Update player attendance
-      const jogadores = await getData('jogadores') || [];
-      const totalTreinos = treinos.filter(t => new Date(t.data) < new Date()).length;
-      if (totalTreinos > 0) {
-        jogadores.forEach((j, i) => {
-          const presentCount = treinos.filter(t => (t.presentes || []).includes(j.id)).length;
-          jogadores[i].presenca = Math.round((presentCount / totalTreinos) * 100);
-        });
-        await setData('jogadores', jogadores);
-      }
     }
     await setData('treinos', treinos);
+    if (presentes !== undefined) {
+      await recalcPresenca(treinos);
+    }
     if (presentes !== undefined) {
       await logAction(user.id, user.nome, user.role, 'Marcou presença', `Treino ${treinos[idx].data}: ${presentes.length} jogador(es) presente(s)`);
     } else {
@@ -64,7 +70,9 @@ module.exports = async function handler(req, res) {
     const { id } = req.body;
     const treinos = await getData('treinos') || [];
     const target = treinos.find(t => t.id === id);
-    await setData('treinos', treinos.filter(t => t.id !== id));
+    const remaining = treinos.filter(t => t.id !== id);
+    await setData('treinos', remaining);
+    await recalcPresenca(remaining);
     await logAction(user.id, user.nome, user.role, 'Excluiu treino', `${target?.tipo || ''} — ${target?.data || `ID ${id}`}`);
     return res.json({ success: true });
   }
