@@ -43,21 +43,41 @@ module.exports = async function handler(req, res) {
     // Update player stats if provided
     if (statsJogadores && Array.isArray(statsJogadores)) {
       const jogadores = await getData('jogadores') || [];
+      const oldStats = jogos[idx].statsJogadores || null; // previously saved stats for this game
+
       statsJogadores.forEach(({ id: jId, pts, ast, reb, tpt, flt }) => {
         const jIdx = jogadores.findIndex(j => j.id === jId);
         if (jIdx === -1) return;
         const j = jogadores[jIdx];
         const games = j.jg || 0;
-        jogadores[jIdx] = {
-          ...j,
-          pts: games ? Math.round((j.pts * games + pts) / (games + 1)) : pts,
-          ast: games ? Math.round((j.ast * games + ast) / (games + 1)) : ast,
-          reb: games ? Math.round((j.reb * games + reb) / (games + 1)) : reb,
-          tpt: games ? Math.round((j.tpt * games + tpt) / (games + 1)) : tpt,
-          flt: games ? Math.round((j.flt * games + flt) / (games + 1)) : flt,
-          jg: games + 1,
-        };
+
+        if (oldStats && games > 0) {
+          // Edit mode: undo previous contribution from this game, apply new values
+          const old = oldStats.find(s => s.id === jId) || { pts: 0, ast: 0, reb: 0, tpt: 0, flt: 0 };
+          jogadores[jIdx] = {
+            ...j,
+            pts: Math.max(0, Math.round((j.pts * games - old.pts + pts) / games)),
+            ast: Math.max(0, Math.round((j.ast * games - old.ast + ast) / games)),
+            reb: Math.max(0, Math.round((j.reb * games - old.reb + reb) / games)),
+            tpt: Math.max(0, Math.round((j.tpt * games - old.tpt + tpt) / games)),
+            flt: Math.max(0, Math.round((j.flt * games - old.flt + flt) / games)),
+          };
+        } else {
+          // First registration: add as new game
+          jogadores[jIdx] = {
+            ...j,
+            pts: games ? Math.round((j.pts * games + pts) / (games + 1)) : pts,
+            ast: games ? Math.round((j.ast * games + ast) / (games + 1)) : ast,
+            reb: games ? Math.round((j.reb * games + reb) / (games + 1)) : reb,
+            tpt: games ? Math.round((j.tpt * games + tpt) / (games + 1)) : tpt,
+            flt: games ? Math.round((j.flt * games + flt) / (games + 1)) : flt,
+            jg: games + 1,
+          };
+        }
       });
+
+      // Store stats on the game so edits can undo/redo correctly
+      jogos[idx].statsJogadores = statsJogadores;
       await setData('jogadores', jogadores);
     }
 

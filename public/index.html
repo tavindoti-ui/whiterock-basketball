@@ -1032,7 +1032,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
 </div>
 
 <div class="modal-overlay" id="modal-edit-jogo">
-  <div class="modal">
+  <div class="modal" style="max-width:540px">
     <div class="modal-title">Editar jogo <button class="modal-close" onclick="closeModal('modal-edit-jogo')"><i class="ti ti-x"></i></button></div>
     <input type="hidden" id="ej-jogo-id">
     <div class="form-group"><label class="form-label">Adversário *</label><input class="form-input" id="ej-jo-adv" placeholder="Nome do time adversário"></div>
@@ -1044,7 +1044,9 @@ select.form-input option{background:#0D1526;color:var(--text)}
       <div class="form-group"><label class="form-label">Local</label><input class="form-input" id="ej-jo-local" placeholder="Ginásio / Quadra"></div>
       <div class="form-group"><label class="form-label">Campeonato</label><input class="form-input" id="ej-jo-camp" placeholder="Ex: Liga Carioca"></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
+    <!-- Score + player stats injected by editJogo() -->
+    <div id="ej-stats-section"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
       <button class="btn btn-primary" style="flex:1" onclick="saveEditJogo()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogo')">Cancelar</button>
     </div>
@@ -1655,6 +1657,39 @@ function editJogo(id) {
   document.getElementById('ej-jo-hora').value = j.hora || '19:00';
   document.getElementById('ej-jo-local').value = j.local || '';
   document.getElementById('ej-jo-camp').value = j.camp || '';
+
+  // Build score + player stats section
+  const ativos = cache.jogadores.filter(p=>p.status==='Ativo');
+  const oldStats = j.statsJogadores || [];
+  const getOld = (pId, k) => { const s = oldStats.find(x=>x.id===pId); return s ? s[k] : 0; };
+
+  document.getElementById('ej-stats-section').innerHTML = `
+    <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:8px">
+      <div style="font-size:10px;font-weight:800;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">
+        <i class="ti ti-trophy" style="color:var(--blue)"></i> Resultado
+      </div>
+      <div class="form-row" style="margin-bottom:14px">
+        <div class="form-group"><label class="form-label">Placar White Rock</label><input class="form-input" id="ej-jo-wr" type="number" min="0" placeholder="—" value="${j.wr!==null?j.wr:''}"></div>
+        <div class="form-group"><label class="form-label">Placar ${j.adv}</label><input class="form-input" id="ej-jo-advpl" type="number" min="0" placeholder="—" value="${j.advPl!==null?j.advPl:''}"></div>
+      </div>
+      <div style="font-size:10px;font-weight:800;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">
+        <i class="ti ti-chart-bar" style="color:var(--blue)"></i> Estatísticas por jogador
+      </div>
+      ${ativos.length === 0 ? '<div style="color:var(--text2);font-size:12px">Nenhum jogador ativo.</div>' :
+        ativos.map(p=>`
+        <div style="background:var(--navy3);border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">#${p.num} ${p.apelido||p.nome.split(' ')[0]}</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+            ${[['pts','PTS'],['ast','AST'],['reb','REB'],['tpt','3PT'],['flt','FLT']].map(([k,l])=>`
+              <div>
+                <div style="font-size:10px;color:var(--text2);margin-bottom:3px">${l}</div>
+                <input type="number" class="form-input" style="padding:5px 6px;font-size:12px;text-align:center"
+                  id="ej-stat-${p.id}-${k}" value="${getOld(p.id,k)}" min="0">
+              </div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+
   openModal('modal-edit-jogo');
 }
 
@@ -1663,17 +1698,41 @@ async function saveEditJogo() {
   const adv = document.getElementById('ej-jo-adv').value.trim();
   const data = document.getElementById('ej-jo-data').value;
   if (!adv || !data) { toast('Adversário e data são obrigatórios','error'); return; }
-  const r = await api('PUT','jogos',{
+
+  const payload = {
     id, adv, data,
     hora: document.getElementById('ej-jo-hora').value,
     local: document.getElementById('ej-jo-local').value,
     camp: document.getElementById('ej-jo-camp').value,
-  });
+  };
+
+  // Include score + stats if score is filled
+  const wrVal = document.getElementById('ej-jo-wr')?.value;
+  const advPlVal = document.getElementById('ej-jo-advpl')?.value;
+  if (wrVal !== '') {
+    payload.wr = +wrVal;
+    payload.advPl = advPlVal !== '' ? +advPlVal : 0;
+    const ativos = cache.jogadores.filter(p=>p.status==='Ativo');
+    payload.statsJogadores = ativos.map(p => ({
+      id: p.id,
+      pts: +document.getElementById(`ej-stat-${p.id}-pts`)?.value || 0,
+      ast: +document.getElementById(`ej-stat-${p.id}-ast`)?.value || 0,
+      reb: +document.getElementById(`ej-stat-${p.id}-reb`)?.value || 0,
+      tpt: +document.getElementById(`ej-stat-${p.id}-tpt`)?.value || 0,
+      flt: +document.getElementById(`ej-stat-${p.id}-flt`)?.value || 0,
+    }));
+  }
+
+  const r = await api('PUT','jogos', payload);
   if (r && r.id) {
     const idx = cache.jogos.findIndex(x=>x.id===id);
-    if (idx!==-1) cache.jogos[idx] = r;
+    if (idx !== -1) cache.jogos[idx] = r;
+    if (payload.statsJogadores) {
+      const j2 = await api('GET','jogadores');
+      if (j2) cache.jogadores = j2;
+    }
     closeModal('modal-edit-jogo');
-    renderJogos(); renderDashboard();
+    renderJogos(); renderDashboard(); renderStats();
     toast('Jogo atualizado!');
   } else toast('Erro ao atualizar jogo','error');
 }
