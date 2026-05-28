@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Peça sua Camisa — White Rock Basketball</title>
+<title>Camisas White Rock Basketball 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,445 +11,643 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --navy:#050B16;--navy2:#081224;--navy3:#0E1828;
-  --blue:#4DA6FF;--blue2:#2D8CFF;
-  --white:#F4F7FB;--gray:#AEB8C7;--gray2:#0D1526;
+  --navy:#050B16;--navy2:#081224;--navy3:#0E1828;--navy4:#0A1428;
+  --blue:#4DA6FF;--blue2:#2D8CFF;--blue3:#1a6fe8;
+  --green:#2ECC71;--green2:#27AE60;
+  --white:#F4F7FB;--gray:#AEB8C7;
   --success:#00C87A;--warning:#F59E0B;--danger:#EF4444;
   --text:#F4F7FB;--text2:#AEB8C7;--text3:#4A5A72;
   --border:rgba(77,166,255,0.12);
-  --card-shadow:0 0 0 1px rgba(77,166,255,0.04),0 10px 40px rgba(0,0,0,0.5);
+  --shadow:0 0 0 1px rgba(77,166,255,0.06),0 16px 48px rgba(0,0,0,0.6);
 }
+html{scroll-behavior:smooth}
 body{
   background:var(--navy);
-  background-image:radial-gradient(ellipse 90% 40% at 50% -5%,rgba(45,140,255,0.08) 0%,transparent 60%);
-  color:var(--text);font-family:'Inter',system-ui,sans-serif;
-  min-height:100vh;-webkit-font-smoothing:antialiased;
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
 
 /* ─── TOP BAR ─── */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;height:60px;
-  background:rgba(5,11,22,0.95);border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);
+  padding:0 28px;height:62px;
+  background:rgba(5,11,22,0.92);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
 }
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none}
 .logo-circle{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,#2D8CFF,#0066cc);
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue2),var(--blue3));
   display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:13px;color:#fff;
-  box-shadow:0 0 14px rgba(45,140,255,0.35);
-  flex-shrink:0;
+  font-weight:900;font-size:14px;color:#fff;flex-shrink:0;
+  box-shadow:0 0 16px rgba(45,140,255,0.4);
 }
-.logo-text{font-weight:800;font-size:15px;color:#fff}
-.logo-sub{font-size:10px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase}
-.topbar-links{display:flex;gap:6px}
-.topbar-links a{
-  font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;
-  padding:6px 12px;border-radius:8px;transition:all .15s;
+.logo-name{font-weight:800;font-size:15px;color:#fff;letter-spacing:-0.3px}
+.logo-sub{font-size:9px;color:var(--text3);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.btn-track{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:9px;border:1px solid var(--border);
+  background:transparent;color:var(--text2);
+  font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;
+  transition:all .18s;text-decoration:none;
 }
-.topbar-links a:hover{color:#fff;background:rgba(255,255,255,0.06)}
-.topbar-links a.active{color:var(--blue);background:rgba(77,166,255,0.08)}
-
-/* ─── CONTENT ─── */
-.wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+.btn-track:hover{background:rgba(255,255,255,0.06);color:#fff;border-color:rgba(255,255,255,0.14)}
+.btn-track.highlight{background:rgba(77,166,255,0.1);color:var(--blue);border-color:rgba(77,166,255,0.25)}
 
 /* ─── HERO ─── */
-.hero{text-align:center;margin-bottom:44px}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(77,166,255,0.1);border:1px solid rgba(77,166,255,0.22);
-  border-radius:20px;padding:5px 14px;
-  font-size:11px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;
-  margin-bottom:16px;
+.hero{
+  position:relative;overflow:hidden;
+  padding:72px 24px 0;text-align:center;
+  background:radial-gradient(ellipse 100% 70% at 50% -10%,rgba(45,140,255,0.1) 0%,transparent 65%);
 }
-.hero h1{font-size:clamp(28px,6vw,44px);font-weight:900;line-height:1.1;margin-bottom:12px}
-.hero h1 span{color:var(--blue)}
-.hero p{color:var(--text2);font-size:15px;max-width:480px;margin:0 auto}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(77,166,255,0.09);border:1px solid rgba(77,166,255,0.2);
+  border-radius:24px;padding:6px 16px;
+  font-size:11px;font-weight:800;color:var(--blue);letter-spacing:1.4px;text-transform:uppercase;
+  margin-bottom:20px;
+}
+.hero h1{
+  font-size:clamp(36px,7vw,68px);font-weight:900;
+  line-height:1.04;letter-spacing:-1.5px;
+  margin-bottom:18px;
+}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero-sub{
+  font-size:clamp(15px,2.5vw,18px);color:var(--text2);
+  max-width:500px;margin:0 auto 36px;line-height:1.6;font-weight:400;
+}
+.hero-cta{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  flex-wrap:wrap;margin-bottom:64px;
+}
+.btn-hero{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:12px;border:none;cursor:pointer;
+  font-family:inherit;font-size:15px;font-weight:700;transition:all .2s;text-decoration:none;
+}
+.btn-hero-primary{
+  background:linear-gradient(135deg,var(--blue2),var(--blue3));
+  color:#fff;box-shadow:0 6px 24px rgba(45,140,255,0.35);
+}
+.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(45,140,255,0.45)}
+.btn-hero-ghost{background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid rgba(255,255,255,0.1)}
+.btn-hero-ghost:hover{background:rgba(255,255,255,0.1);color:#fff}
 
-/* ─── TABS ─── */
-.tabs{display:flex;gap:4px;background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:32px}
-.tab-btn{
-  flex:1;padding:10px 16px;border-radius:9px;border:none;cursor:pointer;
-  font-family:inherit;font-size:13px;font-weight:600;
-  background:transparent;color:var(--text2);transition:all .18s;
+/* ─── JERSEY SHOWCASE ─── */
+.showcase{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  max-width:900px;margin:0 auto;position:relative;
 }
-.tab-btn.active{background:var(--blue2);color:#fff;box-shadow:0 2px 8px rgba(45,140,255,0.3)}
+@media(max-width:600px){.showcase{grid-template-columns:1fr;max-width:380px}}
+.jersey-hero{
+  position:relative;padding:40px 32px 32px;text-align:center;cursor:pointer;
+  transition:transform .25s ease;
+}
+.jersey-hero:hover{transform:translateY(-6px)}
+.jersey-hero::before{
+  content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;
+  border-radius:2px;transition:opacity .2s;opacity:0;
+}
+.jersey-hero.principal::before{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.jersey-hero.secundaria::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.jersey-hero:hover::before{opacity:1}
+.jersey-img-wrap{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  min-height:260px;margin-bottom:24px;
+}
+.jersey-img-wrap img{
+  max-width:100%;max-height:280px;object-fit:contain;
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  transition:filter .25s;
+}
+.jersey-hero:hover .jersey-img-wrap img{
+  filter:drop-shadow(0 28px 50px rgba(0,0,0,0.6));
+}
+.jersey-label{
+  font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.jersey-label.principal{color:var(--blue)}
+.jersey-label.secundaria{color:var(--green)}
+.jersey-name{font-size:20px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-0.3px}
+.jersey-desc{font-size:12px;color:var(--text3);margin-bottom:20px}
+.btn-choose{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 22px;border-radius:9px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:700;transition:all .18s;
+}
+.btn-choose-blue{background:rgba(45,140,255,0.15);color:var(--blue);border:1px solid rgba(45,140,255,0.25)}
+.btn-choose-blue:hover{background:var(--blue2);color:#fff;border-color:var(--blue2)}
+.btn-choose-green{background:rgba(46,204,113,0.12);color:var(--green);border:1px solid rgba(46,204,113,0.22)}
+.btn-choose-green:hover{background:var(--green2);color:#fff;border-color:var(--green2)}
+.showcase-divider{
+  position:absolute;top:10%;bottom:10%;left:50%;width:1px;
+  background:linear-gradient(to bottom,transparent,var(--border),transparent);
+}
+@media(max-width:600px){.showcase-divider{display:none}}
 
-/* ─── CARD ─── */
-.card{
-  background:linear-gradient(180deg,#0D1526 0%,#081224 100%);
-  border:1px solid var(--border);border-radius:16px;padding:28px;
-  box-shadow:var(--card-shadow);position:relative;overflow:hidden;margin-bottom:24px;
+/* ─── SECTION WRAPPER ─── */
+.section{max-width:720px;margin:0 auto;padding:80px 20px}
+.section-sm{max-width:640px;margin:0 auto;padding:0 20px 80px}
+.sec-label{
+  font-size:10px;font-weight:800;color:var(--text3);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:10px;
 }
-.card::before{
+.sec-title{font-size:clamp(22px,4vw,30px);font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-0.4px}
+.sec-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:32px}
+
+/* ─── ORDER CARD ─── */
+.order-card{
+  background:linear-gradient(180deg,#0C1422 0%,#081224 100%);
+  border:1px solid var(--border);border-radius:20px;
+  padding:32px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.order-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(45,140,255,0.4),transparent);
+  background:linear-gradient(90deg,transparent,rgba(45,140,255,0.5),transparent);
 }
-.card-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-.card-title i{color:var(--blue);font-size:18px}
+.order-card.green-top::before{
+  background:linear-gradient(90deg,transparent,rgba(46,204,113,0.5),transparent);
+}
 
-/* ─── FORM ─── */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group.full{grid-column:1/-1}
-label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:0.6px;text-transform:uppercase}
-input,select,textarea{
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+/* modelo selector mini */
+.modelo-sel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.ms-opt{
+  border:2px solid rgba(255,255,255,0.07);border-radius:12px;
+  padding:12px 14px;cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;gap:10px;
+}
+.ms-opt:hover{border-color:rgba(255,255,255,0.14)}
+.ms-opt.selected-blue{border-color:var(--blue2);background:rgba(45,140,255,0.08)}
+.ms-opt.selected-green{border-color:var(--green);background:rgba(46,204,113,0.07)}
+.ms-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ms-dot.blue{background:var(--blue2)}
+.ms-dot.green{background:var(--green)}
+.ms-text{display:flex;flex-direction:column}
+.ms-name{font-size:12px;font-weight:700;color:#fff}
+.ms-sub{font-size:10px;color:var(--text3)}
+
+/* form */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:500px){.fg{grid-template-columns:1fr}}
+.fg-full{grid-column:1/-1}
+.fl{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px}
+.fi{
+  width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
   border-radius:9px;padding:10px 12px;color:#fff;
   font-family:inherit;font-size:14px;outline:none;transition:border .15s;
-  width:100%;
 }
-input:focus,select:focus,textarea:focus{border-color:rgba(77,166,255,0.45);background:rgba(77,166,255,0.04)}
-select option{background:#0D1526;color:#fff}
-textarea{resize:vertical;min-height:72px}
-input::placeholder{color:var(--text3)}
+.fi:focus{border-color:rgba(77,166,255,0.4);background:rgba(77,166,255,0.04)}
+.fi::placeholder{color:var(--text3)}
+select.fi option{background:#0D1526;color:#fff}
+textarea.fi{resize:vertical;min-height:70px}
 
-/* Modelo cards */
-.modelo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-.modelo-card{
-  border:2px solid rgba(255,255,255,0.08);border-radius:11px;
-  padding:14px;cursor:pointer;transition:all .18s;text-align:center;
+.btn-submit{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:15px;border-radius:12px;border:none;cursor:pointer;
+  font-family:inherit;font-size:15px;font-weight:800;transition:all .2s;margin-top:8px;
+  background:linear-gradient(135deg,var(--blue2),var(--blue3));
+  color:#fff;box-shadow:0 6px 20px rgba(45,140,255,0.3);
 }
-.modelo-card:hover{border-color:rgba(77,166,255,0.3)}
-.modelo-card.selected{border-color:var(--blue2);background:rgba(45,140,255,0.08)}
-.modelo-card input[type=radio]{display:none}
-.modelo-dot{width:10px;height:3px;border-radius:2px;margin:0 auto 6px;transition:background .18s}
-.modelo-card.selected .modelo-dot.azul{background:#4DA6FF}
-.modelo-card.selected .modelo-dot.verde{background:#2ECC71}
-.modelo-dot.azul{background:rgba(77,166,255,0.3)}
-.modelo-dot.verde{background:rgba(46,204,113,0.3)}
-.modelo-name{font-weight:700;font-size:12px;color:#fff;margin-bottom:2px}
-.modelo-sub{font-size:10px;color:var(--text3)}
+.btn-submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 28px rgba(45,140,255,0.42)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn-submit.green-btn{background:linear-gradient(135deg,var(--green2),#219a52);box-shadow:0 6px 20px rgba(39,174,96,0.28)}
+.btn-submit.green-btn:hover:not(:disabled){box-shadow:0 8px 28px rgba(39,174,96,0.4)}
 
-/* ─── BUTTON ─── */
-.btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:12px 24px;border-radius:10px;border:none;cursor:pointer;
-  font-family:inherit;font-size:14px;font-weight:700;transition:all .18s;
-}
-.btn-primary{background:linear-gradient(135deg,#2D8CFF,#1a6fe8);color:#fff;box-shadow:0 4px 16px rgba(45,140,255,0.3)}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(45,140,255,0.4)}
-.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.btn-ghost{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid var(--border)}
-.btn-ghost:hover{background:rgba(255,255,255,0.09);color:#fff}
-.btn-full{width:100%;justify-content:center;padding:14px}
-
-/* ─── ALERTS ─── */
-.alert{border-radius:10px;padding:12px 16px;font-size:13px;display:flex;gap:10px;align-items:flex-start;margin-bottom:20px}
+/* alerts */
+.alert{border-radius:11px;padding:12px 16px;font-size:13px;display:flex;gap:10px;align-items:flex-start;margin-bottom:18px}
 .alert i{font-size:16px;flex-shrink:0;margin-top:1px}
 .alert-success{background:rgba(0,200,122,0.08);border:1px solid rgba(0,200,122,0.22);color:var(--success)}
 .alert-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.22);color:var(--danger)}
 .alert-info{background:rgba(77,166,255,0.08);border:1px solid rgba(77,166,255,0.2);color:var(--blue)}
 
-/* ─── ORDER SUCCESS ─── */
-#success-box{display:none}
-.success-inner{text-align:center;padding:16px 0}
+/* ─── SUCCESS ─── */
+.success-wrap{text-align:center;padding:8px 0}
 .success-icon{
-  width:64px;height:64px;border-radius:50%;
-  background:rgba(0,200,122,0.12);border:2px solid rgba(0,200,122,0.3);
+  width:70px;height:70px;border-radius:50%;
+  background:rgba(0,200,122,0.1);border:2px solid rgba(0,200,122,0.3);
   display:flex;align-items:center;justify-content:center;
-  font-size:28px;color:var(--success);margin:0 auto 20px;
+  font-size:30px;color:var(--success);margin:0 auto 20px;
 }
 .codigo-box{
+  display:inline-block;
   background:rgba(77,166,255,0.08);border:1px solid rgba(77,166,255,0.2);
-  border-radius:12px;padding:16px 24px;margin:20px 0;display:inline-block;
+  border-radius:14px;padding:18px 36px;margin:16px 0 24px;
 }
-.codigo-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.codigo-val{font-size:32px;font-weight:900;color:var(--blue);letter-spacing:3px}
+.codigo-label{font-size:10px;font-weight:800;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.codigo-val{font-size:36px;font-weight:900;color:var(--blue);letter-spacing:4px}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 22px;border-radius:9px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  color:var(--text2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;
+}
+.btn-secondary:hover{background:rgba(255,255,255,0.1);color:#fff}
 
 /* ─── TRACKING ─── */
-.status-timeline{margin-top:24px}
-.timeline-item{
-  display:flex;align-items:flex-start;gap:12px;padding:10px 0;position:relative;
+.track-box{
+  background:linear-gradient(180deg,#0C1422 0%,#081224 100%);
+  border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
 }
-.timeline-item:not(:last-child)::after{
-  content:'';position:absolute;left:11px;top:32px;bottom:-10px;width:2px;
+.track-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(77,166,255,0.4),transparent);
+}
+.track-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:500px){.track-row{grid-template-columns:1fr}}
+.track-sep{text-align:center;font-size:11px;color:var(--text3);font-weight:600;letter-spacing:1px;padding:4px 0;margin-bottom:14px}
+
+/* Result card */
+.result-card{
+  background:var(--navy3);border:1px solid var(--border);border-radius:16px;padding:24px;margin-top:20px;
+}
+.result-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.result-codigo{font-size:22px;font-weight:900;color:var(--blue);letter-spacing:2px}
+.result-sub{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+
+/* timeline */
+.timeline{margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:20px}
+.tl-item{display:flex;align-items:flex-start;gap:12px;padding:7px 0;position:relative}
+.tl-item:not(:last-child)::after{
+  content:'';position:absolute;left:10px;top:28px;bottom:-7px;width:2px;
   background:rgba(255,255,255,0.06);
 }
 .tl-dot{
-  width:24px;height:24px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:11px;
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:10px;
 }
-.tl-dot.done{background:rgba(0,200,122,0.15);border:2px solid var(--success);color:var(--success)}
-.tl-dot.current{background:rgba(77,166,255,0.15);border:2px solid var(--blue);color:var(--blue)}
-.tl-dot.pending{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.1);color:var(--text3)}
-.tl-label{font-size:13px;font-weight:600;padding-top:3px}
+.tl-dot.done{background:rgba(0,200,122,0.14);border:2px solid var(--success);color:var(--success)}
+.tl-dot.cur{background:rgba(77,166,255,0.14);border:2px solid var(--blue);color:var(--blue)}
+.tl-dot.pend{background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.09);color:var(--text3)}
+.tl-label{font-size:13px;font-weight:600;padding-top:2px}
 .tl-label.done{color:var(--success)}
-.tl-label.current{color:#fff}
-.tl-label.pending{color:var(--text3)}
+.tl-label.cur{color:#fff}
+.tl-label.pend{color:var(--text3)}
 
-/* ─── ORDER DETAIL ─── */
-.detail-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.detail-row:last-child{border:none}
-.detail-label{font-size:12px;color:var(--text2)}
-.detail-val{font-size:13px;font-weight:600;color:#fff}
+/* detail rows */
+.drow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.drow:last-child{border:none}
+.dlabel{font-size:12px;color:var(--text2)}
+.dval{font-size:13px;font-weight:600;color:#fff}
 
-/* ─── STATUS BADGE ─── */
-.status-badge{
-  display:inline-block;padding:4px 10px;border-radius:20px;
-  font-size:11px;font-weight:700;letter-spacing:0.3px;
+/* status badge */
+.sbadge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.sb-recebido{background:rgba(77,166,255,0.12);color:var(--blue)}
+.sb-aguardando{background:rgba(245,158,11,0.12);color:var(--warning)}
+.sb-confirmado{background:rgba(0,200,122,0.12);color:var(--success)}
+.sb-producao{background:rgba(139,92,246,0.12);color:#A78BFA}
+.sb-personalizacao{background:rgba(236,72,153,0.12);color:#F472B6}
+.sb-pronto{background:rgba(34,211,238,0.12);color:#22D3EE}
+.sb-enviado{background:rgba(99,102,241,0.12);color:#818CF8}
+.sb-entregue{background:rgba(0,200,122,0.2);color:var(--success);font-weight:800}
+.sb-cancelado{background:rgba(239,68,68,0.12);color:var(--danger)}
+
+/* ─── HOW IT WORKS ─── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:8px}
+@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.step{text-align:center;padding:28px 20px}
+.step-num{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(77,166,255,0.1);border:1px solid rgba(77,166,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:900;color:var(--blue);
+  margin:0 auto 14px;
 }
-.s-recebido{background:rgba(77,166,255,0.12);color:var(--blue)}
-.s-aguardando{background:rgba(245,158,11,0.12);color:var(--warning)}
-.s-confirmado{background:rgba(0,200,122,0.12);color:var(--success)}
-.s-producao{background:rgba(139,92,246,0.12);color:#A78BFA}
-.s-personalizacao{background:rgba(236,72,153,0.12);color:#F472B6}
-.s-pronto{background:rgba(34,211,238,0.12);color:#22D3EE}
-.s-enviado{background:rgba(99,102,241,0.12);color:#818CF8}
-.s-entregue{background:rgba(0,200,122,0.18);color:var(--success);font-weight:800}
-.s-cancelado{background:rgba(239,68,68,0.12);color:var(--danger)}
+.step-title{font-weight:700;font-size:14px;color:#fff;margin-bottom:6px}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* ─── DIVIDER ─── */
+.divider{border:none;border-top:1px solid var(--border);max-width:720px;margin:0 auto}
 
 /* ─── FOOTER ─── */
-footer{text-align:center;padding:32px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:40px}
-footer a{color:var(--text3);text-decoration:none}
+footer{
+  text-align:center;padding:32px 20px;
+  font-size:12px;color:var(--text3);
+  border-top:1px solid var(--border);
+}
+footer a{color:var(--text3);text-decoration:none;transition:color .15s}
 footer a:hover{color:var(--blue)}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- ── TOP BAR ── -->
 <div class="topbar">
   <a class="logo" href="#">
     <div class="logo-circle">WR</div>
     <div>
-      <div class="logo-text">White Rock</div>
+      <div class="logo-name">White Rock</div>
       <div class="logo-sub">Basketball</div>
     </div>
   </a>
-  <div class="topbar-links">
-    <a href="#order" id="link-order" class="active" onclick="switchTab('order');return false">Fazer pedido</a>
-    <a href="#track" id="link-track" onclick="switchTab('track');return false">Acompanhar</a>
+  <div class="topbar-actions">
+    <a class="btn-track" href="#track" onclick="scrollToTrack()">
+      <i class="ti ti-search"></i> Acompanhar pedido
+    </a>
   </div>
 </div>
 
-<!-- MAIN -->
-<div class="wrap">
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge"><i class="ti ti-shirt"></i> Camisas 2026</div>
-    <h1>Vista as cores do<br><span>White Rock</span></h1>
-    <p>Faça seu pedido de camisa personalizada e acompanhe o status diretamente aqui.</p>
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow"><i class="ti ti-shirt"></i> Temporada 2026</div>
+  <h1>Vista as cores do<br><em>White Rock</em></h1>
+  <p class="hero-sub">Camisas oficiais da equipe. Personalize com seu número e nome, escolha o modelo e receba em casa.</p>
+  <div class="hero-cta">
+    <a class="btn-hero btn-hero-primary" href="#order" onclick="scrollToOrder('principal')">
+      <i class="ti ti-shopping-cart"></i> Pedir camisa
+    </a>
+    <a class="btn-hero btn-hero-ghost" href="#track" onclick="scrollToTrack()">
+      <i class="ti ti-search"></i> Rastrear pedido
+    </a>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active" id="tab-order" onclick="switchTab('order')">
-      <i class="ti ti-shopping-cart"></i> Fazer pedido
-    </button>
-    <button class="tab-btn" id="tab-track" onclick="switchTab('track')">
-      <i class="ti ti-search"></i> Acompanhar pedido
-    </button>
+  <!-- JERSEY SHOWCASE -->
+  <div class="showcase">
+    <div class="showcase-divider"></div>
+
+    <!-- PRINCIPAL -->
+    <div class="jersey-hero principal" onclick="scrollToOrder('principal')">
+      <div class="jersey-img-wrap">
+        <img src="https://lh3.googleusercontent.com/d/1MmeNehU50XwG0TNhW3Zb0zV94Z7KOP8y"
+          alt="Camisa Principal White Rock"
+          onerror="this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;color:var(--text3)\'><i class=\'ti ti-shirt\' style=\'font-size:56px;color:rgba(77,166,255,0.3)\'></i><span style=\'font-size:12px\'>Camisa Principal</span></div>'">
+      </div>
+      <div class="jersey-label principal">Principal</div>
+      <div class="jersey-name">Midnight Elite</div>
+      <div class="jersey-desc">Azul marinho · Uniforme oficial 2026</div>
+      <button class="btn-choose btn-choose-blue">
+        <i class="ti ti-plus"></i> Pedir este modelo
+      </button>
+    </div>
+
+    <!-- SECUNDÁRIA -->
+    <div class="jersey-hero secundaria" onclick="scrollToOrder('secundaria')">
+      <div class="jersey-img-wrap">
+        <img src="https://lh3.googleusercontent.com/d/1zZ1vgKcDf7poxs_iMOHQGSWzaQHvK1rA"
+          alt="Camisa Secundária White Rock"
+          onerror="this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;color:var(--text3)\'><i class=\'ti ti-shirt\' style=\'font-size:56px;color:rgba(46,204,113,0.3)\'></i><span style=\'font-size:12px\'>Camisa Secundária</span></div>'">
+      </div>
+      <div class="jersey-label secundaria">Secundária</div>
+      <div class="jersey-name">Dark Navy</div>
+      <div class="jersey-desc">Verde e azul · Uniforme alternativo 2026</div>
+      <button class="btn-choose btn-choose-green">
+        <i class="ti ti-plus"></i> Pedir este modelo
+      </button>
+    </div>
   </div>
+</div>
 
-  <!-- ══ PANEL: ORDER ══ -->
-  <div id="panel-order">
+<!-- ── COMO FUNCIONA ── -->
+<div class="section" style="padding-bottom:48px">
+  <div style="text-align:center">
+    <div class="sec-label">Como funciona</div>
+    <div class="sec-title">Simples e rápido</div>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Escolha o modelo</div>
+      <div class="step-desc">Principal ou Secundária. Informe tamanho, número e nome para personalizar.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Envie o pedido</div>
+      <div class="step-desc">Preencha seus dados de contato. Você recebe um código único para rastrear.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Acompanhe</div>
+      <div class="step-desc">Veja em tempo real em que etapa sua camisa está, do pedido à entrega.</div>
+    </div>
+  </div>
+</div>
 
-    <!-- Success box -->
-    <div id="success-box" class="card">
-      <div class="success-inner">
+<hr class="divider">
+
+<!-- ── ORDER FORM ── -->
+<div class="section" id="order">
+  <div class="sec-label">Seu pedido</div>
+  <div class="sec-title">Pedir camisa</div>
+  <div class="sec-desc">Preencha os dados abaixo. Entraremos em contato pelo WhatsApp para confirmar.</div>
+
+  <!-- Success -->
+  <div id="success-box" style="display:none">
+    <div class="order-card">
+      <div class="success-wrap">
         <div class="success-icon"><i class="ti ti-check"></i></div>
-        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Pedido recebido!</h2>
-        <p style="color:var(--text2);font-size:14px;margin-bottom:4px">Guarde seu código de acompanhamento</p>
+        <h2 style="font-size:24px;font-weight:900;margin-bottom:8px">Pedido recebido!</h2>
+        <p style="color:var(--text2);font-size:14px">Guarde seu código — use-o para acompanhar o status.</p>
         <div class="codigo-box">
           <div class="codigo-label">Código do pedido</div>
           <div class="codigo-val" id="codigo-display">WR-0000</div>
         </div>
-        <p style="color:var(--text2);font-size:13px;margin-bottom:24px">
-          Use este código (ou seu WhatsApp) para acompanhar o pedido.
+        <p style="color:var(--text2);font-size:13px;max-width:380px;margin:0 auto 28px;line-height:1.6">
+          Entraremos em contato pelo seu WhatsApp em breve para confirmar os detalhes e o pagamento.
         </p>
-        <button class="btn btn-ghost" onclick="resetForm()">
-          <i class="ti ti-plus"></i> Novo pedido
-        </button>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="resetForm()"><i class="ti ti-plus"></i> Novo pedido</button>
+          <button class="btn-secondary" onclick="scrollToTrack()"><i class="ti ti-search"></i> Acompanhar</button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Order form -->
-    <div id="order-form-wrap">
-      <div class="card">
-        <div class="card-title"><i class="ti ti-user"></i> Seus dados</div>
-        <div id="form-error" class="alert alert-error" style="display:none">
-          <i class="ti ti-alert-circle"></i> <span id="form-error-msg"></span>
-        </div>
-        <div class="form-grid">
-          <div class="form-group full">
-            <label>Nome completo *</label>
-            <input type="text" id="f-nome" placeholder="Seu nome" autocomplete="name">
-          </div>
-          <div class="form-group full">
-            <label>WhatsApp *</label>
-            <input type="tel" id="f-wpp" placeholder="(21) 99999-9999" autocomplete="tel">
-          </div>
-        </div>
+  <!-- Form -->
+  <div id="form-wrap">
+    <div class="order-card" id="form-card">
+      <div id="form-err" class="alert alert-error" style="display:none">
+        <i class="ti ti-alert-circle"></i><span id="form-err-msg"></span>
       </div>
 
-      <div class="card">
-        <div class="card-title"><i class="ti ti-shirt"></i> Camisa</div>
-        <div class="form-grid">
-          <div class="form-group full">
-            <label>Modelo *</label>
-            <div class="modelo-grid">
-              <label class="modelo-card selected" id="mc-principal" onclick="selectModelo('principal')">
-                <input type="radio" name="modelo" value="principal" checked>
-                <div class="modelo-dot azul"></div>
-                <div class="modelo-name">Principal</div>
-                <div class="modelo-sub">Midnight Elite · Azul</div>
-              </label>
-              <label class="modelo-card" id="mc-secundario" onclick="selectModelo('secundario')">
-                <input type="radio" name="modelo" value="secundario">
-                <div class="modelo-dot verde"></div>
-                <div class="modelo-name">Secundária</div>
-                <div class="modelo-sub">Dark Navy · Verde</div>
-              </label>
+      <!-- Modelo selector -->
+      <div style="margin-bottom:20px">
+        <span class="fl">Modelo *</span>
+        <div class="modelo-sel">
+          <div class="ms-opt selected-blue" id="ms-principal" onclick="selectModelo('principal')">
+            <div class="ms-dot blue"></div>
+            <div class="ms-text">
+              <span class="ms-name">Principal</span>
+              <span class="ms-sub">Midnight Elite · Azul</span>
             </div>
           </div>
-
-          <div class="form-group">
-            <label>Tamanho *</label>
-            <select id="f-tam">
-              <option value="">Selecione</option>
-              <option>PP</option><option>P</option><option>M</option>
-              <option>G</option><option>GG</option><option>XG</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Quantidade</label>
-            <select id="f-qtd">
-              <option>1</option><option>2</option><option>3</option>
-              <option>4</option><option>5</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Número na camisa</label>
-            <input type="number" id="f-num" placeholder="Ex: 23" min="0" max="99">
-          </div>
-
-          <div class="form-group">
-            <label>Nome nas costas</label>
-            <input type="text" id="f-nomecam" placeholder="Ex: SILVA" style="text-transform:uppercase" maxlength="16">
-          </div>
-
-          <div class="form-group full">
-            <label>Observações</label>
-            <textarea id="f-obs" placeholder="Alguma observação ou pedido especial?"></textarea>
+          <div class="ms-opt" id="ms-secundaria" onclick="selectModelo('secundaria')">
+            <div class="ms-dot green"></div>
+            <div class="ms-text">
+              <span class="ms-name">Secundária</span>
+              <span class="ms-sub">Dark Navy · Verde</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <button class="btn btn-primary btn-full" id="btn-submit" onclick="submitOrder()">
+      <div class="fg">
+        <!-- Dados pessoais -->
+        <div class="fg-full" style="padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:4px">
+          <span style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Seus dados</span>
+        </div>
+
+        <div class="fg-full">
+          <label class="fl">Nome completo *</label>
+          <input class="fi" type="text" id="f-nome" placeholder="Seu nome" autocomplete="name">
+        </div>
+        <div class="fg-full">
+          <label class="fl">WhatsApp *</label>
+          <input class="fi" type="tel" id="f-wpp" placeholder="(21) 99999-9999" autocomplete="tel">
+        </div>
+
+        <!-- Camisa -->
+        <div class="fg-full" style="padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);margin-top:4px;margin-bottom:4px">
+          <span style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Personalização</span>
+        </div>
+
+        <div>
+          <label class="fl">Tamanho *</label>
+          <select class="fi" id="f-tam">
+            <option value="">Selecione</option>
+            <option>PP</option><option>P</option><option>M</option>
+            <option>G</option><option>GG</option><option>XG</option>
+          </select>
+        </div>
+        <div>
+          <label class="fl">Quantidade</label>
+          <select class="fi" id="f-qtd">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+          </select>
+        </div>
+        <div>
+          <label class="fl">Número na camisa</label>
+          <input class="fi" type="number" id="f-num" placeholder="Ex: 23" min="0" max="99">
+        </div>
+        <div>
+          <label class="fl">Nome nas costas</label>
+          <input class="fi" type="text" id="f-nomecam" placeholder="Ex: SILVA" maxlength="16"
+            style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div class="fg-full">
+          <label class="fl">Observações</label>
+          <textarea class="fi" id="f-obs" placeholder="Algum pedido especial? Ex: entrega, cor de número..."></textarea>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btn-submit" onclick="submitOrder()">
         <i class="ti ti-send"></i> Enviar pedido
       </button>
     </div>
   </div>
-
-  <!-- ══ PANEL: TRACK ══ -->
-  <div id="panel-track" style="display:none">
-    <div class="card">
-      <div class="card-title"><i class="ti ti-search"></i> Consultar pedido</div>
-      <div id="track-error" class="alert alert-error" style="display:none">
-        <i class="ti ti-alert-circle"></i> <span id="track-error-msg">Pedido não encontrado.</span>
-      </div>
-      <div class="form-grid" style="margin-bottom:16px">
-        <div class="form-group full">
-          <label>Código do pedido</label>
-          <input type="text" id="t-codigo" placeholder="WR-0001" style="text-transform:uppercase"
-            oninput="this.value=this.value.toUpperCase()">
-        </div>
-        <div class="form-group full" style="position:relative">
-          <label>— ou —</label>
-        </div>
-        <div class="form-group full">
-          <label>WhatsApp</label>
-          <input type="tel" id="t-wpp" placeholder="(21) 99999-9999">
-        </div>
-      </div>
-      <button class="btn btn-primary btn-full" onclick="trackOrder()">
-        <i class="ti ti-search"></i> Buscar pedido
-      </button>
-    </div>
-
-    <!-- Tracking result -->
-    <div id="track-result" style="display:none"></div>
-  </div>
-
 </div>
 
-<!-- FOOTER -->
+<hr class="divider">
+
+<!-- ── TRACKING ── -->
+<div class="section-sm" id="track" style="padding-top:80px">
+  <div class="sec-label">Rastreio</div>
+  <div class="sec-title">Acompanhar pedido</div>
+  <div class="sec-desc">Informe o código do pedido ou seu WhatsApp para ver o status.</div>
+
+  <div class="track-box">
+    <div id="track-err" class="alert alert-error" style="display:none">
+      <i class="ti ti-alert-circle"></i><span id="track-err-msg">Pedido não encontrado.</span>
+    </div>
+    <div class="track-row">
+      <div>
+        <label class="fl">Código do pedido</label>
+        <input class="fi" type="text" id="t-codigo" placeholder="WR-0001"
+          style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:flex-end">
+        <div class="track-sep">— ou —</div>
+        <label class="fl">WhatsApp</label>
+        <input class="fi" type="tel" id="t-wpp" placeholder="(21) 99999-9999">
+      </div>
+    </div>
+    <button class="btn-submit" style="margin-top:0" onclick="trackOrder()">
+      <i class="ti ti-search"></i> Buscar pedido
+    </button>
+  </div>
+
+  <div id="track-result"></div>
+</div>
+
+<!-- ── FOOTER ── -->
 <footer>
-  <p>White Rock Basketball · <a href="/">Área do time</a></p>
+  <p>White Rock Basketball &copy; 2026 &nbsp;·&nbsp; <a href="/">Área do time</a></p>
 </footer>
 
 <script>
-const API = '/api/pedidos-torcedor';
+const API_URL = '/api/pedidos-torcedor';
 
-// ── TABS ──────────────────────────────────────────────────────────
-function switchTab(tab) {
-  ['order','track'].forEach(t => {
-    document.getElementById('panel-' + t).style.display = t === tab ? 'block' : 'none';
-    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
-    document.getElementById('link-' + t).classList.toggle('active', t === tab);
-  });
-  if (tab === 'track') {
-    document.getElementById('track-error').style.display = 'none';
-    document.getElementById('track-result').style.display = 'none';
-  }
+// ── SCROLL HELPERS ──────────────────────────────────────────────
+function scrollToOrder(modelo) {
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => selectModelo(modelo || 'principal'), 300);
+}
+function scrollToTrack() {
+  document.getElementById('track').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Check URL hash
-if (location.hash === '#track') switchTab('track');
-
-// ── ORDER FORM ────────────────────────────────────────────────────
+// ── MODELO SELECTOR ─────────────────────────────────────────────
 let selectedModelo = 'principal';
-
 function selectModelo(m) {
   selectedModelo = m;
-  document.getElementById('mc-principal').classList.toggle('selected', m === 'principal');
-  document.getElementById('mc-secundario').classList.toggle('selected', m === 'secundario');
+  const card = document.getElementById('form-card');
+  document.getElementById('ms-principal').className = 'ms-opt' + (m === 'principal' ? ' selected-blue' : '');
+  document.getElementById('ms-secundaria').className = 'ms-opt' + (m === 'secundaria' ? ' selected-green' : '');
+  // Tint the submit button
+  const btn = document.getElementById('btn-submit');
+  btn.className = 'btn-submit' + (m === 'secundaria' ? ' green-btn' : '');
+  // Top accent bar on card
+  card.className = 'order-card' + (m === 'secundaria' ? ' green-top' : '');
 }
 
-function showError(msg) {
-  const el = document.getElementById('form-error');
-  document.getElementById('form-error-msg').textContent = msg;
+// ── FORM ────────────────────────────────────────────────────────
+function showFormErr(msg) {
+  const el = document.getElementById('form-err');
+  document.getElementById('form-err-msg').textContent = msg;
   el.style.display = 'flex';
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function resetForm() {
   document.getElementById('success-box').style.display = 'none';
-  document.getElementById('order-form-wrap').style.display = 'block';
-  ['f-nome','f-wpp','f-tam','f-num','f-nomecam','f-obs'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+  document.getElementById('form-wrap').style.display = 'block';
+  ['f-nome','f-wpp','f-num','f-nomecam','f-obs'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
   });
+  document.getElementById('f-tam').value = '';
   document.getElementById('f-qtd').value = '1';
   selectModelo('principal');
-  document.getElementById('form-error').style.display = 'none';
+  document.getElementById('form-err').style.display = 'none';
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function submitOrder() {
-  const nome    = document.getElementById('f-nome').value.trim();
-  const whatsapp= document.getElementById('f-wpp').value.trim();
-  const tamanho = document.getElementById('f-tam').value;
-  const qtd     = parseInt(document.getElementById('f-qtd').value) || 1;
-  const numCam  = document.getElementById('f-num').value;
-  const nomeCam = document.getElementById('f-nomecam').value.trim().toUpperCase();
-  const obs     = document.getElementById('f-obs').value.trim();
+  const nome     = document.getElementById('f-nome').value.trim();
+  const whatsapp = document.getElementById('f-wpp').value.trim();
+  const tamanho  = document.getElementById('f-tam').value;
+  const qtd      = parseInt(document.getElementById('f-qtd').value) || 1;
+  const numCam   = document.getElementById('f-num').value;
+  const nomeCam  = document.getElementById('f-nomecam').value.trim().toUpperCase();
+  const obs      = document.getElementById('f-obs').value.trim();
 
-  if (!nome) { showError('Informe seu nome.'); return; }
-  if (!whatsapp) { showError('Informe seu WhatsApp.'); return; }
-  if (!tamanho) { showError('Selecione o tamanho.'); return; }
+  if (!nome)     { showFormErr('Informe seu nome.'); return; }
+  if (!whatsapp) { showFormErr('Informe seu WhatsApp.'); return; }
+  if (!tamanho)  { showFormErr('Selecione o tamanho.'); return; }
 
   const btn = document.getElementById('btn-submit');
   btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader-2"></i> Enviando...';
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Enviando…';
 
   try {
-    const r = await fetch(API, {
+    const r = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -459,94 +657,36 @@ async function submitOrder() {
         modelo: selectedModelo,
         quantidade: qtd,
         obs: obs || null,
-      })
+      }),
     });
     const data = await r.json();
-    if (!r.ok) throw new Error(data.error || 'Erro ao enviar pedido');
+    if (!r.ok) throw new Error(data.error || 'Erro ao enviar pedido.');
 
     document.getElementById('codigo-display').textContent = data.codigo;
-    document.getElementById('order-form-wrap').style.display = 'none';
+    document.getElementById('form-wrap').style.display = 'none';
     document.getElementById('success-box').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (e) {
-    showError(e.message);
+    showFormErr(e.message);
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<i class="ti ti-send"></i> Enviar pedido';
+    btn.className = 'btn-submit' + (selectedModelo === 'secundaria' ? ' green-btn' : '');
   }
 }
 
-// ── TRACKING ──────────────────────────────────────────────────────
-const STATUS_ALL = [
+// ── TRACKING ────────────────────────────────────────────────────
+const STATUS_PIPELINE = [
   'Pedido recebido','Aguardando pagamento','Pagamento confirmado',
   'Em produção','Em personalização','Pronto para entrega',
-  'Enviado','Entregue','Cancelado'
+  'Enviado','Entregue',
 ];
-
 const STATUS_CLS = {
-  'Pedido recebido':        's-recebido',
-  'Aguardando pagamento':   's-aguardando',
-  'Pagamento confirmado':   's-confirmado',
-  'Em produção':            's-producao',
-  'Em personalização':      's-personalizacao',
-  'Pronto para entrega':    's-pronto',
-  'Enviado':                's-enviado',
-  'Entregue':               's-entregue',
-  'Cancelado':              's-cancelado',
+  'Pedido recebido':'sb-recebido','Aguardando pagamento':'sb-aguardando',
+  'Pagamento confirmado':'sb-confirmado','Em produção':'sb-producao',
+  'Em personalização':'sb-personalizacao','Pronto para entrega':'sb-pronto',
+  'Enviado':'sb-enviado','Entregue':'sb-entregue','Cancelado':'sb-cancelado',
 };
-
-function statusBadge(s) {
-  return `<span class="status-badge ${STATUS_CLS[s] || ''}">${s}</span>`;
-}
-
-function buildTimeline(currentStatus) {
-  if (currentStatus === 'Cancelado') {
-    return `<div class="timeline-item">
-      <div class="tl-dot done"><i class="ti ti-x"></i></div>
-      <div class="tl-label" style="color:var(--danger)">Pedido cancelado</div>
-    </div>`;
-  }
-  const steps = STATUS_ALL.filter(s => s !== 'Cancelado');
-  const currentIdx = steps.indexOf(currentStatus);
-  return steps.map((s, i) => {
-    const cls = i < currentIdx ? 'done' : i === currentIdx ? 'current' : 'pending';
-    const icon = i < currentIdx ? 'ti-check' : i === currentIdx ? 'ti-point' : 'ti-circle';
-    return `<div class="timeline-item">
-      <div class="tl-dot ${cls}"><i class="ti ${icon}" style="font-size:10px"></i></div>
-      <div class="tl-label ${cls}">${s}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderOrderCard(p) {
-  const modeloName = p.modelo === 'principal' ? 'Principal (Midnight Elite)' : 'Secundária (Dark Navy)';
-  return `
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:20px">
-        <div>
-          <div style="font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Pedido</div>
-          <div style="font-size:22px;font-weight:900;color:var(--blue);letter-spacing:2px">${p.codigo}</div>
-        </div>
-        ${statusBadge(p.status)}
-      </div>
-
-      <div class="status-timeline">${buildTimeline(p.status)}</div>
-
-      <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px">
-        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Detalhes</div>
-        <div class="detail-row"><span class="detail-label">Nome</span><span class="detail-val">${p.nome}</span></div>
-        <div class="detail-row"><span class="detail-label">Modelo</span><span class="detail-val">${modeloName}</span></div>
-        <div class="detail-row"><span class="detail-label">Tamanho</span><span class="detail-val">${p.tamanho}</span></div>
-        <div class="detail-row"><span class="detail-label">Quantidade</span><span class="detail-val">${p.quantidade}</span></div>
-        ${p.numCamisa !== null ? `<div class="detail-row"><span class="detail-label">Número</span><span class="detail-val">${p.numCamisa}</span></div>` : ''}
-        ${p.nomeCamisa ? `<div class="detail-row"><span class="detail-label">Nome nas costas</span><span class="detail-val">${p.nomeCamisa}</span></div>` : ''}
-        ${p.valor !== null ? `<div class="detail-row"><span class="detail-label">Valor</span><span class="detail-val" style="color:var(--success)">R$ ${Number(p.valor).toFixed(2).replace('.',',')}</span></div>` : ''}
-        <div class="detail-row"><span class="detail-label">Pagamento</span><span class="detail-val">${p.pagamento}</span></div>
-        <div class="detail-row"><span class="detail-label">Data do pedido</span><span class="detail-val">${fmtDate(p.dataPedido)}</span></div>
-        ${p.obs ? `<div class="detail-row"><span class="detail-label">Obs</span><span class="detail-val" style="font-size:12px;color:var(--text2)">${p.obs}</span></div>` : ''}
-      </div>
-    </div>`;
-}
 
 function fmtDate(d) {
   if (!d) return '—';
@@ -554,44 +694,94 @@ function fmtDate(d) {
   return `${dy}/${m}/${y}`;
 }
 
+function buildTimeline(status) {
+  if (status === 'Cancelado') {
+    return `<div class="tl-item">
+      <div class="tl-dot done" style="background:rgba(239,68,68,.12);border-color:var(--danger);color:var(--danger)"><i class="ti ti-x" style="font-size:9px"></i></div>
+      <div class="tl-label" style="color:var(--danger)">Pedido cancelado</div>
+    </div>`;
+  }
+  const curIdx = STATUS_PIPELINE.indexOf(status);
+  return STATUS_PIPELINE.map((s, i) => {
+    const cls = i < curIdx ? 'done' : i === curIdx ? 'cur' : 'pend';
+    const icon = i < curIdx ? 'ti-check' : i === curIdx ? 'ti-point-filled' : 'ti-circle';
+    return `<div class="tl-item">
+      <div class="tl-dot ${cls}"><i class="ti ${icon}" style="font-size:9px"></i></div>
+      <div class="tl-label ${cls}">${s}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderOrderCard(p) {
+  const modeloLabel = p.modelo === 'principal' ? 'Principal (Midnight Elite)' : 'Secundária (Dark Navy)';
+  const camisa = [p.numCamisa !== null ? '#' + p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' · ') || '—';
+  return `
+    <div class="result-card">
+      <div class="result-header">
+        <div>
+          <div class="result-sub">Pedido</div>
+          <div class="result-codigo">${p.codigo}</div>
+        </div>
+        <span class="sbadge ${STATUS_CLS[p.status] || 'sb-recebido'}">${p.status}</span>
+      </div>
+
+      <div class="timeline">${buildTimeline(p.status)}</div>
+
+      <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px">
+        <div class="drow"><span class="dlabel">Nome</span><span class="dval">${p.nome}</span></div>
+        <div class="drow"><span class="dlabel">Modelo</span><span class="dval">${modeloLabel}</span></div>
+        <div class="drow"><span class="dlabel">Tamanho</span><span class="dval">${p.tamanho}</span></div>
+        <div class="drow"><span class="dlabel">Quantidade</span><span class="dval">${p.quantidade}</span></div>
+        <div class="drow"><span class="dlabel">Personalização</span><span class="dval">${camisa}</span></div>
+        ${p.valor !== null ? `<div class="drow"><span class="dlabel">Valor</span><span class="dval" style="color:var(--success)">R$ ${Number(p.valor).toFixed(2).replace('.',',')}</span></div>` : ''}
+        <div class="drow"><span class="dlabel">Pagamento</span><span class="dval">${p.pagamento}</span></div>
+        <div class="drow"><span class="dlabel">Pedido em</span><span class="dval">${fmtDate(p.dataPedido)}</span></div>
+        ${p.obs ? `<div class="drow"><span class="dlabel">Obs</span><span class="dval" style="font-size:12px;color:var(--text2)">${p.obs}</span></div>` : ''}
+      </div>
+    </div>`;
+}
+
 async function trackOrder() {
   const codigo = document.getElementById('t-codigo').value.trim().toUpperCase();
   const wpp    = document.getElementById('t-wpp').value.trim();
-  const errEl  = document.getElementById('track-error');
+  const errEl  = document.getElementById('track-err');
   const resEl  = document.getElementById('track-result');
 
   errEl.style.display = 'none';
-  resEl.style.display = 'none';
   resEl.innerHTML = '';
 
   if (!codigo && !wpp) {
-    document.getElementById('track-error-msg').textContent = 'Informe o código do pedido ou seu WhatsApp.';
+    document.getElementById('track-err-msg').textContent = 'Informe o código do pedido ou seu WhatsApp.';
     errEl.style.display = 'flex';
     return;
   }
 
   const qs = codigo ? `?codigo=${encodeURIComponent(codigo)}` : `?whatsapp=${encodeURIComponent(wpp)}`;
   try {
-    const r = await fetch(API + qs);
-    if (r.status === 404) throw new Error('Pedido não encontrado. Verifique o código ou WhatsApp.');
+    const r = await fetch(API_URL + qs);
+    if (r.status === 404) throw new Error('Pedido não encontrado. Verifique o código ou WhatsApp informado.');
     const data = await r.json();
-    if (!r.ok) throw new Error(data.error || 'Erro ao buscar pedido');
+    if (!r.ok) throw new Error(data.error || 'Erro ao buscar pedido.');
 
     if (Array.isArray(data)) {
       if (!data.length) throw new Error('Nenhum pedido encontrado para este WhatsApp.');
       resEl.innerHTML = `
-        <div style="font-size:13px;color:var(--text2);margin-bottom:12px">${data.length} pedido(s) encontrado(s):</div>
+        <p style="font-size:13px;color:var(--text2);margin:16px 0 4px">${data.length} pedido(s) encontrado(s):</p>
         ${data.map(p => renderOrderCard(p)).join('')}`;
     } else {
       resEl.innerHTML = renderOrderCard(data);
     }
-    resEl.style.display = 'block';
     resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (e) {
-    document.getElementById('track-error-msg').textContent = e.message;
+    document.getElementById('track-err-msg').textContent = e.message;
     errEl.style.display = 'flex';
   }
 }
+
+// ── URL HASH ──────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  if (location.hash === '#track') scrollToTrack();
+});
 </script>
 </body>
 </html>
