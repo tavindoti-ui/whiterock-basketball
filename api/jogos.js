@@ -6,14 +6,14 @@ module.exports = async function handler(req, res) {
   if (cors(req, res)) return;
 
   if (req.method === 'GET') {
-    const user = requireAuth(req, res, ['admin', 'capitao', 'atleta']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
     if (!user) return;
     const jogos = await getData('jogos') || [];
     return res.json(jogos);
   }
 
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { adv, data, hora, local, camp } = req.body;
     if (!adv || !data) return res.status(400).json({ error: 'Adversário e data são obrigatórios' });
@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'PUT') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao']);
     if (!user) return;
     const { id, wr, advPl, statsJogadores, ...rest } = req.body;
     const jogos = await getData('jogos') || [];
@@ -64,7 +64,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'DELETE') {
-    const user = requireAuth(req, res, ['admin']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { id } = req.body;
     const jogos = await getData('jogos') || [];

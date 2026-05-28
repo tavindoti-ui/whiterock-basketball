@@ -6,14 +6,14 @@ module.exports = async function handler(req, res) {
   if (cors(req, res)) return;
 
   if (req.method === 'GET') {
-    const user = requireAuth(req, res, ['admin', 'capitao', 'atleta']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
     if (!user) return;
     const treinos = await getData('treinos') || [];
     return res.json(treinos);
   }
 
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { data, hora, local, tipo } = req.body;
     if (!data) return res.status(400).json({ error: 'Data obrigatória' });
@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'PUT') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao']);
     if (!user) return;
     const { id, presentes, ...rest } = req.body;
     const treinos = await getData('treinos') || [];

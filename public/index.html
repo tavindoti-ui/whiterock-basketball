@@ -163,8 +163,10 @@ select.form-input option{background:var(--navy2)}
 
 .role-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
 .role-admin{background:rgba(155,89,182,.15);color:#9B59B6}
-.role-capitao{background:rgba(77,166,255,.15);color:var(--blue)}
+.role-tecnico{background:rgba(77,166,255,.15);color:var(--blue)}
+.role-comissao{background:rgba(243,156,18,.15);color:var(--warning)}
 .role-atleta{background:rgba(46,204,113,.15);color:var(--success)}
+.role-capitao{background:rgba(77,166,255,.15);color:var(--blue)}
 
 /* LOADING */
 .loading{text-align:center;padding:40px;color:var(--text2);font-size:14px}
@@ -546,7 +548,12 @@ select.form-input option{background:var(--navy2)}
     <div class="form-row">
       <div class="form-group"><label class="form-label">Senha *</label><input class="form-input" id="u-senha" type="password" placeholder="Mínimo 6 caracteres"></div>
       <div class="form-group"><label class="form-label">Função *</label>
-        <select class="form-input" id="u-role"><option value="atleta">Atleta</option><option value="capitao">Capitão</option><option value="admin">Admin</option></select>
+        <select class="form-input" id="u-role">
+          <option value="atleta">Atleta</option>
+          <option value="comissao">Comissão Técnica</option>
+          <option value="tecnico">Técnico</option>
+          <option value="admin">Administrador</option>
+        </select>
       </div>
     </div>
     <div class="form-group"><label class="form-label">Nº da camisa (se atleta)</label><input class="form-input" id="u-num" type="number" placeholder="Ex: 10"></div>
@@ -654,8 +661,9 @@ select.form-input option{background:var(--navy2)}
       <div class="form-group"><label class="form-label">Função *</label>
         <select class="form-input" id="eu-role">
           <option value="atleta">Atleta</option>
-          <option value="capitao">Capitão</option>
-          <option value="admin">Admin</option>
+          <option value="comissao">Comissão Técnica</option>
+          <option value="tecnico">Técnico</option>
+          <option value="admin">Administrador</option>
         </select>
       </div>
     </div>
@@ -715,6 +723,26 @@ select.form-input option{background:var(--navy2)}
   <div class="modal">
     <div class="modal-title" id="modal-j-title">Jogador <button class="modal-close" onclick="closeModal('modal-jogador-detail')"><i class="ti ti-x"></i></button></div>
     <div id="modal-j-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-edit-jogo">
+  <div class="modal">
+    <div class="modal-title">Editar jogo <button class="modal-close" onclick="closeModal('modal-edit-jogo')"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="ej-jogo-id">
+    <div class="form-group"><label class="form-label">Adversário *</label><input class="form-input" id="ej-jo-adv" placeholder="Nome do time adversário"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data *</label><input class="form-input" id="ej-jo-data" type="date"></div>
+      <div class="form-group"><label class="form-label">Horário</label><input class="form-input" id="ej-jo-hora" type="time"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Local</label><input class="form-input" id="ej-jo-local" placeholder="Ginásio / Quadra"></div>
+      <div class="form-group"><label class="form-label">Campeonato</label><input class="form-input" id="ej-jo-camp" placeholder="Ex: Liga Carioca"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="saveEditJogo()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogo')">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -799,7 +827,13 @@ async function api(method, path, body) {
 }
 
 // ==================== ROLES ====================
-const ROLES = { admin: 'Administrador', capitao: 'Capitão', atleta: 'Atleta' };
+const ROLES = {
+  admin:    'Administrador',
+  tecnico:  'Técnico',
+  comissao: 'Comissão Técnica',
+  atleta:   'Atleta',
+  capitao:  'Técnico',  // legacy — treated as tecnico
+};
 const can = (roles) => roles.includes(currentUser?.role);
 
 // ==================== TOAST ====================
@@ -830,16 +864,17 @@ function initApp() {
 }
 
 function buildNav() {
+  const ALL = ['admin','tecnico','comissao','capitao','atleta'];
   const tabs = [
-    { id:'dashboard', label:'Dashboard', icon:'ti-home', roles:['admin','capitao','atleta'] },
-    { id:'jogadores', label:'Jogadores', icon:'ti-users', roles:['admin','capitao','atleta'] },
-    { id:'jogos', label:'Jogos', icon:'ti-trophy', roles:['admin','capitao','atleta'] },
-    { id:'treinos', label:'Treinos', icon:'ti-calendar', roles:['admin','capitao','atleta'] },
-    { id:'financeiro', label:'Financeiro', icon:'ti-cash', roles:['admin','capitao'] },
-    { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar', roles:['admin','capitao','atleta'] },
-    { id:'comunicacao', label:'Avisos', icon:'ti-bell', roles:['admin','capitao','atleta'] },
-    { id:'uniformes', label:'Uniformes', icon:'ti-shirt', roles:['admin','capitao','atleta'] },
-    { id:'usuarios', label:'Usuários', icon:'ti-settings', roles:['admin'] },
+    { id:'dashboard',    label:'Dashboard',   icon:'ti-home',      roles: ALL },
+    { id:'jogadores',    label:'Jogadores',   icon:'ti-users',     roles: ALL },
+    { id:'jogos',        label:'Jogos',       icon:'ti-trophy',    roles: ALL },
+    { id:'treinos',      label:'Treinos',     icon:'ti-calendar',  roles: ALL },
+    { id:'financeiro',   label:'Financeiro',  icon:'ti-cash',      roles:['admin','tecnico','capitao'] },
+    { id:'estatisticas', label:'Estatísticas',icon:'ti-chart-bar', roles: ALL },
+    { id:'comunicacao',  label:'Avisos',      icon:'ti-bell',      roles: ALL },
+    { id:'uniformes',    label:'Uniformes',   icon:'ti-shirt',     roles: ALL },
+    { id:'usuarios',     label:'Usuários',    icon:'ti-settings',  roles:['admin'] },
   ].filter(t => can(t.roles));
 
   const html = tabs.map(t => `<button class="nav-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')"><i class="ti ${t.icon}"></i> ${t.label}</button>`).join('');
@@ -848,7 +883,7 @@ function buildNav() {
   document.getElementById('mobile-menu').innerHTML = htmlM;
 
   // Show/hide role-specific buttons
-  if (can(['admin','capitao'])) {
+  if (can(['admin','tecnico','capitao'])) {
     ['btn-add-jogador','btn-add-jogo','btn-add-treino','btn-add-aviso','btn-add-kit'].forEach(id => {
       const el = document.getElementById(id); if(el) el.style.display = 'inline-flex';
     });
@@ -868,7 +903,7 @@ function showPage(id) {
 async function loadAll() {
   const [j, jo, tr, fin, av, unif] = await Promise.all([
     api('GET','jogadores'), api('GET','jogos'), api('GET','treinos'),
-    can(['admin','capitao']) ? api('GET','financeiro') : Promise.resolve({lancamentos:[],mensalidades:{}}),
+    can(['admin','tecnico','capitao']) ? api('GET','financeiro') : Promise.resolve({lancamentos:[],mensalidades:{}}),
     api('GET','avisos'),
     api('GET','uniformes'),
   ]);
@@ -895,7 +930,7 @@ function renderDashboard() {
   const proxJogo = cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).sort((a,b)=>a.data.localeCompare(b.data))[0];
 
   let saldoHTML = '';
-  if (can(['admin','capitao'])) {
+  if (can(['admin','tecnico','capitao'])) {
     const ent = cache.financeiro.lancamentos.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
     const sai = cache.financeiro.lancamentos.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
     const saldo = ent - sai;
@@ -912,7 +947,7 @@ function renderDashboard() {
   // alertas
   const alertas = [];
   if (lesionados.length) alertas.push({ tipo:'danger', msg:`${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')}` });
-  if (can(['admin','capitao'])) {
+  if (can(['admin','tecnico','capitao'])) {
     const inad = Object.keys(cache.financeiro.mensalidades || {}).length;
     if (inad) alertas.push({ tipo:'warning', msg:`${inad} jogador(es) com mensalidade em atraso` });
   }
@@ -984,7 +1019,7 @@ function renderJogadores() {
 function openPlayerDetail(id) {
   const j = cache.jogadores.find(x=>x.id===id);
   document.getElementById('modal-j-title').childNodes[0].textContent = j.nome + ' ';
-  const canEdit = can(['admin','capitao']);
+  const canEdit = can(['admin','tecnico','capitao']);
   document.getElementById('modal-j-content').innerHTML = `
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
       <div class="player-avatar" style="width:60px;height:60px;font-size:22px">${initials(j.nome)}</div>
@@ -1133,18 +1168,20 @@ function renderJogos() {
     <div class="card"><div class="card-title">Derrotas</div><div class="card-value" style="color:var(--danger)">${losses}</div></div>
     <div class="card"><div class="card-title">Aproveitamento</div><div class="card-value">${total?Math.round(wins/total*100)+'%':'—'}</div></div>
   `;
-  const canEdit = can(['admin','capitao']);
+  const canManage = can(['admin','tecnico','capitao']);
+  const canStats  = can(['admin','tecnico','comissao','capitao']);
   document.getElementById('proximos-jogos').innerHTML = upcoming.length
-    ? upcoming.map(j=>gameCard(j,canEdit)).join('')
+    ? upcoming.map(j=>gameCard(j,canStats,canManage)).join('')
     : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum jogo agendado.</div>';
   document.getElementById('resultados-lista').innerHTML = past.length
-    ? past.map(j=>gameCard(j,false)).join('')
+    ? past.map(j=>gameCard(j,false,canManage)).join('')
     : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum resultado registrado.</div>';
 }
 
-function gameCard(j, showEdit) {
+function gameCard(j, showStats, showManage) {
   const resultado = j.wr!==null?(j.wr>j.advPl?'VITÓRIA':'DERROTA'):null;
   const resCor = resultado==='VITÓRIA'?'var(--success)':'var(--danger)';
+  const hasActions = showStats || showManage;
   return `<div class="game-card">
     <div class="game-teams">
       <div class="game-team"><div class="game-team-name">White Rock</div><div style="font-size:30px;font-weight:800;color:${j.wr!==null?'var(--blue)':'var(--text2)'}">${j.wr!==null?j.wr:'?'}</div></div>
@@ -1159,7 +1196,11 @@ function gameCard(j, showEdit) {
       <span><i class="ti ti-calendar"></i> ${fmt(j.data)} ${j.hora}</span>
       <span><i class="ti ti-map-pin"></i> ${j.local||'A definir'}</span>
     </div>
-    ${showEdit?`<div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="openStatJogo(${j.id})"><i class="ti ti-edit"></i> Registrar resultado</button></div>`:''}
+    ${hasActions?`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      ${showStats?`<button class="btn btn-ghost btn-sm" onclick="openStatJogo(${j.id})"><i class="ti ti-edit"></i> Registrar resultado</button>`:''}
+      ${showManage?`<button class="btn btn-ghost btn-sm" onclick="editJogo(${j.id})"><i class="ti ti-pencil"></i> Editar jogo</button>`:''}
+      ${showManage?`<button class="btn btn-danger btn-sm" onclick="deleteJogo(${j.id})"><i class="ti ti-trash"></i> Excluir</button>`:''}
+    </div>`:''}
   </div>`;
 }
 
@@ -1224,11 +1265,54 @@ async function saveStatJogo(jId) {
   } else toast('Erro ao salvar resultado','error');
 }
 
+function editJogo(id) {
+  const j = cache.jogos.find(x=>x.id===id);
+  if (!j) return;
+  document.getElementById('ej-jogo-id').value = j.id;
+  document.getElementById('ej-jo-adv').value = j.adv;
+  document.getElementById('ej-jo-data').value = j.data;
+  document.getElementById('ej-jo-hora').value = j.hora || '19:00';
+  document.getElementById('ej-jo-local').value = j.local || '';
+  document.getElementById('ej-jo-camp').value = j.camp || '';
+  openModal('modal-edit-jogo');
+}
+
+async function saveEditJogo() {
+  const id = +document.getElementById('ej-jogo-id').value;
+  const adv = document.getElementById('ej-jo-adv').value.trim();
+  const data = document.getElementById('ej-jo-data').value;
+  if (!adv || !data) { toast('Adversário e data são obrigatórios','error'); return; }
+  const r = await api('PUT','jogos',{
+    id, adv, data,
+    hora: document.getElementById('ej-jo-hora').value,
+    local: document.getElementById('ej-jo-local').value,
+    camp: document.getElementById('ej-jo-camp').value,
+  });
+  if (r && r.id) {
+    const idx = cache.jogos.findIndex(x=>x.id===id);
+    if (idx!==-1) cache.jogos[idx] = r;
+    closeModal('modal-edit-jogo');
+    renderJogos(); renderDashboard();
+    toast('Jogo atualizado!');
+  } else toast('Erro ao atualizar jogo','error');
+}
+
+async function deleteJogo(id) {
+  const j = cache.jogos.find(x=>x.id===id);
+  if (!confirm(`Excluir jogo vs ${j?.adv}? Esta ação não pode ser desfeita.`)) return;
+  const r = await api('DELETE','jogos',{id});
+  if (r && r.success) {
+    cache.jogos = cache.jogos.filter(x=>x.id!==id);
+    renderJogos(); renderDashboard();
+    toast('Jogo excluído!');
+  } else toast('Erro ao excluir jogo','error');
+}
+
 // ==================== TREINOS ====================
 function renderTreinos() {
   const upcoming = cache.treinos.filter(t=>isUpcoming(t.data)).sort((a,b)=>a.data.localeCompare(b.data));
   const past = cache.treinos.filter(t=>!isUpcoming(t.data)).sort((a,b)=>b.data.localeCompare(a.data));
-  const canEdit = can(['admin','capitao']);
+  const canEdit = can(['admin','tecnico','comissao','capitao']);
   const totalJog = cache.jogadores.length;
 
   // Próximos treinos

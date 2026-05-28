@@ -6,7 +6,7 @@ module.exports = async function handler(req, res) {
   if (cors(req, res)) return;
 
   if (req.method === 'GET') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const fin = await getData('financeiro') || [];
     const mens = await getData('mensalidades') || {};

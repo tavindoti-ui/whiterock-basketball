@@ -7,15 +7,15 @@ module.exports = async function handler(req, res) {
 
   // GET - all roles can read
   if (req.method === 'GET') {
-    const user = requireAuth(req, res, ['admin', 'capitao', 'atleta']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
     if (!user) return;
     const jogadores = await getData('jogadores') || [];
     return res.json(jogadores);
   }
 
-  // POST - admin and capitao only
+  // POST - admin, tecnico and capitao only
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { nome, apelido, num, pos, idade, altura, status, tel, obs } = req.body;
     if (!nome) return res.status(400).json({ error: 'Nome obrigatório' });
@@ -29,9 +29,9 @@ module.exports = async function handler(req, res) {
     return res.status(201).json(novo);
   }
 
-  // PUT - admin and capitao only
+  // PUT - admin, tecnico and capitao only
   if (req.method === 'PUT') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { id, ...updates } = req.body;
     const jogadores = await getData('jogadores') || [];

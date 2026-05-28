@@ -6,14 +6,14 @@ module.exports = async function handler(req, res) {
   if (cors(req, res)) return;
 
   if (req.method === 'GET') {
-    const user = requireAuth(req, res, ['admin', 'capitao', 'atleta']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
     if (!user) return;
     const uniformes = await getData('uniformes') || [];
     return res.json(uniformes);
   }
 
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const b = req.body;
     const uniformes = await getData('uniformes') || [];
@@ -40,7 +40,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'PUT') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { id, ...updates } = req.body;
     const uniformes = await getData('uniformes') || [];

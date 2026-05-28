@@ -6,14 +6,14 @@ module.exports = async function handler(req, res) {
   if (cors(req, res)) return;
 
   if (req.method === 'GET') {
-    const user = requireAuth(req, res, ['admin', 'capitao', 'atleta']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
     if (!user) return;
     const avisos = await getData('avisos') || [];
     return res.json(avisos.sort((a, b) => b.data.localeCompare(a.data)));
   }
 
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { titulo, msg, tipo } = req.body;
     if (!titulo || !msg) return res.status(400).json({ error: 'Título e mensagem obrigatórios' });
@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'DELETE') {
-    const user = requireAuth(req, res, ['admin', 'capitao']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { id } = req.body;
     const avisos = await getData('avisos') || [];
