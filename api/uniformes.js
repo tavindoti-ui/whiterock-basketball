@@ -1,5 +1,5 @@
 const { requireAuth } = require('../lib/auth');
-const { getData, setData } = require('../lib/db');
+const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -36,6 +36,7 @@ module.exports = async function handler(req, res) {
     uniformes.push(novo);
     await setData('uniformes', uniformes);
     await setData('counters', counters);
+    await logAction(user.id, user.nome, user.role, 'Registrou kit de uniforme', `${b.jogadorNome} — #${b.num || 0} (Temporada ${b.temporada || '2026'})`);
     return res.status(201).json(novo);
   }
 
@@ -48,6 +49,7 @@ module.exports = async function handler(req, res) {
     if (idx === -1) return res.status(404).json({ error: 'Kit não encontrado' });
     uniformes[idx] = { ...uniformes[idx], ...updates };
     await setData('uniformes', uniformes);
+    await logAction(user.id, user.nome, user.role, 'Editou kit de uniforme', `${uniformes[idx].jogadorNome} — #${uniformes[idx].num}`);
     return res.json(uniformes[idx]);
   }
 
@@ -56,7 +58,9 @@ module.exports = async function handler(req, res) {
     if (!user) return;
     const { id } = req.body;
     const uniformes = await getData('uniformes') || [];
+    const target = uniformes.find(u => u.id === id);
     await setData('uniformes', uniformes.filter(u => u.id !== id));
+    await logAction(user.id, user.nome, user.role, 'Excluiu kit de uniforme', `${target?.jogadorNome || `ID ${id}`}`);
     return res.json({ success: true });
   }
 

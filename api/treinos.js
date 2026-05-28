@@ -1,5 +1,5 @@
 const { requireAuth } = require('../lib/auth');
-const { getData, setData } = require('../lib/db');
+const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -24,6 +24,7 @@ module.exports = async function handler(req, res) {
     treinos.push(novo);
     await setData('treinos', treinos);
     await setData('counters', counters);
+    await logAction(user.id, user.nome, user.role, 'Agendou treino', `${tipo} — ${data} às ${hora || '20:00'}`);
     return res.status(201).json(novo);
   }
 
@@ -49,6 +50,11 @@ module.exports = async function handler(req, res) {
       }
     }
     await setData('treinos', treinos);
+    if (presentes !== undefined) {
+      await logAction(user.id, user.nome, user.role, 'Marcou presença', `Treino ${treinos[idx].data}: ${presentes.length} jogador(es) presente(s)`);
+    } else {
+      await logAction(user.id, user.nome, user.role, 'Editou treino', `${treinos[idx].tipo} — ${treinos[idx].data}`);
+    }
     return res.json(treinos[idx]);
   }
 
@@ -57,7 +63,9 @@ module.exports = async function handler(req, res) {
     if (!user) return;
     const { id } = req.body;
     const treinos = await getData('treinos') || [];
+    const target = treinos.find(t => t.id === id);
     await setData('treinos', treinos.filter(t => t.id !== id));
+    await logAction(user.id, user.nome, user.role, 'Excluiu treino', `${target?.tipo || ''} — ${target?.data || `ID ${id}`}`);
     return res.json({ success: true });
   }
 

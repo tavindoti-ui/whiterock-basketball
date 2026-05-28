@@ -1,5 +1,5 @@
 const { requireAuth } = require('../lib/auth');
-const { getData, setData } = require('../lib/db');
+const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -24,6 +24,7 @@ module.exports = async function handler(req, res) {
     jogos.push(novo);
     await setData('jogos', jogos);
     await setData('counters', counters);
+    await logAction(user.id, user.nome, user.role, 'Cadastrou jogo', `vs ${adv} — ${data} (${camp || 'Amistoso'})`);
     return res.status(201).json(novo);
   }
 
@@ -60,6 +61,11 @@ module.exports = async function handler(req, res) {
       await setData('jogadores', jogadores);
     }
 
+    if (statsJogadores && Array.isArray(statsJogadores)) {
+      await logAction(user.id, user.nome, user.role, 'Registrou resultado', `vs ${jogos[idx].adv}: WR ${wr} × ${advPl}`);
+    } else {
+      await logAction(user.id, user.nome, user.role, 'Editou jogo', `vs ${jogos[idx].adv} (${jogos[idx].data})`);
+    }
     return res.json(jogos[idx]);
   }
 
@@ -68,7 +74,9 @@ module.exports = async function handler(req, res) {
     if (!user) return;
     const { id } = req.body;
     const jogos = await getData('jogos') || [];
+    const target = jogos.find(j => j.id === id);
     await setData('jogos', jogos.filter(j => j.id !== id));
+    await logAction(user.id, user.nome, user.role, 'Excluiu jogo', `vs ${target?.adv || `ID ${id}`} (${target?.data || ''})`);
     return res.json({ success: true });
   }
 

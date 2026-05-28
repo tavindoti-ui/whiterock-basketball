@@ -1,5 +1,5 @@
 const { requireAuth } = require('../lib/auth');
-const { getData, setData } = require('../lib/db');
+const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -26,6 +26,7 @@ module.exports = async function handler(req, res) {
     jogadores.push(novo);
     await setData('jogadores', jogadores);
     await setData('counters', counters);
+    await logAction(user.id, user.nome, user.role, 'Cadastrou jogador', `${nome}${apelido ? ` (${apelido})` : ''} — #${num || 0} ${pos || ''}`);
     return res.status(201).json(novo);
   }
 
@@ -37,8 +38,10 @@ module.exports = async function handler(req, res) {
     const jogadores = await getData('jogadores') || [];
     const idx = jogadores.findIndex(j => j.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Jogador não encontrado' });
-    jogadores[idx] = { ...jogadores[idx], ...updates };
+    const prev = jogadores[idx];
+    jogadores[idx] = { ...prev, ...updates };
     await setData('jogadores', jogadores);
+    await logAction(user.id, user.nome, user.role, 'Editou jogador', `${jogadores[idx].nome} (#${jogadores[idx].num})`);
     return res.json(jogadores[idx]);
   }
 
@@ -48,8 +51,10 @@ module.exports = async function handler(req, res) {
     if (!user) return;
     const { id } = req.body;
     const jogadores = await getData('jogadores') || [];
+    const target = jogadores.find(j => j.id === id);
     const filtered = jogadores.filter(j => j.id !== id);
     await setData('jogadores', filtered);
+    await logAction(user.id, user.nome, user.role, 'Excluiu jogador', `${target?.nome || `ID ${id}`}`);
     return res.json({ success: true });
   }
 

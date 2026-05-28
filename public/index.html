@@ -606,6 +606,20 @@ select.form-input option{background:#0D1526;color:var(--text)}
       <tbody id="users-body"></tbody>
     </table>
   </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:28px;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0"><i class="ti ti-clipboard-list"></i> Log de atividades</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <input class="form-input" id="log-search" placeholder="Filtrar..." style="width:180px;font-size:12px" oninput="renderLog()">
+      <button class="btn btn-danger btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i> Limpar log</button>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Data / Hora</th><th>Usuário</th><th>Função</th><th>Ação</th><th>Detalhes</th></tr></thead>
+      <tbody id="log-body"></tbody>
+    </table>
+  </div>
 </div>
 
 </div><!-- end #app -->
@@ -944,6 +958,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 let currentUser = null;
 let token = null;
 let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [] };
+let _logCache = [];
 
 // ==================== AUTH ====================
 function saveSession(t, u) {
@@ -1726,9 +1741,11 @@ async function addAviso() {
 
 // ==================== USERS ====================
 async function renderUsers() {
+  _logCache = []; // invalidate cache so log refreshes
   const users = await api('GET','users');
   if (!users) return;
   cache.users = users;
+  renderLog();
   document.getElementById('users-body').innerHTML = users.map(u=>`
     <tr>
       <td style="font-weight:500">${u.nome}</td>
@@ -1805,6 +1822,69 @@ async function deleteUser(id) {
     renderUsers();
     toast('Usuário excluído!');
   } else toast((r&&r.error)||'Erro ao excluir usuário','error');
+}
+
+// ==================== LOG ====================
+async function renderLog() {
+  if (!_logCache.length) {
+    const logs = await api('GET','log');
+    if (!logs) return;
+    _logCache = logs;
+  }
+  const search = (document.getElementById('log-search')?.value || '').toLowerCase();
+  const filtered = search
+    ? _logCache.filter(l =>
+        l.userName.toLowerCase().includes(search) ||
+        l.action.toLowerCase().includes(search) ||
+        l.details.toLowerCase().includes(search)
+      )
+    : _logCache;
+
+  const roleColor = { admin:'#8B5CF6', tecnico:'#4DA6FF', comissao:'#F59E0B', atleta:'#00C87A', capitao:'#4DA6FF' };
+  const actionIcon = (a) => {
+    if (a.includes('Cadastrou')||a.includes('Criou')||a.includes('Agendou')||a.includes('Publicou')||a.includes('Registrou')) return 'ti-plus';
+    if (a.includes('Editou')||a.includes('Marcou')||a.includes('Quitou')) return 'ti-pencil';
+    if (a.includes('Excluiu')) return 'ti-trash';
+    if (a.includes('resultado')) return 'ti-trophy';
+    return 'ti-activity';
+  };
+
+  document.getElementById('log-body').innerHTML = filtered.length ? filtered.map(l => {
+    const d = new Date(l.timestamp);
+    const dateStr = d.toLocaleDateString('pt-BR');
+    const timeStr = d.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    const isDelete = l.action.includes('Excluiu');
+    const isCreate = l.action.includes('Cadastrou')||l.action.includes('Criou')||l.action.includes('Agendou')||l.action.includes('Publicou');
+    const actionColor = isDelete ? 'var(--danger)' : isCreate ? 'var(--success)' : 'var(--blue)';
+    return `<tr>
+      <td style="white-space:nowrap;color:var(--text2);font-size:12px">
+        <div style="font-weight:600;color:var(--text)">${dateStr}</div>
+        <div style="font-size:11px;color:var(--text3)">${timeStr}</div>
+      </td>
+      <td style="font-weight:600;font-size:13px">${l.userName}</td>
+      <td><span class="role-tag role-${l.userRole}">${ROLES[l.userRole]||l.userRole}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px;color:${actionColor};font-weight:600;font-size:12px">
+          <i class="ti ${actionIcon(l.action)}" style="font-size:13px"></i>
+          ${l.action}
+        </div>
+      </td>
+      <td style="color:var(--text2);font-size:12px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${l.details}">${l.details}</td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:32px;font-size:13px">
+    <i class="ti ti-clipboard-x" style="font-size:24px;display:block;margin-bottom:8px;opacity:.4"></i>
+    Nenhuma atividade registrada ainda.
+  </td></tr>`;
+}
+
+async function clearLog() {
+  if (!confirm('Limpar todo o log de atividades? Esta ação não pode ser desfeita.')) return;
+  const r = await api('DELETE','log');
+  if (r && r.success) {
+    _logCache = [];
+    renderLog();
+    toast('Log limpo!');
+  } else toast('Erro ao limpar log','error');
 }
 
 // ==================== UNIFORMES ====================

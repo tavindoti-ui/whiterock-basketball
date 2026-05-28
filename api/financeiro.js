@@ -1,5 +1,5 @@
 const { requireAuth } = require('../lib/auth');
-const { getData, setData } = require('../lib/db');
+const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -25,6 +25,7 @@ module.exports = async function handler(req, res) {
     fin.push(novo);
     await setData('financeiro', fin);
     await setData('counters', counters);
+    await logAction(user.id, user.nome, user.role, `Registrou lançamento (${tipo})`, `${desc} — R$ ${Number(valor).toFixed(2)}`);
     return res.status(201).json(novo);
   }
 
@@ -48,6 +49,7 @@ module.exports = async function handler(req, res) {
         fin.push({ id: counters.financeiro, desc: `Mensalidade quitada - ${j.nome}`, tipo: 'entrada', valor: 80 * m, cat: 'Mensalidade', data: new Date().toISOString().split('T')[0] });
         await setData('financeiro', fin);
         await setData('counters', counters);
+        await logAction(user.id, user.nome, user.role, 'Quitou mensalidade', `${j.nome} — ${m} mês${m > 1 ? 'es' : ''} (R$ ${80 * m})`);
       }
       return res.json({ success: true });
     }

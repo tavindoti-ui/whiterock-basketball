@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { requireAuth } = require('../lib/auth');
-const { getData, setData } = require('../lib/db');
+const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -34,6 +34,7 @@ module.exports = async function handler(req, res) {
     await setData('counters', counters);
 
     const { senha: _, ...safeUser } = newUser;
+    await logAction(user.id, user.nome, user.role, 'Criou usuário', `${nome} — ${email} (${role})`);
     return res.status(201).json(safeUser);
   }
 
@@ -58,6 +59,7 @@ module.exports = async function handler(req, res) {
     };
     await setData('users', users);
     const { senha: _, ...safeUser } = users[idx];
+    await logAction(user.id, user.nome, user.role, 'Editou usuário', `${users[idx].nome} — ${users[idx].email} (${users[idx].role})`);
     return res.json(safeUser);
   }
 
@@ -68,8 +70,10 @@ module.exports = async function handler(req, res) {
     const { id } = req.body;
     if (id === user.id) return res.status(400).json({ error: 'Você não pode excluir sua própria conta' });
     const users = await getData('users');
-    if (!users.find(u => u.id === id)) return res.status(404).json({ error: 'Usuário não encontrado' });
+    const target = users.find(u => u.id === id);
+    if (!target) return res.status(404).json({ error: 'Usuário não encontrado' });
     await setData('users', users.filter(u => u.id !== id));
+    await logAction(user.id, user.nome, user.role, 'Excluiu usuário', `${target.nome} — ${target.email} (${target.role})`);
     return res.json({ success: true });
   }
 
