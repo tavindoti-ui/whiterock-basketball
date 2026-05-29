@@ -1282,12 +1282,12 @@ function renderDashboard() {
     <div class="card"><div class="card-title">Jogadores ativos</div><div class="card-value">${ativos}</div><div class="card-sub" style="color:var(--text2)">${cache.jogadores.length} cadastrados</div></div>
     <div class="card"><div class="card-title">Próximo jogo</div><div class="card-value" style="font-size:16px">${proxJogo?`vs ${proxJogo.adv}`:'—'}</div><div class="card-sub" style="color:var(--text2)">${proxJogo?`${fmt(proxJogo.data)} às ${proxJogo.hora}`:''}</div></div>
     ${saldoHTML}
-    <div class="card"><div class="card-title">Afastados por lesão</div><div class="card-value" style="color:var(--danger)">${lesionados.length}</div><div class="card-sub" style="color:var(--text2)">${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')||'Elenco completo'}</div></div>
+    <div class="card"><div class="card-title">Afastados por lesão</div><div class="card-value" style="color:var(--danger)">${lesionados.length}</div><div class="card-sub" style="color:var(--text2)">${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')||'Elenco completo'}</div></div>
   `;
 
   // alertas
   const alertas = [];
-  if (lesionados.length) alertas.push({ tipo:'danger', msg:`${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')}` });
+  if (lesionados.length) alertas.push({ tipo:'danger', msg:`${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')}` });
   if (can(['admin','tecnico','capitao'])) {
     const inad = Object.keys(cache.financeiro.mensalidades || {}).length;
     if (inad) alertas.push({ tipo:'warning', msg:`${inad} jogador(es) com mensalidade em atraso` });
@@ -1308,7 +1308,7 @@ function renderDashboard() {
   const byReb = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.reb-a.reb).slice(0,3);
   ['rank-pts','rank-ast','rank-reb'].forEach((id,i)=>{
     const list=[byPts,byAst,byReb][i], key=['pts','ast','reb'][i];
-    document.getElementById(id).innerHTML = list.map((j,idx)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:var(--text2);width:16px">${idx+1}</span><div style="flex:1;font-size:13px">${j.nome.split(' ')[0]}</div><span style="font-weight:700;color:var(--blue)">${j[key]}</span></div>`).join('');
+    document.getElementById(id).innerHTML = list.map((j,idx)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:var(--text2);width:16px">${idx+1}</span><div style="flex:1;font-size:13px">${j.apelido||j.nome.split(' ')[0]}</div><span style="font-weight:700;color:var(--blue)">${j[key]}</span></div>`).join('');
   });
 
   // próximo treino
@@ -1320,7 +1320,7 @@ function renderDashboard() {
   // presença
   document.getElementById('dash-presenca').innerHTML = [...cache.jogadores].sort((a,b)=>b.presenca-a.presenca).map(j=>`
     <div class="stat-row">
-      <div class="stat-name">${j.nome.split(' ')[0]} #${j.num}</div>
+      <div class="stat-name">${j.apelido||j.nome.split(' ')[0]} #${j.num}</div>
       <div class="stat-bar-wrap"><div class="stat-bar" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
       <div class="stat-val" style="color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</div>
     </div>
@@ -1364,7 +1364,7 @@ function renderJogadores() {
   const la = document.getElementById('lesao-alert');
   if (lesionados.length) {
     la.style.display='flex';
-    document.getElementById('lesao-txt').textContent = `${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.nome.split(' ')[0]).join(', ')}`;
+    document.getElementById('lesao-txt').textContent = `${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')}`;
   } else la.style.display='none';
 
   if (!lista.length) {
@@ -1799,7 +1799,7 @@ function renderTreinos() {
   document.getElementById('presenca-lista').innerHTML = cache.jogadores.map(j=>`
     <div class="pres-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div style="font-size:13px;font-weight:600">${j.nome.split(' ')[0]} #${j.num}</div>
+        <div style="font-size:13px;font-weight:600">${j.apelido||j.nome.split(' ')[0]} #${j.num}</div>
         <div class="pres-pct ${j.presenca>=80?'high':j.presenca>=60?'mid':'low'}">${j.presenca}%</div>
       </div>
       <div class="prog-bar"><div class="prog-fill" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
@@ -1927,7 +1927,7 @@ function renderFinanceiro() {
 
   document.getElementById('mens-body').innerHTML = cache.jogadores.filter(j=>mens[j.id]).map(j=>`
     <tr>
-      <td>${j.nome.split(' ')[0]}</td>
+      <td>${j.apelido||j.nome.split(' ')[0]}</td>
       <td><span class="badge badge-orange">${mens[j.id]} mês(es)</span></td>
       <td><span class="badge badge-red">Inadimplente</span></td>
       <td><button class="btn btn-success btn-sm" onclick="quitarMens(${j.id})"><i class="ti ti-check"></i> Quitar</button></td>
