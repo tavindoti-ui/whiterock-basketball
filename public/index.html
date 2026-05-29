@@ -2547,6 +2547,7 @@ function buildFanOrdersSection(pedidos) {
             <th>Código</th><th>Nome</th><th>WhatsApp</th>
             <th>Modelo</th><th>Tam</th><th>Qtd</th><th>Camisa</th>
             <th>Valor</th><th>Pgto</th><th>Status</th><th>Data</th>
+            <th>PIX</th>
             ${canDel ? '<th></th>' : ''}
           </tr>
         </thead>
@@ -2585,9 +2586,10 @@ function buildFanOrdersSection(pedidos) {
               </select>
             </td>
             <td style="color:var(--text2);font-size:11px">${fmt(p.dataPedido)}</td>
+            <td><button class="btn btn-sm" style="background:rgba(77,166,255,0.12);color:var(--blue);border:1px solid rgba(77,166,255,0.2)" onclick="openPixModal(${p.id})" title="Ver QR Code PIX"><i class="ti ti-qrcode"></i></button></td>
             ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteFanOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
           </tr>`).join('') : `
-          <tr><td colspan="${canDel?12:11}" style="text-align:center;color:var(--text2);padding:24px">
+          <tr><td colspan="${canDel?13:12}" style="text-align:center;color:var(--text2);padding:24px">
             ${total ? 'Nenhum pedido corresponde ao filtro.' : 'Nenhum pedido recebido ainda. <a href="/pedido.html" target="_blank" style="color:var(--blue)">Abrir página de pedidos →</a>'}
           </td></tr>`}
         </tbody>
@@ -2665,10 +2667,98 @@ async function deleteUniformOrder(id) {
   } else toast('Erro ao remover','error');
 }
 
+// ==================== PIX ====================
+const PIX_KEY  = 'b7813325-914c-42d7-82b7-e9e27105e7fa';
+const PIX_NAME = 'White Rock';
+const PIX_CITY = 'Rio de Janeiro';
+
+function crc16pix(str) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++) {
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
+function buildPixPayload(amount) {
+  const f = (id, v) => `${id}${String(v.length).padStart(2,'0')}${v}`;
+  const pixInfo = f('0014','BR.GOV.BCB.PIX') + f('01', PIX_KEY);
+  const additional = f('62', f('05','***'));
+  let p = f('00','01') + f('01','12') + f('26', pixInfo) +
+          f('52','0000') + f('53','986') +
+          (amount ? f('54', Number(amount).toFixed(2)) : '') +
+          f('58','BR') +
+          f('59', PIX_NAME.substring(0,25)) +
+          f('60', PIX_CITY.substring(0,15)) +
+          additional + '6304';
+  return p + crc16pix(p);
+}
+
+function openPixModal(pedidoId) {
+  const p = cache.pedidosTorcedor.find(x => x.id === pedidoId);
+  if (!p) return;
+  const payload = buildPixPayload(p.valor);
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(payload)}&size=200x200&margin=6&ecc=M`;
+  const valorTxt = p.valor ? `R$ ${Number(p.valor).toFixed(2).replace('.',',')}` : 'A confirmar';
+  document.getElementById('pix-modal-nome').textContent  = p.nome;
+  document.getElementById('pix-modal-cod').textContent   = p.codigo;
+  document.getElementById('pix-modal-valor').textContent = valorTxt;
+  document.getElementById('pix-modal-qr').src = qrUrl;
+  openModal('modal-pix');
+}
+
+function copyAdminPixKey() {
+  navigator.clipboard.writeText(PIX_KEY).then(() => {
+    const btn = document.getElementById('btn-copy-pix-admin');
+    if (btn) { btn.innerHTML = '<i class="ti ti-check"></i> Copiado!'; btn.style.color = 'var(--success)'; }
+    setTimeout(() => { if (btn) { btn.innerHTML = '<i class="ti ti-copy"></i> Copiar chave'; btn.style.color = ''; } }, 2000);
+  });
+}
+
 // ==================== AUTO-LOGIN ====================
 if (loadSession()) {
   initApp();
 }
 </script>
+
+<!-- PIX MODAL -->
+<div class="modal-overlay" id="modal-pix">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <div class="modal-title" style="justify-content:space-between">
+      <span><i class="ti ti-qrcode" style="color:var(--blue)"></i> PIX — Cobrança</span>
+      <button class="modal-close" onclick="closeModal('modal-pix')"><i class="ti ti-x"></i></button>
+    </div>
+
+    <div style="font-size:13px;color:var(--text2);margin-bottom:4px" id="pix-modal-nome"></div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:16px" id="pix-modal-cod"></div>
+
+    <!-- QR Code -->
+    <div style="background:#fff;border-radius:14px;padding:12px;display:inline-block;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.4)">
+      <img id="pix-modal-qr" width="200" height="200" alt="QR Code PIX" style="display:block">
+    </div>
+
+    <!-- Valor -->
+    <div style="background:rgba(0,200,122,0.08);border:1px solid rgba(0,200,122,0.2);border-radius:10px;padding:10px 16px;margin-bottom:16px">
+      <div style="font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Valor</div>
+      <div style="font-size:20px;font-weight:900;color:var(--success)" id="pix-modal-valor">—</div>
+    </div>
+
+    <!-- Chave -->
+    <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Chave PIX</div>
+    <code style="font-size:10px;background:rgba(0,0,0,0.3);padding:6px 10px;border-radius:7px;color:var(--blue);word-break:break-all;display:block;margin-bottom:14px">b7813325-914c-42d7-82b7-e9e27105e7fa</code>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary btn-sm" id="btn-copy-pix-admin" style="flex:1" onclick="copyAdminPixKey()">
+        <i class="ti ti-copy"></i> Copiar chave
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-pix')">Fechar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
