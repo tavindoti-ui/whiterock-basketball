@@ -450,28 +450,6 @@ footer a:hover{color:var(--blue)}
           <div class="codigo-label">Código do pedido</div>
           <div class="codigo-val" id="codigo-display">WR-0000</div>
         </div>
-        <!-- PIX PAYMENT -->
-        <div style="background:rgba(77,166,255,0.06);border:1px solid rgba(77,166,255,0.18);border-radius:16px;padding:24px;margin:0 auto 24px;max-width:320px">
-          <div style="font-size:11px;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:6px">
-            <i class="ti ti-qrcode" style="font-size:14px"></i> Pagamento via PIX
-          </div>
-          <!-- QR Code -->
-          <div style="background:#fff;border-radius:12px;padding:10px;display:inline-block;margin-bottom:14px">
-            <img id="pix-qr-img" width="160" height="160" alt="QR Code PIX" style="display:block">
-          </div>
-          <!-- Chave -->
-          <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Chave PIX (aleatória)</div>
-          <div style="display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:wrap">
-            <code style="font-size:10px;background:rgba(0,0,0,0.35);padding:6px 10px;border-radius:7px;color:var(--blue);word-break:break-all;max-width:220px">b7813325-914c-42d7-82b7-e9e27105e7fa</code>
-            <button id="btn-copy-pix" onclick="copyPixKey()" style="background:rgba(77,166,255,0.15);border:1px solid rgba(77,166,255,0.25);color:var(--blue);padding:6px 12px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0">
-              <i class="ti ti-copy"></i> Copiar
-            </button>
-          </div>
-          <div style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5">
-            O valor será confirmado pelo time via WhatsApp.<br>Envie o comprovante pelo WhatsApp após o pagamento.
-          </div>
-        </div>
-
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
           <button class="btn-secondary" onclick="resetForm()"><i class="ti ti-plus"></i> Novo pedido</button>
           <button class="btn-secondary" onclick="scrollToTrack()"><i class="ti ti-search"></i> Acompanhar</button>
@@ -627,52 +605,6 @@ function selectModelo(m) {
   card.className = 'order-card' + (m === 'secundaria' ? ' green-top' : '');
 }
 
-// ── PIX ─────────────────────────────────────────────────────────
-const PIX_KEY  = 'b7813325-914c-42d7-82b7-e9e27105e7fa';
-const PIX_NAME = 'White Rock';
-const PIX_CITY = 'Rio de Janeiro';
-
-function crc16(str) {
-  let crc = 0xFFFF;
-  for (let i = 0; i < str.length; i++) {
-    crc ^= str.charCodeAt(i) << 8;
-    for (let j = 0; j < 8; j++) {
-      crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
-      crc &= 0xFFFF;
-    }
-  }
-  return crc.toString(16).toUpperCase().padStart(4, '0');
-}
-
-function buildPixPayload() {
-  const f = (id, v) => `${id}${String(v.length).padStart(2,'0')}${v}`;
-  const pixInfo = f('0014','BR.GOV.BCB.PIX') + f('01', PIX_KEY);
-  const additional = f('62', f('05','***'));
-  let p = f('00','01') + f('01','12') + f('26', pixInfo) +
-          f('52','0000') + f('53','986') +
-          f('58','BR') +
-          f('59', PIX_NAME.substring(0,25)) +
-          f('60', PIX_CITY.substring(0,15)) +
-          additional + '6304';
-  return p + crc16(p);
-}
-
-function showPixQR() {
-  const payload = buildPixPayload();
-  const img = document.getElementById('pix-qr-img');
-  if (img) img.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(payload)}&size=160x160&margin=4&ecc=M`;
-}
-
-function copyPixKey() {
-  navigator.clipboard.writeText(PIX_KEY).then(() => {
-    const btn = document.getElementById('btn-copy-pix');
-    if (btn) { btn.innerHTML = '<i class="ti ti-check"></i> Copiado!'; btn.style.color = 'var(--success)'; }
-    setTimeout(() => { if (btn) { btn.innerHTML = '<i class="ti ti-copy"></i> Copiar'; btn.style.color = ''; } }, 2000);
-  }).catch(() => {
-    prompt('Copie a chave PIX:', PIX_KEY);
-  });
-}
-
 // ── FORM ────────────────────────────────────────────────────────
 function showFormErr(msg) {
   const el = document.getElementById('form-err');
@@ -730,7 +662,6 @@ async function submitOrder() {
     document.getElementById('codigo-display').textContent = data.codigo;
     document.getElementById('form-wrap').style.display = 'none';
     document.getElementById('success-box').style.display = 'block';
-    showPixQR();
     document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (e) {
     showFormErr(e.message);
