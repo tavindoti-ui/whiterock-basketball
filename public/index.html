@@ -2241,8 +2241,9 @@ async function clearLog() {
 }
 
 // ==================== UNIFORMES ====================
-const UNIF_PRINCIPAL  = 'https://lh3.googleusercontent.com/d/1MmeNehU50XwG0TNhW3Zb0zV94Z7KOP8y';
-const UNIF_SECUNDARIO = 'https://lh3.googleusercontent.com/d/1zZ1vgKcDf7poxs_iMOHQGSWzaQHvK1rA';
+const UNIF_PRINCIPAL  = 'https://lh3.googleusercontent.com/d/1jDblQEhml0NE7iQk_OjQaH2rjANVKtkI';
+const UNIF_SECUNDARIO = 'https://lh3.googleusercontent.com/d/1NrWQxs90soK5MHl4CeLjV0H7lvNtlF42';
+const UNIF_CITY       = 'https://lh3.googleusercontent.com/d/1A5BYc0YuEaCx8ABLP8Bk8fMnurc3xgiz';
 
 function statusBadgeCls(s) {
   if (s === 'Entregue')    return 'badge-green';
@@ -2288,32 +2289,26 @@ function renderUniformes() {
           <i class="ti ti-info-circle"></i> Selecione os uniformes que deseja e clique em <strong>Enviar pedido</strong>.
         </div>`}
 
-      <div class="grid2" style="margin-bottom:28px">
+      <div class="grid3" style="margin-bottom:28px">
 
         <!-- Uniforme Principal -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#4DA6FF"></div>
           ${unifImgBox(UNIF_PRINCIPAL, 160)}
           <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Uniforme Principal</div>
-          <div style="color:var(--blue);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">Midnight Elite · 2026</div>
-
+          <div style="color:var(--blue);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
           <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
             <input type="checkbox" id="unif-check-principal" style="width:18px;height:18px;accent-color:var(--blue);cursor:pointer"
               ${meu?.tamPrincipal ? 'checked' : ''} onchange="toggleUnifTam('principal')">
             <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
           </label>
-
           <div id="unif-tam-principal-wrap" style="display:${meu?.tamPrincipal ? 'block' : 'none'}">
             <label class="form-label">Tamanho</label>
             <select class="form-input" id="unif-tam-principal">
               ${TAMANHOS.map(t => `<option ${meu?.tamPrincipal===t?'selected':''}>${t}</option>`).join('')}
             </select>
           </div>
-
-          ${meu?.tamPrincipal ? `
-            <div style="margin-top:12px">
-              <span class="badge ${statusBadgeCls(meu.statusPrincipal)}">${meu.statusPrincipal}</span>
-            </div>` : ''}
+          ${meu?.tamPrincipal ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusPrincipal)}">${meu.statusPrincipal}</span></div>` : ''}
         </div>
 
         <!-- Uniforme Secundário -->
@@ -2321,26 +2316,41 @@ function renderUniformes() {
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2ECC71"></div>
           ${unifImgBox(UNIF_SECUNDARIO, 160)}
           <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Uniforme Secundário</div>
-          <div style="color:#2ECC71;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">Dark Navy · 2026</div>
-
+          <div style="color:#2ECC71;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
           <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
             <input type="checkbox" id="unif-check-secundario" style="width:18px;height:18px;accent-color:#2ECC71;cursor:pointer"
               ${meu?.tamSecundario ? 'checked' : ''} onchange="toggleUnifTam('secundario')">
             <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
           </label>
-
           <div id="unif-tam-secundario-wrap" style="display:${meu?.tamSecundario ? 'block' : 'none'}">
             <label class="form-label">Tamanho</label>
             <select class="form-input" id="unif-tam-secundario">
               ${TAMANHOS.map(t => `<option ${meu?.tamSecundario===t?'selected':''}>${t}</option>`).join('')}
             </select>
           </div>
-
-          ${meu?.tamSecundario ? `
-            <div style="margin-top:12px">
-              <span class="badge ${statusBadgeCls(meu.statusSecundario)}">${meu.statusSecundario}</span>
-            </div>` : ''}
+          ${meu?.tamSecundario ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusSecundario)}">${meu.statusSecundario}</span></div>` : ''}
         </div>
+
+        <!-- Uniforme City Edition -->
+        <div class="jersey-card" style="padding:24px">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#F59E0B"></div>
+          ${unifImgBox(UNIF_CITY, 160)}
+          <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">City Edition</div>
+          <div style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
+          <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+            <input type="checkbox" id="unif-check-city" style="width:18px;height:18px;accent-color:#F59E0B;cursor:pointer"
+              ${meu?.tamCity ? 'checked' : ''} onchange="toggleUnifTam('city')">
+            <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
+          </label>
+          <div id="unif-tam-city-wrap" style="display:${meu?.tamCity ? 'block' : 'none'}">
+            <label class="form-label">Tamanho</label>
+            <select class="form-input" id="unif-tam-city">
+              ${TAMANHOS.map(t => `<option ${meu?.tamCity===t?'selected':''}>${t}</option>`).join('')}
+            </select>
+          </div>
+          ${meu?.tamCity ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusCity)}">${meu.statusCity}</span></div>` : ''}
+        </div>
+
       </div>
 
       <button class="btn btn-primary" onclick="saveMyOrder()" style="padding:12px 36px;font-size:14px">
@@ -2372,10 +2382,17 @@ function buildManagementSection(pedidos) {
   const ativos = cache.jogadores.filter(j => j.status === 'Ativo');
   const totalP = pedidos.filter(p => p.tamPrincipal).length;
   const totalS = pedidos.filter(p => p.tamSecundario).length;
+  const totalC = pedidos.filter(p => p.tamCity).length;
   const pedidosNums = new Set(pedidos.map(p => p.num));
   const semPedido = ativos.filter(j => !pedidosNums.has(j.num));
-  const STATUS_OPTS = ['Pendente','Em Produção','Entregue'];
+  const SO = ['Pendente','Em Produção','Entregue'];
   const canDel = can(['admin']);
+
+  const colStatus = (tam, status, id, tipo) => tam
+    ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${id},'${tipo}',this.value)">
+        ${SO.map(s=>`<option ${status===s?'selected':''}>${s}</option>`).join('')}
+       </select>`
+    : `<span style="color:var(--text3)">—</span>`;
 
   return `
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px">
@@ -2385,16 +2402,21 @@ function buildManagementSection(pedidos) {
       </button>
     </div>
 
-    <div class="grid3" style="margin-bottom:28px">
+    <div class="grid4" style="margin-bottom:28px">
       <div class="card">
-        <div class="card-title">Pediram Principal</div>
+        <div class="card-title">Principal</div>
         <div class="card-value" style="color:var(--blue)">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalP} sem pedido</div>
       </div>
       <div class="card">
-        <div class="card-title">Pediram Secundário</div>
+        <div class="card-title">Secundário</div>
         <div class="card-value" style="color:#2ECC71">${totalS}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalS} sem pedido</div>
+      </div>
+      <div class="card">
+        <div class="card-title">City Edition</div>
+        <div class="card-value" style="color:#F59E0B">${totalC}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
+        <div class="card-sub" style="color:var(--text2)">${ativos.length - totalC} sem pedido</div>
       </div>
       <div class="card">
         <div class="card-title">Aguardando pedido</div>
@@ -2421,6 +2443,7 @@ function buildManagementSection(pedidos) {
               <th>Jogador</th><th>#</th>
               <th style="color:var(--blue)">Principal</th><th>Status</th>
               <th style="color:#2ECC71">Secundário</th><th>Status</th>
+              <th style="color:#F59E0B">City Edition</th><th>Status</th>
               <th>Pedido em</th>
               ${canDel ? '<th></th>' : ''}
             </tr>
@@ -2430,26 +2453,12 @@ function buildManagementSection(pedidos) {
             <tr>
               <td style="font-weight:600">${p.jogadorNome}</td>
               <td><span class="badge badge-blue">#${p.num||'—'}</span></td>
-              <td>${p.tamPrincipal
-                ? `<span style="font-weight:700;color:var(--blue);font-size:14px">${p.tamPrincipal}</span>`
-                : `<span style="color:var(--text3)">—</span>`}</td>
-              <td>
-                ${p.tamPrincipal
-                  ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'principal',this.value)">
-                      ${STATUS_OPTS.map(s=>`<option ${p.statusPrincipal===s?'selected':''}>${s}</option>`).join('')}
-                     </select>`
-                  : `<span style="color:var(--text3)">—</span>`}
-              </td>
-              <td>${p.tamSecundario
-                ? `<span style="font-weight:700;color:#2ECC71;font-size:14px">${p.tamSecundario}</span>`
-                : `<span style="color:var(--text3)">—</span>`}</td>
-              <td>
-                ${p.tamSecundario
-                  ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${p.id},'secundario',this.value)">
-                      ${STATUS_OPTS.map(s=>`<option ${p.statusSecundario===s?'selected':''}>${s}</option>`).join('')}
-                     </select>`
-                  : `<span style="color:var(--text3)">—</span>`}
-              </td>
+              <td>${p.tamPrincipal ? `<span style="font-weight:700;color:var(--blue);font-size:14px">${p.tamPrincipal}</span>` : `<span style="color:var(--text3)">—</span>`}</td>
+              <td>${colStatus(p.tamPrincipal, p.statusPrincipal, p.id, 'principal')}</td>
+              <td>${p.tamSecundario ? `<span style="font-weight:700;color:#2ECC71;font-size:14px">${p.tamSecundario}</span>` : `<span style="color:var(--text3)">—</span>`}</td>
+              <td>${colStatus(p.tamSecundario, p.statusSecundario, p.id, 'secundario')}</td>
+              <td>${p.tamCity ? `<span style="font-weight:700;color:#F59E0B;font-size:14px">${p.tamCity}</span>` : `<span style="color:var(--text3)">—</span>`}</td>
+              <td>${colStatus(p.tamCity, p.statusCity, p.id, 'city')}</td>
               <td style="color:var(--text2);font-size:12px">${fmt(p.dataPedido)}</td>
               ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteUniformOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
             </tr>`).join('')}
@@ -2637,10 +2646,12 @@ function toggleUnifTam(tipo) {
 async function saveMyOrder() {
   const querP = document.getElementById('unif-check-principal')?.checked;
   const querS = document.getElementById('unif-check-secundario')?.checked;
+  const querC = document.getElementById('unif-check-city')?.checked;
   const tamP = querP ? document.getElementById('unif-tam-principal')?.value : null;
   const tamS = querS ? document.getElementById('unif-tam-secundario')?.value : null;
-  if (!tamP && !tamS) { toast('Selecione pelo menos um uniforme','error'); return; }
-  const r = await api('POST','uniformes',{ tamPrincipal:tamP, tamSecundario:tamS });
+  const tamC = querC ? document.getElementById('unif-tam-city')?.value : null;
+  if (!tamP && !tamS && !tamC) { toast('Selecione pelo menos um uniforme','error'); return; }
+  const r = await api('POST','uniformes',{ tamPrincipal:tamP, tamSecundario:tamS, tamCity:tamC });
   if (r && r.id) {
     const idx = cache.uniformes.findIndex(x => x.id === r.id || x.userId === r.userId);
     if (idx !== -1) cache.uniformes[idx] = r; else cache.uniformes.push(r);
@@ -2651,8 +2662,9 @@ async function saveMyOrder() {
 
 async function updateOrderStatus(id, tipo, status) {
   const payload = { id };
-  if (tipo === 'principal') payload.statusPrincipal = status;
-  else payload.statusSecundario = status;
+  if (tipo === 'principal')  payload.statusPrincipal  = status;
+  else if (tipo === 'city')  payload.statusCity       = status;
+  else                       payload.statusSecundario = status;
   const r = await api('PUT','uniformes', payload);
   if (r && r.id) {
     const idx = cache.uniformes.findIndex(x => x.id === id);
@@ -2697,6 +2709,7 @@ function exportUniformesPDF() {
   const ativos  = cache.jogadores.filter(j => j.status === 'Ativo');
   const totalP  = pedidos.filter(p => p.tamPrincipal).length;
   const totalS  = pedidos.filter(p => p.tamSecundario).length;
+  const totalC  = pedidos.filter(p => p.tamCity).length;
   const pedNums = new Set(pedidos.map(p => p.num));
   const semPed  = ativos.filter(j => !pedNums.has(j.num));
 
@@ -2704,12 +2717,12 @@ function exportUniformesPDF() {
   doc.text('Resumo', 14, y); y += 6;
 
   const resumo = [
-    [`Jogadores ativos: ${ativos.length}`, `Pediram Principal: ${totalP}`, `Pediram Secundário: ${totalS}`, `Aguardando pedido: ${semPed.length}`]
+    [`Ativos: ${ativos.length}`, `Principal: ${totalP}`, `Secundário: ${totalS}`, `City Edition: ${totalC}`, `Aguardando: ${semPed.length}`]
   ];
   doc.autoTable({
     startY: y, body: resumo,
     styles: { fontSize: 9, fillColor: [13, 21, 38], textColor: [174, 184, 199], cellPadding: 3 },
-    columnStyles: { 0:{cellWidth:55}, 1:{cellWidth:55}, 2:{cellWidth:55}, 3:{cellWidth:55} },
+    columnStyles: { 0:{cellWidth:40}, 1:{cellWidth:40}, 2:{cellWidth:40}, 3:{cellWidth:44}, 4:{cellWidth:44} },
     margin: { left: 14 },
   });
   y = doc.lastAutoTable.finalY + 8;
@@ -2727,24 +2740,28 @@ function exportUniformesPDF() {
       p.statusPrincipal || '—',
       p.tamSecundario || '—',
       p.statusSecundario || '—',
+      p.tamCity || '—',
+      p.statusCity || '—',
       p.dataPedido ? new Date(p.dataPedido + 'T00:00:00').toLocaleDateString('pt-BR') : '—',
     ]);
 
   doc.autoTable({
     startY: y,
-    head: [['#', 'Jogador', 'Principal', 'Status P.', 'Secundário', 'Status S.', 'Data pedido']],
-    body: rows.length ? rows : [['—','Nenhum pedido recebido','','','','','']],
+    head: [['#', 'Jogador', 'Principal', 'Status P.', 'Secundário', 'Status S.', 'City', 'Status C.', 'Data']],
+    body: rows.length ? rows : [['—','Nenhum pedido recebido','','','','','','','']],
     headStyles: { fillColor: [45, 140, 255], textColor: 255, fontStyle: 'bold', fontSize: 9 },
     bodyStyles: { fillColor: [13, 21, 38], textColor: [244, 247, 251], fontSize: 9 },
     alternateRowStyles: { fillColor: [8, 18, 36] },
     columnStyles: {
-      0: { cellWidth: 14, halign: 'center' },
-      1: { cellWidth: 48 },
-      2: { cellWidth: 22, halign: 'center' },
-      3: { cellWidth: 32 },
-      4: { cellWidth: 22, halign: 'center' },
-      5: { cellWidth: 32 },
-      6: { cellWidth: 28, halign: 'center' },
+      0: { cellWidth: 12, halign: 'center' },
+      1: { cellWidth: 40 },
+      2: { cellWidth: 18, halign: 'center' },
+      3: { cellWidth: 26 },
+      4: { cellWidth: 18, halign: 'center' },
+      5: { cellWidth: 26 },
+      6: { cellWidth: 14, halign: 'center' },
+      7: { cellWidth: 26 },
+      8: { cellWidth: 22, halign: 'center' },
     },
     margin: { left: 14 },
   });

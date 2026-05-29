@@ -9,7 +9,6 @@ module.exports = async function handler(req, res) {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
     if (!user) return;
     const pedidos = await getData('uniformes') || [];
-    // Atleta only sees their own order
     if (user.role === 'atleta') {
       return res.json(pedidos.filter(p => p.userId === user.id));
     }
@@ -20,23 +19,18 @@ module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['atleta', 'capitao', 'tecnico', 'comissao']);
     if (!user) return;
-    const { tamPrincipal, tamSecundario } = req.body;
-    if (!tamPrincipal && !tamSecundario) {
+    const { tamPrincipal, tamSecundario, tamCity } = req.body;
+    if (!tamPrincipal && !tamSecundario && !tamCity) {
       return res.status(400).json({ error: 'Selecione pelo menos um uniforme' });
     }
 
-    // Look up jogador record to get apelido/nome — num comes directly from the user account
     const jogadores = await getData('jogadores') || [];
     const hasNum = user.num !== null && user.num !== undefined;
-    let jogadorRef = hasNum
-      ? jogadores.find(j => j.num === user.num)
-      : null;
+    let jogadorRef = hasNum ? jogadores.find(j => j.num === user.num) : null;
     if (!jogadorRef) {
-      // Fallback: match by name (case-insensitive)
       const searchName = (user.nome || '').toLowerCase();
       jogadorRef = jogadores.find(j => j.nome.toLowerCase() === searchName);
     }
-    // Name: prefer apelido from jogadores; number: always use the one on the user account
     const displayNome = jogadorRef?.apelido || jogadorRef?.nome || user.nome;
     const displayNum  = hasNum ? user.num : (jogadorRef?.num ?? 0);
 
@@ -51,15 +45,17 @@ module.exports = async function handler(req, res) {
         ...old,
         jogadorNome: displayNome,
         num: displayNum,
-        tamPrincipal: tamPrincipal || null,
+        tamPrincipal:  tamPrincipal  || null,
         tamSecundario: tamSecundario || null,
-        statusPrincipal: tamPrincipal ? (old.statusPrincipal || 'Pendente') : null,
+        tamCity:       tamCity       || null,
+        statusPrincipal:  tamPrincipal  ? (old.statusPrincipal  || 'Pendente') : null,
         statusSecundario: tamSecundario ? (old.statusSecundario || 'Pendente') : null,
+        statusCity:       tamCity       ? (old.statusCity       || 'Pendente') : null,
         dataPedido: now,
       };
       await setData('uniformes', pedidos);
       await logAction(user.id, user.nome, user.role, 'Atualizou pedido de uniforme',
-        `${displayNome} #${displayNum} — Principal: ${tamPrincipal || '—'} / Secundário: ${tamSecundario || '—'}`);
+        `${displayNome} #${displayNum} — P: ${tamPrincipal||'—'} / S: ${tamSecundario||'—'} / City: ${tamCity||'—'}`);
       return res.json(pedidos[existingIdx]);
     }
 
@@ -69,17 +65,19 @@ module.exports = async function handler(req, res) {
       userId: user.id,
       jogadorNome: displayNome,
       num: displayNum,
-      tamPrincipal: tamPrincipal || null,
+      tamPrincipal:  tamPrincipal  || null,
       tamSecundario: tamSecundario || null,
-      statusPrincipal: tamPrincipal ? 'Pendente' : null,
+      tamCity:       tamCity       || null,
+      statusPrincipal:  tamPrincipal  ? 'Pendente' : null,
       statusSecundario: tamSecundario ? 'Pendente' : null,
+      statusCity:       tamCity       ? 'Pendente' : null,
       dataPedido: now,
     };
     pedidos.push(novo);
     await setData('uniformes', pedidos);
     await setData('counters', counters);
     await logAction(user.id, user.nome, user.role, 'Fez pedido de uniforme',
-      `${displayNome} #${displayNum} — Principal: ${tamPrincipal || '—'} / Secundário: ${tamSecundario || '—'}`);
+      `${displayNome} #${displayNum} — P: ${tamPrincipal||'—'} / S: ${tamSecundario||'—'} / City: ${tamCity||'—'}`);
     return res.status(201).json(novo);
   }
 
@@ -87,15 +85,16 @@ module.exports = async function handler(req, res) {
   if (req.method === 'PUT') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { id, statusPrincipal, statusSecundario } = req.body;
+    const { id, statusPrincipal, statusSecundario, statusCity } = req.body;
     const pedidos = await getData('uniformes') || [];
     const idx = pedidos.findIndex(p => p.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Pedido não encontrado' });
-    if (statusPrincipal !== undefined) pedidos[idx].statusPrincipal = statusPrincipal;
+    if (statusPrincipal  !== undefined) pedidos[idx].statusPrincipal  = statusPrincipal;
     if (statusSecundario !== undefined) pedidos[idx].statusSecundario = statusSecundario;
+    if (statusCity       !== undefined) pedidos[idx].statusCity       = statusCity;
     await setData('uniformes', pedidos);
     await logAction(user.id, user.nome, user.role, 'Atualizou status de uniforme',
-      `${pedidos[idx].jogadorNome} — Principal: ${pedidos[idx].statusPrincipal || '—'} / Secundário: ${pedidos[idx].statusSecundario || '—'}`);
+      `${pedidos[idx].jogadorNome} — P: ${pedidos[idx].statusPrincipal||'—'} / S: ${pedidos[idx].statusSecundario||'—'} / City: ${pedidos[idx].statusCity||'—'}`);
     return res.json(pedidos[idx]);
   }
 

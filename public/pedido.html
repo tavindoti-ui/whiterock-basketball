@@ -102,10 +102,10 @@ body{
 
 /* ─── JERSEY SHOWCASE ─── */
 .showcase{
-  display:grid;grid-template-columns:1fr 1fr;gap:0;
-  max-width:900px;margin:0 auto;position:relative;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+  max-width:1100px;margin:0 auto;position:relative;
 }
-@media(max-width:600px){.showcase{grid-template-columns:1fr;max-width:380px}}
+@media(max-width:700px){.showcase{grid-template-columns:1fr;max-width:380px}}
 .jersey-hero{
   position:relative;padding:40px 32px 32px;text-align:center;cursor:pointer;
   transition:transform .25s ease;
@@ -117,6 +117,7 @@ body{
 }
 .jersey-hero.principal::before{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
 .jersey-hero.secundaria::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.jersey-hero.city::before{background:linear-gradient(90deg,transparent,#F59E0B,transparent)}
 .jersey-hero:hover::before{opacity:1}
 .jersey-img-wrap{
   position:relative;display:flex;align-items:center;justify-content:center;
@@ -136,6 +137,7 @@ body{
 }
 .jersey-label.principal{color:var(--blue)}
 .jersey-label.secundaria{color:var(--green)}
+.jersey-label.city{color:#F59E0B}
 .jersey-name{font-size:20px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-0.3px}
 .jersey-desc{font-size:12px;color:var(--text3);margin-bottom:20px}
 .btn-choose{
@@ -147,6 +149,10 @@ body{
 .btn-choose-blue:hover{background:var(--blue2);color:#fff;border-color:var(--blue2)}
 .btn-choose-green{background:rgba(46,204,113,0.12);color:var(--green);border:1px solid rgba(46,204,113,0.22)}
 .btn-choose-green:hover{background:var(--green2);color:#fff;border-color:var(--green2)}
+.btn-choose-gold{background:rgba(245,158,11,0.12);color:#F59E0B;border:1px solid rgba(245,158,11,0.22)}
+.btn-choose-gold:hover{background:#d97706;color:#fff;border-color:#d97706}
+.ms-opt.selected-gold{border-color:#F59E0B;background:rgba(245,158,11,0.07)}
+.ms-dot.gold{background:#F59E0B}
 .showcase-divider{
   position:absolute;top:10%;bottom:10%;left:50%;width:1px;
   background:linear-gradient(to bottom,transparent,var(--border),transparent);
@@ -179,7 +185,8 @@ body{
 }
 
 /* modelo selector mini */
-.modelo-sel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.modelo-sel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+@media(max-width:480px){.modelo-sel{grid-template-columns:1fr}}
 .ms-opt{
   border:2px solid rgba(255,255,255,0.07);border-radius:12px;
   padding:12px 14px;cursor:pointer;transition:all .18s;
@@ -221,6 +228,9 @@ textarea.fi{resize:vertical;min-height:70px}
 .btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 .btn-submit.green-btn{background:linear-gradient(135deg,var(--green2),#219a52);box-shadow:0 6px 20px rgba(39,174,96,0.28)}
 .btn-submit.green-btn:hover:not(:disabled){box-shadow:0 8px 28px rgba(39,174,96,0.4)}
+.btn-submit.gold-btn{background:linear-gradient(135deg,#d97706,#b45309);box-shadow:0 6px 20px rgba(217,119,6,0.3)}
+.btn-submit.gold-btn:hover:not(:disabled){box-shadow:0 8px 28px rgba(217,119,6,0.45)}
+.order-card.gold-top::before{background:linear-gradient(90deg,transparent,rgba(245,158,11,0.5),transparent)}
 
 /* alerts */
 .alert{border-radius:11px;padding:12px 16px;font-size:13px;display:flex;gap:10px;align-items:flex-start;margin-bottom:18px}
@@ -372,18 +382,17 @@ footer a:hover{color:var(--blue)}
 
   <!-- JERSEY SHOWCASE -->
   <div class="showcase">
-    <div class="showcase-divider"></div>
 
     <!-- PRINCIPAL -->
     <div class="jersey-hero principal" onclick="scrollToOrder('principal')">
       <div class="jersey-img-wrap">
-        <img src="https://lh3.googleusercontent.com/d/1MmeNehU50XwG0TNhW3Zb0zV94Z7KOP8y"
+        <img src="https://lh3.googleusercontent.com/d/1jDblQEhml0NE7iQk_OjQaH2rjANVKtkI"
           alt="Camisa Principal White Rock"
           onerror="this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;color:var(--text3)\'><i class=\'ti ti-shirt\' style=\'font-size:56px;color:rgba(77,166,255,0.3)\'></i><span style=\'font-size:12px\'>Camisa Principal</span></div>'">
       </div>
       <div class="jersey-label principal">Principal</div>
-      <div class="jersey-name">Midnight Elite</div>
-      <div class="jersey-desc">Azul marinho · Uniforme oficial 2026</div>
+      <div class="jersey-name">Uniforme Oficial</div>
+      <div class="jersey-desc">Uniforme principal · 2026</div>
       <button class="btn-choose btn-choose-blue">
         <i class="ti ti-plus"></i> Pedir este modelo
       </button>
@@ -392,17 +401,33 @@ footer a:hover{color:var(--blue)}
     <!-- SECUNDÁRIA -->
     <div class="jersey-hero secundaria" onclick="scrollToOrder('secundaria')">
       <div class="jersey-img-wrap">
-        <img src="https://lh3.googleusercontent.com/d/1zZ1vgKcDf7poxs_iMOHQGSWzaQHvK1rA"
+        <img src="https://lh3.googleusercontent.com/d/1NrWQxs90soK5MHl4CeLjV0H7lvNtlF42"
           alt="Camisa Secundária White Rock"
           onerror="this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;color:var(--text3)\'><i class=\'ti ti-shirt\' style=\'font-size:56px;color:rgba(46,204,113,0.3)\'></i><span style=\'font-size:12px\'>Camisa Secundária</span></div>'">
       </div>
       <div class="jersey-label secundaria">Secundária</div>
-      <div class="jersey-name">Dark Navy</div>
-      <div class="jersey-desc">Verde e azul · Uniforme alternativo 2026</div>
+      <div class="jersey-name">Uniforme Away</div>
+      <div class="jersey-desc">Uniforme alternativo · 2026</div>
       <button class="btn-choose btn-choose-green">
         <i class="ti ti-plus"></i> Pedir este modelo
       </button>
     </div>
+
+    <!-- CITY EDITION -->
+    <div class="jersey-hero city" onclick="scrollToOrder('city')">
+      <div class="jersey-img-wrap">
+        <img src="https://lh3.googleusercontent.com/d/1A5BYc0YuEaCx8ABLP8Bk8fMnurc3xgiz"
+          alt="Camisa City Edition White Rock"
+          onerror="this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;color:var(--text3)\'><i class=\'ti ti-shirt\' style=\'font-size:56px;color:rgba(245,158,11,0.3)\'></i><span style=\'font-size:12px\'>City Edition</span></div>'">
+      </div>
+      <div class="jersey-label city">City Edition</div>
+      <div class="jersey-name">City Edition</div>
+      <div class="jersey-desc">Edição especial · 2026</div>
+      <button class="btn-choose btn-choose-gold">
+        <i class="ti ti-plus"></i> Pedir este modelo
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -473,14 +498,21 @@ footer a:hover{color:var(--blue)}
             <div class="ms-dot blue"></div>
             <div class="ms-text">
               <span class="ms-name">Principal</span>
-              <span class="ms-sub">Midnight Elite · Azul</span>
+              <span class="ms-sub">Uniforme oficial</span>
             </div>
           </div>
           <div class="ms-opt" id="ms-secundaria" onclick="selectModelo('secundaria')">
             <div class="ms-dot green"></div>
             <div class="ms-text">
               <span class="ms-name">Secundária</span>
-              <span class="ms-sub">Dark Navy · Verde</span>
+              <span class="ms-sub">Uniforme away</span>
+            </div>
+          </div>
+          <div class="ms-opt" id="ms-city" onclick="selectModelo('city')">
+            <div class="ms-dot gold"></div>
+            <div class="ms-text">
+              <span class="ms-name">City Edition</span>
+              <span class="ms-sub">Edição especial</span>
             </div>
           </div>
         </div>
@@ -598,11 +630,10 @@ function selectModelo(m) {
   const card = document.getElementById('form-card');
   document.getElementById('ms-principal').className = 'ms-opt' + (m === 'principal' ? ' selected-blue' : '');
   document.getElementById('ms-secundaria').className = 'ms-opt' + (m === 'secundaria' ? ' selected-green' : '');
-  // Tint the submit button
+  document.getElementById('ms-city').className       = 'ms-opt' + (m === 'city'       ? ' selected-gold'  : '');
   const btn = document.getElementById('btn-submit');
-  btn.className = 'btn-submit' + (m === 'secundaria' ? ' green-btn' : '');
-  // Top accent bar on card
-  card.className = 'order-card' + (m === 'secundaria' ? ' green-top' : '');
+  btn.className = 'btn-submit' + (m === 'secundaria' ? ' green-btn' : m === 'city' ? ' gold-btn' : '');
+  card.className = 'order-card' + (m === 'secundaria' ? ' green-top' : m === 'city' ? ' gold-top' : '');
 }
 
 // ── FORM ────────────────────────────────────────────────────────
@@ -668,7 +699,7 @@ async function submitOrder() {
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<i class="ti ti-send"></i> Enviar pedido';
-    btn.className = 'btn-submit' + (selectedModelo === 'secundaria' ? ' green-btn' : '');
+    btn.className = 'btn-submit' + (selectedModelo === 'secundaria' ? ' green-btn' : selectedModelo === 'city' ? ' gold-btn' : '');
   }
 }
 
