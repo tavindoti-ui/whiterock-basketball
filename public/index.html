@@ -1528,9 +1528,10 @@ function renderDashboard() {
     : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum resultado ainda.</div>';
 
   // ranking
-  const byPts = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.pts-a.pts).slice(0,3);
-  const byAst = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.ast-a.ast).slice(0,3);
-  const byReb = [...cache.jogadores].filter(j=>j.jg>0).sort((a,b)=>b.reb-a.reb).slice(0,3);
+  const temJogos = cache.jogos.some(j => !isUpcoming(j.data));
+  const byPts = [...cache.jogadores].filter(j=>temJogos||j.pts>0).sort((a,b)=>b.pts-a.pts).slice(0,3);
+  const byAst = [...cache.jogadores].filter(j=>temJogos||j.ast>0).sort((a,b)=>b.ast-a.ast).slice(0,3);
+  const byReb = [...cache.jogadores].filter(j=>temJogos||j.reb>0).sort((a,b)=>b.reb-a.reb).slice(0,3);
   ['rank-pts','rank-ast','rank-reb'].forEach((id,i)=>{
     const list=[byPts,byAst,byReb][i], key=['pts','ast','reb'][i];
     document.getElementById(id).innerHTML = list.map((j,idx)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:var(--text2);width:16px">${idx+1}</span><div style="flex:1;font-size:13px">${j.apelido||j.nome.split(' ')[0]}</div><span style="font-weight:700;color:var(--blue)">${j[key]}</span></div>`).join('');
@@ -2220,7 +2221,9 @@ function renderStats() {
   const key = cat;
   const ativos = cache.jogadores.filter(j=>j.status!=='Inativo').sort((a,b)=>b[key]-a[key]);
 
-  document.getElementById('stat-jg-count').textContent = cache.jogos.filter(j=>j.wr!==null).length;
+  // Count ALL past games — regardless of score being confirmed or not
+  const jogosDisputados = cache.jogos.filter(j => !isUpcoming(j.data)).length;
+  document.getElementById('stat-jg-count').textContent = jogosDisputados;
 
   // Chart.js horizontal bar chart
   const canvas = document.getElementById('stats-chart');
@@ -2280,11 +2283,12 @@ function renderStats() {
     });
   }
 
+  const jogosReais = cache.jogos.filter(j => !isUpcoming(j.data)).length;
   document.getElementById('stats-tbl').innerHTML = [...cache.jogadores].sort((a,b)=>b.pts-a.pts).map(j=>`
     <tr>
       <td style="color:var(--text2)">#${j.num}</td>
-      <td style="font-weight:500">${j.nome}</td>
-      <td>${j.jg}</td>
+      <td style="font-weight:500">${j.apelido||j.nome.split(' ')[0]}</td>
+      <td>${jogosReais}</td>
       <td style="font-weight:600;color:var(--blue)">${j.pts}</td>
       <td>${j.ast}</td><td>${j.reb}</td><td>${j.tpt}</td><td>${j.flt}</td>
     </tr>
