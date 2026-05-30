@@ -620,6 +620,23 @@ body.sidebar-mini .btn-logout{justify-content:center}
 .fsb-enviado{background:rgba(99,102,241,0.12);color:#818CF8}
 .fsb-entregue{background:rgba(0,200,122,0.18);color:var(--success)}
 .fsb-cancelado{background:rgba(239,68,68,0.12);color:var(--danger)}
+/* ── Uniform grouped table ── */
+.utbl-th-p{background:rgba(45,140,255,0.18);color:#4DA6FF;font-weight:800;text-align:center;letter-spacing:.5px}
+.utbl-th-s{background:rgba(46,204,113,0.15);color:#2ECC71;font-weight:800;text-align:center;letter-spacing:.5px}
+.utbl-th-c{background:rgba(245,158,11,0.15);color:#F59E0B;font-weight:800;text-align:center;letter-spacing:.5px}
+.utbl-sub{font-size:10px;font-weight:700;letter-spacing:.5px;text-align:center;padding:4px 6px!important}
+.utbl-sub-p{color:#4DA6FF;background:rgba(45,140,255,0.07)}
+.utbl-sub-s{color:#2ECC71;background:rgba(46,204,113,0.06)}
+.utbl-sub-c{color:#F59E0B;background:rgba(245,158,11,0.06)}
+.utbl-border-p{border-left:2px solid rgba(45,140,255,0.25)!important}
+.utbl-border-s{border-left:2px solid rgba(46,204,113,0.22)!important}
+.utbl-border-c{border-left:2px solid rgba(245,158,11,0.22)!important}
+.utbl-tam-p{font-weight:800;color:#4DA6FF;font-size:14px}
+.utbl-tam-s{font-weight:800;color:#2ECC71;font-size:14px}
+.utbl-tam-c{font-weight:800;color:#F59E0B;font-size:14px}
+.utbl-empty{color:var(--text3);font-size:13px}
+.utbl-date{color:var(--text2);font-size:12px;border-left:1px solid var(--border)!important;padding-left:12px!important}
+.utbl-sel{padding:3px 6px!important;font-size:11px!important;width:auto!important}
 </style>
 </head>
 <body>
@@ -2562,20 +2579,24 @@ function renderUniformes() {
 }
 
 function buildManagementSection(pedidos) {
-  const ativos = cache.jogadores.filter(j => j.status === 'Ativo');
-  const totalP = pedidos.filter(p => p.tamPrincipal).length;
-  const totalS = pedidos.filter(p => p.tamSecundario).length;
-  const totalC = pedidos.filter(p => p.tamCity).length;
-  const pedidosNums = new Set(pedidos.map(p => p.num));
-  const semPedido = ativos.filter(j => !pedidosNums.has(j.num));
-  const SO = ['Pendente','Em Produção','Entregue'];
-  const canDel = can(['admin']);
+  const ativos    = cache.jogadores.filter(j => j.status === 'Ativo');
+  const totalP    = pedidos.filter(p => p.tamPrincipal).length;
+  const totalS    = pedidos.filter(p => p.tamSecundario).length;
+  const totalC    = pedidos.filter(p => p.tamCity).length;
+  const pedNums   = new Set(pedidos.map(p => p.num));
+  const semPedido = ativos.filter(j => !pedNums.has(j.num));
+  const SO        = ['Pendente','Em Produção','Entregue'];
+  const canDel    = can(['admin']);
 
-  const colStatus = (tam, status, id, tipo) => tam
-    ? `<select class="form-input" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateOrderStatus(${id},'${tipo}',this.value)">
-        ${SO.map(s=>`<option ${status===s?'selected':''}>${s}</option>`).join('')}
+  const sel = (tam, status, id, tipo) => tam
+    ? `<select class="form-input utbl-sel" onchange="updateOrderStatus(${id},'${tipo}',this.value)">
+         ${SO.map(s => `<option ${status===s?'selected':''}>${s}</option>`).join('')}
        </select>`
-    : `<span style="color:var(--text3)">—</span>`;
+    : `<span class="utbl-empty">—</span>`;
+
+  const tamCell = (tam, cls) => tam
+    ? `<span class="${cls}">${tam}</span>`
+    : `<span class="utbl-empty">—</span>`;
 
   return `
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px">
@@ -2587,23 +2608,23 @@ function buildManagementSection(pedidos) {
 
     <div class="grid4" style="margin-bottom:28px">
       <div class="card">
-        <div class="card-title">Principal</div>
-        <div class="card-value" style="color:var(--blue)">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
+        <div class="card-title" style="color:#4DA6FF"><i class="ti ti-shirt" style="margin-right:4px"></i>Principal</div>
+        <div class="card-value" style="color:#4DA6FF">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalP} sem pedido</div>
       </div>
       <div class="card">
-        <div class="card-title">Secundário</div>
+        <div class="card-title" style="color:#2ECC71"><i class="ti ti-shirt" style="margin-right:4px"></i>Secundário</div>
         <div class="card-value" style="color:#2ECC71">${totalS}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalS} sem pedido</div>
       </div>
       <div class="card">
-        <div class="card-title">City Edition</div>
+        <div class="card-title" style="color:#F59E0B"><i class="ti ti-shirt" style="margin-right:4px"></i>City Edition</div>
         <div class="card-value" style="color:#F59E0B">${totalC}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalC} sem pedido</div>
       </div>
       <div class="card">
         <div class="card-title">Aguardando pedido</div>
-        <div class="card-value" style="color:${semPedido.length ? 'var(--warning)' : 'var(--success)'}">${semPedido.length}</div>
+        <div class="card-value" style="color:${semPedido.length?'var(--warning)':'var(--success)'}">${semPedido.length}</div>
         <div class="card-sub" style="color:var(--text2)">jogadores ativos</div>
       </div>
     </div>
@@ -2623,26 +2644,32 @@ function buildManagementSection(pedidos) {
         <table class="tbl">
           <thead>
             <tr>
-              <th>Jogador</th><th>#</th>
-              <th style="color:var(--blue)">Principal</th><th>Status</th>
-              <th style="color:#2ECC71">Secundário</th><th>Status</th>
-              <th style="color:#F59E0B">City Edition</th><th>Status</th>
-              <th>Pedido em</th>
-              ${canDel ? '<th></th>' : ''}
+              <th rowspan="2" style="vertical-align:middle">Jogador</th>
+              <th rowspan="2" style="vertical-align:middle;text-align:center">#</th>
+              <th colspan="2" class="utbl-th-p"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Principal</th>
+              <th colspan="2" class="utbl-th-s"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Secundário</th>
+              <th colspan="2" class="utbl-th-c"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>City Edition</th>
+              <th rowspan="2" style="vertical-align:middle">Pedido em</th>
+              ${canDel ? '<th rowspan="2" style="vertical-align:middle"></th>' : ''}
+            </tr>
+            <tr>
+              <th class="utbl-sub utbl-sub-p">Tam.</th><th class="utbl-sub utbl-sub-p">Status</th>
+              <th class="utbl-sub utbl-sub-s">Tam.</th><th class="utbl-sub utbl-sub-s">Status</th>
+              <th class="utbl-sub utbl-sub-c">Tam.</th><th class="utbl-sub utbl-sub-c">Status</th>
             </tr>
           </thead>
           <tbody>
             ${[...pedidos].sort((a,b)=>(a.num||0)-(b.num||0)).map(p => `
             <tr>
               <td style="font-weight:600">${p.jogadorNome}</td>
-              <td><span class="badge badge-blue">#${p.num||'—'}</span></td>
-              <td>${p.tamPrincipal ? `<span style="font-weight:700;color:var(--blue);font-size:14px">${p.tamPrincipal}</span>` : `<span style="color:var(--text3)">—</span>`}</td>
-              <td>${colStatus(p.tamPrincipal, p.statusPrincipal, p.id, 'principal')}</td>
-              <td>${p.tamSecundario ? `<span style="font-weight:700;color:#2ECC71;font-size:14px">${p.tamSecundario}</span>` : `<span style="color:var(--text3)">—</span>`}</td>
-              <td>${colStatus(p.tamSecundario, p.statusSecundario, p.id, 'secundario')}</td>
-              <td>${p.tamCity ? `<span style="font-weight:700;color:#F59E0B;font-size:14px">${p.tamCity}</span>` : `<span style="color:var(--text3)">—</span>`}</td>
-              <td>${colStatus(p.tamCity, p.statusCity, p.id, 'city')}</td>
-              <td style="color:var(--text2);font-size:12px">${fmt(p.dataPedido)}</td>
+              <td style="text-align:center"><span class="badge badge-blue">#${p.num||'—'}</span></td>
+              <td class="utbl-border-p">${tamCell(p.tamPrincipal,'utbl-tam-p')}</td>
+              <td>${sel(p.tamPrincipal,p.statusPrincipal,p.id,'principal')}</td>
+              <td class="utbl-border-s">${tamCell(p.tamSecundario,'utbl-tam-s')}</td>
+              <td>${sel(p.tamSecundario,p.statusSecundario,p.id,'secundario')}</td>
+              <td class="utbl-border-c">${tamCell(p.tamCity,'utbl-tam-c')}</td>
+              <td>${sel(p.tamCity,p.statusCity,p.id,'city')}</td>
+              <td class="utbl-date">${fmt(p.dataPedido)}</td>
               ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteUniformOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
             </tr>`).join('')}
           </tbody>
@@ -2866,149 +2893,316 @@ async function deleteUniformOrder(id) {
 // ==================== PDF EXPORT ====================
 function exportUniformesPDF() {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-  const today = new Date().toLocaleDateString('pt-BR');
+  const doc   = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const today = new Date().toLocaleDateString('pt-BR');
+  const userName = currentUser?.nome || 'Admin';
 
-  // ── Header ──────────────────────────────────────────────────────
-  doc.setFillColor(5, 11, 22);
-  doc.rect(0, 0, pageW, 22, 'F');
-  doc.setTextColor(77, 166, 255);
-  doc.setFontSize(16); doc.setFont('helvetica','bold');
-  doc.text('WHITE ROCK BASKETBALL', 14, 10);
-  doc.setFontSize(9); doc.setFont('helvetica','normal');
-  doc.setTextColor(174, 184, 199);
-  doc.text('Relatório de Pedidos de Uniforme — Temporada 2026', 14, 16);
-  doc.text(`Gerado em: ${today}`, pageW - 14, 16, { align: 'right' });
+  const COL_P = [45, 140, 255];
+  const COL_S = [46, 204, 113];
+  const COL_C = [245, 158, 11];
+  const DARK  = [13, 21, 38];
+  const DARK2 = [8, 18, 36];
+  const LIGHT = [244, 247, 251];
+  const GRAY  = [174, 184, 199];
 
-  let y = 30;
+  const TAMANHOS = ['PP','P','M','G','GG','XG'];
 
-  // ── Resumo ──────────────────────────────────────────────────────
-  const pedidos = cache.uniformes || [];
-  const ativos  = cache.jogadores.filter(j => j.status === 'Ativo');
-  const totalP  = pedidos.filter(p => p.tamPrincipal).length;
-  const totalS  = pedidos.filter(p => p.tamSecundario).length;
-  const totalC  = pedidos.filter(p => p.tamCity).length;
-  const pedNums = new Set(pedidos.map(p => p.num));
-  const semPed  = ativos.filter(j => !pedNums.has(j.num));
+  // ── Shared data ─────────────────────────────────────────────────
+  const pedidos  = cache.uniformes || [];
+  const fanPeds  = cache.pedidosTorcedor || [];
+  const ativos   = cache.jogadores.filter(j => j.status === 'Ativo');
+  const totalP   = pedidos.filter(p => p.tamPrincipal).length;
+  const totalS   = pedidos.filter(p => p.tamSecundario).length;
+  const totalC   = pedidos.filter(p => p.tamCity).length;
+  const pedNums  = new Set(pedidos.map(p => p.num));
+  const semPed   = ativos.filter(j => !pedNums.has(j.num));
 
-  doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(244, 247, 251);
-  doc.text('Resumo', 14, y); y += 6;
+  // ── Helper: page header band ─────────────────────────────────────
+  function addHeader(section) {
+    doc.setFillColor(5, 11, 22);
+    doc.rect(0, 0, pageW, 24, 'F');
+    // Blue accent left strip
+    doc.setFillColor(...COL_P);
+    doc.rect(0, 0, 4, 24, 'F');
+    doc.setTextColor(...COL_P);
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('WHITE ROCK BASKETBALL', 10, 10);
+    doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+    doc.setTextColor(...GRAY);
+    doc.text(section, 10, 18);
+    doc.text(`Gerado por ${userName} · ${today}`, pageW - 12, 18, { align: 'right' });
+    return 30;
+  }
 
-  const resumo = [
-    [`Ativos: ${ativos.length}`, `Principal: ${totalP}`, `Secundário: ${totalS}`, `City Edition: ${totalC}`, `Aguardando: ${semPed.length}`]
-  ];
+  // ── Helper: footer on all pages ──────────────────────────────────
+  function addFooters() {
+    const n = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= n; i++) {
+      doc.setPage(i);
+      doc.setDrawColor(30, 45, 70); doc.setLineWidth(0.25);
+      doc.line(10, pageH - 11, pageW - 10, pageH - 11);
+      doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+      doc.setTextColor(74, 90, 114);
+      doc.text('White Rock Basketball — Relatório de Uniformes · Temporada 2026', 10, pageH - 7);
+      doc.text(`Pág. ${i} / ${n}`, pageW - 10, pageH - 7, { align: 'right' });
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // PÁG 1 — RESUMO EXECUTIVO
+  // ════════════════════════════════════════════════════════════════
+  let y = addHeader('Página 1 — Resumo Executivo · Temporada 2026');
+
+  // KPI cards (5 cells as single row table)
   doc.autoTable({
-    startY: y, body: resumo,
-    styles: { fontSize: 9, fillColor: [13, 21, 38], textColor: [174, 184, 199], cellPadding: 3 },
-    columnStyles: { 0:{cellWidth:40}, 1:{cellWidth:40}, 2:{cellWidth:40}, 3:{cellWidth:44}, 4:{cellWidth:44} },
-    margin: { left: 14 },
+    startY: y,
+    body: [[
+      { content: `JOGADORES ATIVOS\n${ativos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: LIGHT } },
+      { content: `PRINCIPAL\n${totalP} / ${ativos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: COL_P } },
+      { content: `SECUNDÁRIO\n${totalS} / ${ativos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: COL_S } },
+      { content: `CITY EDITION\n${totalC} / ${ativos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: COL_C } },
+      { content: `AGUARDANDO\n${semPed.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: semPed.length ? [245,158,11] : [0,200,122] } },
+    ]],
+    styles: { fillColor: DARK, cellPadding: 6, halign: 'center', lineColor: [30,45,70], lineWidth: 0.3 },
+    columnStyles: { 0:{cellWidth:48}, 1:{cellWidth:48}, 2:{cellWidth:48}, 3:{cellWidth:52}, 4:{cellWidth:48} },
+    margin: { left: 10 },
   });
-  y = doc.lastAutoTable.finalY + 8;
+  y = doc.lastAutoTable.finalY + 10;
 
-  // ── Tabela de pedidos ───────────────────────────────────────────
-  doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(244, 247, 251);
-  doc.text(`Pedidos recebidos (${pedidos.length})`, 14, y); y += 4;
+  // Consolidation table by size
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(...LIGHT);
+  doc.text('Consolidação por tamanho', 10, y); y += 5;
 
-  const rows = [...pedidos]
-    .sort((a, b) => (a.num || 0) - (b.num || 0))
-    .map(p => [
-      p.num !== null && p.num !== undefined ? `#${p.num}` : '—',
-      p.jogadorNome || '—',
-      p.tamPrincipal || '—',
-      p.statusPrincipal || '—',
-      p.tamSecundario || '—',
-      p.statusSecundario || '—',
-      p.tamCity || '—',
-      p.statusCity || '—',
-      p.dataPedido ? new Date(p.dataPedido + 'T00:00:00').toLocaleDateString('pt-BR') : '—',
-    ]);
+  const sizeRows = TAMANHOS.map(tam => {
+    const cP = pedidos.filter(p => p.tamPrincipal === tam).length;
+    const cS = pedidos.filter(p => p.tamSecundario === tam).length;
+    const cC = pedidos.filter(p => p.tamCity === tam).length;
+    const tot = cP + cS + cC;
+    return [tam, cP || '—', cS || '—', cC || '—', tot || '—'];
+  }).filter(r => r[4] !== '—');
+
+  const totalRow = (() => {
+    const tP = TAMANHOS.reduce((s,t) => s + pedidos.filter(p=>p.tamPrincipal===t).length, 0);
+    const tS = TAMANHOS.reduce((s,t) => s + pedidos.filter(p=>p.tamSecundario===t).length, 0);
+    const tC = TAMANHOS.reduce((s,t) => s + pedidos.filter(p=>p.tamCity===t).length, 0);
+    return [{ content:'TOTAL', styles:{fontStyle:'bold',textColor:LIGHT} },
+            { content: tP, styles:{fontStyle:'bold',textColor:COL_P} },
+            { content: tS, styles:{fontStyle:'bold',textColor:COL_S} },
+            { content: tC, styles:{fontStyle:'bold',textColor:COL_C} },
+            { content: tP+tS+tC, styles:{fontStyle:'bold',textColor:LIGHT} }];
+  })();
 
   doc.autoTable({
     startY: y,
-    head: [['#', 'Jogador', 'Principal', 'Status P.', 'Secundário', 'Status S.', 'City', 'Status C.', 'Data']],
-    body: rows.length ? rows : [['—','Nenhum pedido recebido','','','','','','','']],
-    headStyles: { fillColor: [45, 140, 255], textColor: 255, fontStyle: 'bold', fontSize: 9 },
-    bodyStyles: { fillColor: [13, 21, 38], textColor: [244, 247, 251], fontSize: 9 },
-    alternateRowStyles: { fillColor: [8, 18, 36] },
-    columnStyles: {
-      0: { cellWidth: 12, halign: 'center' },
-      1: { cellWidth: 40 },
-      2: { cellWidth: 18, halign: 'center' },
-      3: { cellWidth: 26 },
-      4: { cellWidth: 18, halign: 'center' },
-      5: { cellWidth: 26 },
-      6: { cellWidth: 14, halign: 'center' },
-      7: { cellWidth: 26 },
-      8: { cellWidth: 22, halign: 'center' },
-    },
-    margin: { left: 14 },
+    head: [[
+      { content: 'Tamanho', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content: 'Principal', styles:{fontStyle:'bold',textColor:COL_P,fillColor:[20,35,70]} },
+      { content: 'Secundário', styles:{fontStyle:'bold',textColor:COL_S,fillColor:[15,45,30]} },
+      { content: 'City Edition', styles:{fontStyle:'bold',textColor:COL_C,fillColor:[40,30,10]} },
+      { content: 'Total', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    ]],
+    body: [...(sizeRows.length ? sizeRows : [['Sem pedidos','—','—','—','—']]), totalRow],
+    styles: { fontSize: 9, fillColor: DARK, textColor: GRAY, halign: 'center', cellPadding: 4, lineColor:[30,45,70], lineWidth:0.25 },
+    alternateRowStyles: { fillColor: DARK2 },
+    columnStyles: { 0:{cellWidth:24,halign:'center',fontStyle:'bold',textColor:LIGHT}, 1:{cellWidth:32}, 2:{cellWidth:32}, 3:{cellWidth:34}, 4:{cellWidth:28,fontStyle:'bold',textColor:LIGHT} },
+    margin: { left: 10 },
   });
-  y = doc.lastAutoTable.finalY + 8;
+  y = doc.lastAutoTable.finalY + 10;
 
-  // ── Sem pedido ──────────────────────────────────────────────────
+  // Missing players
   if (semPed.length) {
-    if (y > 170) { doc.addPage(); y = 20; }
-    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(245, 158, 11);
-    doc.text(`Jogadores sem pedido (${semPed.length})`, 14, y); y += 4;
+    doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(245, 158, 11);
+    doc.text(`⚠  Jogadores sem pedido (${semPed.length})`, 10, y); y += 5;
     doc.autoTable({
       startY: y,
-      head: [['#', 'Nome / Apelido', 'Posição', 'Status']],
+      head: [[ '#', 'Nome / Apelido', 'Posição', 'Status' ]],
       body: semPed.map(j => [`#${j.num}`, j.apelido || j.nome, j.pos, j.status]),
-      headStyles: { fillColor: [180, 100, 0], textColor: 255, fontStyle: 'bold', fontSize: 9 },
-      bodyStyles: { fillColor: [13, 21, 38], textColor: [244, 247, 251], fontSize: 9 },
-      alternateRowStyles: { fillColor: [8, 18, 36] },
-      columnStyles: { 0:{cellWidth:18,halign:'center'}, 1:{cellWidth:60}, 2:{cellWidth:40}, 3:{cellWidth:30} },
-      margin: { left: 14 },
+      headStyles: { fillColor: [80, 50, 5], textColor: COL_C, fontStyle:'bold', fontSize:8.5 },
+      bodyStyles: { fillColor: DARK, textColor: GRAY, fontSize: 8.5 },
+      alternateRowStyles: { fillColor: DARK2 },
+      columnStyles: { 0:{cellWidth:16,halign:'center'}, 1:{cellWidth:58}, 2:{cellWidth:40}, 3:{cellWidth:30} },
+      margin: { left: 10 },
     });
-    y = doc.lastAutoTable.finalY + 8;
+  } else {
+    doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(0, 200, 122);
+    doc.text('✓  Todos os jogadores ativos já fizeram seu pedido.', 10, y);
   }
 
-  // ── Pedidos de torcedores ───────────────────────────────────────
-  const fanPeds = cache.pedidosTorcedor || [];
-  if (fanPeds.length) {
-    if (y > 150) { doc.addPage(); y = 20; }
-    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(77, 166, 255);
-    doc.text(`Pedidos de Torcedores (${fanPeds.length})`, 14, y); y += 4;
-    doc.autoTable({
-      startY: y,
-      head: [['Código', 'Nome', 'WhatsApp', 'Modelo', 'Tam', 'Qtd', 'Personalização', 'Valor', 'Pagamento', 'Status', 'Data']],
-      body: [...fanPeds].sort((a,b) => b.id - a.id).map(p => [
-        p.codigo,
-        p.nome,
-        p.whatsapp,
-        p.modelo === 'principal' ? 'Principal' : 'Secundária',
-        p.tamanho,
-        p.quantidade,
-        [p.numCamisa !== null ? '#'+p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' ') || '—',
-        p.valor ? fmtBRL(p.valor) : '—',
-        p.pagamento,
-        p.status,
-        p.dataPedido ? new Date(p.dataPedido + 'T00:00:00').toLocaleDateString('pt-BR') : '—',
-      ]),
-      headStyles: { fillColor: [45, 140, 255], textColor: 255, fontStyle: 'bold', fontSize: 8 },
-      bodyStyles: { fillColor: [13, 21, 38], textColor: [244, 247, 251], fontSize: 8 },
-      alternateRowStyles: { fillColor: [8, 18, 36] },
-      columnStyles: {
-        0:{cellWidth:18}, 1:{cellWidth:36}, 2:{cellWidth:28},
-        3:{cellWidth:20,halign:'center'}, 4:{cellWidth:12,halign:'center'},
-        5:{cellWidth:10,halign:'center'}, 6:{cellWidth:28},
-        7:{cellWidth:18,halign:'right'}, 8:{cellWidth:20,halign:'center'},
-        9:{cellWidth:32}, 10:{cellWidth:20,halign:'center'},
-      },
-      margin: { left: 14 },
-    });
-  }
+  // ════════════════════════════════════════════════════════════════
+  // PÁG 2 — PEDIDOS DE JOGADORES
+  // ════════════════════════════════════════════════════════════════
+  doc.addPage();
+  y = addHeader(`Página 2 — Pedidos de Jogadores (${pedidos.length} pedidos)`);
 
-  // ── Rodapé ──────────────────────────────────────────────────────
-  const pageCount = doc.internal.getNumberOfPages();
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(74, 90, 114);
-    doc.text(`White Rock Basketball · ${today}`, 14, doc.internal.pageSize.getHeight() - 8);
-    doc.text(`Página ${i} de ${pageCount}`, pageW - 14, doc.internal.pageSize.getHeight() - 8, { align: 'right' });
-  }
+  const playerRows = [...pedidos]
+    .sort((a, b) => (a.num||0) - (b.num||0))
+    .map(p => [
+      p.num != null ? `#${p.num}` : '—',
+      p.jogadorNome || '—',
+      p.tamPrincipal  || '—',
+      p.statusPrincipal  || '—',
+      p.tamSecundario || '—',
+      p.statusSecundario || '—',
+      p.tamCity       || '—',
+      p.statusCity    || '—',
+      p.dataPedido ? new Date(p.dataPedido+'T00:00:00').toLocaleDateString('pt-BR') : '—',
+    ]);
 
+  const statusFill = (s) => {
+    if (s === 'Entregue')    return { fillColor:[5,35,20],  textColor:COL_S };
+    if (s === 'Em Produção') return { fillColor:[40,30,5],  textColor:COL_C };
+    return { fillColor: DARK, textColor: GRAY };
+  };
+
+  doc.autoTable({
+    startY: y,
+    head: [
+      [
+        { content:'Jogador',      rowSpan:2, styles:{valign:'middle',fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+        { content:'#',            rowSpan:2, styles:{valign:'middle',halign:'center',fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+        { content:'Principal',    colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_P,fillColor:[20,40,75]} },
+        { content:'Secundário',   colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_S,fillColor:[15,45,30]} },
+        { content:'City Edition', colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_C,fillColor:[45,30,10]} },
+        { content:'Pedido em',    rowSpan:2, styles:{valign:'middle',fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      ],
+      [
+        { content:'Tam.',   styles:{halign:'center',fontStyle:'bold',textColor:COL_P,fillColor:[15,35,70],fontSize:8} },
+        { content:'Status', styles:{halign:'center',fontStyle:'bold',textColor:COL_P,fillColor:[15,35,70],fontSize:8} },
+        { content:'Tam.',   styles:{halign:'center',fontStyle:'bold',textColor:COL_S,fillColor:[12,40,25],fontSize:8} },
+        { content:'Status', styles:{halign:'center',fontStyle:'bold',textColor:COL_S,fillColor:[12,40,25],fontSize:8} },
+        { content:'Tam.',   styles:{halign:'center',fontStyle:'bold',textColor:COL_C,fillColor:[40,28,8],fontSize:8} },
+        { content:'Status', styles:{halign:'center',fontStyle:'bold',textColor:COL_C,fillColor:[40,28,8],fontSize:8} },
+      ]
+    ],
+    body: playerRows.length ? playerRows : [['','Sem pedidos registrados','','','','','','','']],
+    styles: { fontSize: 8.5, fillColor: DARK, textColor: GRAY, lineColor:[25,40,65], lineWidth:0.25, cellPadding:3 },
+    alternateRowStyles: { fillColor: DARK2 },
+    columnStyles: {
+      0:{cellWidth:40}, 1:{cellWidth:13,halign:'center'},
+      2:{cellWidth:14,halign:'center',fontStyle:'bold',textColor:COL_P},
+      3:{cellWidth:26,halign:'center'},
+      4:{cellWidth:14,halign:'center',fontStyle:'bold',textColor:COL_S},
+      5:{cellWidth:26,halign:'center'},
+      6:{cellWidth:14,halign:'center',fontStyle:'bold',textColor:COL_C},
+      7:{cellWidth:26,halign:'center'},
+      8:{cellWidth:24,halign:'center'},
+    },
+    willDrawCell: (data) => {
+      if (data.section !== 'body') return;
+      const col = data.column.index;
+      const val = String(data.cell.raw || '');
+      if (col === 3 || col === 5 || col === 7) {
+        const s = statusFill(val);
+        data.cell.styles.fillColor  = s.fillColor;
+        data.cell.styles.textColor  = s.textColor;
+        data.cell.styles.fontStyle  = val === 'Entregue' ? 'bold' : 'normal';
+      }
+    },
+    margin: { left: 10 },
+  });
+
+  // ════════════════════════════════════════════════════════════════
+  // PÁG 3 — PEDIDOS DE TORCEDORES
+  // ════════════════════════════════════════════════════════════════
+  doc.addPage();
+  y = addHeader(`Página 3 — Pedidos de Torcedores (${fanPeds.length} pedidos)`);
+
+  // KPI cards
+  const fanTotal    = fanPeds.length;
+  const fanPend     = fanPeds.filter(p => !['Entregue','Cancelado'].includes(p.status)).length;
+  const fanEntr     = fanPeds.filter(p => p.status === 'Entregue').length;
+  const fanReceita  = fanPeds.filter(p => p.pagamento === 'Pago' && p.valor).reduce((s,p) => s + p.valor, 0);
+
+  doc.autoTable({
+    startY: y,
+    body: [[
+      { content:`TOTAL\n${fanTotal}`,               styles:{fontStyle:'bold',fontSize:9,textColor:COL_P} },
+      { content:`EM ANDAMENTO\n${fanPend}`,          styles:{fontStyle:'bold',fontSize:9,textColor:[245,158,11]} },
+      { content:`ENTREGUES\n${fanEntr}`,             styles:{fontStyle:'bold',fontSize:9,textColor:COL_S} },
+      { content:`RECEITA CONFIRMADA\n${fmtBRL(fanReceita)}`, styles:{fontStyle:'bold',fontSize:9,textColor:COL_S} },
+    ]],
+    styles: { fillColor:DARK, cellPadding:6, halign:'center', lineColor:[30,45,70], lineWidth:0.3 },
+    columnStyles: { 0:{cellWidth:52}, 1:{cellWidth:56}, 2:{cellWidth:52}, 3:{cellWidth:64} },
+    margin: { left: 10 },
+  });
+  y = doc.lastAutoTable.finalY + 10;
+
+  const fanStatusStyle = (s) => {
+    if (s === 'Entregue')            return { fillColor:[5,35,20],   textColor:COL_S };
+    if (s === 'Pagamento confirmado')return { fillColor:[5,35,20],   textColor:COL_S };
+    if (s === 'Em produção'||s==='Em personalização') return { fillColor:[25,15,40], textColor:[167,139,250] };
+    if (s === 'Pronto para entrega'||s==='Enviado')   return { fillColor:[5,30,40],  textColor:[34,211,238] };
+    if (s === 'Aguardando pagamento') return { fillColor:[40,30,5],  textColor:COL_C };
+    if (s === 'Cancelado')            return { fillColor:[40,10,10], textColor:[239,68,68] };
+    return { fillColor: DARK, textColor: GRAY };
+  };
+
+  const pagStyle = (p) => p === 'Pago'
+    ? { fillColor:[5,35,20], textColor:COL_S }
+    : { fillColor:[40,30,5], textColor:COL_C };
+
+  const fanRows = [...fanPeds].sort((a,b) => b.id - a.id).map(p => [
+    p.codigo,
+    p.nome,
+    p.whatsapp,
+    p.modelo === 'principal' ? 'Principal' : p.modelo === 'secundaria' ? 'Secundária' : 'City',
+    p.tamanho,
+    p.quantidade,
+    [p.numCamisa != null ? '#'+p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' ') || '—',
+    p.valor ? fmtBRL(p.valor) : '—',
+    p.pagamento,
+    p.status,
+    p.dataPedido ? new Date(p.dataPedido+'T00:00:00').toLocaleDateString('pt-BR') : '—',
+  ]);
+
+  doc.autoTable({
+    startY: y,
+    head: [[
+      { content:'Código',        styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Nome',          styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'WhatsApp',      styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Modelo',        styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Tam',           styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Qtd',           styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Personaliz.',   styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Valor',         styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Pagamento',     styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Status',        styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+      { content:'Data',          styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    ]],
+    body: fanRows.length ? fanRows : [['','Sem pedidos registrados','','','','','','','','','']],
+    styles: { fontSize:8, fillColor:DARK, textColor:GRAY, lineColor:[25,40,65], lineWidth:0.25, cellPadding:3 },
+    alternateRowStyles: { fillColor:DARK2 },
+    columnStyles: {
+      0:{cellWidth:18}, 1:{cellWidth:34}, 2:{cellWidth:27},
+      3:{cellWidth:18,halign:'center'}, 4:{cellWidth:11,halign:'center'},
+      5:{cellWidth:9,halign:'center'},  6:{cellWidth:26},
+      7:{cellWidth:20,halign:'right'},  8:{cellWidth:20,halign:'center'},
+      9:{cellWidth:36},                 10:{cellWidth:18,halign:'center'},
+    },
+    willDrawCell: (data) => {
+      if (data.section !== 'body') return;
+      const col = data.column.index;
+      const val = String(data.cell.raw || '');
+      if (col === 9) {
+        const s = fanStatusStyle(val);
+        data.cell.styles.fillColor = s.fillColor;
+        data.cell.styles.textColor = s.textColor;
+        if (val === 'Entregue') data.cell.styles.fontStyle = 'bold';
+      }
+      if (col === 8) {
+        const s = pagStyle(val);
+        data.cell.styles.fillColor = s.fillColor;
+        data.cell.styles.textColor = s.textColor;
+      }
+    },
+    margin: { left: 10 },
+  });
+
+  // ── Footers on all pages ────────────────────────────────────────
+  addFooters();
   doc.save(`WR_Uniformes_${today.replace(/\//g,'-')}.pdf`);
   toast('PDF gerado!');
 }
