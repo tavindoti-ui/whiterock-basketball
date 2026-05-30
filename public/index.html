@@ -475,7 +475,46 @@ select.form-input option{background:#0D1526;color:var(--text)}
   .login-box{padding:28px 18px}
   .pres-grid{grid-template-columns:1fr 1fr}
   .jersey-card{padding:18px}
+
+  /* Uniform cards — compact horizontal on mobile */
+  .unif-grid-mobile { display:flex !important; flex-direction:column; gap:12px; margin-bottom:20px !important; }
+  .unif-card-mobile { display:flex; gap:14px; align-items:flex-start; text-align:left; }
+  .unif-card-img    { flex-shrink:0; width:88px; cursor:pointer; }
+  .unif-card-img img{ width:88px; height:110px; object-fit:contain;
+                      filter:drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+                      transition:transform .18s; }
+  .unif-card-img:hover img{ transform:scale(1.06); }
+  .unif-card-body   { flex:1; min-width:0; padding-top:4px; }
 }
+/* Lightbox */
+#jersey-zoom{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,0.92);
+  align-items:center;justify-content:center;cursor:zoom-out;
+  animation:fadeIn .18s ease;
+}
+#jersey-zoom.open{ display:flex }
+#jersey-zoom img{
+  max-width:88vw;max-height:88vh;object-fit:contain;
+  border-radius:14px;
+  filter:drop-shadow(0 24px 60px rgba(0,0,0,0.8));
+  animation:zoomIn .2s ease;
+}
+#jersey-zoom-close{
+  position:absolute;top:18px;right:18px;
+  background:rgba(255,255,255,0.1);border:none;border-radius:50%;
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;cursor:pointer;transition:background .15s;
+}
+#jersey-zoom-close:hover{background:rgba(255,255,255,0.2)}
+#jersey-zoom-name{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;padding:6px 18px;font-size:13px;font-weight:700;color:#fff;
+  white-space:nowrap;
+}
+@keyframes zoomIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+
 @media(max-width:420px){
   .page{padding:8px}
   .nav{padding:0 8px}
@@ -2251,15 +2290,45 @@ function statusBadgeCls(s) {
   return 'badge-orange';
 }
 
-function unifImgBox(src, minH) {
-  return `<div style="width:100%;border-radius:10px;margin-bottom:16px;background:#070F1D;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:${minH||160}px">
-    <img src="${src}" style="max-width:100%;max-height:${minH?minH+60:220}px;object-fit:contain"
+function unifImgBox(src, minH, name) {
+  return `<div onclick="openJerseyZoom('${src}','${name||''}')"
+    style="width:100%;border-radius:10px;margin-bottom:16px;background:#070F1D;
+           display:flex;align-items:center;justify-content:center;overflow:hidden;
+           min-height:${minH||160}px;cursor:zoom-in;position:relative;transition:opacity .15s"
+    title="Clique para ampliar">
+    <img src="${src}" style="max-width:100%;max-height:${minH?minH+60:220}px;object-fit:contain;transition:transform .2s"
+      onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform=''"
       onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div style="display:none;flex-direction:column;align-items:center;gap:8px;padding:28px;color:var(--text2);font-size:12px">
       <i class="ti ti-photo-off" style="font-size:28px"></i>Indisponível
     </div>
+    <div style="position:absolute;bottom:6px;right:8px;background:rgba(0,0,0,0.5);
+                border-radius:6px;padding:3px 7px;font-size:10px;color:rgba(255,255,255,0.55);
+                pointer-events:none;display:flex;align-items:center;gap:4px">
+      <i class="ti ti-zoom-in" style="font-size:11px"></i> Ampliar
+    </div>
   </div>`;
 }
+
+function openJerseyZoom(src, name) {
+  const el = document.getElementById('jersey-zoom');
+  document.getElementById('jersey-zoom-img').src  = src;
+  document.getElementById('jersey-zoom-name').textContent = name || '';
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeJerseyZoom(e) {
+  if (e.target.id === 'jersey-zoom' || e.target.id === 'jersey-zoom-img') {
+    document.getElementById('jersey-zoom').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('jersey-zoom')?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
 
 function renderUniformes() {
   const el = document.getElementById('unif-content');
@@ -2289,66 +2358,78 @@ function renderUniformes() {
           <i class="ti ti-info-circle"></i> Selecione os uniformes que deseja e clique em <strong>Enviar pedido</strong>.
         </div>`}
 
-      <div class="grid3" style="margin-bottom:28px">
+      <div class="grid3 unif-grid-mobile" style="margin-bottom:28px">
 
         <!-- Uniforme Principal -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#4DA6FF"></div>
-          ${unifImgBox(UNIF_PRINCIPAL, 160)}
-          <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Uniforme Principal</div>
-          <div style="color:var(--blue);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
-          <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
-            <input type="checkbox" id="unif-check-principal" style="width:18px;height:18px;accent-color:var(--blue);cursor:pointer"
-              ${meu?.tamPrincipal ? 'checked' : ''} onchange="toggleUnifTam('principal')">
-            <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
-          </label>
-          <div id="unif-tam-principal-wrap" style="display:${meu?.tamPrincipal ? 'block' : 'none'}">
-            <label class="form-label">Tamanho</label>
-            <select class="form-input" id="unif-tam-principal">
-              ${TAMANHOS.map(t => `<option ${meu?.tamPrincipal===t?'selected':''}>${t}</option>`).join('')}
-            </select>
+          <div class="unif-card-mobile">
+            <div class="unif-card-img">${unifImgBox(UNIF_PRINCIPAL, 160, 'Principal')}</div>
+            <div class="unif-card-body">
+              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Principal</div>
+              <div style="color:var(--blue);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
+              <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+                <input type="checkbox" id="unif-check-principal" style="width:18px;height:18px;accent-color:var(--blue);cursor:pointer"
+                  ${meu?.tamPrincipal ? 'checked' : ''} onchange="toggleUnifTam('principal')">
+                <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
+              </label>
+              <div id="unif-tam-principal-wrap" style="display:${meu?.tamPrincipal ? 'block' : 'none'}">
+                <label class="form-label">Tamanho</label>
+                <select class="form-input" id="unif-tam-principal">
+                  ${TAMANHOS.map(t => `<option ${meu?.tamPrincipal===t?'selected':''}>${t}</option>`).join('')}
+                </select>
+              </div>
+              ${meu?.tamPrincipal ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusPrincipal)}">${meu.statusPrincipal}</span></div>` : ''}
+            </div>
           </div>
-          ${meu?.tamPrincipal ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusPrincipal)}">${meu.statusPrincipal}</span></div>` : ''}
         </div>
 
         <!-- Uniforme Secundário -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2ECC71"></div>
-          ${unifImgBox(UNIF_SECUNDARIO, 160)}
-          <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Uniforme Secundário</div>
-          <div style="color:#2ECC71;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
-          <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
-            <input type="checkbox" id="unif-check-secundario" style="width:18px;height:18px;accent-color:#2ECC71;cursor:pointer"
-              ${meu?.tamSecundario ? 'checked' : ''} onchange="toggleUnifTam('secundario')">
-            <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
-          </label>
-          <div id="unif-tam-secundario-wrap" style="display:${meu?.tamSecundario ? 'block' : 'none'}">
-            <label class="form-label">Tamanho</label>
-            <select class="form-input" id="unif-tam-secundario">
-              ${TAMANHOS.map(t => `<option ${meu?.tamSecundario===t?'selected':''}>${t}</option>`).join('')}
-            </select>
+          <div class="unif-card-mobile">
+            <div class="unif-card-img">${unifImgBox(UNIF_SECUNDARIO, 160, 'Secundário')}</div>
+            <div class="unif-card-body">
+              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Secundário</div>
+              <div style="color:#2ECC71;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
+              <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+                <input type="checkbox" id="unif-check-secundario" style="width:18px;height:18px;accent-color:#2ECC71;cursor:pointer"
+                  ${meu?.tamSecundario ? 'checked' : ''} onchange="toggleUnifTam('secundario')">
+                <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
+              </label>
+              <div id="unif-tam-secundario-wrap" style="display:${meu?.tamSecundario ? 'block' : 'none'}">
+                <label class="form-label">Tamanho</label>
+                <select class="form-input" id="unif-tam-secundario">
+                  ${TAMANHOS.map(t => `<option ${meu?.tamSecundario===t?'selected':''}>${t}</option>`).join('')}
+                </select>
+              </div>
+              ${meu?.tamSecundario ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusSecundario)}">${meu.statusSecundario}</span></div>` : ''}
+            </div>
           </div>
-          ${meu?.tamSecundario ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusSecundario)}">${meu.statusSecundario}</span></div>` : ''}
         </div>
 
         <!-- Uniforme City Edition -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#F59E0B"></div>
-          ${unifImgBox(UNIF_CITY, 160)}
-          <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">City Edition</div>
-          <div style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
-          <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
-            <input type="checkbox" id="unif-check-city" style="width:18px;height:18px;accent-color:#F59E0B;cursor:pointer"
-              ${meu?.tamCity ? 'checked' : ''} onchange="toggleUnifTam('city')">
-            <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
-          </label>
-          <div id="unif-tam-city-wrap" style="display:${meu?.tamCity ? 'block' : 'none'}">
-            <label class="form-label">Tamanho</label>
-            <select class="form-input" id="unif-tam-city">
-              ${TAMANHOS.map(t => `<option ${meu?.tamCity===t?'selected':''}>${t}</option>`).join('')}
-            </select>
+          <div class="unif-card-mobile">
+            <div class="unif-card-img">${unifImgBox(UNIF_CITY, 160, 'City Edition')}</div>
+            <div class="unif-card-body">
+              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">City Edition</div>
+              <div style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
+              <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
+                <input type="checkbox" id="unif-check-city" style="width:18px;height:18px;accent-color:#F59E0B;cursor:pointer"
+                  ${meu?.tamCity ? 'checked' : ''} onchange="toggleUnifTam('city')">
+                <span style="font-size:13px;font-weight:600">Quero este uniforme</span>
+              </label>
+              <div id="unif-tam-city-wrap" style="display:${meu?.tamCity ? 'block' : 'none'}">
+                <label class="form-label">Tamanho</label>
+                <select class="form-input" id="unif-tam-city">
+                  ${TAMANHOS.map(t => `<option ${meu?.tamCity===t?'selected':''}>${t}</option>`).join('')}
+                </select>
+              </div>
+              ${meu?.tamCity ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusCity)}">${meu.statusCity}</span></div>` : ''}
+            </div>
           </div>
-          ${meu?.tamCity ? `<div style="margin-top:12px"><span class="badge ${statusBadgeCls(meu.statusCity)}">${meu.statusCity}</span></div>` : ''}
         </div>
 
       </div>
@@ -2841,5 +2922,11 @@ if (loadSession()) {
 </script>
 
 
+<!-- JERSEY LIGHTBOX -->
+<div id="jersey-zoom" onclick="closeJerseyZoom(event)">
+  <button id="jersey-zoom-close" onclick="document.getElementById('jersey-zoom').classList.remove('open')"><i class="ti ti-x"></i></button>
+  <img id="jersey-zoom-img" src="" alt="">
+  <div id="jersey-zoom-name"></div>
+</div>
 </body>
 </html>
