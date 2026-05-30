@@ -114,7 +114,47 @@ body{
 .btn-logout:hover{background:rgba(239,68,68,.1);color:var(--danger);border-color:rgba(239,68,68,.3)}
 
 /* MOBILE NAV */
-.mobile-menu{display:none;flex-wrap:wrap;gap:6px;padding:10px 16px;background:var(--navy2);border-bottom:1px solid var(--border);overflow-x:auto}
+.mobile-menu{display:none}
+.mobile-tab{display:none}
+/* Bottom navigation */
+.bottom-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(5,11,22,0.97);border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bottom-nav-inner{display:flex;height:58px}
+.bottom-nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;border:none;background:transparent;color:var(--text3);
+  cursor:pointer;font-family:inherit;font-size:9px;font-weight:700;
+  letter-spacing:0.4px;text-transform:uppercase;transition:color .15s;
+  padding:4px 2px;min-width:0;
+}
+.bottom-nav-btn i{font-size:21px;transition:transform .15s}
+.bottom-nav-btn.active{color:var(--blue)}
+.bottom-nav-btn.active i{transform:translateY(-1px)}
+.bottom-nav-btn:not(.active):hover{color:var(--text2)}
+/* More sheet */
+.bottom-more-sheet{
+  display:none;position:fixed;bottom:58px;left:0;right:0;z-index:199;
+  background:rgba(8,18,36,0.98);border-top:1px solid var(--border);
+  padding:12px 16px;flex-wrap:wrap;gap:8px;
+  backdrop-filter:blur(20px);
+}
+.bottom-more-sheet.open{display:flex}
+.bottom-more-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:10px;border:1px solid var(--border);
+  background:transparent;color:var(--text2);font-family:inherit;
+  font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;flex:1;min-width:120px;
+}
+.bottom-more-btn.active{color:var(--blue);border-color:rgba(77,166,255,0.3);background:rgba(77,166,255,0.08)}
+.bottom-more-btn:hover{color:#fff;background:rgba(255,255,255,0.06)}
+@media(max-width:700px){
+  .bottom-nav{display:block}
+  #app{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
+}
 .mobile-tab{
   padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;
   border:1px solid var(--border);background:transparent;color:var(--text2);white-space:nowrap;transition:.17s;
@@ -528,6 +568,10 @@ select.form-input option{background:#0D1526;color:var(--text)}
   .grid3{grid-template-columns:1fr 1fr}
 }
 
+/* ==================== CONFIRM MODAL ==================== */
+.confirm-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px}
+.confirm-icon.danger{background:rgba(239,68,68,0.12);border:2px solid rgba(239,68,68,0.3);color:var(--danger)}
+.confirm-icon.warning{background:rgba(245,158,11,0.12);border:2px solid rgba(245,158,11,0.3);color:var(--warning)}
 /* ==================== SIDEBAR MINI + GROUPS ==================== */
 .nav-group-label{
   font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.8px;
@@ -662,6 +706,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
     <div class="sec-title" style="margin:0"><i class="ti ti-users"></i> Elenco</div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <input class="form-input" id="busca-jogador" placeholder="🔍 Nome, apelido ou nº..." style="width:190px;font-size:12px" oninput="renderJogadores()">
       <select class="form-input" style="width:auto;font-size:12px" id="filtro-status" onchange="renderJogadores()">
         <option value="">Todos</option>
         <option value="Ativo">Ativos</option>
@@ -1244,9 +1289,33 @@ function buildNav() {
   });
 
   document.getElementById('nav-tabs').innerHTML = html;
-  document.getElementById('mobile-menu').innerHTML = mobileTabs.map(t =>
-    `<button class="mobile-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')">${t.label}</button>`
-  ).join('');
+
+  // Bottom nav: first 4 tabs as icons + "Mais" for the rest
+  const PRIMARY_MAX = 4;
+  const primary = mobileTabs.slice(0, PRIMARY_MAX);
+  const overflow = mobileTabs.slice(PRIMARY_MAX);
+  const bnInner = document.getElementById('bottom-nav-inner');
+  if (bnInner) {
+    let bnHtml = primary.map(t =>
+      `<button class="bottom-nav-btn${t.id==='dashboard'?' active':''}" data-page="${t.id}" onclick="showPage('${t.id}')">
+        <i class="ti ${t.icon}"></i><span>${t.label}</span>
+      </button>`
+    ).join('');
+    if (overflow.length) {
+      bnHtml += `<button class="bottom-nav-btn" id="btn-more-nav" onclick="toggleMoreSheet()">
+        <i class="ti ti-dots"></i><span>Mais</span>
+      </button>`;
+    }
+    bnInner.innerHTML = bnHtml;
+  }
+  const moreSheet = document.getElementById('bottom-more-sheet');
+  if (moreSheet && overflow.length) {
+    moreSheet.innerHTML = overflow.map(t =>
+      `<button class="bottom-more-btn" data-page="${t.id}" onclick="showPage('${t.id}');toggleMoreSheet(false)">
+        <i class="ti ${t.icon}" style="font-size:16px"></i>${t.label}
+      </button>`
+    ).join('');
+  }
 
   // Show/hide role-specific buttons
   if (can(['admin','tecnico','capitao'])) {
@@ -1260,11 +1329,24 @@ function buildNav() {
   }
 }
 
+function toggleMoreSheet(forceClose) {
+  const sheet = document.getElementById('bottom-more-sheet');
+  if (!sheet) return;
+  const open = forceClose === false ? false : !sheet.classList.contains('open');
+  sheet.classList.toggle('open', open);
+  const btn = document.getElementById('btn-more-nav');
+  if (btn) btn.classList.toggle('active', open);
+}
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab,.mobile-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll(`[onclick*="showPage('${id}')"]`).forEach(t => t.classList.add('active'));
+  // Sync bottom nav
+  document.querySelectorAll('.bottom-nav-btn[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  document.querySelectorAll('.bottom-more-btn[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  toggleMoreSheet(false);
   const renders = { jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
@@ -1292,6 +1374,21 @@ async function loadAll() {
 
 // ==================== UTILS ====================
 function fmt(d) { if(!d) return '—'; const [y,m,dy]=d.split('-'); return `${dy}/${m}/${y}`; }
+function fmtBRL(v) { return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(+v||0); }
+
+function confirmAction(msg, onConfirm, { title='Confirmar', label='Confirmar', icon='ti-trash', type='danger' } = {}) {
+  document.getElementById('confirm-msg').textContent   = msg;
+  document.getElementById('confirm-title').textContent = title;
+  const iconEl = document.getElementById('confirm-icon');
+  iconEl.className = `ti ${icon}`;
+  document.getElementById('confirm-icon-wrap').className = `confirm-icon ${type}`;
+  const btn = document.getElementById('confirm-ok-btn');
+  btn.textContent = label;
+  btn.className   = `btn btn-${type}`;
+  btn.style.cssText = 'flex:1;justify-content:center';
+  btn.onclick = () => { closeModal('modal-confirm'); onConfirm(); };
+  openModal('modal-confirm');
+}
 function today() { return new Date().toISOString().split('T')[0]; }
 function isUpcoming(d) { return d >= today(); }
 function initials(n) { return n.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase(); }
@@ -1316,7 +1413,7 @@ function renderDashboard() {
     const ent = cache.financeiro.lancamentos.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
     const sai = cache.financeiro.lancamentos.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
     const saldo = ent - sai;
-    saldoHTML = `<div class="card"><div class="card-title">Saldo do caixa</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'};font-size:20px">R$ ${saldo}</div><div class="card-sub" style="color:var(--text2)">Entradas: R$ ${ent} / Saídas: R$ ${sai}</div></div>`;
+    saldoHTML = `<div class="card"><div class="card-title">Saldo do caixa</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'};font-size:20px">${fmtBRL(saldo)}</div><div class="card-sub" style="color:var(--text2)">Entradas: ${fmtBRL(ent)} / Saídas: ${fmtBRL(sai)}</div></div>`;
   }
 
   document.getElementById('dash-cards').innerHTML = `
@@ -1399,7 +1496,16 @@ function playerCardHTML(j, idx) {
 
 function renderJogadores() {
   const filtro = document.getElementById('filtro-status')?.value || '';
-  const lista = cache.jogadores.filter(j=>!filtro||j.status===filtro);
+  const busca  = (document.getElementById('busca-jogador')?.value || '').toLowerCase().trim();
+  const lista = cache.jogadores.filter(j => {
+    if (filtro && j.status !== filtro) return false;
+    if (busca) {
+      return j.nome.toLowerCase().includes(busca) ||
+             (j.apelido||'').toLowerCase().includes(busca) ||
+             String(j.num).includes(busca);
+    }
+    return true;
+  });
 
   const lesionados = cache.jogadores.filter(j=>j.status==='Lesão');
   const la = document.getElementById('lesao-alert');
@@ -1578,14 +1684,15 @@ async function saveEditJogador() {
 
 async function deleteJogador(id) {
   const j = cache.jogadores.find(x=>x.id===id);
-  if (!confirm(`Excluir ${j?.nome}? Esta ação não pode ser desfeita.`)) return;
-  const r = await api('DELETE','jogadores',{id});
-  if (r && r.success) {
-    cache.jogadores = cache.jogadores.filter(x=>x.id!==id);
-    closeModal('modal-jogador-detail');
-    renderJogadores(); renderDashboard();
-    toast('Jogador excluído!');
-  } else toast('Erro ao excluir','error');
+  confirmAction(`Excluir o jogador ${j?.apelido||j?.nome} permanentemente?`, async () => {
+    const r = await api('DELETE','jogadores',{id});
+    if (r && r.success) {
+      cache.jogadores = cache.jogadores.filter(x=>x.id!==id);
+      closeModal('modal-jogador-detail');
+      renderJogadores(); renderDashboard();
+      toast('Jogador excluído!');
+    } else toast('Erro ao excluir','error');
+  }, { title:'Excluir jogador', label:'Sim, excluir', icon:'ti-user-minus', type:'danger' });
 }
 
 // ==================== JOGOS ====================
@@ -1788,24 +1895,20 @@ async function saveEditJogo() {
 
 async function deleteJogo(id) {
   const j = cache.jogos.find(x=>x.id===id);
-  if (!confirm(`Excluir jogo vs ${j?.adv}? Esta ação não pode ser desfeita.`)) return;
-  const r = await api('DELETE','jogos',{id});
-  if (r && r.success) {
-    cache.jogos = cache.jogos.filter(x=>x.id!==id);
-    renderJogos(); renderDashboard();
-    toast('Jogo excluído!');
-  } else toast('Erro ao excluir jogo','error');
+  confirmAction(`Excluir o jogo vs ${j?.adv}?`, async () => {
+    const r = await api('DELETE','jogos',{id});
+    if (r && r.success) { cache.jogos = cache.jogos.filter(x=>x.id!==id); renderJogos(); renderDashboard(); toast('Jogo excluído!'); }
+    else toast('Erro ao excluir jogo','error');
+  }, { title:'Excluir jogo', label:'Sim, excluir', icon:'ti-trophy-off', type:'danger' });
 }
 
 async function deleteTreino(id) {
   const t = cache.treinos.find(x=>x.id===id);
-  if (!confirm(`Excluir treino "${t?.tipo}" de ${fmt(t?.data)}? Esta ação não pode ser desfeita.`)) return;
-  const r = await api('DELETE','treinos',{id});
-  if (r && r.success) {
-    cache.treinos = cache.treinos.filter(x=>x.id!==id);
-    renderTreinos(); renderDashboard();
-    toast('Treino excluído!');
-  } else toast('Erro ao excluir treino','error');
+  confirmAction(`Excluir o treino "${t?.tipo}" de ${fmt(t?.data)}?`, async () => {
+    const r = await api('DELETE','treinos',{id});
+    if (r && r.success) { cache.treinos = cache.treinos.filter(x=>x.id!==id); renderTreinos(); renderDashboard(); toast('Treino excluído!'); }
+    else toast('Erro ao excluir treino','error');
+  }, { title:'Excluir treino', label:'Sim, excluir', icon:'ti-calendar-off', type:'danger' });
 }
 
 // ==================== TREINOS ====================
@@ -1949,9 +2052,9 @@ function renderFinanceiro() {
   const inad = Object.keys(mens).length;
 
   document.getElementById('fin-cards').innerHTML = `
-    <div class="card"><div class="card-title">Saldo atual</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'}">R$ ${saldo}</div></div>
-    <div class="card"><div class="card-title">Entradas</div><div class="card-value" style="color:var(--success)">R$ ${ent}</div></div>
-    <div class="card"><div class="card-title">Saídas</div><div class="card-value" style="color:var(--danger)">R$ ${sai}</div></div>
+    <div class="card"><div class="card-title">Saldo atual</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'}; font-size:clamp(16px,3vw,24px)">${fmtBRL(saldo)}</div></div>
+    <div class="card"><div class="card-title">Entradas</div><div class="card-value" style="color:var(--success);font-size:clamp(16px,3vw,24px)">${fmtBRL(ent)}</div></div>
+    <div class="card"><div class="card-title">Saídas</div><div class="card-value" style="color:var(--danger);font-size:clamp(16px,3vw,24px)">${fmtBRL(sai)}</div></div>
     <div class="card"><div class="card-title">Inadimplentes</div><div class="card-value" style="color:var(--warning)">${inad}</div></div>
   `;
 
@@ -1960,7 +2063,7 @@ function renderFinanceiro() {
     <div class="fin-item">
       <div style="flex:1;min-width:0"><div style="font-size:13px">${f.desc}</div><div style="font-size:11px;color:var(--text2)">${fmt(f.data)} · ${f.cat}</div></div>
       <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
-        <span class="fin-val ${f.tipo}" style="font-size:14px;font-weight:600">${f.tipo==='entrada'?'+':'-'}R$ ${f.valor}</span>
+        <span class="fin-val ${f.tipo}" style="font-size:14px;font-weight:600">${f.tipo==='entrada'?'+':'-'}${fmtBRL(f.valor)}</span>
         ${canDelFin ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px" onclick="deleteLancamento(${f.id})" title="Excluir lançamento"><i class="ti ti-trash"></i></button>` : ''}
       </div>
     </div>
@@ -2003,23 +2106,25 @@ async function quitarMens(id) {
 
 async function deleteLancamento(id) {
   const f = cache.financeiro.lancamentos.find(x => x.id === id);
-  if (!confirm(`Excluir lançamento?\n\n"${f?.desc}" — R$ ${f?.valor}\n\nEsta ação não pode ser desfeita.`)) return;
-  const r = await api('DELETE','financeiro',{ id });
-  if (r && r.success) {
-    cache.financeiro.lancamentos = cache.financeiro.lancamentos.filter(x => x.id !== id);
-    renderFinanceiro(); renderDashboard();
-    toast('Lançamento excluído!');
-  } else toast('Erro ao excluir','error');
+  confirmAction(`Excluir "${f?.desc}" — ${fmtBRL(f?.valor)}?`, async () => {
+    const r = await api('DELETE','financeiro',{ id });
+    if (r && r.success) {
+      cache.financeiro.lancamentos = cache.financeiro.lancamentos.filter(x => x.id !== id);
+      renderFinanceiro(); renderDashboard();
+      toast('Lançamento excluído!');
+    } else toast('Erro ao excluir','error');
+  }, { title:'Excluir lançamento', label:'Sim, excluir', icon:'ti-receipt-off', type:'danger' });
 }
 
 async function zerarCaixa() {
-  if (!confirm('Zerar o caixa?\n\nTodos os lançamentos e mensalidades serão apagados permanentemente.\nEsta ação não pode ser desfeita.')) return;
-  const r = await api('DELETE','financeiro',{ zerarCaixa:true });
-  if (r && r.success) {
-    cache.financeiro = { lancamentos:[], mensalidades:{} };
-    renderFinanceiro(); renderDashboard();
-    toast('Caixa zerado!');
-  } else toast('Erro ao zerar caixa','error');
+  confirmAction('Apagar todos os lançamentos e mensalidades em aberto? Esta ação não pode ser desfeita.', async () => {
+    const r = await api('DELETE','financeiro',{ zerarCaixa:true });
+    if (r && r.success) {
+      cache.financeiro = { lancamentos:[], mensalidades:{} };
+      renderFinanceiro(); renderDashboard();
+      toast('Caixa zerado!');
+    } else toast('Erro ao zerar caixa','error');
+  }, { title:'Zerar caixa', label:'Sim, zerar tudo', icon:'ti-coin-off', type:'warning' });
 }
 
 // ==================== ESTATÍSTICAS ====================
@@ -2208,12 +2313,11 @@ async function saveEditUser() {
 
 async function deleteUser(id) {
   const u = cache.users.find(x=>x.id===id);
-  if (!confirm(`Excluir usuário "${u?.nome}" permanentemente? Esta ação não pode ser desfeita.`)) return;
-  const r = await api('DELETE','users',{id});
-  if (r && r.success) {
-    renderUsers();
-    toast('Usuário excluído!');
-  } else toast((r&&r.error)||'Erro ao excluir usuário','error');
+  confirmAction(`Excluir o usuário "${u?.nome}" permanentemente?`, async () => {
+    const r = await api('DELETE','users',{id});
+    if (r && r.success) { renderUsers(); toast('Usuário excluído!'); }
+    else toast((r&&r.error)||'Erro ao excluir usuário','error');
+  }, { title:'Excluir usuário', label:'Sim, excluir', icon:'ti-user-off', type:'danger' });
 }
 
 // ==================== LOG ====================
@@ -2270,13 +2374,11 @@ async function renderLog() {
 }
 
 async function clearLog() {
-  if (!confirm('Limpar todo o log de atividades? Esta ação não pode ser desfeita.')) return;
-  const r = await api('DELETE','log');
-  if (r && r.success) {
-    _logCache = [];
-    renderLog();
-    toast('Log limpo!');
-  } else toast('Erro ao limpar log','error');
+  confirmAction('Apagar todo o histórico de atividades? Esta ação não pode ser desfeita.', async () => {
+    const r = await api('DELETE','log');
+    if (r && r.success) { _logCache = []; renderLog(); toast('Log limpo!'); }
+    else toast('Erro ao limpar log','error');
+  }, { title:'Limpar log', label:'Sim, limpar', icon:'ti-clipboard-x', type:'warning' });
 }
 
 // ==================== UNIFORMES ====================
@@ -2614,7 +2716,7 @@ function buildFanOrdersSection(pedidos) {
       </div>
       <div class="card">
         <div class="card-title">Receita</div>
-        <div class="card-value" style="color:var(--success);font-size:18px">R$&nbsp;${receita.toFixed(2).replace('.',',')}</div>
+        <div class="card-value" style="color:var(--success);font-size:18px">${fmtBRL(receita)}</div>
         <div class="card-sub">pagamentos confirmados</div>
       </div>
     </div>
@@ -2709,13 +2811,11 @@ async function updateFanOrderField(id, field, value) {
 
 async function deleteFanOrder(id) {
   const p = cache.pedidosTorcedor.find(x => x.id === id);
-  if (!confirm(`Remover pedido ${p?.codigo} de ${p?.nome}?`)) return;
-  const r = await api('DELETE','pedidos-torcedor',{ id });
-  if (r && r.success) {
-    cache.pedidosTorcedor = cache.pedidosTorcedor.filter(x => x.id !== id);
-    renderUniformes();
-    toast('Pedido removido!');
-  } else toast('Erro ao remover','error');
+  confirmAction(`Remover pedido ${p?.codigo} de ${p?.nome}?`, async () => {
+    const r = await api('DELETE','pedidos-torcedor',{ id });
+    if (r && r.success) { cache.pedidosTorcedor = cache.pedidosTorcedor.filter(x => x.id !== id); renderUniformes(); toast('Pedido removido!'); }
+    else toast('Erro ao remover','error');
+  }, { title:'Remover pedido', label:'Sim, remover', icon:'ti-shirt-off', type:'danger' });
 }
 
 function toggleUnifTam(tipo) {
@@ -2756,13 +2856,11 @@ async function updateOrderStatus(id, tipo, status) {
 
 async function deleteUniformOrder(id) {
   const p = cache.uniformes.find(x => x.id === id);
-  if (!confirm(`Remover pedido de ${p?.jogadorNome}?`)) return;
-  const r = await api('DELETE','uniformes',{ id });
-  if (r && r.success) {
-    cache.uniformes = cache.uniformes.filter(x => x.id !== id);
-    renderUniformes();
-    toast('Pedido removido!');
-  } else toast('Erro ao remover','error');
+  confirmAction(`Remover pedido de uniforme de ${p?.jogadorNome}?`, async () => {
+    const r = await api('DELETE','uniformes',{ id });
+    if (r && r.success) { cache.uniformes = cache.uniformes.filter(x => x.id !== id); renderUniformes(); toast('Pedido removido!'); }
+    else toast('Erro ao remover','error');
+  }, { title:'Remover pedido', label:'Sim, remover', icon:'ti-shirt-off', type:'danger' });
 }
 
 // ==================== PDF EXPORT ====================
@@ -2883,7 +2981,7 @@ function exportUniformesPDF() {
         p.tamanho,
         p.quantidade,
         [p.numCamisa !== null ? '#'+p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' ') || '—',
-        p.valor ? `R$ ${Number(p.valor).toFixed(2)}` : '—',
+        p.valor ? fmtBRL(p.valor) : '—',
         p.pagamento,
         p.status,
         p.dataPedido ? new Date(p.dataPedido + 'T00:00:00').toLocaleDateString('pt-BR') : '—',
@@ -2921,6 +3019,25 @@ if (loadSession()) {
 }
 </script>
 
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-inner" id="bottom-nav-inner"></div>
+</nav>
+<div class="bottom-more-sheet" id="bottom-more-sheet"></div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div id="confirm-icon-wrap" class="confirm-icon danger"><i id="confirm-icon" class="ti ti-trash"></i></div>
+    <div id="confirm-title" style="font-size:17px;font-weight:800;color:#fff;margin-bottom:8px">Confirmar ação</div>
+    <div id="confirm-msg"  style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px"></div>
+    <div style="display:flex;gap:8px">
+      <button id="confirm-ok-btn" class="btn btn-danger" style="flex:1;justify-content:center">Excluir</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal('modal-confirm')">Cancelar</button>
+    </div>
+  </div>
+</div>
 
 <!-- JERSEY LIGHTBOX -->
 <div id="jersey-zoom" onclick="closeJerseyZoom(event)">
