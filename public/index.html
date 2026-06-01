@@ -909,7 +909,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
-      <div class="circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://drive.google.com/uc?export=view&id=1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
+      <div class="circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
       <h1>White Rock</h1>
       <p>Basketball · Sistema de Gestão</p>
     </div>
@@ -936,7 +936,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <!-- NAV DESKTOP -->
 <nav class="nav">
   <div class="nav-logo" onclick="showPage('dashboard')">
-    <div class="logo-circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://drive.google.com/uc?export=view&id=1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
+    <div class="logo-circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
     <div class="nav-title">White Rock <span id="nav-role-label">Basketball</span></div>
     <button class="sidebar-toggle" onclick="event.stopPropagation();toggleSidebar()" title="Recolher sidebar"><i class="ti ti-layout-sidebar-left-collapse" id="sidebar-toggle-icon"></i></button>
   </div>
@@ -1700,7 +1700,7 @@ function calcAge(dataNasc) {
 const _presenceConfirmed = new Set();
 
 function renderDashboard() {
-  const LOGO = 'https://drive.google.com/uc?export=view&id=1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz';
+  const LOGO = 'https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz';
   const todayStr = today();
 
   // ── Base data ──────────────────────────────────────────────────
@@ -1861,15 +1861,15 @@ function renderDashboard() {
     const widgets = [
       () => {
         const top = [...ativos].sort((a,b)=>b.presenca-a.presenca)[0];
-        return top ? { icon:'ti-percentage', color:'#8B5CF6', label:'Maior frequência', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.presenca}% de presença nos treinos` } : null;
+        return top ? { icon:'ti-percentage', color:'#8B5CF6', label:'Maior frequência', val: (top.apelido||top.nome.split(' ')[0]), num: top.num, sub: `${top.presenca}% de presença nos treinos` } : null;
       },
       () => {
         const top = [...cache.jogadores].filter(j=>j.pts>0).sort((a,b)=>b.pts-a.pts)[0];
-        return top ? { icon:'ti-basketball', color:'var(--blue)', label:'Top pontuador', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.pts} pontos na temporada` } : null;
+        return top ? { icon:'ti-basketball', color:'var(--blue)', label:'Top pontuador', val: (top.apelido||top.nome.split(' ')[0]), num: top.num, sub: `${top.pts} pontos na temporada` } : null;
       },
       () => {
         const top = [...cache.jogadores].filter(j=>j.ast>0).sort((a,b)=>b.ast-a.ast)[0];
-        return top ? { icon:'ti-arrows-shuffle', color:'var(--success)', label:'Mais assistências', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.ast} assistências` } : null;
+        return top ? { icon:'ti-arrows-shuffle', color:'var(--success)', label:'Mais assistências', val: (top.apelido||top.nome.split(' ')[0]), num: top.num, sub: `${top.ast} assistências` } : null;
       },
       () => {
         const wins = cache.jogos.filter(j=>j.wr!==null&&j.wr>j.advPl).length;
@@ -1890,7 +1890,10 @@ function renderDashboard() {
             <i class="ti ${widget.icon}"></i>
           </div>
           <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">${widget.label}</div>
-          <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-0.5px">${widget.val}</div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px">${widget.val}</div>
+            ${widget.num != null ? `<div style="font-size:13px;font-weight:700;color:var(--blue)">#${widget.num}</div>` : ''}
+          </div>
           <div style="font-size:12px;color:var(--text2)">${widget.sub}</div>
         </div>`;
     } else {
