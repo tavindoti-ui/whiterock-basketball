@@ -457,13 +457,38 @@ select.form-input option{background:#0D1526;color:var(--text)}
 
 .aviso-card{
   background:linear-gradient(160deg,#0D1526 0%,#081224 100%);
-  border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;
-  box-shadow:var(--card-shadow);
+  border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px;
+  box-shadow:var(--card-shadow);transition:border-color .2s;
 }
+.aviso-card:hover{border-color:rgba(77,166,255,0.2)}
+.aviso-img{
+  width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
+  border-bottom:1px solid var(--border);
+  transition:transform .3s ease;cursor:pointer;
+}
+.aviso-card:hover .aviso-img{transform:scale(1.01)}
+.aviso-inner{padding:16px}
 .aviso-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .aviso-title{font-size:14px;font-weight:700;color:#fff;letter-spacing:0.2px}
 .aviso-body{font-size:13px;color:var(--text2);line-height:1.6}
 .aviso-meta{font-size:11px;color:var(--text3);margin-top:8px;letter-spacing:0.3px}
+/* Dashboard art banner */
+.dash-art-banner{
+  position:relative;border-radius:16px;overflow:hidden;margin-bottom:22px;cursor:pointer;
+  border:1px solid rgba(77,166,255,0.14);box-shadow:var(--card-shadow);
+}
+.dash-art-banner img{
+  width:100%;max-height:320px;object-fit:cover;display:block;
+  transition:transform .4s ease;
+}
+.dash-art-banner:hover img{transform:scale(1.015)}
+.dash-art-overlay{
+  position:absolute;bottom:0;left:0;right:0;padding:16px 20px;
+  background:linear-gradient(transparent,rgba(5,11,22,0.88));
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+}
+.dash-art-title{font-size:15px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
+.dash-art-meta{font-size:11px;color:rgba(255,255,255,0.6)}
 
 .stat-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .stat-name{font-size:13px;color:var(--text);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
@@ -960,6 +985,9 @@ body.sidebar-mini .btn-logout{justify-content:center}
   <!-- 1. HERO: Próximo Jogo -->
   <div id="dash-hero"></div>
 
+  <!-- Art banner (latest notice with image) -->
+  <div id="dash-art-banner"></div>
+
   <!-- 2. KPI Cards -->
   <div class="grid4" id="dash-cards" style="margin-bottom:22px"></div>
 
@@ -1239,12 +1267,17 @@ body.sidebar-mini .btn-logout{justify-content:center}
   <div class="modal">
     <div class="modal-title">Publicar aviso <button class="modal-close" onclick="closeModal('modal-add-aviso')"><i class="ti ti-x"></i></button></div>
     <div class="form-group"><label class="form-label">Título *</label><input class="form-input" id="av-titulo" placeholder="Ex: Treino cancelado"></div>
-    <div class="form-group"><label class="form-label">Mensagem *</label><textarea class="form-input" id="av-msg" rows="4" placeholder="Descreva o aviso..."></textarea></div>
+    <div class="form-group"><label class="form-label">Mensagem *</label><textarea class="form-input" id="av-msg" rows="3" placeholder="Descreva o aviso..."></textarea></div>
     <div class="form-group"><label class="form-label">Tipo</label>
       <select class="form-input" id="av-tipo"><option value="info">Informativo</option><option value="warning">Atenção</option><option value="danger">Urgente</option></select>
     </div>
+    <div class="form-group">
+      <label class="form-label"><i class="ti ti-photo" style="color:var(--blue)"></i> Arte / Imagem <span style="color:var(--text3);font-weight:400;font-size:10px">(opcional — cole o link do Google Drive ou Imgur)</span></label>
+      <input class="form-input" id="av-imagem" placeholder="https://drive.google.com/file/d/... ou https://i.imgur.com/...">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px"><i class="ti ti-info-circle"></i> Cole o link de compartilhamento do Drive ou qualquer URL direta de imagem (1920×1080 recomendado)</div>
+    </div>
     <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addAviso()">Publicar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="addAviso()"><i class="ti ti-send"></i> Publicar</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-aviso')">Cancelar</button>
     </div>
   </div>
@@ -1982,6 +2015,31 @@ function renderDashboard() {
       <div class="stat-bar-wrap"><div class="stat-bar" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
       <div class="stat-val" style="color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</div>
     </div>`).join('');
+
+  // ── Art banner (latest aviso com imagem) ───────────────────────
+  const bannerEl = document.getElementById('dash-art-banner');
+  if (bannerEl) {
+    const featured = cache.avisos.find(a => a.imagem);
+    if (featured) {
+      const cor = featured.tipo==='danger'?'var(--danger)':featured.tipo==='warning'?'var(--warning)':'var(--blue)';
+      const bdg = featured.tipo==='danger'?'badge-red':featured.tipo==='warning'?'badge-orange':'badge-blue';
+      const lbl = featured.tipo==='danger'?'Urgente':featured.tipo==='warning'?'Atenção':'Info';
+      bannerEl.innerHTML = `
+        <div class="dash-art-banner" onclick="openJerseyZoom('${featured.imagem}','${featured.titulo.replace(/'/g,'\\\'')}')" title="Clique para ampliar">
+          <img src="${featured.imagem}" alt="${featured.titulo}"
+            onerror="this.closest('.dash-art-banner').style.display='none'">
+          <div class="dash-art-overlay">
+            <div>
+              <div class="dash-art-title"><i class="ti ti-bell" style="margin-right:5px;color:${cor}"></i>${featured.titulo}</div>
+              <div class="dash-art-meta">${featured.autor||'Admin'} · ${fmt(featured.data)}</div>
+            </div>
+            <span class="badge ${bdg}">${lbl}</span>
+          </div>
+        </div>`;
+    } else {
+      bannerEl.innerHTML = '';
+    }
+  }
 }
 
 function confirmHeroPresence(data, adv, btn) {
@@ -2742,31 +2800,69 @@ function renderStats() {
 
 // ==================== AVISOS ====================
 function renderAvisos() {
+  const cor  = a => a.tipo==='danger'?'var(--danger)':a.tipo==='warning'?'var(--warning)':'var(--blue)';
+  const bdg  = a => a.tipo==='danger'?'badge-red':a.tipo==='warning'?'badge-orange':'badge-blue';
+  const bdgl = a => a.tipo==='danger'?'Urgente':a.tipo==='warning'?'Atenção':'Info';
+  const canDel = can(['admin','tecnico','capitao']);
+
   document.getElementById('avisos-lista').innerHTML = cache.avisos.length
     ? cache.avisos.map(a=>`
-      <div class="aviso-card" style="border-left:3px solid ${a.tipo==='danger'?'var(--danger)':a.tipo==='warning'?'var(--warning)':'var(--blue)'}">
-        <div class="aviso-top">
-          <div class="aviso-title">${a.titulo}</div>
-          <span class="badge ${a.tipo==='danger'?'badge-red':a.tipo==='warning'?'badge-orange':'badge-blue'}">${a.tipo==='danger'?'Urgente':a.tipo==='warning'?'Atenção':'Info'}</span>
+      <div class="aviso-card" style="border-left:4px solid ${cor(a)}">
+        ${a.imagem ? `
+          <img class="aviso-img" src="${a.imagem}" alt="${a.titulo}"
+            onclick="openJerseyZoom('${a.imagem}','${a.titulo.replace(/'/g,'\\\'')}')"
+            onerror="this.style.display='none'">` : ''}
+        <div class="aviso-inner">
+          <div class="aviso-top">
+            <div class="aviso-title">${a.titulo}</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+              <span class="badge ${bdg(a)}">${bdgl(a)}</span>
+              ${canDel ? `<button class="btn btn-danger btn-sm" style="padding:3px 7px" onclick="deleteAviso(${a.id})"><i class="ti ti-trash"></i></button>` : ''}
+            </div>
+          </div>
+          <div class="aviso-body">${a.msg}</div>
+          <div class="aviso-meta"><i class="ti ti-user"></i> ${a.autor||'Admin'} · <i class="ti ti-clock"></i> ${fmt(a.data)}</div>
         </div>
-        <div class="aviso-body">${a.msg}</div>
-        <div class="aviso-meta"><i class="ti ti-user"></i> ${a.autor||'Admin'} · <i class="ti ti-clock"></i> ${fmt(a.data)}</div>
-      </div>
-    `).join('')
+      </div>`).join('')
     : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum aviso publicado.</div>';
 }
 
+async function deleteAviso(id) {
+  const a = cache.avisos.find(x => x.id === id);
+  confirmAction(`Excluir o aviso "${a?.titulo}"?`, async () => {
+    const r = await api('DELETE','avisos',{ id });
+    if (r && r.success) {
+      cache.avisos = cache.avisos.filter(x => x.id !== id);
+      renderAvisos(); renderDashboard();
+      toast('Aviso excluído!');
+    } else toast('Erro ao excluir','error');
+  }, { title:'Excluir aviso', label:'Sim, excluir', icon:'ti-bell-off', type:'danger' });
+}
+
+function driveUrlToImg(url) {
+  if (!url) return null;
+  url = url.trim();
+  // Convert Drive share link → direct embed URL
+  const m = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+  // Already a direct URL — return as-is
+  return url;
+}
+
 async function addAviso() {
-  const titulo = document.getElementById('av-titulo').value.trim();
-  const msg = document.getElementById('av-msg').value.trim();
+  const titulo  = document.getElementById('av-titulo').value.trim();
+  const msg     = document.getElementById('av-msg').value.trim();
+  const rawImg  = document.getElementById('av-imagem').value.trim();
+  const imagem  = driveUrlToImg(rawImg) || null;
   if (!titulo || !msg) { toast('Preencha título e mensagem','error'); return; }
-  const r = await api('POST','avisos',{ titulo, msg, tipo:document.getElementById('av-tipo').value });
+  const r = await api('POST','avisos',{ titulo, msg, tipo:document.getElementById('av-tipo').value, imagem });
   if (r && r.id) {
     cache.avisos.unshift(r);
     closeModal('modal-add-aviso');
     renderAvisos();
+    renderDashboard();
     toast('Aviso publicado!');
-    ['av-titulo','av-msg'].forEach(id=>document.getElementById(id).value='');
+    ['av-titulo','av-msg','av-imagem'].forEach(id=>document.getElementById(id).value='');
   } else toast('Erro ao publicar','error');
 }
 
