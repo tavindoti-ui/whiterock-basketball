@@ -1832,14 +1832,17 @@ function renderDashboard() {
   const statsEl = document.getElementById('dash-top-stats');
   if (statsEl) {
     const medals = ['🥇','🥈','🥉'];
-    const byPts = [...cache.jogadores].sort((a,b)=>b.pts-a.pts).slice(0,3);
-    const byAst = [...cache.jogadores].sort((a,b)=>b.ast-a.ast).slice(0,3);
-    const mkRows = (list, key) => list.map((j,i) => `
-      <div class="top-rank-item">
-        <span class="rank-medal">${medals[i]}</span>
-        <span class="rank-name">${j.apelido||j.nome.split(' ')[0]}</span>
-        <span class="rank-val">${j[key]}</span>
-      </div>`).join('');
+    const comStats = j => j.pts > 0 || j.reb > 0 || j.ast > 0;
+    const byPts = [...cache.jogadores].filter(j => j.pts > 0).sort((a,b)=>b.pts-a.pts).slice(0,3);
+    const byAst = [...cache.jogadores].filter(j => j.ast > 0).sort((a,b)=>b.ast-a.ast).slice(0,3);
+    const mkRows = (list, key) => list.length
+      ? list.map((j,i) => `
+          <div class="top-rank-item">
+            <span class="rank-medal">${medals[i]}</span>
+            <span class="rank-name">${j.apelido||j.nome.split(' ')[0]}</span>
+            <span class="rank-val">${j[key]}</span>
+          </div>`).join('')
+      : `<div style="color:var(--text3);font-size:12px;padding:4px 0">Sem dados ainda</div>`;
     statsEl.innerHTML = `
       <div class="card" style="height:100%">
         <div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px">
@@ -1861,11 +1864,11 @@ function renderDashboard() {
         return top ? { icon:'ti-percentage', color:'#8B5CF6', label:'Maior frequência', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.presenca}% de presença nos treinos` } : null;
       },
       () => {
-        const top = [...cache.jogadores].sort((a,b)=>b.pts-a.pts)[0];
+        const top = [...cache.jogadores].filter(j=>j.pts>0).sort((a,b)=>b.pts-a.pts)[0];
         return top ? { icon:'ti-basketball', color:'var(--blue)', label:'Top pontuador', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.pts} pontos na temporada` } : null;
       },
       () => {
-        const top = [...cache.jogadores].sort((a,b)=>b.ast-a.ast)[0];
+        const top = [...cache.jogadores].filter(j=>j.ast>0).sort((a,b)=>b.ast-a.ast)[0];
         return top ? { icon:'ti-arrows-shuffle', color:'var(--success)', label:'Mais assistências', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.ast} assistências` } : null;
       },
       () => {
@@ -2723,7 +2726,7 @@ function renderStats() {
   }
 
   const jogosReais = cache.jogos.filter(j => !isUpcoming(j.data)).length;
-  document.getElementById('stats-tbl').innerHTML = [...cache.jogadores].sort((a,b)=>b.pts-a.pts).map(j=>`
+  document.getElementById('stats-tbl').innerHTML = [...cache.jogadores].filter(j=>j.pts>0||j.reb>0||j.ast>0||j.tpt>0||j.flt>0).sort((a,b)=>b.pts-a.pts).map(j=>`
     <tr>
       <td style="color:var(--text2)">#${j.num}</td>
       <td style="font-weight:500">${j.apelido||j.nome.split(' ')[0]}</td>
