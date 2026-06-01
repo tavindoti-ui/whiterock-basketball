@@ -38,6 +38,32 @@ body{
   min-height:100vh;-webkit-font-smoothing:antialiased;
 }
 
+/* ══ ROCK TEXTURE ═══════════════════════════════════════════════
+   Cracks, particles and mountain silhouette — all z-index:0,
+   pointer-events:none, very low opacity so they never distract. */
+
+/* Crack lines */
+.rock-crack{position:fixed;pointer-events:none;z-index:0}
+.rock-crack-1{top:0;right:0;width:320px;height:420px}
+.rock-crack-2{bottom:60px;left:0;width:260px;height:380px;opacity:.7}
+
+/* Mountains */
+.rock-mountains{position:fixed;bottom:0;left:0;right:0;height:220px;pointer-events:none;z-index:0}
+@media(max-width:700px){.rock-mountains{height:120px}}
+
+/* Particles */
+.rock-particle{
+  position:fixed;border-radius:50%;background:rgba(77,166,255,1);
+  pointer-events:none;z-index:0;
+  animation:rp-float var(--rp-dur,10s) ease-in-out infinite var(--rp-del,0s);
+}
+@keyframes rp-float{
+  0%,100%{transform:translate(0,0) scale(1);opacity:var(--rp-op,.3)}
+  33%{transform:translate(var(--rp-x,8px),calc(var(--rp-y,-18px)));scale(1.3);opacity:calc(var(--rp-op,.3)*1.8)}
+  66%{transform:translate(calc(var(--rp-x,8px)*-.6),calc(var(--rp-y,-18px)*.5));scale(.8);opacity:calc(var(--rp-op,.3)*.6)}
+}
+@media(prefers-reduced-motion:reduce){.rock-particle,.rock-crack{display:none}}
+
 /* ══ BACKGROUND ANIMATED ORBS ══════════════════════════════════ */
 .bg-orb{
   position:fixed;border-radius:50%;pointer-events:none;z-index:0;
@@ -931,6 +957,74 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
 <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
 <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
+
+<!-- ══ ROCK TEXTURE ELEMENTS ══════════════════════════════════════ -->
+
+<!-- Crack 1 — top right corner -->
+<svg class="rock-crack rock-crack-1" aria-hidden="true"
+     viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+  <!-- main fracture -->
+  <path d="M295,0 L248,72 L270,108 L218,178 L244,224 L188,308 L210,358 L172,420"
+    stroke="rgba(77,166,255,0.09)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- branch 1 -->
+  <path d="M248,72 L290,86 L308,70"
+    stroke="rgba(77,166,255,0.055)" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- branch 2 -->
+  <path d="M218,178 L258,172 L278,185 L265,210"
+    stroke="rgba(77,166,255,0.045)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+  <!-- branch 3 -->
+  <path d="M188,308 L155,316 L162,348"
+    stroke="rgba(77,166,255,0.04)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <!-- hairline secondary -->
+  <path d="M270,108 L305,118"
+    stroke="rgba(77,166,255,0.03)" stroke-width="0.7" fill="none"/>
+  <path d="M244,224 L275,232 L285,250"
+    stroke="rgba(77,166,255,0.035)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+</svg>
+
+<!-- Crack 2 — bottom left corner -->
+<svg class="rock-crack rock-crack-2" aria-hidden="true"
+     viewBox="0 0 260 380" xmlns="http://www.w3.org/2000/svg">
+  <path d="M18,380 L55,308 L32,272 L78,198 L52,148 L95,72 L70,24 L98,0"
+    stroke="rgba(77,166,255,0.07)" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M55,308 L22,296 L10,315"
+    stroke="rgba(77,166,255,0.04)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+  <path d="M78,198 L108,194 L120,208"
+    stroke="rgba(77,166,255,0.04)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <path d="M95,72 L125,68 L135,50"
+    stroke="rgba(77,166,255,0.035)" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+</svg>
+
+<!-- Mountain silhouette — bottom of screen -->
+<svg class="rock-mountains" aria-hidden="true"
+     viewBox="0 0 1440 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+  <!-- back range (darker, lower) -->
+  <polygon points="0,220 180,140 360,220"   fill="rgba(45,140,255,0.03)"/>
+  <polygon points="240,220 480,90 720,220"  fill="rgba(45,140,255,0.025)"/>
+  <polygon points="550,220 760,110 970,220" fill="rgba(45,140,255,0.03)"/>
+  <polygon points="840,220 1060,80 1280,220" fill="rgba(45,140,255,0.028)"/>
+  <polygon points="1150,220 1340,130 1440,220 1440,220 1150,220" fill="rgba(45,140,255,0.025)"/>
+  <!-- front range (slightly brighter) -->
+  <polygon points="0,220 100,175 240,220"   fill="rgba(77,166,255,0.038)"/>
+  <polygon points="160,220 330,148 500,220" fill="rgba(77,166,255,0.032)"/>
+  <polygon points="400,220 600,130 800,220" fill="rgba(77,166,255,0.042)"/>
+  <polygon points="680,220 880,155 1080,220" fill="rgba(77,166,255,0.035)"/>
+  <polygon points="980,220 1140,160 1300,220" fill="rgba(77,166,255,0.038)"/>
+  <polygon points="1200,220 1350,145 1440,220" fill="rgba(77,166,255,0.03)"/>
+  <!-- subtle ridge outlines -->
+  <polyline points="0,220 100,175 240,220 330,148 500,220 600,130 800,220 880,155 1080,220 1140,160 1300,220 1440,170 1440,220"
+    fill="none" stroke="rgba(77,166,255,0.06)" stroke-width="1"/>
+</svg>
+
+<!-- Floating particles -->
+<div class="rock-particle" style="width:2px;height:2px;top:18%;left:22%;--rp-op:.35;--rp-dur:11s;--rp-del:0s;--rp-x:10px;--rp-y:-22px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:3px;height:3px;top:35%;left:68%;--rp-op:.25;--rp-dur:14s;--rp-del:-4s;--rp-x:-12px;--rp-y:-18px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:2px;height:2px;top:55%;left:40%;--rp-op:.2;--rp-dur:9s;--rp-del:-2s;--rp-x:8px;--rp-y:-14px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:2px;height:2px;top:72%;left:78%;--rp-op:.28;--rp-dur:13s;--rp-del:-6s;--rp-x:-9px;--rp-y:-20px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:3px;height:3px;top:28%;left:88%;--rp-op:.18;--rp-dur:16s;--rp-del:-8s;--rp-x:6px;--rp-y:-16px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:2px;height:2px;top:82%;left:15%;--rp-op:.22;--rp-dur:12s;--rp-del:-3s;--rp-x:11px;--rp-y:-12px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:2px;height:2px;top:48%;left:55%;--rp-op:.15;--rp-dur:10s;--rp-del:-7s;--rp-x:-7px;--rp-y:-19px" aria-hidden="true"></div>
+<div class="rock-particle" style="width:3px;height:3px;top:12%;left:50%;--rp-op:.2;--rp-dur:15s;--rp-del:-5s;--rp-x:9px;--rp-y:-15px" aria-hidden="true"></div>
 
 <!-- ======== LOGIN SCREEN ======== -->
 <div id="login-screen">
