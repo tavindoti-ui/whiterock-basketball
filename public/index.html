@@ -728,6 +728,146 @@ body.sidebar-mini .btn-logout{justify-content:center}
   body.sidebar-mini .nav{width:100%}
   body.sidebar-mini #app{margin-left:0;padding-top:52px}
 }
+/* ══ DASHBOARD REDESIGN ════════════════════════════════════════════ */
+
+/* ── Hero ── */
+.dash-hero{
+  position:relative;border-radius:20px;overflow:hidden;
+  min-height:200px;margin-bottom:22px;
+  background:linear-gradient(135deg,#050B16 0%,#0A1828 60%,#0D2040 100%);
+  border:1px solid rgba(77,166,255,0.18);
+  box-shadow:0 8px 40px rgba(0,0,0,0.5),0 0 60px rgba(45,140,255,0.06);
+  display:flex;flex-direction:column;justify-content:space-between;padding:0;
+}
+/* Rock texture overlay */
+.dash-hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,0.012) 0px,transparent 1px,transparent 8px,rgba(255,255,255,0.012) 9px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,0.008) 0px,transparent 1px,transparent 12px,rgba(255,255,255,0.008) 13px);
+}
+.hero-logo-bg{
+  position:absolute;right:-40px;top:50%;transform:translateY(-50%);
+  width:220px;height:220px;object-fit:cover;border-radius:50%;
+  opacity:0.055;filter:blur(2px);pointer-events:none;z-index:0;
+}
+.hero-body{
+  position:relative;z-index:2;padding:24px 28px 20px;
+}
+.hero-eyebrow{
+  font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.hero-eyebrow::before{
+  content:'';width:20px;height:2px;background:var(--blue);border-radius:2px;display:block;
+}
+.hero-vs-row{
+  display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;
+}
+.hero-team{font-size:clamp(18px,4vw,28px);font-weight:900;color:#fff;letter-spacing:-0.5px;line-height:1}
+.hero-adv{font-size:clamp(18px,4vw,28px);font-weight:900;color:var(--blue);letter-spacing:-0.5px;line-height:1}
+.hero-vs-sep{
+  font-size:11px;font-weight:800;color:var(--text3);letter-spacing:2px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);
+  border-radius:6px;padding:4px 8px;
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px;
+}
+.hero-meta-item{
+  display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);font-weight:500;
+}
+.hero-meta-item i{color:var(--blue);font-size:13px}
+.hero-no-game{
+  font-size:14px;font-weight:600;color:var(--text2);
+  display:flex;align-items:center;gap:8px;
+}
+/* confirm button */
+.hero-confirm-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;border-radius:10px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:700;transition:all .2s;
+  background:linear-gradient(135deg,var(--blue2),var(--blue3,#1a6fe8));
+  color:#fff;box-shadow:0 4px 16px rgba(45,140,255,0.35);
+}
+.hero-confirm-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(45,140,255,0.45)}
+.hero-confirm-btn.confirmed{background:rgba(0,200,122,0.15);color:var(--success);border:1px solid rgba(0,200,122,0.3);box-shadow:none}
+.hero-confirm-btn.confirmed:hover{transform:none}
+/* blue bottom accent */
+.hero-accent{height:3px;background:linear-gradient(90deg,var(--blue2),rgba(77,166,255,0.2),transparent);flex-shrink:0;position:relative;z-index:2}
+
+/* ── KPI cards (bigger) ── */
+.kpi-card{
+  background:linear-gradient(145deg,#0D1526 0%,#081224 100%);
+  border:1px solid var(--border);border-radius:16px;
+  padding:22px 20px;position:relative;overflow:hidden;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+  box-shadow:var(--card-shadow);
+}
+.kpi-card:hover{border-color:rgba(77,166,255,0.28);transform:translateY(-3px);box-shadow:var(--card-shadow),0 0 28px rgba(45,140,255,0.08)}
+.kpi-card::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(77,166,255,0.04),transparent);transition:left .4s ease;pointer-events:none}
+.kpi-card:hover::after{left:140%}
+.kpi-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;flex-shrink:0}
+.kpi-value{font-size:clamp(28px,5vw,36px);font-weight:900;color:#fff;line-height:1;letter-spacing:-1px;margin-bottom:4px}
+.kpi-label{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:2px}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* ── MVP ── */
+.mvp-card{
+  background:linear-gradient(145deg,#12100A 0%,#1A1405 60%,#0D1200 100%);
+  border:1px solid rgba(245,158,11,0.2);border-radius:16px;padding:22px;
+  position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 40px rgba(245,158,11,0.04);
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+}
+.mvp-card:hover{border-color:rgba(245,158,11,0.35);transform:translateY(-3px)}
+.mvp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)}
+.mvp-badge{font-size:10px;font-weight:800;color:#F59E0B;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.mvp-avatar{width:56px;height:56px;border-radius:50%;background:rgba(245,158,11,0.1);border:2px solid rgba(245,158,11,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#F59E0B;margin-bottom:12px;box-shadow:0 0 20px rgba(245,158,11,0.15)}
+.mvp-name{font-size:18px;font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-0.3px}
+.mvp-stats{display:flex;gap:16px}
+.mvp-stat-item{display:flex;flex-direction:column;gap:2px}
+.mvp-stat-val{font-size:16px;font-weight:800;color:#F59E0B}
+.mvp-stat-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+
+/* ── Destaques compactos ── */
+.top-rank-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.top-rank-item:last-child{border:none;padding-bottom:0}
+.rank-medal{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+.rank-name{flex:1;font-size:13px;font-weight:600;color:#fff}
+.rank-val{font-size:14px;font-weight:800;color:var(--blue)}
+
+/* ── Eventos timeline ── */
+.event-item{display:flex;gap:12px;padding:10px 0;position:relative}
+.event-item:not(:last-child)::after{content:'';position:absolute;left:16px;top:36px;bottom:-10px;width:1px;background:rgba(255,255,255,0.06)}
+.event-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.event-dot.jogo{background:rgba(45,140,255,0.12);border:1px solid rgba(45,140,255,0.25)}
+.event-dot.treino{background:rgba(0,200,122,0.1);border:1px solid rgba(0,200,122,0.2)}
+.event-info{flex:1;min-width:0}
+.event-when{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.event-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.event-meta{font-size:11px;color:var(--text2)}
+
+/* ── Status do elenco ── */
+.squad-stat{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.squad-stat:last-child{border:none;padding-bottom:0}
+.squad-dot-wrap{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.squad-num{font-size:22px;font-weight:900;line-height:1}
+.squad-label{font-size:11px;color:var(--text2);font-weight:600}
+
+/* ── Destaque do dia ── */
+.destaque-card{
+  background:linear-gradient(135deg,rgba(45,140,255,0.08) 0%,rgba(8,18,36,0.95) 100%);
+  border:1px solid rgba(45,140,255,0.16);border-radius:16px;padding:20px;
+  position:relative;overflow:hidden;
+}
+.destaque-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue2),rgba(77,166,255,0.3),transparent)}
+
+/* ── Dashboard mid grid ── */
+.dash-mid-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:22px}
+@media(max-width:900px){.dash-mid-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.dash-mid-grid{grid-template-columns:1fr}}
+
 /* ─── FAN ORDER STATUS BADGES ─── */
 .fsb{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;white-space:nowrap}
 .fsb-recebido{background:rgba(77,166,255,0.12);color:var(--blue)}
@@ -816,30 +956,43 @@ body.sidebar-mini .btn-logout{justify-content:center}
 
 <!-- PAGES -->
 <div class="page active" id="page-dashboard">
-  <div class="grid4" id="dash-cards"></div>
-  <div class="grid2">
+
+  <!-- 1. HERO: Próximo Jogo -->
+  <div id="dash-hero"></div>
+
+  <!-- 2. KPI Cards -->
+  <div class="grid4" id="dash-cards" style="margin-bottom:22px"></div>
+
+  <!-- 3. MVP + Destaques + Destaque do Dia -->
+  <div class="dash-mid-grid" id="dash-mid-grid">
+    <div id="dash-mvp"></div>
+    <div id="dash-top-stats"></div>
+    <div id="dash-destaque"></div>
+  </div>
+
+  <!-- 4. Próximos Eventos + Status do Elenco -->
+  <div class="grid2" style="margin-bottom:22px">
     <div>
-      <div class="sec-title"><i class="ti ti-alert-triangle"></i> Alertas</div>
-      <div id="dash-alertas"></div>
-      <div class="sec-title" style="margin-top:16px"><i class="ti ti-trophy"></i> Últimos resultados</div>
-      <div id="dash-resultados"></div>
+      <div class="sec-title"><i class="ti ti-calendar-event"></i> Próximos eventos</div>
+      <div class="card" id="dash-events" style="padding:12px 16px"></div>
     </div>
     <div>
-      <div class="sec-title"><i class="ti ti-star"></i> Destaques</div>
-      <div class="card" style="margin-bottom:12px">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Cestinhas</div>
-        <div id="rank-pts"></div>
-        <div style="font-size:12px;color:var(--text2);margin:10px 0 8px">Assistências</div>
-        <div id="rank-ast"></div>
-        <div style="font-size:12px;color:var(--text2);margin:10px 0 8px">Rebotes</div>
-        <div id="rank-reb"></div>
-      </div>
-      <div class="sec-title"><i class="ti ti-calendar-event"></i> Próximo treino</div>
-      <div class="card" id="dash-treino"></div>
+      <div class="sec-title"><i class="ti ti-users"></i> Status do elenco</div>
+      <div class="card" id="dash-elenco" style="padding:12px 16px"></div>
     </div>
   </div>
-  <div class="sec-title"><i class="ti ti-percentage"></i> Frequência</div>
+
+  <!-- 5. Alertas -->
+  <div id="dash-alertas" style="margin-bottom:16px"></div>
+
+  <!-- 6. Últimos Resultados -->
+  <div class="sec-title"><i class="ti ti-trophy"></i> Últimos resultados</div>
+  <div id="dash-resultados" style="margin-bottom:22px"></div>
+
+  <!-- 7. Frequência -->
+  <div class="sec-title"><i class="ti ti-percentage"></i> Frequência nos treinos</div>
   <div class="card" id="dash-presenca"></div>
+
 </div>
 
 <div class="page" id="page-jogadores">
@@ -1543,27 +1696,263 @@ function calcAge(dataNasc) {
 }
 
 // ==================== DASHBOARD ====================
-function renderDashboard() {
-  const ativos = cache.jogadores.filter(j=>j.status==='Ativo').length;
-  const lesionados = cache.jogadores.filter(j=>j.status==='Lesão');
-  const proxJogo = cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).sort((a,b)=>a.data.localeCompare(b.data))[0];
+// Presence confirmation state (session-only)
+const _presenceConfirmed = new Set();
 
-  let saldoHTML = '';
+function renderDashboard() {
+  const LOGO = 'https://drive.google.com/uc?export=view&id=1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz';
+  const todayStr = today();
+
+  // ── Base data ──────────────────────────────────────────────────
+  const ativos     = cache.jogadores.filter(j => j.status === 'Ativo');
+  const lesionados = cache.jogadores.filter(j => j.status === 'Lesão');
+  const suspensos  = cache.jogadores.filter(j => j.status === 'Suspenso');
+  const proxJogo   = cache.jogos.filter(j => isUpcoming(j.data) && j.wr === null)
+                       .sort((a,b) => a.data.localeCompare(b.data))[0];
+  const jogosDisp  = cache.jogos.filter(j => !isUpcoming(j.data)).length;
+  const avgPresenca = ativos.length
+    ? Math.round(ativos.reduce((s,j) => s + (j.presenca||0), 0) / ativos.length)
+    : 0;
+
+  // ── 1. HERO ────────────────────────────────────────────────────
+  const heroEl = document.getElementById('dash-hero');
+  if (heroEl) {
+    if (proxJogo) {
+      const confirmed = _presenceConfirmed.has(proxJogo.data + proxJogo.adv);
+      const canConfirm = can(['atleta','capitao','tecnico','comissao','admin']);
+      heroEl.innerHTML = `
+        <div class="dash-hero">
+          <img class="hero-logo-bg" src="${LOGO}" alt="">
+          <div class="hero-body">
+            <div class="hero-eyebrow">
+              <i class="ti ti-basketball"></i>
+              ${proxJogo.camp || 'Próximo Jogo'}
+            </div>
+            <div class="hero-vs-row">
+              <span class="hero-team">WHITE ROCK</span>
+              <span class="hero-vs-sep">VS</span>
+              <span class="hero-adv">${proxJogo.adv.toUpperCase()}</span>
+            </div>
+            <div class="hero-meta">
+              <span class="hero-meta-item"><i class="ti ti-calendar"></i>${fmt(proxJogo.data)}</span>
+              <span class="hero-meta-item"><i class="ti ti-clock"></i>${proxJogo.hora || '—'}</span>
+              ${proxJogo.local ? `<span class="hero-meta-item"><i class="ti ti-map-pin"></i>${proxJogo.local}</span>` : ''}
+            </div>
+            ${canConfirm ? `
+            <button class="hero-confirm-btn${confirmed?' confirmed':''}"
+              onclick="confirmHeroPresence('${proxJogo.data}','${proxJogo.adv}',this)">
+              <i class="ti ti-${confirmed?'check':'user-check'}"></i>
+              ${confirmed ? 'Presença confirmada!' : 'Confirmar presença'}
+            </button>` : ''}
+          </div>
+          <div class="hero-accent"></div>
+        </div>`;
+    } else {
+      heroEl.innerHTML = `
+        <div class="dash-hero">
+          <img class="hero-logo-bg" src="${LOGO}" alt="">
+          <div class="hero-body">
+            <div class="hero-eyebrow"><i class="ti ti-basketball"></i> White Rock Basketball</div>
+            <div class="hero-vs-row">
+              <span class="hero-team">TEMPORADA</span>
+              <span class="hero-vs-sep">·</span>
+              <span class="hero-adv">2026</span>
+            </div>
+            <div class="hero-no-game"><i class="ti ti-calendar-off" style="color:var(--text3)"></i> Nenhum jogo agendado</div>
+          </div>
+          <div class="hero-accent"></div>
+        </div>`;
+    }
+  }
+
+  // ── 2. KPI CARDS ───────────────────────────────────────────────
+  let kpiSaldo = '';
   if (can(['admin','tecnico','capitao'])) {
-    const ent = cache.financeiro.lancamentos.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
-    const sai = cache.financeiro.lancamentos.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
+    const ent   = cache.financeiro.lancamentos.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
+    const sai   = cache.financeiro.lancamentos.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
     const saldo = ent - sai;
-    saldoHTML = `<div class="card"><div class="card-title">Saldo do caixa</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'};font-size:20px">${fmtBRL(saldo)}</div><div class="card-sub" style="color:var(--text2)">Entradas: ${fmtBRL(ent)} / Saídas: ${fmtBRL(sai)}</div></div>`;
+    kpiSaldo = `
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(0,200,122,0.1);color:var(--success)"><i class="ti ti-currency-dollar"></i></div>
+        <div class="kpi-label">Saldo do caixa</div>
+        <div class="kpi-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'}">${fmtBRL(saldo)}</div>
+        <div class="kpi-sub">Ent: ${fmtBRL(ent)} · Saí: ${fmtBRL(sai)}</div>
+      </div>`;
   }
 
   document.getElementById('dash-cards').innerHTML = `
-    <div class="card"><div class="card-title">Jogadores ativos</div><div class="card-value">${ativos}</div><div class="card-sub" style="color:var(--text2)">${cache.jogadores.length} cadastrados</div></div>
-    <div class="card"><div class="card-title">Próximo jogo</div><div class="card-value" style="font-size:16px">${proxJogo?`vs ${proxJogo.adv}`:'—'}</div><div class="card-sub" style="color:var(--text2)">${proxJogo?`${fmt(proxJogo.data)} às ${proxJogo.hora}`:''}</div></div>
-    ${saldoHTML}
-    <div class="card"><div class="card-title">Afastados por lesão</div><div class="card-value" style="color:var(--danger)">${lesionados.length}</div><div class="card-sub" style="color:var(--text2)">${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')||'Elenco completo'}</div></div>
-  `;
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:rgba(77,166,255,0.1);color:var(--blue)"><i class="ti ti-users"></i></div>
+      <div class="kpi-label">Atletas ativos</div>
+      <div class="kpi-value">${ativos.length}</div>
+      <div class="kpi-sub">${cache.jogadores.length} cadastrados</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.1);color:#F59E0B"><i class="ti ti-trophy"></i></div>
+      <div class="kpi-label">Jogos disputados</div>
+      <div class="kpi-value">${jogosDisp}</div>
+      <div class="kpi-sub">${cache.jogos.filter(j=>isUpcoming(j.data)).length} agendado(s)</div>
+    </div>
+    ${kpiSaldo}
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:rgba(139,92,246,0.1);color:#8B5CF6"><i class="ti ti-trending-up"></i></div>
+      <div class="kpi-label">Frequência média</div>
+      <div class="kpi-value" style="color:${avgPresenca>=80?'var(--success)':avgPresenca>=60?'var(--warning)':'var(--danger)'}">${avgPresenca}%</div>
+      <div class="kpi-sub">nos treinos</div>
+    </div>`;
 
-  // alertas
+  // ── 3. MVP ─────────────────────────────────────────────────────
+  const mvpEl = document.getElementById('dash-mvp');
+  if (mvpEl) {
+    const ranked = [...cache.jogadores]
+      .filter(j => j.pts > 0 || j.reb > 0 || j.ast > 0)
+      .map(j => ({ ...j, score: j.pts + j.reb * 0.6 + j.ast * 0.7 }))
+      .sort((a,b) => b.score - a.score);
+    const mvp = ranked[0];
+    if (mvp) {
+      const ini = initials(mvp.apelido || mvp.nome);
+      mvpEl.innerHTML = `
+        <div class="mvp-card" style="height:100%">
+          <div class="mvp-badge"><i class="ti ti-trophy" style="color:#F59E0B"></i> MVP do elenco</div>
+          <div class="mvp-avatar">${ini}</div>
+          <div class="mvp-name">${mvp.apelido || mvp.nome.split(' ')[0]}</div>
+          <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">${mvp.pos || '—'}</div>
+          <div class="mvp-stats">
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.pts}</span><span class="mvp-stat-lbl">PPG</span></div>
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.reb}</span><span class="mvp-stat-lbl">RPG</span></div>
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.ast}</span><span class="mvp-stat-lbl">APG</span></div>
+          </div>
+        </div>`;
+    } else {
+      mvpEl.innerHTML = `<div class="mvp-card" style="height:100%;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px"><i class="ti ti-trophy" style="font-size:28px;display:block;margin:0 auto 8px;opacity:.3"></i>Sem estatísticas ainda</div>`;
+    }
+  }
+
+  // ── 4. TOP STATS ───────────────────────────────────────────────
+  const statsEl = document.getElementById('dash-top-stats');
+  if (statsEl) {
+    const medals = ['🥇','🥈','🥉'];
+    const byPts = [...cache.jogadores].sort((a,b)=>b.pts-a.pts).slice(0,3);
+    const byAst = [...cache.jogadores].sort((a,b)=>b.ast-a.ast).slice(0,3);
+    const mkRows = (list, key) => list.map((j,i) => `
+      <div class="top-rank-item">
+        <span class="rank-medal">${medals[i]}</span>
+        <span class="rank-name">${j.apelido||j.nome.split(' ')[0]}</span>
+        <span class="rank-val">${j[key]}</span>
+      </div>`).join('');
+    statsEl.innerHTML = `
+      <div class="card" style="height:100%">
+        <div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+          <i class="ti ti-flame" style="font-size:13px"></i> Destaques
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Pontos</div>
+        ${mkRows(byPts,'pts')}
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin:12px 0 6px">Assistências</div>
+        ${mkRows(byAst,'ast')}
+      </div>`;
+  }
+
+  // ── 5. DESTAQUE DO DIA ─────────────────────────────────────────
+  const destaqueEl = document.getElementById('dash-destaque');
+  if (destaqueEl) {
+    const widgets = [
+      () => {
+        const top = [...ativos].sort((a,b)=>b.presenca-a.presenca)[0];
+        return top ? { icon:'ti-percentage', color:'#8B5CF6', label:'Maior frequência', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.presenca}% de presença nos treinos` } : null;
+      },
+      () => {
+        const top = [...cache.jogadores].sort((a,b)=>b.pts-a.pts)[0];
+        return top ? { icon:'ti-basketball', color:'var(--blue)', label:'Top pontuador', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.pts} pontos na temporada` } : null;
+      },
+      () => {
+        const top = [...cache.jogadores].sort((a,b)=>b.ast-a.ast)[0];
+        return top ? { icon:'ti-arrows-shuffle', color:'var(--success)', label:'Mais assistências', val: (top.apelido||top.nome.split(' ')[0]), sub: `${top.ast} assistências` } : null;
+      },
+      () => {
+        const wins = cache.jogos.filter(j=>j.wr!==null&&j.wr>j.advPl).length;
+        const total = cache.jogos.filter(j=>j.wr!==null).length;
+        if (!total) return null;
+        return { icon:'ti-trophy', color:'#F59E0B', label:'Aproveitamento', val: `${Math.round(wins/total*100)}%`, sub: `${wins} vitória(s) em ${total} jogo(s)` };
+      },
+    ];
+    const day = new Date().getDay();
+    const widget = widgets[day % widgets.length]?.();
+    if (widget) {
+      destaqueEl.innerHTML = `
+        <div class="destaque-card" style="height:100%">
+          <div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <i class="ti ti-sparkles"></i> Destaque do dia
+          </div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:20px;color:${widget.color};margin-bottom:12px">
+            <i class="ti ${widget.icon}"></i>
+          </div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">${widget.label}</div>
+          <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-0.5px">${widget.val}</div>
+          <div style="font-size:12px;color:var(--text2)">${widget.sub}</div>
+        </div>`;
+    } else {
+      destaqueEl.innerHTML = '';
+    }
+  }
+
+  // ── 6. PRÓXIMOS EVENTOS ────────────────────────────────────────
+  const eventsEl = document.getElementById('dash-events');
+  if (eventsEl) {
+    const upcoming = [
+      ...cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).map(j=>({ tipo:'jogo', data:j.data, hora:j.hora, titulo:`WR × ${j.adv}`, meta: j.local || j.camp || 'Amistoso' })),
+      ...cache.treinos.filter(t=>isUpcoming(t.data)).map(t=>({ tipo:'treino', data:t.data, hora:t.hora, titulo:t.tipo, meta: t.local || 'A definir' })),
+    ].sort((a,b)=>a.data.localeCompare(b.data)).slice(0,5);
+
+    if (upcoming.length) {
+      let lastDate = '';
+      eventsEl.innerHTML = upcoming.map(ev => {
+        const dateLabel = ev.data === todayStr ? 'HOJE' : ev.data === nextDay(todayStr) ? 'AMANHÃ' : fmt(ev.data);
+        const dateHeader = dateLabel !== lastDate ? `<div style="font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:6px 0 4px">${dateLabel}</div>` : '';
+        lastDate = dateLabel;
+        return `${dateHeader}
+          <div class="event-item">
+            <div class="event-dot ${ev.tipo}">
+              <i class="ti ${ev.tipo==='jogo'?'ti-basketball':'ti-barbell'}" style="color:${ev.tipo==='jogo'?'var(--blue)':'var(--success)'}"></i>
+            </div>
+            <div class="event-info">
+              <div class="event-title">${ev.titulo}</div>
+              <div class="event-meta"><i class="ti ti-clock" style="font-size:10px"></i> ${ev.hora || '—'} · ${ev.meta}</div>
+            </div>
+          </div>`;
+      }).join('');
+    } else {
+      eventsEl.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:8px 0">Nenhum evento agendado.</div>';
+    }
+  }
+
+  // ── 7. STATUS DO ELENCO ────────────────────────────────────────
+  const elencoEl = document.getElementById('dash-elenco');
+  if (elencoEl) {
+    elencoEl.innerHTML = `
+      <div class="squad-stat">
+        <div class="squad-dot-wrap" style="background:rgba(0,200,122,0.1)"><i class="ti ti-circle-check" style="color:var(--success);font-size:16px"></i></div>
+        <div>
+          <div class="squad-num" style="color:var(--success)">${ativos.length}</div>
+          <div class="squad-label">Aptos</div>
+        </div>
+      </div>
+      <div class="squad-stat">
+        <div class="squad-dot-wrap" style="background:rgba(245,158,11,0.1)"><i class="ti ti-alert-triangle" style="color:var(--warning);font-size:16px"></i></div>
+        <div>
+          <div class="squad-num" style="color:var(--warning)">${suspensos.length}</div>
+          <div class="squad-label">Suspensos</div>
+        </div>
+      </div>
+      <div class="squad-stat">
+        <div class="squad-dot-wrap" style="background:rgba(239,68,68,0.1)"><i class="ti ti-first-aid-kit" style="color:var(--danger);font-size:16px"></i></div>
+        <div>
+          <div class="squad-num" style="color:var(--danger)">${lesionados.length}</div>
+          <div class="squad-label">Lesionados${lesionados.length?`: ${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')}`  :''}</div>
+        </div>
+      </div>`;
+  }
+
+  // ── 8. ALERTAS ─────────────────────────────────────────────────
   const alertas = [];
   if (lesionados.length) alertas.push({ tipo:'danger', msg:`${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')}` });
   if (can(['admin','tecnico','capitao'])) {
@@ -1572,38 +1961,35 @@ function renderDashboard() {
   }
   document.getElementById('dash-alertas').innerHTML = alertas.length
     ? alertas.map(a=>`<div class="alert alert-${a.tipo}"><i class="ti ti-alert-triangle"></i> ${a.msg}</div>`).join('')
-    : '<div class="alert alert-success"><i class="ti ti-check"></i> Tudo em ordem!</div>';
+    : '';
 
-  // resultados
+  // ── 9. ÚLTIMOS RESULTADOS ──────────────────────────────────────
   const past = cache.jogos.filter(j=>j.wr!==null).sort((a,b)=>b.data.localeCompare(a.data)).slice(0,3);
   document.getElementById('dash-resultados').innerHTML = past.length
-    ? past.map(j=>`<div class="game-card" style="padding:12px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px">WR <strong>${j.wr}</strong> × <strong>${j.advPl}</strong> ${j.adv}</div><span class="badge ${j.wr>j.advPl?'badge-green':'badge-red'}">${j.wr>j.advPl?'Vitória':'Derrota'}</span></div><div style="font-size:11px;color:var(--text2);margin-top:4px">${fmt(j.data)} · ${j.camp||'Amistoso'}</div></div>`).join('')
-    : '<div class="card" style="color:var(--text2);font-size:13px">Nenhum resultado ainda.</div>';
+    ? past.map(j=>`<div class="game-card" style="padding:12px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px">WR <strong>${j.wr}</strong> × <strong>${j.advPl}</strong> ${j.adv}</div><span class="badge ${j.wr>j.advPl?'badge-green':'badge-red'}">${j.wr>j.advPl?'Vitória':'Derrota'}</span></div><div style="font-size:11px;color:var(--text2);margin-top:4px">${fmt(j.data)} · ${j.camp||'Amistoso'}</div></div>`).join('')
+    : '<div style="color:var(--text2);font-size:13px">Nenhum resultado registrado.</div>';
 
-  // ranking
-  const temJogos = cache.jogos.some(j => !isUpcoming(j.data));
-  const byPts = [...cache.jogadores].filter(j=>temJogos||j.pts>0).sort((a,b)=>b.pts-a.pts).slice(0,3);
-  const byAst = [...cache.jogadores].filter(j=>temJogos||j.ast>0).sort((a,b)=>b.ast-a.ast).slice(0,3);
-  const byReb = [...cache.jogadores].filter(j=>temJogos||j.reb>0).sort((a,b)=>b.reb-a.reb).slice(0,3);
-  ['rank-pts','rank-ast','rank-reb'].forEach((id,i)=>{
-    const list=[byPts,byAst,byReb][i], key=['pts','ast','reb'][i];
-    document.getElementById(id).innerHTML = list.map((j,idx)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:var(--text2);width:16px">${idx+1}</span><div style="flex:1;font-size:13px">${j.apelido||j.nome.split(' ')[0]}</div><span style="font-weight:700;color:var(--blue)">${j[key]}</span></div>`).join('');
-  });
-
-  // próximo treino
-  const prtr = cache.treinos.filter(t=>isUpcoming(t.data)).sort((a,b)=>a.data.localeCompare(b.data))[0];
-  document.getElementById('dash-treino').innerHTML = prtr
-    ? `<div style="font-size:14px;font-weight:600">${prtr.tipo}</div><div style="font-size:12px;color:var(--text2);margin-top:4px"><i class="ti ti-calendar"></i> ${fmt(prtr.data)} às ${prtr.hora}</div><div style="font-size:12px;color:var(--text2)"><i class="ti ti-map-pin"></i> ${prtr.local||'A definir'}</div>`
-    : '<span style="color:var(--text2);font-size:13px">Nenhum treino agendado</span>';
-
-  // presença
+  // ── 10. FREQUÊNCIA ─────────────────────────────────────────────
   document.getElementById('dash-presenca').innerHTML = [...cache.jogadores].sort((a,b)=>b.presenca-a.presenca).map(j=>`
     <div class="stat-row">
       <div class="stat-name">${j.apelido||j.nome.split(' ')[0]} #${j.num}</div>
       <div class="stat-bar-wrap"><div class="stat-bar" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
       <div class="stat-val" style="color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</div>
-    </div>
-  `).join('');
+    </div>`).join('');
+}
+
+function confirmHeroPresence(data, adv, btn) {
+  const key = data + adv;
+  _presenceConfirmed.add(key);
+  btn.className = 'hero-confirm-btn confirmed';
+  btn.innerHTML = '<i class="ti ti-check"></i> Presença confirmada!';
+  toast('Presença confirmada! ✓');
+}
+
+function nextDay(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split('T')[0];
 }
 
 // ==================== JOGADORES ====================
