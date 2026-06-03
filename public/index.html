@@ -3190,13 +3190,13 @@ function renderUniformes() {
 
       <div class="grid3 unif-grid-mobile" style="margin-bottom:28px">
 
-        <!-- Uniforme Principal -->
+        <!-- Uniforme Summit Edition -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#4DA6FF"></div>
           <div class="unif-card-mobile">
             <div class="unif-card-img">${unifImgBox(UNIF_PRINCIPAL, 160, 'Principal')}</div>
             <div class="unif-card-body">
-              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Principal</div>
+              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Summit Edition</div>
               <div style="color:var(--blue);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
               <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
                 <input type="checkbox" id="unif-check-principal" style="width:18px;height:18px;accent-color:var(--blue);cursor:pointer"
@@ -3214,13 +3214,13 @@ function renderUniformes() {
           </div>
         </div>
 
-        <!-- Uniforme Secundário -->
+        <!-- Uniforme Glacier Edition -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2ECC71"></div>
           <div class="unif-card-mobile">
             <div class="unif-card-img">${unifImgBox(UNIF_SECUNDARIO, 160, 'Secundário')}</div>
             <div class="unif-card-body">
-              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Secundário</div>
+              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Glacier Edition</div>
               <div style="color:#2ECC71;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
               <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
                 <input type="checkbox" id="unif-check-secundario" style="width:18px;height:18px;accent-color:#2ECC71;cursor:pointer"
@@ -3238,13 +3238,13 @@ function renderUniformes() {
           </div>
         </div>
 
-        <!-- Uniforme City Edition -->
+        <!-- Uniforme Skyline Edition -->
         <div class="jersey-card" style="padding:24px">
           <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#F59E0B"></div>
           <div class="unif-card-mobile">
             <div class="unif-card-img">${unifImgBox(UNIF_CITY, 160, 'City Edition')}</div>
             <div class="unif-card-body">
-              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">City Edition</div>
+              <div style="font-weight:800;color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Skyline Edition</div>
               <div style="color:#F59E0B;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px">2026</div>
               <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">
                 <input type="checkbox" id="unif-check-city" style="width:18px;height:18px;accent-color:#F59E0B;cursor:pointer"
@@ -3319,17 +3319,17 @@ function buildManagementSection(pedidos) {
 
     <div class="grid4" style="margin-bottom:28px">
       <div class="card">
-        <div class="card-title" style="color:#4DA6FF"><i class="ti ti-shirt" style="margin-right:4px"></i>Principal</div>
+        <div class="card-title" style="color:#4DA6FF"><i class="ti ti-shirt" style="margin-right:4px"></i>Summit Edition</div>
         <div class="card-value" style="color:#4DA6FF">${totalP}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalP} sem pedido</div>
       </div>
       <div class="card">
-        <div class="card-title" style="color:#2ECC71"><i class="ti ti-shirt" style="margin-right:4px"></i>Secundário</div>
+        <div class="card-title" style="color:#2ECC71"><i class="ti ti-shirt" style="margin-right:4px"></i>Glacier Edition</div>
         <div class="card-value" style="color:#2ECC71">${totalS}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalS} sem pedido</div>
       </div>
       <div class="card">
-        <div class="card-title" style="color:#F59E0B"><i class="ti ti-shirt" style="margin-right:4px"></i>City Edition</div>
+        <div class="card-title" style="color:#F59E0B"><i class="ti ti-shirt" style="margin-right:4px"></i>Skyline Edition</div>
         <div class="card-value" style="color:#F59E0B">${totalC}<span style="font-size:14px;color:var(--text2);font-weight:400"> / ${ativos.length}</span></div>
         <div class="card-sub" style="color:var(--text2)">${ativos.length - totalC} sem pedido</div>
       </div>
@@ -3357,9 +3357,9 @@ function buildManagementSection(pedidos) {
             <tr>
               <th rowspan="2" style="vertical-align:middle">Jogador</th>
               <th rowspan="2" style="vertical-align:middle;text-align:center">#</th>
-              <th colspan="2" class="utbl-th-p"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Principal</th>
-              <th colspan="2" class="utbl-th-s"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Secundário</th>
-              <th colspan="2" class="utbl-th-c"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>City Edition</th>
+              <th colspan="2" class="utbl-th-p"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Summit Edition</th>
+              <th colspan="2" class="utbl-th-s"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Glacier Edition</th>
+              <th colspan="2" class="utbl-th-c"><i class="ti ti-shirt" style="font-size:11px;margin-right:4px"></i>Skyline Edition</th>
               <th rowspan="2" style="vertical-align:middle">Pedido em</th>
               ${canDel ? '<th rowspan="2" style="vertical-align:middle"></th>' : ''}
             </tr>
@@ -3709,9 +3709,9 @@ function exportUniformesPDF() {
     startY: y,
     head: [[
       { content: 'Tamanho', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
-      { content: 'Principal', styles:{fontStyle:'bold',textColor:COL_P,fillColor:[20,35,70]} },
-      { content: 'Secundário', styles:{fontStyle:'bold',textColor:COL_S,fillColor:[15,45,30]} },
-      { content: 'City Edition', styles:{fontStyle:'bold',textColor:COL_C,fillColor:[40,30,10]} },
+      { content: 'Summit Edition', styles:{fontStyle:'bold',textColor:COL_P,fillColor:[20,35,70]} },
+      { content: 'Glacier Edition', styles:{fontStyle:'bold',textColor:COL_S,fillColor:[15,45,30]} },
+      { content: 'Skyline Edition', styles:{fontStyle:'bold',textColor:COL_C,fillColor:[40,30,10]} },
       { content: 'Total', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
     ]],
     body: [...(sizeRows.length ? sizeRows : [['Sem pedidos','—','—','—','—']]), totalRow],
@@ -3773,9 +3773,9 @@ function exportUniformesPDF() {
       [
         { content:'Jogador',      rowSpan:2, styles:{valign:'middle',fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
         { content:'#',            rowSpan:2, styles:{valign:'middle',halign:'center',fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
-        { content:'Principal',    colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_P,fillColor:[20,40,75]} },
-        { content:'Secundário',   colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_S,fillColor:[15,45,30]} },
-        { content:'City Edition', colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_C,fillColor:[45,30,10]} },
+        { content:'Summit Edition',    colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_P,fillColor:[20,40,75]} },
+        { content:'Glacier Edition',   colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_S,fillColor:[15,45,30]} },
+        { content:'Skyline Edition', colSpan:2, styles:{halign:'center',fontStyle:'bold',textColor:COL_C,fillColor:[45,30,10]} },
         { content:'Pedido em',    rowSpan:2, styles:{valign:'middle',fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
       ],
       [
@@ -3858,7 +3858,7 @@ function exportUniformesPDF() {
     p.codigo,
     p.nome,
     p.whatsapp,
-    p.modelo === 'principal' ? 'Principal' : p.modelo === 'secundaria' ? 'Secundária' : 'City',
+    p.modelo === 'principal' ? 'Summit Edition' : p.modelo === 'secundaria' ? 'Glacier Edition' : 'Skyline',
     p.tamanho,
     p.quantidade,
     [p.numCamisa != null ? '#'+p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' ') || '—',
