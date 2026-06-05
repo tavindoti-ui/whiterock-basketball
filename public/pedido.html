@@ -747,7 +747,7 @@ function buildTimeline(status) {
 }
 
 function renderOrderCard(p) {
-  const modeloLabel = p.modelo === 'principal' ? 'Principal (Midnight Elite)' : 'Secundária (Dark Navy)';
+  const modeloLabel = p.modelo === 'principal' ? 'Summit Edition' : p.modelo === 'secundaria' ? 'Glacier Edition' : 'Skyline Edition';
   const camisa = [p.numCamisa !== null ? '#' + p.numCamisa : null, p.nomeCamisa].filter(Boolean).join(' · ') || '—';
   return `
     <div class="result-card">
