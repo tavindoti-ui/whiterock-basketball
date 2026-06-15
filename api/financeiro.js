@@ -16,15 +16,24 @@ module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const { desc, tipo, valor, cat } = req.body;
+    const { desc, tipo, valor, cat, jogadorId } = req.body;
     if (!desc || !tipo || !valor) return res.status(400).json({ error: 'Campos obrigatórios faltando' });
     const fin = await getData('financeiro') || [];
     const counters = await getData('counters');
     counters.financeiro = (counters.financeiro || 0) + 1;
-    const novo = { id: counters.financeiro, desc, tipo, valor: Number(valor), cat: cat || 'Outros', data: new Date().toISOString().split('T')[0] };
+    const novo = { id: counters.financeiro, desc, tipo, valor: Number(valor), cat: cat || 'Outros', jogadorId: jogadorId || null, data: new Date().toISOString().split('T')[0] };
     fin.push(novo);
     await setData('financeiro', fin);
     await setData('counters', counters);
+    // Se for entrada de mensalidade vinculada a jogador, reduz a dívida
+    if (tipo === 'entrada' && cat === 'Mensalidade' && jogadorId) {
+      const mens = await getData('mensalidades') || {};
+      if (mens[jogadorId] && mens[jogadorId] > 0) {
+        mens[jogadorId] -= 1;
+        if (mens[jogadorId] <= 0) delete mens[jogadorId];
+        await setData('mensalidades', mens);
+      }
+    }
     await logAction(user.id, user.nome, user.role, `Registrou lançamento (${tipo})`, `${desc} — R$ ${Number(valor).toFixed(2)}`);
     return res.status(201).json(novo);
   }
