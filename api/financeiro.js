@@ -14,7 +14,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const user = requireAuth(req, res, ['admin']);
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
     const { desc, tipo, valor, cat, jogadorId } = req.body;
     if (!desc || !tipo || !valor) return res.status(400).json({ error: 'Campos obrigatórios faltando' });
