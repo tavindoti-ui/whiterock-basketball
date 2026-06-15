@@ -1188,7 +1188,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
       <div class="tbl-wrap"><div style="padding:14px" id="extrato-lista"></div></div>
     </div>
     <div>
-      <div class="sec-title"><i class="ti ti-alert-circle"></i> Mensalidades pendentes</div>
+      <div class="sec-title"><i class="ti ti-users"></i> Situação das mensalidades</div>
       <div class="tbl-wrap">
         <table class="tbl">
           <thead><tr><th>Jogador</th><th>Atraso</th><th>Status</th><th></th></tr></thead>
@@ -1342,16 +1342,22 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <div class="modal-overlay" id="modal-add-lancamento">
   <div class="modal">
     <div class="modal-title">Lançamento financeiro <button class="modal-close" onclick="closeModal('modal-add-lancamento')"><i class="ti ti-x"></i></button></div>
-    <div class="form-group"><label class="form-label">Descrição *</label><input class="form-input" id="lan-desc" placeholder="Ex: Mensalidade João, Aluguel quadra..."></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Tipo *</label>
-        <select class="form-input" id="lan-tipo"><option value="entrada">Entrada</option><option value="saida">Saída</option></select>
+        <select class="form-input" id="lan-tipo" onchange="toggleLanJogador()"><option value="entrada">Entrada</option><option value="saida">Saída</option></select>
       </div>
-      <div class="form-group"><label class="form-label">Valor (R$) *</label><input class="form-input" id="lan-valor" type="number" placeholder="0,00"></div>
+      <div class="form-group"><label class="form-label">Categoria</label>
+        <select class="form-input" id="lan-cat" onchange="toggleLanJogador()"><option>Mensalidade</option><option>Patrocínio</option><option>Aluguel quadra</option><option>Uniforme</option><option>Arbitragem</option><option>Campeonato</option><option>Outros</option></select>
+      </div>
     </div>
-    <div class="form-group"><label class="form-label">Categoria</label>
-      <select class="form-input" id="lan-cat"><option>Mensalidade</option><option>Patrocínio</option><option>Aluguel quadra</option><option>Uniforme</option><option>Arbitragem</option><option>Campeonato</option><option>Outros</option></select>
+    <div class="form-group" id="lan-jogador-group" style="display:none">
+      <label class="form-label">Jogador *</label>
+      <select class="form-input" id="lan-jogador">
+        <option value="">— Selecione o jogador —</option>
+      </select>
     </div>
+    <div class="form-group"><label class="form-label">Descrição *</label><input class="form-input" id="lan-desc" placeholder="Ex: Mensalidade João, Aluguel quadra..."></div>
+    <div class="form-group"><label class="form-label">Valor (R$) *</label><input class="form-input" id="lan-valor" type="number" placeholder="0,00"></div>
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn btn-primary" style="flex:1" onclick="addLancamento()">Registrar</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-lancamento')">Cancelar</button>
@@ -2756,27 +2762,73 @@ function renderFinanceiro() {
     </div>
   `).join('') || '<div style="color:var(--text2);font-size:13px;padding:16px">Nenhum lançamento registrado.</div>';
 
-  document.getElementById('mens-body').innerHTML = cache.jogadores.filter(j=>mens[j.id]).map(j=>`
-    <tr>
-      <td>${j.apelido||j.nome.split(' ')[0]}</td>
-      <td><span class="badge badge-orange">${mens[j.id]} mês(es)</span></td>
-      <td><span class="badge badge-red">Inadimplente</span></td>
-      <td><button class="btn btn-success btn-sm" onclick="quitarMens(${j.id})"><i class="ti ti-check"></i> Quitar</button></td>
-    </tr>
-  `).join('');
+  document.getElementById('mens-body').innerHTML = cache.jogadores.length === 0
+    ? '<tr><td colspan="4" style="color:var(--text2);font-size:13px;padding:16px;text-align:center">Nenhum jogador cadastrado.</td></tr>'
+    : cache.jogadores.map(j => {
+        const mesesAtraso = mens[j.id] || 0;
+        if (mesesAtraso > 0) {
+          return `<tr>
+            <td>${j.apelido||j.nome.split(' ')[0]}</td>
+            <td><span class="badge badge-orange">${mesesAtraso} mês(es)</span></td>
+            <td><span class="badge badge-red">Inadimplente</span></td>
+            <td><button class="btn btn-success btn-sm" onclick="quitarMens(${j.id})"><i class="ti ti-check"></i> Quitar</button></td>
+          </tr>`;
+        } else {
+          return `<tr>
+            <td>${j.apelido||j.nome.split(' ')[0]}</td>
+            <td>—</td>
+            <td><span class="badge badge-green">Em dia</span></td>
+            <td></td>
+          </tr>`;
+        }
+      }).join('');
+}
+
+function toggleLanJogador() {
+  const tipo = document.getElementById('lan-tipo').value;
+  const cat = document.getElementById('lan-cat').value;
+  const group = document.getElementById('lan-jogador-group');
+  const isMens = tipo === 'entrada' && cat === 'Mensalidade';
+  group.style.display = isMens ? '' : 'none';
+  if (isMens) {
+    const sel = document.getElementById('lan-jogador');
+    sel.innerHTML = '<option value="">— Selecione o jogador —</option>' +
+      cache.jogadores.map(j => `<option value="${j.id}">${j.apelido||j.nome.split(' ')[0]} — ${j.nome}</option>`).join('');
+  }
 }
 
 async function addLancamento() {
-  const desc = document.getElementById('lan-desc').value.trim();
+  const tipo = document.getElementById('lan-tipo').value;
+  const cat = document.getElementById('lan-cat').value;
+  const isMens = tipo === 'entrada' && cat === 'Mensalidade';
+  let desc = document.getElementById('lan-desc').value.trim();
   const valor = +document.getElementById('lan-valor').value;
+  let jogadorId = null;
+
+  if (isMens) {
+    jogadorId = +document.getElementById('lan-jogador').value;
+    if (!jogadorId) { toast('Selecione o jogador da mensalidade','error'); return; }
+    const j = cache.jogadores.find(x => x.id === jogadorId);
+    if (j && !desc) desc = `Mensalidade ${j.apelido||j.nome.split(' ')[0]}`;
+  }
+
   if (!desc || !valor) { toast('Preencha descrição e valor','error'); return; }
-  const r = await api('POST','financeiro',{ desc, tipo:document.getElementById('lan-tipo').value, valor, cat:document.getElementById('lan-cat').value });
+  const r = await api('POST','financeiro',{ desc, tipo, valor, cat, jogadorId });
   if (r && r.id) {
     cache.financeiro.lancamentos.push(r);
+    // Se for mensalidade de entrada, marca como pago (remove inadimplência se existir)
+    if (isMens && jogadorId && cache.financeiro.mensalidades[jogadorId]) {
+      const mens = cache.financeiro.mensalidades;
+      mens[jogadorId] = Math.max(0, (mens[jogadorId] || 0) - 1);
+      if (mens[jogadorId] === 0) delete mens[jogadorId];
+    }
     closeModal('modal-add-lancamento');
     renderFinanceiro(); renderDashboard();
     toast('Lançamento registrado!');
     ['lan-desc','lan-valor'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('lan-tipo').value = 'entrada';
+    document.getElementById('lan-cat').value = 'Mensalidade';
+    toggleLanJogador();
   } else toast('Erro ao registrar','error');
 }
 
