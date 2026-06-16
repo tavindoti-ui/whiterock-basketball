@@ -2742,7 +2742,20 @@ function renderFinanceiro() {
   const ent = fin.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
   const sai = fin.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
   const saldo = ent-sai;
-  const inad = Object.keys(mens).length;
+  // Lógica de vencimento: dia 15 de cada mês
+  const hoje = new Date();
+  const anoAtual = hoje.getFullYear();
+  const mesAtual = hoje.getMonth(); // 0-indexed
+  const passouDia15 = hoje.getDate() > 15;
+  const anoMesAtual = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}`;
+
+  // Jogadores que pagaram mensalidade no mês atual
+  const pagaramEsseMes = new Set(
+    fin.filter(f => f.tipo === 'entrada' && f.cat === 'Mensalidade' && f.jogadorId && f.data && f.data.startsWith(anoMesAtual))
+       .map(f => f.jogadorId)
+  );
+
+  const inad = cache.jogadores.filter(j => !pagaramEsseMes.has(j.id) && passouDia15).length;
 
   document.getElementById('fin-cards').innerHTML = `
     <div class="card"><div class="card-title">Saldo atual</div><div class="card-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'}; font-size:clamp(16px,3vw,24px)">${fmtBRL(saldo)}</div></div>
@@ -2765,19 +2778,26 @@ function renderFinanceiro() {
   document.getElementById('mens-body').innerHTML = cache.jogadores.length === 0
     ? '<tr><td colspan="4" style="color:var(--text2);font-size:13px;padding:16px;text-align:center">Nenhum jogador cadastrado.</td></tr>'
     : cache.jogadores.map(j => {
-        const mesesAtraso = mens[j.id] || 0;
-        if (mesesAtraso > 0) {
-          return `<tr>
-            <td>${j.apelido||j.nome.split(' ')[0]}</td>
-            <td><span class="badge badge-orange">${mesesAtraso} mês(es)</span></td>
-            <td><span class="badge badge-red">Inadimplente</span></td>
-            <td><button class="btn btn-success btn-sm" onclick="quitarMens(${j.id})"><i class="ti ti-check"></i> Quitar</button></td>
-          </tr>`;
-        } else {
+        const pagou = pagaramEsseMes.has(j.id);
+        if (pagou) {
           return `<tr>
             <td>${j.apelido||j.nome.split(' ')[0]}</td>
             <td>—</td>
             <td><span class="badge badge-green">Em dia</span></td>
+            <td></td>
+          </tr>`;
+        } else if (!passouDia15) {
+          return `<tr>
+            <td>${j.apelido||j.nome.split(' ')[0]}</td>
+            <td><span class="badge badge-blue">Vence dia 15</span></td>
+            <td><span class="badge badge-orange">Pendente</span></td>
+            <td></td>
+          </tr>`;
+        } else {
+          return `<tr>
+            <td>${j.apelido||j.nome.split(' ')[0]}</td>
+            <td><span class="badge badge-red">Atrasado</span></td>
+            <td><span class="badge badge-red">Inadimplente</span></td>
             <td></td>
           </tr>`;
         }
