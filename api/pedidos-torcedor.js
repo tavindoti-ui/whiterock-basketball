@@ -1,6 +1,7 @@
 const { requireAuth } = require('../lib/auth');
 const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
+const { withErrorHandling } = require('../lib/error-handler');
 
 const STATUS_VALIDOS = [
   'Pedido recebido',
@@ -19,7 +20,7 @@ function gerarCodigo(id) {
   return 'WR-' + String(id).padStart(4, '0');
 }
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   if (cors(req, res)) return;
 
   // ── GET ────────────────────────────────────────────────────────
@@ -129,4 +130,4 @@ module.exports = async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-};
+});

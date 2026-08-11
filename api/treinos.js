@@ -1,6 +1,7 @@
 const { requireAuth } = require('../lib/auth');
 const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
+const { withErrorHandling } = require('../lib/error-handler');
 
 // Recalculates presenca % for all players based on past/today treinos
 async function recalcPresenca(treinos) {
@@ -15,7 +16,7 @@ async function recalcPresenca(treinos) {
   await setData('jogadores', jogadores);
 }
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   if (cors(req, res)) return;
 
   if (req.method === 'GET') {
@@ -78,4 +79,4 @@ module.exports = async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-};
+});

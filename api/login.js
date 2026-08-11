@@ -2,8 +2,9 @@ const bcrypt = require('bcryptjs');
 const { signToken } = require('../lib/auth');
 const { getData, seedIfEmpty } = require('../lib/db');
 const cors = require('../lib/cors');
+const { withErrorHandling } = require('../lib/error-handler');
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   if (cors(req, res)) return;
   await seedIfEmpty();
 
@@ -29,4 +30,4 @@ module.exports = async function handler(req, res) {
     token,
     user: { id: user.id, nome: user.nome, email: user.email, role: user.role, num: user.num }
   });
-};
+});
