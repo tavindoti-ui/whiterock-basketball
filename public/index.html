@@ -1581,11 +1581,22 @@ async function doLogin() {
   btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader"></i> Entrando...';
   try {
     const r = await fetch(`${API}/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, senha}) });
-    const d = await r.json();
-    if (!r.ok) { showLoginError(d.error || 'Erro ao entrar'); return; }
+    let d;
+    try {
+      d = await r.json();
+    } catch (parseErr) {
+      // O servidor respondeu, mas não com JSON (ex: página de erro do Vercel).
+      console.error('Resposta não era JSON:', parseErr);
+      showLoginError(`Erro no servidor (status ${r.status}). Veja o console para detalhes.`);
+      return;
+    }
+    if (!r.ok) { showLoginError(d.error || d.detalhe || 'Erro ao entrar'); return; }
     saveSession(d.token, d.user);
     initApp();
   } catch(e) {
+    // Isso só acontece se o fetch nem chegou a sair do navegador
+    // (sem internet, DNS falhou, etc.) — erro de rede de verdade.
+    console.error('Falha de rede no login:', e);
     showLoginError('Erro de conexão. Verifique a internet.');
   } finally {
     btn.disabled = false; btn.innerHTML = '<i class="ti ti-login"></i> Entrar';
@@ -1610,7 +1621,12 @@ async function api(method, path, body) {
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(`${API}/${path}`, opts);
   if (r.status === 401) { doLogout(); return null; }
-  return r.json();
+  try {
+    return await r.json();
+  } catch (e) {
+    console.error(`Resposta não-JSON de /${path} (status ${r.status})`, e);
+    throw new Error(`Erro no servidor (status ${r.status}) ao acessar /${path}`);
+  }
 }
 
 // ==================== ROLES ====================
