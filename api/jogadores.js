@@ -18,12 +18,12 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { nome, apelido, num, pos, idade, altura, status, tel, obs } = req.body;
+    const { nome, apelido, num, pos, idade, dataNasc, naturalidade, rg, cpf, altura, status, tel, obs, endereco, numero, bairro, cidade, cep } = req.body;
     if (!nome) return res.status(400).json({ error: 'Nome obrigatório' });
     const jogadores = await getData('jogadores') || [];
     const counters = await getData('counters');
     counters.jogadores = (counters.jogadores || 0) + 1;
-    const novo = { id: counters.jogadores, nome, apelido: apelido || '', num: num || 0, pos: pos || 'Armador', idade: idade || 0, altura: altura || 0, status: status || 'Ativo', tel: tel || '', obs: obs || '', pts: 0, ast: 0, reb: 0, tpt: 0, flt: 0, jg: 0, presenca: 100 };
+    const novo = { id: counters.jogadores, nome, apelido: apelido || '', num: num || 0, pos: pos || 'Armador', idade: idade || 0, dataNasc: dataNasc || '', naturalidade: naturalidade || '', rg: rg || '', cpf: cpf || '', altura: altura || 0, status: status || 'Ativo', tel: tel || '', obs: obs || '', endereco: endereco || '', numero: numero || '', bairro: bairro || '', cidade: cidade || '', cep: cep || '', pts: 0, ast: 0, reb: 0, tpt: 0, flt: 0, jg: 0, presenca: 100 };
     jogadores.push(novo);
     await setData('jogadores', jogadores);
     await setData('counters', counters);
