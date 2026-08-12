@@ -477,6 +477,20 @@ select.form-input option{background:#0D1526;color:var(--text)}
 }
 .modal-close:hover{background:rgba(239,68,68,.1);color:var(--danger);border-color:rgba(239,68,68,.3)}
 
+/* FORM SECTIONS (blocos de cadastro) */
+.form-section{
+  background:rgba(77,166,255,0.03);
+  border:1px solid var(--border);border-radius:12px;
+  padding:16px 16px 4px;margin-bottom:14px;
+}
+.form-section:last-of-type{margin-bottom:8px}
+.form-section-title{
+  display:flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:14px;
+}
+.form-section-title i{font-size:13px}
+
 .alert{padding:11px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .alert-warning{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--warning)}
 .alert-danger{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--danger)}
@@ -1131,6 +1145,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
         <option value="Suspenso">Suspensos</option>
         <option value="Inativo">Inativos</option>
       </select>
+<button class="btn btn-ghost btn-sm" onclick="exportJogadoresPDF()"><i class="ti ti-file-download"></i> Exportar PDF</button>
 <button class="btn btn-primary btn-sm" id="btn-add-jogador" onclick="openAddJogador()" style="display:none"><i class="ti ti-plus"></i> Cadastrar</button>
     </div>
   </div>
@@ -1270,29 +1285,65 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <!-- ======== MODAIS ======== -->
 
 <div class="modal-overlay" id="modal-add-jogador">
-  <div class="modal">
+  <div class="modal" style="max-width:640px">
     <div class="modal-title">Cadastrar jogador <button class="modal-close" onclick="closeModal('modal-add-jogador')"><i class="ti ti-x"></i></button></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="j-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
-      <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="j-apelido" placeholder="Ex: Tavin"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Nº da camisa *</label><input class="form-input" id="j-num" type="number" placeholder="Ex: 10"></div>
-      <div class="form-group"><label class="form-label">Posição</label>
-        <select class="form-input" id="j-pos"><option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option></select>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-id"></i> Dados pessoais</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="j-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
+        <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="j-datanasc" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Naturalidade</label><input class="form-input" id="j-naturalidade" placeholder="Ex: Rio de Janeiro/RJ"></div>
+        <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="j-tel" placeholder="(21) 99999-9999"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">RG</label><input class="form-input" id="j-rg" placeholder="Ex: 12.345.678-9"></div>
+        <div class="form-group"><label class="form-label">CPF</label><input class="form-input" id="j-cpf" placeholder="Ex: 123.456.789-00"></div>
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="j-datanasc" type="date"></div>
-      <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="j-altura" type="number" placeholder="Ex: 185"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Status</label>
-        <select class="form-input" id="j-status"><option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option></select>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-map-pin"></i> Endereço</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Endereço</label><input class="form-input" id="j-endereco" placeholder="Ex: Rua das Palmeiras"></div>
+        <div class="form-group"><label class="form-label">Número</label><input class="form-input" id="j-numero" placeholder="Ex: 123"></div>
       </div>
-      <div class="form-group"><label class="form-label">Telefone (WhatsApp)</label><input class="form-input" id="j-tel" placeholder="(21) 99999-9999"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Bairro</label><input class="form-input" id="j-bairro" placeholder="Ex: Centro"></div>
+        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="j-cidade" placeholder="Ex: Nova Iguaçu"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">CEP</label><input class="form-input" id="j-cep" placeholder="Ex: 26000-000"></div>
+        <div></div>
+      </div>
     </div>
-    <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="j-obs" placeholder="Ex: Torção no tornozelo"></div>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-shirt-sport"></i> Informações esportivas</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="j-apelido" placeholder="Ex: Tavin"></div>
+        <div class="form-group"><label class="form-label">Nº da camisa *</label><input class="form-input" id="j-num" type="number" placeholder="Ex: 10"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Posição</label>
+          <select class="form-input" id="j-pos"><option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="j-altura" type="number" placeholder="Ex: 185"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-activity"></i> Status</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Status do jogador</label>
+          <select class="form-input" id="j-status"><option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="j-obs" placeholder="Ex: Torção no tornozelo"></div>
+      </div>
+    </div>
+
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn btn-primary" style="flex:1" onclick="addJogador()">Cadastrar</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-jogador')">Cancelar</button>
@@ -1464,34 +1515,70 @@ body.sidebar-mini .btn-logout{justify-content:center}
 </div>
 
 <div class="modal-overlay" id="modal-edit-jogador">
-  <div class="modal">
+  <div class="modal" style="max-width:640px">
     <div class="modal-title">Editar jogador <button class="modal-close" onclick="closeModal('modal-edit-jogador')"><i class="ti ti-x"></i></button></div>
     <input type="hidden" id="ej-id">
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="ej-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
-      <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="ej-apelido" placeholder="Ex: Tavin"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Nº da camisa</label><input class="form-input" id="ej-num" type="number" placeholder="Ex: 10"></div>
-      <div class="form-group"><label class="form-label">Posição</label>
-        <select class="form-input" id="ej-pos">
-          <option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option>
-        </select>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-id"></i> Dados pessoais</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="ej-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
+        <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="ej-datanasc" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Naturalidade</label><input class="form-input" id="ej-naturalidade" placeholder="Ex: Rio de Janeiro/RJ"></div>
+        <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="ej-tel" placeholder="(21) 99999-9999"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">RG</label><input class="form-input" id="ej-rg" placeholder="Ex: 12.345.678-9"></div>
+        <div class="form-group"><label class="form-label">CPF</label><input class="form-input" id="ej-cpf" placeholder="Ex: 123.456.789-00"></div>
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="ej-datanasc" type="date"></div>
-      <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="ej-altura" type="number" placeholder="Ex: 185"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Telefone (WhatsApp)</label><input class="form-input" id="ej-tel" placeholder="(21) 99999-9999"></div>
-      <div class="form-group"><label class="form-label">Status</label>
-        <select class="form-input" id="ej-status">
-          <option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option>
-        </select>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-map-pin"></i> Endereço</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Endereço</label><input class="form-input" id="ej-endereco" placeholder="Ex: Rua das Palmeiras"></div>
+        <div class="form-group"><label class="form-label">Número</label><input class="form-input" id="ej-numero" placeholder="Ex: 123"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Bairro</label><input class="form-input" id="ej-bairro" placeholder="Ex: Centro"></div>
+        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="ej-cidade" placeholder="Ex: Nova Iguaçu"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">CEP</label><input class="form-input" id="ej-cep" placeholder="Ex: 26000-000"></div>
+        <div></div>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="ej-obs" placeholder="Ex: Torção no tornozelo"></div>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-shirt-sport"></i> Informações esportivas</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="ej-apelido" placeholder="Ex: Tavin"></div>
+        <div class="form-group"><label class="form-label">Nº da camisa</label><input class="form-input" id="ej-num" type="number" placeholder="Ex: 10"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Posição</label>
+          <select class="form-input" id="ej-pos">
+            <option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="ej-altura" type="number" placeholder="Ex: 185"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="ti ti-activity"></i> Status</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Status do jogador</label>
+          <select class="form-input" id="ej-status">
+            <option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="ej-obs" placeholder="Ex: Torção no tornozelo"></div>
+      </div>
+    </div>
+
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn btn-primary" style="flex:1" onclick="saveEditJogador()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogador')">Cancelar</button>
@@ -2282,6 +2369,10 @@ function openPlayerDetail(id) {
       <div><span style="color:var(--text2)">Altura:</span> ${j.altura} cm</div>
       <div><span style="color:var(--text2)">WhatsApp:</span> <a href="https://wa.me/55${(j.tel||'').replace(/\D/g,'')}" style="color:var(--success)">${j.tel||'—'}</a></div>
       <div><span style="color:var(--text2)">Jogos:</span> ${j.jg}</div>
+      ${j.naturalidade?`<div><span style="color:var(--text2)">Naturalidade:</span> ${j.naturalidade}</div>`:''}
+      ${j.rg?`<div><span style="color:var(--text2)">RG:</span> ${j.rg}</div>`:''}
+      ${j.cpf?`<div><span style="color:var(--text2)">CPF:</span> ${j.cpf}</div>`:''}
+      ${(j.endereco||j.cidade)?`<div><span style="color:var(--text2)">Endereço:</span> ${[j.endereco,j.numero].filter(Boolean).join(', ')}${j.bairro?' - '+j.bairro:''}${j.cidade?', '+j.cidade:''}${j.cep?' - '+j.cep:''}</div>`:''}
     </div>
     ${j.obs?`<div class="alert alert-danger"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;margin-bottom:16px">
@@ -2321,17 +2412,25 @@ async function addJogador() {
     num: +document.getElementById('j-num').value||0,
     pos: document.getElementById('j-pos').value,
     dataNasc: document.getElementById('j-datanasc').value,
+    naturalidade: document.getElementById('j-naturalidade').value.trim(),
+    rg: document.getElementById('j-rg').value.trim(),
+    cpf: document.getElementById('j-cpf').value.trim(),
     altura: +document.getElementById('j-altura').value||0,
     status: document.getElementById('j-status').value,
     tel: document.getElementById('j-tel').value,
     obs: document.getElementById('j-obs').value,
+    endereco: document.getElementById('j-endereco').value.trim(),
+    numero: document.getElementById('j-numero').value.trim(),
+    bairro: document.getElementById('j-bairro').value.trim(),
+    cidade: document.getElementById('j-cidade').value.trim(),
+    cep: document.getElementById('j-cep').value.trim(),
   });
   if (r && r.id) {
     cache.jogadores.push(r);
     closeModal('modal-add-jogador');
     renderJogadores(); renderDashboard();
     toast('Jogador cadastrado!');
-    ['j-nome','j-apelido','j-num','j-datanasc','j-altura','j-tel','j-obs'].forEach(id=>document.getElementById(id).value='');
+    ['j-nome','j-apelido','j-num','j-datanasc','j-naturalidade','j-rg','j-cpf','j-altura','j-tel','j-obs','j-endereco','j-numero','j-bairro','j-cidade','j-cep'].forEach(id=>document.getElementById(id).value='');
   } else toast('Erro ao cadastrar','error');
 }
 
@@ -2358,10 +2457,18 @@ function editJogadorFull(id) {
   document.getElementById('ej-num').value = j.num;
   document.getElementById('ej-pos').value = j.pos;
   document.getElementById('ej-datanasc').value = j.dataNasc || '';
+  document.getElementById('ej-naturalidade').value = j.naturalidade || '';
+  document.getElementById('ej-rg').value = j.rg || '';
+  document.getElementById('ej-cpf').value = j.cpf || '';
   document.getElementById('ej-altura').value = j.altura;
   document.getElementById('ej-tel').value = j.tel || '';
   document.getElementById('ej-status').value = j.status;
   document.getElementById('ej-obs').value = j.obs || '';
+  document.getElementById('ej-endereco').value = j.endereco || '';
+  document.getElementById('ej-numero').value = j.numero || '';
+  document.getElementById('ej-bairro').value = j.bairro || '';
+  document.getElementById('ej-cidade').value = j.cidade || '';
+  document.getElementById('ej-cep').value = j.cep || '';
   closeModal('modal-jogador-detail');
   openModal('modal-edit-jogador');
 }
@@ -2377,10 +2484,18 @@ async function saveEditJogador() {
     num: +document.getElementById('ej-num').value || 0,
     pos: document.getElementById('ej-pos').value,
     dataNasc: document.getElementById('ej-datanasc').value,
+    naturalidade: document.getElementById('ej-naturalidade').value.trim(),
+    rg: document.getElementById('ej-rg').value.trim(),
+    cpf: document.getElementById('ej-cpf').value.trim(),
     altura: +document.getElementById('ej-altura').value || 0,
     tel: document.getElementById('ej-tel').value,
     status: document.getElementById('ej-status').value,
     obs: document.getElementById('ej-obs').value,
+    endereco: document.getElementById('ej-endereco').value.trim(),
+    numero: document.getElementById('ej-numero').value.trim(),
+    bairro: document.getElementById('ej-bairro').value.trim(),
+    cidade: document.getElementById('ej-cidade').value.trim(),
+    cep: document.getElementById('ej-cep').value.trim(),
   });
   if (r && r.id) {
     const idx = cache.jogadores.findIndex(x=>x.id===id);
@@ -3687,6 +3802,151 @@ async function deleteUniformOrder(id) {
     if (r && r.success) { cache.uniformes = cache.uniformes.filter(x => x.id !== id); renderUniformes(); toast('Pedido removido!'); }
     else toast('Erro ao remover','error');
   }, { title:'Remover pedido', label:'Sim, remover', icon:'ti-shirt-off', type:'danger' });
+}
+
+// ==================== PDF EXPORT — JOGADORES ====================
+function exportJogadoresPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc   = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const today = new Date().toLocaleDateString('pt-BR');
+  const userName = currentUser?.nome || 'Admin';
+
+  const COL_P = [45, 140, 255];
+  const DARK  = [13, 21, 38];
+  const DARK2 = [8, 18, 36];
+  const LIGHT = [244, 247, 251];
+  const GRAY  = [174, 184, 199];
+  const GREEN = [46, 204, 113];
+  const RED   = [235, 87, 87];
+  const ORANGE= [245, 158, 11];
+
+  const todos    = [...cache.jogadores];
+  const ativos   = todos.filter(j => j.status === 'Ativo');
+  const lesion   = todos.filter(j => j.status === 'Lesão');
+  const suspen   = todos.filter(j => j.status === 'Suspenso');
+  const inativos = todos.filter(j => j.status === 'Inativo');
+
+  function addHeader(section) {
+    doc.setFillColor(5, 11, 22);
+    doc.rect(0, 0, pageW, 24, 'F');
+    doc.setFillColor(...COL_P);
+    doc.rect(0, 0, 4, 24, 'F');
+    doc.setTextColor(...COL_P);
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('WHITE ROCK BASKETBALL', 10, 10);
+    doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+    doc.setTextColor(...GRAY);
+    doc.text(section, 10, 18);
+    doc.text(`Gerado por ${userName} · ${today}`, pageW - 12, 18, { align: 'right' });
+    return 30;
+  }
+
+  function addFooters() {
+    const n = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= n; i++) {
+      doc.setPage(i);
+      doc.setDrawColor(30, 45, 70); doc.setLineWidth(0.25);
+      doc.line(10, pageH - 11, pageW - 10, pageH - 11);
+      doc.setFontSize(7.5); doc.setFont('helvetica','normal');
+      doc.setTextColor(74, 90, 114);
+      doc.text('White Rock Basketball — Relatório de Jogadores · Temporada 2026', 10, pageH - 7);
+      doc.text(`Pág. ${i} / ${n}`, pageW - 10, pageH - 7, { align: 'right' });
+    }
+  }
+
+  const statusColor = (s) => s === 'Ativo' ? GREEN : s === 'Lesão' ? RED : s === 'Suspenso' ? ORANGE : GRAY;
+
+  // ════════════════════════════════════════════════════════════════
+  // PÁG 1 — RESUMO
+  // ════════════════════════════════════════════════════════════════
+  let y = addHeader('Página 1 — Resumo do Elenco · Temporada 2026');
+
+  doc.autoTable({
+    startY: y,
+    body: [[
+      { content: `TOTAL DE JOGADORES\n${todos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: LIGHT } },
+      { content: `ATIVOS\n${ativos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: GREEN } },
+      { content: `LESIONADOS\n${lesion.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: RED } },
+      { content: `SUSPENSOS\n${suspen.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: ORANGE } },
+      { content: `INATIVOS\n${inativos.length}`, styles: { fontStyle:'bold', fontSize:9, textColor: GRAY } },
+    ]],
+    styles: { fillColor: DARK, cellPadding: 6, halign: 'center', lineColor: [30,45,70], lineWidth: 0.3 },
+    columnStyles: { 0:{cellWidth:52}, 1:{cellWidth:48}, 2:{cellWidth:48}, 3:{cellWidth:48}, 4:{cellWidth:48} },
+    margin: { left: 10 },
+  });
+  y = doc.lastAutoTable.finalY + 10;
+
+  // ════════════════════════════════════════════════════════════════
+  // LISTAGEM COMPLETA — agrupada por posição, na ordem do app
+  // ════════════════════════════════════════════════════════════════
+  const head = [[
+    { content: '#', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Nome', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Apelido', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Idade', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Altura', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Telefone', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Status', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'Presença', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'JG', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'PTS', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'REB', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+    { content: 'AST', styles:{fontStyle:'bold',textColor:LIGHT,fillColor:[20,35,60]} },
+  ]];
+
+  const rowsForGroup = (grupo) => grupo
+    .sort((a,b) => (a.num||0) - (b.num||0))
+    .map(j => [
+      j.num ? `#${j.num}` : '—',
+      j.nome || '—',
+      j.apelido || '—',
+      j.idade || '—',
+      j.altura ? `${j.altura} cm` : '—',
+      j.tel || '—',
+      { content: j.status || '—', styles: { textColor: statusColor(j.status), fontStyle:'bold' } },
+      j.presenca != null ? `${j.presenca}%` : '—',
+      j.jg || 0,
+      j.pts || 0,
+      j.reb || 0,
+      j.ast || 0,
+    ]);
+
+  const groups = [...POS_ORDER, null].map(pos => {
+    const grupo = pos ? todos.filter(j => j.pos === pos) : todos.filter(j => !POS_ORDER.includes(j.pos));
+    return { label: pos ? (POS_LABEL[pos]?.plural || pos) : 'Outros', grupo };
+  }).filter(g => g.grupo.length);
+
+  if (!groups.length) {
+    doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(...GRAY);
+    doc.text('Nenhum jogador cadastrado.', 10, y);
+  } else {
+    groups.forEach(({ label, grupo }) => {
+      if (y > pageH - 40) { doc.addPage(); y = addHeader('Página — Listagem de Jogadores · Temporada 2026'); }
+      doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(...COL_P);
+      doc.text(`${label.toUpperCase()} (${grupo.length})`, 10, y); y += 5;
+      doc.autoTable({
+        startY: y,
+        head,
+        body: rowsForGroup(grupo),
+        styles: { fontSize: 8, fillColor: DARK, textColor: GRAY, halign: 'center', cellPadding: 3.2, lineColor:[30,45,70], lineWidth:0.25 },
+        alternateRowStyles: { fillColor: DARK2 },
+        columnStyles: {
+          0:{cellWidth:12}, 1:{cellWidth:52,halign:'left'}, 2:{cellWidth:32,halign:'left'},
+          3:{cellWidth:16}, 4:{cellWidth:18}, 5:{cellWidth:28}, 6:{cellWidth:22},
+          7:{cellWidth:20}, 8:{cellWidth:12}, 9:{cellWidth:14}, 10:{cellWidth:14}, 11:{cellWidth:14},
+        },
+        margin: { left: 10 },
+        didDrawPage: () => {}
+      });
+      y = doc.lastAutoTable.finalY + 8;
+    });
+  }
+
+  addFooters();
+  doc.save(`jogadores-whiterock-${today.replace(/\//g,'-')}.pdf`);
+  toast('PDF exportado com sucesso!');
 }
 
 // ==================== PDF EXPORT ====================
