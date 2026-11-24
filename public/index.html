@@ -1269,6 +1269,7 @@ body.sidebar-mini .btn-logout{justify-content:center}
     <div class="sec-title" style="margin:0"><i class="ti ti-clipboard-list"></i> Log de atividades</div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <input class="form-input" id="log-search" placeholder="Filtrar..." style="width:180px;font-size:12px" oninput="renderLog()">
+      <button class="btn btn-ghost btn-sm" onclick="downloadBackup()"><i class="ti ti-database-export"></i> Baixar backup</button>
       <button class="btn btn-danger btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i> Limpar log</button>
     </div>
   </div>
@@ -3310,6 +3311,21 @@ async function clearLog() {
     if (r && r.success) { _logCache = []; renderLog(); toast('Log limpo!'); }
     else toast('Erro ao limpar log','error');
   }, { title:'Limpar log', label:'Sim, limpar', icon:'ti-clipboard-x', type:'warning' });
+}
+
+// Baixa uma cópia completa dos dados (JSON) — guarde em local seguro.
+async function downloadBackup() {
+  try {
+    const data = await api('GET','backup');
+    if (!data || data.error) { toast(data?.error || 'Erro ao gerar backup','error'); return; }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `whiterock-backup-${today()}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast('Backup baixado!');
+  } catch (e) { toast(e.message,'error'); }
 }
 
 // ==================== UNIFORMES ====================

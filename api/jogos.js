@@ -16,10 +16,10 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { adv, data, hora, local, camp } = req.body;
+    const { adv, data, hora, local, camp } = req.body || {};
     if (!adv || !data) return res.status(400).json({ error: 'Adversário e data são obrigatórios' });
     const jogos = await getData('jogos') || [];
-    const counters = await getData('counters');
+    const counters = await getData('counters') || {};
     counters.jogos = (counters.jogos || 0) + 1;
     const novo = { id: counters.jogos, adv, data, hora: hora || '19:00', local: local || '', camp: camp || 'Amistoso', wr: null, advPl: null };
     jogos.push(novo);
@@ -32,7 +32,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'PUT') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao']);
     if (!user) return;
-    const { id, wr, advPl, statsJogadores, ...rest } = req.body;
+    const { id, wr, advPl, statsJogadores, ...rest } = req.body || {};
     const jogos = await getData('jogos') || [];
     const idx = jogos.findIndex(j => j.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Jogo não encontrado' });
@@ -93,7 +93,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { id } = req.body;
+    const { id } = req.body || {};
     const jogos = await getData('jogos') || [];
     const target = jogos.find(j => j.id === id);
     await setData('jogos', jogos.filter(j => j.id !== id));

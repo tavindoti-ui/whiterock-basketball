@@ -20,6 +20,29 @@ function gerarCodigo(id) {
   return 'WR-' + String(id).padStart(4, '0');
 }
 
+// What a public (not logged in) lookup may see. Codes are sequential, so
+// anyone can try WR-0001, WR-0002…: never expose the fan's phone, notes or
+// full name here. "Ana Paula Souza" → "Ana S."
+function publicView(p) {
+  const partes = String(p.nome || '').trim().split(/\s+/).filter(Boolean);
+  const inicial = partes.length > 1 ? (partes[partes.length - 1].match(/\p{L}/u) || [''])[0] : '';
+  const nome = inicial ? `${partes[0]} ${inicial.toUpperCase()}.` : (partes[0] || '');
+  return {
+    codigo: p.codigo,
+    nome,
+    tamanho: p.tamanho,
+    numCamisa: p.numCamisa,
+    nomeCamisa: p.nomeCamisa,
+    modelo: p.modelo,
+    quantidade: p.quantidade,
+    valor: p.valor,
+    status: p.status,
+    pagamento: p.pagamento,
+    dataPedido: p.dataPedido,
+    obs: null,
+  };
+}
+
 module.exports = withErrorHandling(async function handler(req, res) {
   if (cors(req, res)) return;
 
@@ -32,13 +55,18 @@ module.exports = withErrorHandling(async function handler(req, res) {
       const pedidos = await getData('pedidos-torcedor') || [];
       let result;
       if (codigo) {
-        result = pedidos.find(p => p.codigo === codigo.toUpperCase());
+        const p = pedidos.find(p => p.codigo === String(codigo).toUpperCase());
+        result = p ? publicView(p) : null;
       } else {
         // Return all orders for this whatsapp (most recent first)
-        const digits = whatsapp.replace(/\D/g, '');
+        const digits = String(whatsapp).replace(/\D/g, '');
+        if (digits.length < 10) {
+          return res.status(400).json({ error: 'Informe o WhatsApp completo, com DDD.' });
+        }
         result = pedidos
-          .filter(p => p.whatsapp.replace(/\D/g, '') === digits)
-          .sort((a, b) => b.id - a.id);
+          .filter(p => String(p.whatsapp || '').replace(/\D/g, '') === digits)
+          .sort((a, b) => b.id - a.id)
+          .map(publicView);
       }
       if (!result) return res.status(404).json({ error: 'Pedido não encontrado' });
       return res.json(result);
@@ -53,10 +81,17 @@ module.exports = withErrorHandling(async function handler(req, res) {
 
   // ── POST — public, no auth ──────────────────────────────────────
   if (req.method === 'POST') {
-    const { nome, whatsapp, tamanho, numCamisa, nomeCamisa, modelo, quantidade, obs } = req.body;
+    const { nome, whatsapp, tamanho, numCamisa, nomeCamisa, modelo, quantidade, obs } = req.body || {};
 
     if (!nome || !whatsapp || !tamanho || !modelo) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, whatsapp, tamanho, modelo' });
+    }
+    // Public form: cap sizes so nobody can flood the database with huge entries.
+    const tooLong = [[nome, 80], [whatsapp, 25], [tamanho, 10], [modelo, 20], [nomeCamisa, 20], [obs, 500]]
+      .some(([v, max]) => v != null && String(v).length > max);
+    if (tooLong) return res.status(400).json({ error: 'Algum campo está longo demais.' });
+    if (quantidade && (+quantidade > 50 || !Number.isFinite(+quantidade))) {
+      return res.status(400).json({ error: 'Quantidade inválida.' });
     }
 
     const pedidos = await getData('pedidos-torcedor') || [];
@@ -66,8 +101,8 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const novo = {
       id: counters['pedidos-torcedor'],
       codigo: gerarCodigo(counters['pedidos-torcedor']),
-      nome: nome.trim(),
-      whatsapp: whatsapp.trim(),
+      nome: String(nome).trim(),
+      whatsapp: String(whatsapp).trim(),
       tamanho,
       numCamisa: numCamisa !== undefined && numCamisa !== '' ? +numCamisa : null,
       nomeCamisa: (nomeCamisa || '').trim().toUpperCase() || null,
@@ -92,7 +127,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
 
-    const { id, status, pagamento, valor, obs } = req.body;
+    const { id, status, pagamento, valor, obs } = req.body || {};
     const pedidos = await getData('pedidos-torcedor') || [];
     const idx = pedidos.findIndex(p => p.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Pedido não encontrado' });
@@ -120,7 +155,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const { id } = req.body;
+    const { id } = req.body || {};
     const pedidos = await getData('pedidos-torcedor') || [];
     const target = pedidos.find(p => p.id === id);
     await setData('pedidos-torcedor', pedidos.filter(p => p.id !== id));

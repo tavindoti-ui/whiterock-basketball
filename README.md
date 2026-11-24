@@ -48,13 +48,8 @@ whiterock/
 | Gerenciar usuários    | ✅    | ❌      | ❌     |
 
 ## Credenciais iniciais
-| Usuário | Email | Senha |
-|---------|-------|-------|
-| Admin | admin@whiterock.com | admin123 |
-| Capitão (Lucas) | lucas@whiterock.com | lucas123 |
-| Atleta (Rafael) | rafael@whiterock.com | rafael123 |
-
-⚠️ **Troque as senhas após o primeiro login!**
+Na primeira execução (banco vazio) o sistema cria contas de demonstração definidas em `lib/db.js`.
+⚠️ **Troque as senhas imediatamente após o primeiro login** e exclua as contas de demonstração que não forem usadas — as senhas iniciais estão no código, que é público.
 
 ---
 

@@ -11,7 +11,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'GET') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const users = await getData('users');
+    const users = await getData('users') || [];
     const safe = users.map(({ senha, ...u }) => u);
     return res.json(safe);
   }
@@ -21,13 +21,13 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
 
-    const { nome, email, senha, role, num } = req.body;
+    const { nome, email, senha, role, num } = req.body || {};
     if (!nome || !email || !senha || !role) return res.status(400).json({ error: 'Campos obrigatórios faltando' });
 
-    const users = await getData('users');
-    if (users.find(u => u.email === email)) return res.status(409).json({ error: 'Email já cadastrado' });
+    const users = await getData('users') || [];
+    if (users.find(u => u.email.toLowerCase() === String(email).toLowerCase())) return res.status(409).json({ error: 'Email já cadastrado' });
 
-    const counters = await getData('counters');
+    const counters = await getData('counters') || {};
     counters.users = (counters.users || 0) + 1;
     const newUser = { id: counters.users, nome, email, senha: bcrypt.hashSync(senha, 10), role, num: (num !== undefined && num !== null && num !== '') ? +num : null, ativo: true };
     users.push(newUser);
@@ -44,8 +44,8 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
 
-    const { id, nome, email, senha, role, num, ativo } = req.body;
-    const users = await getData('users');
+    const { id, nome, email, senha, role, num, ativo } = req.body || {};
+    const users = await getData('users') || [];
     const idx = users.findIndex(u => u.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Usuário não encontrado' });
 
@@ -68,9 +68,9 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const { id } = req.body;
+    const { id } = req.body || {};
     if (id === user.id) return res.status(400).json({ error: 'Você não pode excluir sua própria conta' });
-    const users = await getData('users');
+    const users = await getData('users') || [];
     const target = users.find(u => u.id === id);
     if (!target) return res.status(404).json({ error: 'Usuário não encontrado' });
     await setData('users', users.filter(u => u.id !== id));

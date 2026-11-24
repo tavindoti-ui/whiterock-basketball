@@ -29,10 +29,10 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { data, hora, local, tipo } = req.body;
+    const { data, hora, local, tipo } = req.body || {};
     if (!data) return res.status(400).json({ error: 'Data obrigatória' });
     const treinos = await getData('treinos') || [];
-    const counters = await getData('counters');
+    const counters = await getData('counters') || {};
     counters.treinos = (counters.treinos || 0) + 1;
     const novo = { id: counters.treinos, data, hora: hora || '20:00', local: local || '', tipo: tipo || 'Treino técnico', presentes: [] };
     treinos.push(novo);
@@ -45,7 +45,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'PUT') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao']);
     if (!user) return;
-    const { id, presentes, ...rest } = req.body;
+    const { id, presentes, ...rest } = req.body || {};
     const treinos = await getData('treinos') || [];
     const idx = treinos.findIndex(t => t.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Treino não encontrado' });
@@ -68,7 +68,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const { id } = req.body;
+    const { id } = req.body || {};
     const treinos = await getData('treinos') || [];
     const target = treinos.find(t => t.id === id);
     const remaining = treinos.filter(t => t.id !== id);

@@ -16,10 +16,10 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { titulo, msg, tipo, imagem } = req.body;
+    const { titulo, msg, tipo, imagem } = req.body || {};
     if (!titulo || !msg) return res.status(400).json({ error: 'Título e mensagem obrigatórios' });
     const avisos = await getData('avisos') || [];
-    const counters = await getData('counters');
+    const counters = await getData('counters') || {};
     counters.avisos = (counters.avisos || 0) + 1;
     const novo = { id: counters.avisos, titulo, msg, tipo: tipo || 'info', imagem: imagem || null, data: new Date().toISOString().split('T')[0], autor: user.nome };
     avisos.push(novo);
@@ -32,7 +32,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { id } = req.body;
+    const { id } = req.body || {};
     const avisos = await getData('avisos') || [];
     const target = avisos.find(a => a.id === id);
     await setData('avisos', avisos.filter(a => a.id !== id));

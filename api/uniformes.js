@@ -20,7 +20,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'POST') {
     const user = requireAuth(req, res, ['atleta', 'capitao', 'tecnico', 'comissao']);
     if (!user) return;
-    const { tamPrincipal, tamSecundario, tamCity } = req.body;
+    const { tamPrincipal, tamSecundario, tamCity } = req.body || {};
     if (!tamPrincipal && !tamSecundario && !tamCity) {
       return res.status(400).json({ error: 'Selecione pelo menos um uniforme' });
     }
@@ -36,7 +36,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const displayNum  = hasNum ? user.num : (jogadorRef?.num ?? 0);
 
     const pedidos = await getData('uniformes') || [];
-    const counters = await getData('counters');
+    const counters = await getData('counters') || {};
     const now = new Date().toISOString().split('T')[0];
     const existingIdx = pedidos.findIndex(p => p.userId === user.id);
 
@@ -86,7 +86,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'PUT') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
-    const { id, statusPrincipal, statusSecundario, statusCity } = req.body;
+    const { id, statusPrincipal, statusSecundario, statusCity } = req.body || {};
     const pedidos = await getData('uniformes') || [];
     const idx = pedidos.findIndex(p => p.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Pedido não encontrado' });
@@ -103,7 +103,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method === 'DELETE') {
     const user = requireAuth(req, res, ['admin']);
     if (!user) return;
-    const { id } = req.body;
+    const { id } = req.body || {};
     const pedidos = await getData('uniformes') || [];
     const target = pedidos.find(p => p.id === id);
     await setData('uniformes', pedidos.filter(p => p.id !== id));
