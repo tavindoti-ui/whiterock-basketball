@@ -1260,6 +1260,79 @@ select.form-input option{background:#0D1526;color:var(--text)}
   .card,.player-card,.game-card,.aviso-card,.tbl-wrap,.btn{transition:none!important}
   .card:hover,.player-card:hover,.btn-primary:hover{transform:none!important}
 }
+
+/* ═══════════ CADASTRO E FICHA DO ATLETA (fase 5) ═══════════ */
+.avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.player-avatar:has(.avatar-img),.mvp-avatar:has(.avatar-img){padding:0;overflow:hidden}
+.form-opt{color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0;font-weight:500}
+.form-hint{font-size:11px;color:var(--text3);margin-top:6px;line-height:1.45}
+.form-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
+.form-input.invalid{border-color:var(--danger)!important;box-shadow:0 0 0 3px rgba(239,68,68,0.14)!important}
+.form-tabs{display:flex;gap:4px;padding:4px;margin:6px 0 16px;background:rgba(5,11,22,0.6);border:1px solid var(--border);border-radius:11px;overflow-x:auto;scrollbar-width:none}
+.form-tabs::-webkit-scrollbar{display:none}
+.form-tab{flex:1;min-height:34px;padding:0 12px;border:none;border-radius:8px;background:transparent;color:var(--text2);font:600 12.5px/1 inherit;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;transition:background .15s,color .15s}
+.form-tab:hover{color:var(--text)}
+.form-tab.active{background:rgba(45,140,255,0.16);color:#fff;box-shadow:inset 0 0 0 1px rgba(77,166,255,0.25)}
+.form-tab.active i{color:var(--blue)}
+.form-tab:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.form-tab-panel{display:none}
+.form-tab-panel.active{display:block;animation:pageFadeIn .18s ease}
+.jf-identity{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.jf-photo{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:4px}
+.jf-photo-img{width:92px;height:92px;font-size:28px;margin:0}
+.jf-photo-btns{display:flex;gap:6px}
+.jf-photo-btns label{cursor:pointer}
+@media(max-width:560px){
+  .jf-identity{grid-template-columns:1fr;gap:10px}
+  .jf-photo{flex-direction:row;justify-content:flex-start;gap:14px}
+  .jf-photo-img{width:68px;height:68px;font-size:22px}
+  .form-row-3{grid-template-columns:1fr 1fr}
+  .form-tab{font-size:12px;padding:0 10px}
+  .hide-sm{display:none}
+}
+/* Ficha */
+#modal-jogador-detail .modal{max-width:700px}
+.pf-head{display:flex;gap:18px;align-items:center;margin-bottom:18px}
+.pf-avatar{width:88px;height:88px;font-size:28px;margin:0;flex-shrink:0}
+.pf-name{font-size:24px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-0.4px}
+.pf-sub{font-size:12.5px;color:var(--text2);margin-top:4px}
+.pf-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pf-facts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
+.pf-fact,.pf-stat{background:rgba(5,11,22,0.5);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.pf-fact b,.pf-stat b{display:block;font-size:18px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;line-height:1.2}
+.pf-fact b small{font-size:11px;font-weight:600;color:var(--text2)}
+.pf-fact span,.pf-stat span,.pf-info span{display:block;font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-top:2px}
+.pf-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.pf-stat{text-align:center}
+.pf-stat:nth-child(2) b{color:var(--blue)}
+.pf-section{margin-bottom:20px}
+.pf-section .sec-title{margin-bottom:10px}
+.pf-train{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px}
+.pf-dot{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.pf-dot.ok{background:rgba(0,200,122,0.14);color:var(--success)}
+.pf-dot.no{background:rgba(239,68,68,0.12);color:var(--danger)}
+.pf-empty{font-size:12.5px;color:var(--text3)}
+.pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.timeline{list-style:none;margin:0;padding:2px 0 0 16px;border-left:2px solid rgba(77,166,255,0.2)}
+.timeline li{position:relative;padding:0 0 12px 8px;font-size:13px;color:var(--text);line-height:1.45}
+.timeline li:last-child{padding-bottom:2px}
+.timeline li::before{content:'';position:absolute;left:-23px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--navy2);border:2px solid var(--blue)}
+.timeline li.injury::before{border-color:var(--danger)}
+.timeline li.injury.closed::before{border-color:var(--text3)}
+.timeline small{display:block;font-size:11px;font-weight:700;color:var(--text2);letter-spacing:0.3px}
+.pf-info{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;font-size:13px;color:var(--text);background:rgba(5,11,22,0.4);border:1px solid var(--border);border-radius:10px;padding:14px}
+.pf-info span{margin:0 0 2px}
+.pf-quick{display:flex;gap:8px;flex-wrap:wrap;padding:14px;margin-bottom:12px;background:rgba(45,140,255,0.04);border:1px solid var(--border);border-radius:10px}
+.pf-quick .form-input{height:32px;padding:0 10px;font-size:12.5px}
+.pf-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:620px){
+  .pf-facts{grid-template-columns:repeat(3,1fr)}
+  .pf-stats{grid-template-columns:repeat(3,1fr)}
+  .pf-cols,.pf-info{grid-template-columns:1fr}
+  .pf-avatar{width:68px;height:68px;font-size:22px}
+  .pf-name{font-size:20px}
+}
 </style>
 </head>
 <body>
@@ -1643,69 +1716,94 @@ select.form-input option{background:#0D1526;color:var(--text)}
 
 <!-- ======== MODAIS ======== -->
 
-<div class="modal-overlay" id="modal-add-jogador">
-  <div class="modal" style="max-width:640px">
-    <div class="modal-title">Cadastrar jogador <button class="modal-close" onclick="closeModal('modal-add-jogador')"><i class="ti ti-x"></i></button></div>
+<div class="modal-overlay" id="modal-jogador-form">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-title"><span id="jf-title">Cadastrar jogador</span> <button class="modal-close" onclick="closeModal('modal-jogador-form')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="jf-id">
 
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-id"></i> Dados pessoais</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="j-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
-        <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="j-datanasc" type="date"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Naturalidade</label><input class="form-input" id="j-naturalidade" placeholder="Ex: Rio de Janeiro/RJ"></div>
-        <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="j-tel" placeholder="(21) 99999-9999"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">RG</label><input class="form-input" id="j-rg" placeholder="Ex: 12.345.678-9"></div>
-        <div class="form-group"><label class="form-label">CPF</label><input class="form-input" id="j-cpf" placeholder="Ex: 123.456.789-00"></div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-map-pin"></i> Endereço</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Endereço</label><input class="form-input" id="j-endereco" placeholder="Ex: Rua das Palmeiras"></div>
-        <div class="form-group"><label class="form-label">Número</label><input class="form-input" id="j-numero" placeholder="Ex: 123"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Bairro</label><input class="form-input" id="j-bairro" placeholder="Ex: Centro"></div>
-        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="j-cidade" placeholder="Ex: Nova Iguaçu"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">CEP</label><input class="form-input" id="j-cep" placeholder="Ex: 26000-000"></div>
-        <div></div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-shirt-sport"></i> Informações esportivas</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="j-apelido" placeholder="Ex: Tavin"></div>
-        <div class="form-group"><label class="form-label">Nº da camisa *</label><input class="form-input" id="j-num" type="number" placeholder="Ex: 10"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Posição</label>
-          <select class="form-input" id="j-pos"><option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option></select>
+    <!-- Identidade: sempre visível -->
+    <div class="jf-identity">
+      <div class="jf-photo">
+        <div class="player-avatar jf-photo-img" id="jf-photo-img">?</div>
+        <div class="jf-photo-btns">
+          <label class="btn btn-ghost btn-sm" title="Escolher foto"><i class="ti ti-camera"></i> Foto
+            <input type="file" accept="image/*" id="jf-foto-input" hidden onchange="onJogadorFoto(this)">
+          </label>
+          <button type="button" class="btn btn-ghost btn-sm btn-icon" id="jf-foto-remove" onclick="removeJogadorFoto()" title="Remover foto" aria-label="Remover foto"><i class="ti ti-trash"></i></button>
         </div>
-        <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="j-altura" type="number" placeholder="Ex: 185"></div>
       </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-activity"></i> Status</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Status do jogador</label>
-          <select class="form-input" id="j-status"><option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option></select>
+      <div>
+        <div class="form-group"><label class="form-label" for="jf-nome">Nome completo *</label><input class="form-input" id="jf-nome" maxlength="120" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label" for="jf-apelido">Apelido <span class="form-opt">(como é chamado)</span></label><input class="form-input" id="jf-apelido" maxlength="40" placeholder="Ex: Tavin"></div>
+          <div class="form-row" style="gap:10px">
+            <div class="form-group"><label class="form-label" for="jf-num">Nº camisa *</label><input class="form-input" id="jf-num" type="number" min="0" max="99" placeholder="10"></div>
+            <div class="form-group"><label class="form-label" for="jf-pos">Posição</label>
+              <select class="form-input" id="jf-pos"><option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option></select>
+            </div>
+          </div>
         </div>
-        <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="j-obs" placeholder="Ex: Torção no tornozelo"></div>
       </div>
     </div>
 
+    <div class="form-tabs" role="tablist" aria-label="Seções do cadastro">
+      <button type="button" class="form-tab active" role="tab" data-tab="esportivo" onclick="setFormTab('esportivo')"><i class="ti ti-ball-basketball"></i> Esportivo</button>
+      <button type="button" class="form-tab" role="tab" data-tab="pessoal" onclick="setFormTab('pessoal')"><i class="ti ti-user"></i> Pessoal</button>
+      <button type="button" class="form-tab" role="tab" data-tab="docs" onclick="setFormTab('docs')"><i class="ti ti-id"></i> Documentos<span class="hide-sm">&nbsp;e endereço</span></button>
+    </div>
+
+    <div class="form-tab-panel active" data-panel="esportivo">
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label" for="jf-altura">Altura (cm)</label><input class="form-input" id="jf-altura" type="number" min="0" placeholder="185"></div>
+        <div class="form-group"><label class="form-label" for="jf-peso">Peso (kg)</label><input class="form-input" id="jf-peso" type="number" min="0" placeholder="82"></div>
+        <div class="form-group"><label class="form-label" for="jf-envergadura">Envergadura (cm)</label><input class="form-input" id="jf-envergadura" type="number" min="0" placeholder="192"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="jf-mao">Mão dominante</label>
+          <select class="form-input" id="jf-mao"><option value="">—</option><option>Destro</option><option>Canhoto</option><option>Ambidestro</option></select>
+        </div>
+        <div class="form-group"><label class="form-label" for="jf-status">Situação</label>
+          <select class="form-input" id="jf-status"><option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label" for="jf-obs">Observação / lesão</label><input class="form-input" id="jf-obs" maxlength="300" placeholder="Ex: Torção no tornozelo"><div class="form-hint">Ao marcar "Lesão", ela entra sozinha no histórico de lesões da ficha.</div></div>
+      <div class="form-group"><label class="form-label" for="jf-historico">Histórico esportivo</label><textarea class="form-input" id="jf-historico" maxlength="3000" rows="4" placeholder="Uma linha por item. Ex:&#10;2024 - Campeão Copa Rio sub-23&#10;2022 - Tijuca TC"></textarea></div>
+    </div>
+
+    <div class="form-tab-panel" data-panel="pessoal">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="jf-datanasc">Data de nascimento</label><input class="form-input" id="jf-datanasc" type="date"></div>
+        <div class="form-group"><label class="form-label" for="jf-naturalidade">Naturalidade</label><input class="form-input" id="jf-naturalidade" maxlength="80" placeholder="Ex: Rio de Janeiro/RJ"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="jf-tel">WhatsApp</label><input class="form-input" id="jf-tel" inputmode="tel" maxlength="16" placeholder="(21) 99999-9999" oninput="maskField(this,'tel')"></div>
+        <div class="form-group"><label class="form-label" for="jf-emergencia">Contato de emergência</label><input class="form-input" id="jf-emergencia" maxlength="120" placeholder="Ex: Maria (mãe) · (21) 98888-7777"></div>
+      </div>
+    </div>
+
+    <div class="form-tab-panel" data-panel="docs">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="jf-rg">RG</label><input class="form-input" id="jf-rg" maxlength="30" placeholder="Ex: 12.345.678-9"></div>
+        <div class="form-group"><label class="form-label" for="jf-cpf">CPF</label><input class="form-input" id="jf-cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" oninput="maskField(this,'cpf')"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="jf-endereco">Endereço</label><input class="form-input" id="jf-endereco" maxlength="120" placeholder="Ex: Rua das Palmeiras"></div>
+        <div class="form-row" style="gap:10px">
+          <div class="form-group"><label class="form-label" for="jf-numero">Número</label><input class="form-input" id="jf-numero" maxlength="20" placeholder="123"></div>
+          <div class="form-group"><label class="form-label" for="jf-cep">CEP</label><input class="form-input" id="jf-cep" inputmode="numeric" maxlength="9" placeholder="26000-000" oninput="maskField(this,'cep')"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="jf-bairro">Bairro</label><input class="form-input" id="jf-bairro" maxlength="80" placeholder="Ex: Centro"></div>
+        <div class="form-group"><label class="form-label" for="jf-cidade">Cidade</label><input class="form-input" id="jf-cidade" maxlength="80" placeholder="Ex: Nova Iguaçu"></div>
+      </div>
+      <div class="form-hint" style="margin-top:-4px"><i class="ti ti-lock"></i> Documentos, endereço e contatos só aparecem para a comissão e para o próprio atleta.</div>
+    </div>
+
+    <div class="alert alert-danger" id="jf-error" style="display:none;margin:12px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
     <div class="modal-actions">
-      <button class="btn btn-primary" onclick="addJogador()"><i class="ti ti-check"></i> Cadastrar</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-add-jogador')">Cancelar</button>
+      <button class="btn btn-primary" id="jf-save" onclick="saveJogadorForm()"><i class="ti ti-check"></i> <span>Cadastrar</span></button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-jogador-form')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -1873,78 +1971,6 @@ select.form-input option{background:#0D1526;color:var(--text)}
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-edit-jogador">
-  <div class="modal" style="max-width:640px">
-    <div class="modal-title">Editar jogador <button class="modal-close" onclick="closeModal('modal-edit-jogador')"><i class="ti ti-x"></i></button></div>
-    <input type="hidden" id="ej-id">
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-id"></i> Dados pessoais</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="ej-nome" placeholder="Ex: Gustavo Augusto Bello dos Santos"></div>
-        <div class="form-group"><label class="form-label">Data de nascimento</label><input class="form-input" id="ej-datanasc" type="date"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Naturalidade</label><input class="form-input" id="ej-naturalidade" placeholder="Ex: Rio de Janeiro/RJ"></div>
-        <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="ej-tel" placeholder="(21) 99999-9999"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">RG</label><input class="form-input" id="ej-rg" placeholder="Ex: 12.345.678-9"></div>
-        <div class="form-group"><label class="form-label">CPF</label><input class="form-input" id="ej-cpf" placeholder="Ex: 123.456.789-00"></div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-map-pin"></i> Endereço</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Endereço</label><input class="form-input" id="ej-endereco" placeholder="Ex: Rua das Palmeiras"></div>
-        <div class="form-group"><label class="form-label">Número</label><input class="form-input" id="ej-numero" placeholder="Ex: 123"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Bairro</label><input class="form-input" id="ej-bairro" placeholder="Ex: Centro"></div>
-        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="ej-cidade" placeholder="Ex: Nova Iguaçu"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">CEP</label><input class="form-input" id="ej-cep" placeholder="Ex: 26000-000"></div>
-        <div></div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-shirt-sport"></i> Informações esportivas</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Apelido <span style="color:var(--text2);font-size:11px">(como é chamado)</span></label><input class="form-input" id="ej-apelido" placeholder="Ex: Tavin"></div>
-        <div class="form-group"><label class="form-label">Nº da camisa</label><input class="form-input" id="ej-num" type="number" placeholder="Ex: 10"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Posição</label>
-          <select class="form-input" id="ej-pos">
-            <option>Armador</option><option>Ala-armador</option><option>Ala</option><option>Ala-pivô</option><option>Pivô</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Altura (cm)</label><input class="form-input" id="ej-altura" type="number" placeholder="Ex: 185"></div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-section-title"><i class="ti ti-activity"></i> Status</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Status do jogador</label>
-          <select class="form-input" id="ej-status">
-            <option>Ativo</option><option>Lesão</option><option>Suspenso</option><option>Inativo</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Observação / Lesão</label><input class="form-input" id="ej-obs" placeholder="Ex: Torção no tornozelo"></div>
-      </div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn btn-primary" onclick="saveEditJogador()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogador')">Cancelar</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-overlay" id="modal-jogador-detail">
   <div class="modal">
     <div class="modal-title" id="modal-j-title">Jogador <button class="modal-close" onclick="closeModal('modal-jogador-detail')"><i class="ti ti-x"></i></button></div>
@@ -1995,7 +2021,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2099,14 +2125,7 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
 });
 
-function openAddJogador() {
-  ['j-nome','j-apelido','j-num','j-datanasc','j-altura','j-tel','j-obs'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value = '';
-  });
-  const ps = document.getElementById('j-pos'); if(ps) ps.selectedIndex = 0;
-  const st = document.getElementById('j-status'); if(st) st.value = 'Ativo';
-  openModal('modal-add-jogador');
-}
+// openAddJogador() fica junto do formulário do atleta (seção FICHA DO ATLETA)
 
 function openAddUser() {
   ['u-nome','u-email','u-senha','u-num'].forEach(id => {
@@ -2280,13 +2299,15 @@ function showPage(id) {
 // ==================== LOAD ALL ====================
 async function loadAll() {
   const isManager = can(['admin','tecnico','capitao']);
-  const [j, jo, tr, fin, av, unif, fant] = await Promise.all([
+  const [j, jo, tr, fin, av, unif, fant, fotos] = await Promise.all([
     api('GET','jogadores'), api('GET','jogos'), api('GET','treinos'),
     isManager ? api('GET','financeiro') : Promise.resolve({lancamentos:[],mensalidades:{}}),
     api('GET','avisos'),
     api('GET','uniformes'),
     isManager ? api('GET','pedidos-torcedor') : Promise.resolve([]),
+    api('GET','jogadores?fotos=1').catch(() => ({})),
   ]);
+  if (fotos && typeof fotos === 'object' && !fotos.error) cache.fotos = fotos;
   if (j) cache.jogadores = j;
   if (jo) cache.jogos = jo;
   if (tr) cache.treinos = tr;
@@ -2690,7 +2711,7 @@ function renderDashboard() {
         <div class="mvp-card" style="height:100%">
           <div class="mvp-badge"><i class="ti ti-trophy" style="color:#F59E0B"></i> MVP do elenco</div>
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
-            <div class="mvp-avatar" style="margin:0">${initials(mvp.apelido || mvp.nome)}</div>
+            <div class="mvp-avatar" style="margin:0">${avatarInner(mvp)}</div>
             <div>
               <div class="mvp-name" style="margin:0">${shortName(mvp)}</div>
               <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase">#${mvp.num} · ${mvp.pos || '—'}</div>
@@ -2837,11 +2858,11 @@ function playerCardHTML(j, idx) {
   return `
     <div class="player-card ${j.status==='Lesão'?'lesao':j.status==='Suspenso'?'suspenso':''}" onclick="openPlayerDetail(${j.id})" style="animation-delay:${delay}s">
       <div class="player-num">#${j.num}</div>
-      <div class="player-avatar">${initials(j.apelido||j.nome)}</div>
+      <div class="player-avatar">${avatarInner(j)}</div>
       <div class="player-name">${j.apelido||j.nome.split(' ')[0]}</div>
       ${j.apelido?`<div style="font-size:10px;color:var(--text2);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${j.nome}</div>`:''}
       <div class="player-pos">${j.pos}</div>
-      <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}">${j.status}</span>
+      <span class="badge ${statusBadgeClass(j.status)}">${j.status}</span>
       ${j.obs?`<div style="font-size:11px;color:var(--danger);margin-top:6px"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
       <div class="player-stats" style="margin-top:10px">
         <div class="ps"><div class="ps-val">${j.pts}</div><div class="ps-lbl">PTS</div></div>
@@ -2911,160 +2932,371 @@ function renderJogadores() {
   document.getElementById('player-grid').innerHTML = html;
 }
 
-function openPlayerDetail(id) {
-  const j = cache.jogadores.find(x=>x.id===id);
-  document.getElementById('modal-j-title').childNodes[0].textContent = j.nome + ' ';
-  const canEdit = can(['admin','tecnico','capitao']);
-  document.getElementById('modal-j-content').innerHTML = `
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-      <div class="player-avatar" style="width:60px;height:60px;font-size:22px">${initials(j.nome)}</div>
-      <div>
-        <div style="font-size:18px;font-weight:700">${j.apelido||j.nome}</div>
-        ${j.apelido?`<div style="font-size:12px;color:var(--text2);margin-top:1px">${j.nome}</div>`:''}
-        <div style="color:var(--text2);font-size:13px;margin-top:2px">#${j.num} · ${j.pos}</div>
-        <span class="badge ${j.status==='Ativo'?'badge-green':j.status==='Lesão'?'badge-red':j.status==='Suspenso'?'badge-orange':'badge-gray'}" style="margin-top:4px">${j.status}</span>
-      </div>
-    </div>
-    <div class="grid2" style="font-size:13px;margin-bottom:14px">
-      <div><span style="color:var(--text2)">Nascimento:</span> ${j.dataNasc ? fmt(j.dataNasc) + ' <span style="color:var(--text3)">(' + calcAge(j.dataNasc) + ' anos)</span>' : j.idade ? j.idade + ' anos' : '—'}</div>
-      <div><span style="color:var(--text2)">Altura:</span> ${j.altura} cm</div>
-      <div><span style="color:var(--text2)">WhatsApp:</span> <a href="https://wa.me/55${(j.tel||'').replace(/\D/g,'')}" style="color:var(--success)">${j.tel||'—'}</a></div>
-      <div><span style="color:var(--text2)">Jogos:</span> ${j.jg}</div>
-      ${j.naturalidade?`<div><span style="color:var(--text2)">Naturalidade:</span> ${j.naturalidade}</div>`:''}
-      ${j.rg?`<div><span style="color:var(--text2)">RG:</span> ${j.rg}</div>`:''}
-      ${j.cpf?`<div><span style="color:var(--text2)">CPF:</span> ${j.cpf}</div>`:''}
-      ${(j.endereco||j.cidade)?`<div><span style="color:var(--text2)">Endereço:</span> ${[j.endereco,j.numero].filter(Boolean).join(', ')}${j.bairro?' - '+j.bairro:''}${j.cidade?', '+j.cidade:''}${j.cep?' - '+j.cep:''}</div>`:''}
-    </div>
-    ${j.obs?`<div class="alert alert-danger"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>`:''}
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;margin-bottom:16px">
-      ${[['PTS',j.pts],['AST',j.ast],['REB',j.reb],['3PT',j.tpt],['FLT',j.flt]].map(([l,v])=>`<div class="card" style="padding:10px"><div style="font-size:18px;font-weight:700">${v}</div><div style="font-size:10px;color:var(--text2)">${l}</div></div>`).join('')}
-    </div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:6px">Presença</div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-      <div class="prog-bar" style="flex:1"><div class="prog-fill" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
-      <span style="font-weight:700;color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</span>
-    </div>
-    ${canEdit?`
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <select class="form-input" id="edit-status-${j.id}" style="flex:1">
-          <option ${j.status==='Ativo'?'selected':''}>Ativo</option>
-          <option ${j.status==='Lesão'?'selected':''}>Lesão</option>
-          <option ${j.status==='Suspenso'?'selected':''}>Suspenso</option>
-          <option ${j.status==='Inativo'?'selected':''}>Inativo</option>
-        </select>
-        <input class="form-input" id="edit-obs-${j.id}" value="${j.obs||''}" placeholder="Observação / lesão" style="flex:2">
-        <button class="btn btn-primary btn-sm" onclick="updateJogador(${j.id})">Salvar</button>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:4px">
-        <button class="btn btn-ghost btn-sm" onclick="editJogadorFull(${j.id})" style="flex:1"><i class="ti ti-pencil"></i> Editar dados completos</button>
-        ${can(['admin'])?`<button class="btn btn-danger btn-sm" onclick="deleteJogador(${j.id})"><i class="ti ti-trash"></i> Excluir</button>`:''}
-      </div>
-    `:''}
-  `;
-  openModal('modal-jogador-detail');
+// ==================== FICHA DO ATLETA ====================
+function statusBadgeClass(s) {
+  return s === 'Ativo' ? 'badge-green' : s === 'Lesão' ? 'badge-red' : s === 'Suspenso' ? 'badge-orange' : 'badge-gray';
 }
 
-async function addJogador() {
-  const nome = document.getElementById('j-nome').value.trim();
-  if (!nome) { toast('Nome obrigatório','error'); return; }
-  const r = await api('POST','jogadores',{
-    nome,
-    apelido: document.getElementById('j-apelido').value.trim(),
-    num: +document.getElementById('j-num').value||0,
-    pos: document.getElementById('j-pos').value,
-    dataNasc: document.getElementById('j-datanasc').value,
-    naturalidade: document.getElementById('j-naturalidade').value.trim(),
-    rg: document.getElementById('j-rg').value.trim(),
-    cpf: document.getElementById('j-cpf').value.trim(),
-    altura: +document.getElementById('j-altura').value||0,
-    status: document.getElementById('j-status').value,
-    tel: document.getElementById('j-tel').value,
-    obs: document.getElementById('j-obs').value,
-    endereco: document.getElementById('j-endereco').value.trim(),
-    numero: document.getElementById('j-numero').value.trim(),
-    bairro: document.getElementById('j-bairro').value.trim(),
-    cidade: document.getElementById('j-cidade').value.trim(),
-    cep: document.getElementById('j-cep').value.trim(),
+// Foto (se houver) ou iniciais dentro de um .player-avatar
+function avatarInner(j) {
+  const foto = cache.fotos && cache.fotos[j.id];
+  return foto ? `<img src="${foto}" alt="" class="avatar-img">` : initials(j.apelido || j.nome);
+}
+
+// Últimos treinos já realizados, do mais recente para o mais antigo
+function treinosDoJogador(j, limite) {
+  const hoje = today();
+  return (cache.treinos || [])
+    .filter(t => t.data <= hoje && (!j.criadoEm || t.data >= j.criadoEm))
+    .sort((a, b) => b.data.localeCompare(a.data))
+    .slice(0, limite)
+    .map(t => ({ data: t.data, tipo: t.tipo, presente: (t.presentes || []).includes(j.id) }));
+}
+
+// "2024 - Campeão Copa Rio" → { ano: '2024', texto: 'Campeão Copa Rio' }
+function historicoItens(texto) {
+  return String(texto || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+    const m = l.match(/^(\d{4})\s*[-–—:]\s*(.+)$/);
+    return m ? { ano: m[1], texto: m[2] } : { ano: '', texto: l };
   });
-  if (r && r.id) {
-    cache.jogadores.push(r);
-    closeModal('modal-add-jogador');
-    renderJogadores(); renderDashboard();
-    toast('Jogador cadastrado!');
-    ['j-nome','j-apelido','j-num','j-datanasc','j-naturalidade','j-rg','j-cpf','j-altura','j-tel','j-obs','j-endereco','j-numero','j-bairro','j-cidade','j-cep'].forEach(id=>document.getElementById(id).value='');
-  } else toast('Erro ao cadastrar','error');
+}
+
+function canSeePrivate(j) {
+  return can(['admin', 'tecnico', 'comissao', 'capitao']) ||
+    (currentUser && currentUser.num !== undefined && currentUser.num !== null && Number(currentUser.num) === Number(j.num));
+}
+
+function openPlayerDetail(id) {
+  const j = cache.jogadores.find(x => x.id === id);
+  if (!j) return;
+  document.getElementById('modal-j-title').childNodes[0].textContent = 'Ficha do atleta ';
+  const canEdit = can(['admin', 'tecnico', 'capitao']);
+  const idade = j.dataNasc ? calcAge(j.dataNasc) : (j.idade || null);
+  const fact = (lbl, v, un) => `<div class="pf-fact"><b>${v ? v + (un ? `<small> ${un}</small>` : '') : '—'}</b><span>${lbl}</span></div>`;
+  const treinos = treinosDoJogador(j, 12);
+  const hist = historicoItens(j.historico);
+  const lesoes = (j.lesoes || []).slice().sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''));
+  const presColor = j.presenca >= 80 ? 'var(--success)' : j.presenca >= 60 ? 'var(--warning)' : 'var(--danger)';
+  const priv = canSeePrivate(j);
+  const endereco = [[j.endereco, j.numero].filter(Boolean).join(', '), j.bairro, j.cidade, j.cep].filter(Boolean).join(' · ');
+  const info = priv ? [
+    ['WhatsApp', j.tel ? `<a href="https://wa.me/55${(j.tel || '').replace(/\D/g, '')}" target="_blank" rel="noopener" style="color:var(--success)">${j.tel}</a>` : ''],
+    ['Emergência', j.emergencia], ['Nascimento', j.dataNasc ? fmt(j.dataNasc) : ''], ['Naturalidade', j.naturalidade],
+    ['RG', j.rg], ['CPF', j.cpf], ['Endereço', endereco],
+  ].filter(([, v]) => v) : [];
+
+  document.getElementById('modal-j-content').innerHTML = `
+    <div class="pf-head">
+      <div class="player-avatar pf-avatar">${avatarInner(j)}</div>
+      <div style="min-width:0">
+        <div class="pf-name">${j.apelido || j.nome}</div>
+        ${j.apelido ? `<div class="pf-sub">${j.nome}</div>` : ''}
+        <div class="pf-chips">
+          <span class="badge badge-blue">#${j.num}</span>
+          <span class="badge badge-blue">${j.pos || '—'}</span>
+          <span class="badge ${statusBadgeClass(j.status)}">${j.status}</span>
+        </div>
+      </div>
+    </div>
+    ${j.obs && j.status !== 'Ativo' ? `<div class="alert ${j.status === 'Lesão' ? 'alert-danger' : 'alert-warning'}"><i class="ti ti-first-aid-kit"></i> ${j.obs}</div>` : ''}
+
+    <div class="pf-facts">
+      ${fact('Idade', idade, 'anos')}${fact('Altura', j.altura, 'cm')}${fact('Peso', j.peso, 'kg')}${fact('Envergadura', j.envergadura, 'cm')}${fact('Mão', j.maoDominante)}
+    </div>
+
+    <div class="pf-section">
+      <div class="sec-title"><i class="ti ti-chart-bar"></i> Estatísticas</div>
+      <div class="pf-stats">
+        ${[['Jogos', j.jg], ['PTS', j.pts], ['AST', j.ast], ['REB', j.reb], ['3PT', j.tpt], ['FLT', j.flt]].map(([l, v]) => `<div class="pf-stat"><b>${v ?? 0}</b><span>${l}</span></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="pf-section">
+      <div class="sec-title"><i class="ti ti-run"></i> Presença nos treinos</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="prog-bar" style="flex:1;height:7px;margin:0"><div class="prog-fill" style="width:${j.presenca}%;background:${presColor}"></div></div>
+        <b style="color:${presColor};font-variant-numeric:tabular-nums">${j.presenca}%</b>
+      </div>
+      ${treinos.length ? `
+        <div class="pf-train" aria-label="Últimos treinos">
+          ${treinos.map(t => `<span class="pf-dot ${t.presente ? 'ok' : 'no'}" title="${fmt(t.data)} · ${t.tipo || 'Treino'} · ${t.presente ? 'Presente' : 'Faltou'}"><i class="ti ${t.presente ? 'ti-check' : 'ti-x'}"></i></span>`).join('')}
+        </div>
+        <div class="pf-empty" style="margin-top:6px">Últimos ${treinos.length} treinos, do mais recente para o mais antigo.</div>` : `<div class="pf-empty" style="margin-top:8px">Nenhum treino realizado ainda.</div>`}
+    </div>
+
+    <div class="pf-cols">
+      <div class="pf-section">
+        <div class="sec-title"><i class="ti ti-history"></i> Histórico esportivo</div>
+        ${hist.length ? `<ul class="timeline">${hist.map(h => `<li>${h.ano ? `<small>${h.ano}</small>` : ''}${h.texto}</li>`).join('')}</ul>` : `<div class="pf-empty">Nada registrado.</div>`}
+      </div>
+      <div class="pf-section">
+        <div class="sec-title"><i class="ti ti-first-aid-kit"></i> Histórico de lesões</div>
+        ${lesoes.length ? `<ul class="timeline">${lesoes.map(l => `<li class="injury${l.fim ? ' closed' : ''}"><small>${fmt(l.inicio)} → ${l.fim ? fmt(l.fim) : 'em recuperação'}</small>${l.descricao}</li>`).join('')}</ul>` : `<div class="pf-empty">Nenhuma lesão registrada.</div>`}
+      </div>
+    </div>
+
+    ${info.length ? `
+      <div class="pf-section">
+        <div class="sec-title"><i class="ti ti-lock"></i> Contato e documentos</div>
+        <div class="pf-info">${info.map(([l, v]) => `<div><span>${l}</span>${v}</div>`).join('')}</div>
+      </div>` : ''}
+
+    ${canEdit ? `
+      <div class="pf-quick">
+        <select class="form-input" id="edit-status-${j.id}" aria-label="Situação" style="flex:1;min-width:120px">
+          ${['Ativo', 'Lesão', 'Suspenso', 'Inativo'].map(s => `<option ${j.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+        </select>
+        <input class="form-input" id="edit-obs-${j.id}" value="${j.obs || ''}" placeholder="Observação / lesão" aria-label="Observação" style="flex:2;min-width:160px">
+        <button class="btn btn-primary btn-sm" onclick="updateJogador(${j.id})"><i class="ti ti-check"></i> Atualizar situação</button>
+      </div>` : ''}
+    <div class="pf-actions">
+      ${canEdit ? `<button class="btn btn-ghost btn-sm" onclick="editJogadorFull(${j.id})"><i class="ti ti-pencil"></i> Editar cadastro</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="exportFichaPDF(${j.id})"><i class="ti ti-file-download"></i> Ficha em PDF</button>
+      ${can(['admin']) ? `<button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="deleteJogador(${j.id})"><i class="ti ti-trash"></i> Excluir</button>` : ''}
+    </div>
+  `;
+  openModal('modal-jogador-detail');
 }
 
 async function updateJogador(id) {
   const status = document.getElementById(`edit-status-${id}`)?.value;
   const obs = document.getElementById(`edit-obs-${id}`)?.value || '';
-  const apelido = document.getElementById(`edit-apelido-${id}`)?.value.trim() || '';
-  const r = await api('PUT','jogadores',{id,status,obs,apelido});
+  const r = await api('PUT', 'jogadores', { id, status, obs });
   if (r && r.id) {
-    const idx = cache.jogadores.findIndex(j=>j.id===id);
-    if (idx!==-1) cache.jogadores[idx] = r;
-    closeModal('modal-jogador-detail');
+    const idx = cache.jogadores.findIndex(j => j.id === id);
+    if (idx !== -1) cache.jogadores[idx] = r;
     renderJogadores(); renderDashboard();
-    toast('Jogador atualizado!');
-  } else toast('Erro ao atualizar','error');
+    openPlayerDetail(id);
+    toast('Situação atualizada!');
+  } else toast(r?.error || 'Erro ao atualizar', 'error');
 }
 
-function editJogadorFull(id) {
-  const j = cache.jogadores.find(x=>x.id===id);
-  if (!j) return;
-  document.getElementById('ej-id').value = j.id;
-  document.getElementById('ej-nome').value = j.nome;
-  document.getElementById('ej-apelido').value = j.apelido || '';
-  document.getElementById('ej-num').value = j.num;
-  document.getElementById('ej-pos').value = j.pos;
-  document.getElementById('ej-datanasc').value = j.dataNasc || '';
-  document.getElementById('ej-naturalidade').value = j.naturalidade || '';
-  document.getElementById('ej-rg').value = j.rg || '';
-  document.getElementById('ej-cpf').value = j.cpf || '';
-  document.getElementById('ej-altura').value = j.altura;
-  document.getElementById('ej-tel').value = j.tel || '';
-  document.getElementById('ej-status').value = j.status;
-  document.getElementById('ej-obs').value = j.obs || '';
-  document.getElementById('ej-endereco').value = j.endereco || '';
-  document.getElementById('ej-numero').value = j.numero || '';
-  document.getElementById('ej-bairro').value = j.bairro || '';
-  document.getElementById('ej-cidade').value = j.cidade || '';
-  document.getElementById('ej-cep').value = j.cep || '';
-  closeModal('modal-jogador-detail');
-  openModal('modal-edit-jogador');
-}
+// ==================== CADASTRO / EDIÇÃO (um só formulário) ====================
+const JF_FIELDS = {
+  nome: 'jf-nome', apelido: 'jf-apelido', num: 'jf-num', pos: 'jf-pos',
+  altura: 'jf-altura', peso: 'jf-peso', envergadura: 'jf-envergadura', maoDominante: 'jf-mao',
+  status: 'jf-status', obs: 'jf-obs', historico: 'jf-historico',
+  dataNasc: 'jf-datanasc', naturalidade: 'jf-naturalidade', tel: 'jf-tel', emergencia: 'jf-emergencia',
+  rg: 'jf-rg', cpf: 'jf-cpf', endereco: 'jf-endereco', numero: 'jf-numero', cep: 'jf-cep', bairro: 'jf-bairro', cidade: 'jf-cidade',
+};
+const JF_NUMERIC = ['num', 'altura', 'peso', 'envergadura'];
+let _jfFoto; // undefined = sem mudança · null = remover · 'data:...' = nova foto
 
-async function saveEditJogador() {
-  const id = +document.getElementById('ej-id').value;
-  const nome = document.getElementById('ej-nome').value.trim();
-  if (!nome) { toast('Nome obrigatório','error'); return; }
-  const r = await api('PUT','jogadores',{
-    id,
-    nome,
-    apelido: document.getElementById('ej-apelido').value.trim(),
-    num: +document.getElementById('ej-num').value || 0,
-    pos: document.getElementById('ej-pos').value,
-    dataNasc: document.getElementById('ej-datanasc').value,
-    naturalidade: document.getElementById('ej-naturalidade').value.trim(),
-    rg: document.getElementById('ej-rg').value.trim(),
-    cpf: document.getElementById('ej-cpf').value.trim(),
-    altura: +document.getElementById('ej-altura').value || 0,
-    tel: document.getElementById('ej-tel').value,
-    status: document.getElementById('ej-status').value,
-    obs: document.getElementById('ej-obs').value,
-    endereco: document.getElementById('ej-endereco').value.trim(),
-    numero: document.getElementById('ej-numero').value.trim(),
-    bairro: document.getElementById('ej-bairro').value.trim(),
-    cidade: document.getElementById('ej-cidade').value.trim(),
-    cep: document.getElementById('ej-cep').value.trim(),
+function setFormTab(tab) {
+  document.querySelectorAll('#modal-jogador-form .form-tab').forEach(b => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on));
   });
-  if (r && r.id) {
-    const idx = cache.jogadores.findIndex(x=>x.id===id);
-    if (idx!==-1) cache.jogadores[idx] = r;
-    closeModal('modal-edit-jogador');
+  document.querySelectorAll('#modal-jogador-form .form-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
+}
+
+function maskField(el, kind) {
+  let d = el.value.replace(/\D/g, '');
+  if (kind === 'tel') {
+    d = d.slice(0, 11);
+    el.value = d.length > 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
+      : d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`
+      : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d;
+  } else if (kind === 'cpf') {
+    d = d.slice(0, 11);
+    el.value = d.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+  } else if (kind === 'cep') {
+    d = d.slice(0, 8);
+    el.value = d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+  }
+}
+
+function jfShowPhoto(src, nome) {
+  const box = document.getElementById('jf-photo-img');
+  box.innerHTML = src ? `<img src="${src}" alt="" class="avatar-img">` : (nome ? initials(nome) : '<i class="ti ti-user"></i>');
+  document.getElementById('jf-foto-remove').style.display = src ? '' : 'none';
+}
+
+// Reduz a foto para 240×240 (recorte central) antes de enviar: ~15 KB
+function onJogadorFoto(input) {
+  const file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+  if (!/^image\//.test(file.type)) { toast('Escolha um arquivo de imagem', 'error'); return; }
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const S = 240, side = Math.min(img.width, img.height);
+    const c = document.createElement('canvas'); c.width = S; c.height = S;
+    c.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, S, S);
+    URL.revokeObjectURL(url);
+    _jfFoto = c.toDataURL('image/jpeg', 0.82);
+    jfShowPhoto(_jfFoto);
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast('Não foi possível abrir essa imagem', 'error'); };
+  img.src = url;
+}
+function removeJogadorFoto() { _jfFoto = null; jfShowPhoto(null, document.getElementById('jf-nome').value); }
+
+function jfError(msg, fieldKey) {
+  const box = document.getElementById('jf-error');
+  document.querySelectorAll('#modal-jogador-form .form-input.invalid').forEach(e => e.classList.remove('invalid'));
+  if (!msg) { box.style.display = 'none'; return; }
+  box.querySelector('span').textContent = msg;
+  box.style.display = 'flex';
+  const el = fieldKey && document.getElementById(JF_FIELDS[fieldKey]);
+  if (el) {
+    const panel = el.closest('.form-tab-panel');
+    if (panel) setFormTab(panel.dataset.panel);
+    el.classList.add('invalid'); el.focus();
+  }
+}
+
+function openJogadorForm(j) {
+  _jfFoto = undefined;
+  jfError(null);
+  document.getElementById('jf-id').value = j ? j.id : '';
+  document.getElementById('jf-title').textContent = j ? 'Editar cadastro' : 'Cadastrar jogador';
+  document.querySelector('#jf-save span').textContent = j ? 'Salvar alterações' : 'Cadastrar';
+  document.querySelector('#jf-save i').className = j ? 'ti ti-device-floppy' : 'ti ti-check';
+  Object.entries(JF_FIELDS).forEach(([k, id]) => {
+    const el = document.getElementById(id);
+    let v = j ? j[k] : '';
+    if (JF_NUMERIC.includes(k) && k !== 'num' && !v) v = '';
+    el.value = v ?? '';
+  });
+  if (!j) { document.getElementById('jf-pos').selectedIndex = 0; document.getElementById('jf-status').value = 'Ativo'; }
+  else if (!j.pos) document.getElementById('jf-pos').selectedIndex = 0;
+  jfShowPhoto(j && cache.fotos ? cache.fotos[j.id] : null, j ? (j.apelido || j.nome) : '');
+  setFormTab('esportivo');
+  closeModal('modal-jogador-detail');
+  openModal('modal-jogador-form');
+  setTimeout(() => document.getElementById('jf-nome').focus(), 50);
+}
+function openAddJogador() { openJogadorForm(null); }
+function editJogadorFull(id) { const j = cache.jogadores.find(x => x.id === id); if (j) openJogadorForm(j); }
+
+function jfValidate(data, id) {
+  if (!data.nome) return ['Informe o nome completo.', 'nome'];
+  if (document.getElementById('jf-num').value === '') return ['Informe o número da camisa.', 'num'];
+  if (data.num > 99) return ['O número da camisa vai de 0 a 99.', 'num'];
+  if (data.status !== 'Inativo') {
+    const dono = cache.jogadores.find(x => x.id !== id && x.status !== 'Inativo' && Number(x.num) === data.num);
+    if (dono) return [`A camisa ${data.num} já é de ${dono.apelido || dono.nome}.`, 'num'];
+  }
+  const faixa = [['altura', 100, 250, 'A altura deve estar entre 100 e 250 cm.'], ['peso', 30, 200, 'O peso deve estar entre 30 e 200 kg.'], ['envergadura', 100, 270, 'A envergadura deve estar entre 100 e 270 cm.']];
+  for (const [k, min, max, msg] of faixa) if (data[k] && (data[k] < min || data[k] > max)) return [msg, k];
+  if (data.dataNasc && data.dataNasc > today()) return ['A data de nascimento está no futuro.', 'dataNasc'];
+  if (data.cpf && data.cpf.replace(/\D/g, '').length !== 11) return ['O CPF precisa ter 11 dígitos.', 'cpf'];
+  return null;
+}
+
+async function saveJogadorForm() {
+  const id = +document.getElementById('jf-id').value || null;
+  const data = {};
+  Object.entries(JF_FIELDS).forEach(([k, elId]) => {
+    const v = document.getElementById(elId).value;
+    data[k] = JF_NUMERIC.includes(k) ? (+v || 0) : v.trim();
+  });
+  const err = jfValidate(data, id);
+  if (err) { jfError(err[0], err[1]); return; }
+  jfError(null);
+
+  const btn = document.getElementById('jf-save');
+  btn.disabled = true;
+  try {
+    const r = await api(id ? 'PUT' : 'POST', 'jogadores', id ? { id, ...data } : data);
+    if (!r || !r.id) { jfError(r?.error || 'Não foi possível salvar. Tente novamente.'); return; }
+    if (id) { const i = cache.jogadores.findIndex(x => x.id === id); if (i !== -1) cache.jogadores[i] = r; }
+    else cache.jogadores.push(r);
+    if (_jfFoto !== undefined) {
+      const f = await api('PUT', 'jogadores', { id: r.id, foto: _jfFoto });
+      if (f && f.success) {
+        cache.fotos = cache.fotos || {};
+        if (_jfFoto) cache.fotos[r.id] = _jfFoto; else delete cache.fotos[r.id];
+      } else toast(f?.error || 'Cadastro salvo, mas a foto não foi enviada', 'error');
+    }
+    closeModal('modal-jogador-form');
     renderJogadores(); renderDashboard();
-    toast('Jogador atualizado!');
-  } else toast('Erro ao atualizar','error');
+    toast(id ? 'Cadastro atualizado!' : 'Jogador cadastrado!');
+    openPlayerDetail(r.id);
+  } finally {
+    btn.disabled = false;
+  }
+}
+// Nomes antigos, usados em outros pontos do app
+function addJogador() { return saveJogadorForm(); }
+function saveEditJogador() { return saveJogadorForm(); }
+
+// ==================== FICHA TÉCNICA EM PDF ====================
+function exportFichaPDF(id) {
+  const j = cache.jogadores.find(x => x.id === id);
+  if (!j || !window.jspdf) { toast('Não foi possível gerar o PDF', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  const BLUE = [45, 140, 255], NAVY = [5, 11, 22], TXT = [25, 35, 55], MUTED = [110, 120, 140];
+  const clean = s => String(s ?? '').replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
+
+  doc.setFillColor(...NAVY); doc.rect(0, 0, W, 26, 'F');
+  doc.setFillColor(...BLUE); doc.rect(0, 0, 4, 26, 'F');
+  doc.setTextColor(...BLUE); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+  doc.text('WHITE ROCK BASKETBALL', 12, 11);
+  doc.setTextColor(200, 210, 225); doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text('Ficha técnica do atleta', 12, 19);
+  doc.text(new Date().toLocaleDateString('pt-BR'), W - 12, 19, { align: 'right' });
+
+  let y = 36;
+  const foto = cache.fotos && cache.fotos[j.id];
+  if (foto) { try { doc.addImage(foto, 'JPEG', 12, y, 34, 34); } catch (e) {} }
+  const x0 = foto ? 52 : 12;
+  doc.setTextColor(...TXT); doc.setFont('helvetica', 'bold'); doc.setFontSize(20);
+  doc.text(clean(j.apelido || j.nome), x0, y + 9);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(...MUTED);
+  if (j.apelido) doc.text(clean(j.nome), x0, y + 16);
+  doc.setTextColor(...TXT); doc.setFontSize(11);
+  doc.text(`#${j.num}  ·  ${clean(j.pos || '—')}  ·  ${clean(j.status)}`, x0, y + 25);
+  y += 44;
+
+  const idade = j.dataNasc ? calcAge(j.dataNasc) : (j.idade || null);
+  const v = (n, un) => n ? `${n}${un}` : '—';
+  doc.autoTable({
+    startY: y, theme: 'grid',
+    head: [['Idade', 'Altura', 'Peso', 'Envergadura', 'Mão dominante']],
+    body: [[idade ? `${idade} anos` : '—', v(j.altura, ' cm'), v(j.peso, ' kg'), v(j.envergadura, ' cm'), clean(j.maoDominante || '—')]],
+    headStyles: { fillColor: BLUE, textColor: 255, fontStyle: 'bold' }, styles: { halign: 'center', fontSize: 10 },
+    margin: { left: 12, right: 12 },
+  });
+  y = doc.lastAutoTable.finalY + 6;
+  doc.autoTable({
+    startY: y, theme: 'grid',
+    head: [['Jogos', 'Pontos', 'Assistências', 'Rebotes', 'Bolas de 3', 'Faltas', 'Presença']],
+    body: [[j.jg || 0, j.pts || 0, j.ast || 0, j.reb || 0, j.tpt || 0, j.flt || 0, `${j.presenca ?? 0}%`]],
+    headStyles: { fillColor: NAVY, textColor: 255, fontStyle: 'bold' }, styles: { halign: 'center', fontSize: 10 },
+    margin: { left: 12, right: 12 },
+  });
+  y = doc.lastAutoTable.finalY + 8;
+
+  const section = (title, rows) => {
+    if (y > H - 40) { doc.addPage(); y = 20; }
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(...BLUE);
+    doc.text(title.toUpperCase(), 12, y); y += 2;
+    doc.autoTable({
+      startY: y, theme: 'plain', body: rows.length ? rows : [['—', 'Nada registrado']],
+      styles: { fontSize: 9.5, textColor: TXT, cellPadding: 1.8 }, columnStyles: { 0: { cellWidth: 42, textColor: MUTED, fontStyle: 'bold' } },
+      margin: { left: 12, right: 12 },
+    });
+    y = doc.lastAutoTable.finalY + 7;
+  };
+  section('Histórico esportivo', historicoItens(j.historico).map(h => [h.ano || '', clean(h.texto)]));
+  section('Histórico de lesões', (j.lesoes || []).map(l => [`${fmt(l.inicio)} a ${l.fim ? fmt(l.fim) : "hoje"}`, clean(l.descricao)]));
+  if (canSeePrivate(j)) {
+    const endereco = [[j.endereco, j.numero].filter(Boolean).join(', '), j.bairro, j.cidade, j.cep].filter(Boolean).join(' · ');
+    section('Contato e documentos', [
+      ['WhatsApp', j.tel], ['Emergência', j.emergencia], ['Nascimento', j.dataNasc ? fmt(j.dataNasc) : ''],
+      ['Naturalidade', j.naturalidade], ['RG', j.rg], ['CPF', j.cpf], ['Endereço', endereco],
+    ].filter(([, val]) => val).map(([l, val]) => [l, clean(val)]));
+  }
+
+  doc.setFontSize(8); doc.setTextColor(...MUTED);
+  doc.text('White Rock Basketball — documento interno', 12, H - 8);
+  const nomeArq = clean(j.apelido || j.nome).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w]+/g, '-').toLowerCase();
+  doc.save(`ficha-${nomeArq}.pdf`);
 }
 
 async function deleteJogador(id) {
@@ -3073,6 +3305,7 @@ async function deleteJogador(id) {
     const r = await api('DELETE','jogadores',{id});
     if (r && r.success) {
       cache.jogadores = cache.jogadores.filter(x=>x.id!==id);
+      if (cache.fotos) delete cache.fotos[id];
       closeModal('modal-jogador-detail');
       renderJogadores(); renderDashboard();
       toast('Jogador excluído!');

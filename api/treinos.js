@@ -7,11 +7,12 @@ const { withErrorHandling } = require('../lib/error-handler');
 async function recalcPresenca(treinos) {
   const today = new Date().toISOString().split('T')[0]; // UTC date string
   const held = treinos.filter(t => t.data <= today);   // past + today
-  const total = held.length;
   const jogadores = await getData('jogadores') || [];
   jogadores.forEach((j, i) => {
-    const present = held.filter(t => (t.presentes || []).includes(j.id)).length;
-    jogadores[i].presenca = total > 0 ? Math.round((present / total) * 100) : 0;
+    // Só contam os treinos a partir do cadastro do jogador (quando a data é conhecida)
+    const seus = j.criadoEm ? held.filter(t => t.data >= j.criadoEm) : held;
+    const present = seus.filter(t => (t.presentes || []).includes(j.id)).length;
+    jogadores[i].presenca = seus.length > 0 ? Math.round((present / seus.length) * 100) : 100;
   });
   await setData('jogadores', jogadores);
 }
