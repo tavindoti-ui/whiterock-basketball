@@ -2,6 +2,7 @@ const { requireAuth } = require('../lib/auth');
 const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 const { withErrorHandling } = require('../lib/error-handler');
+const { registrarAlteracao, registrarCancelamento, registrarNovo } = require('../lib/alteracoes');
 
 // Súmula de cada jogador em cada jogo (números do jogo, não médias).
 // p2 = arremessos de 2, p3 = arremessos de 3, ft = lances livres (m = certos, a = tentados).
@@ -133,6 +134,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
     jogos.push(novo);
     await setData('jogos', jogos);
     await setData('counters', counters);
+    await registrarNovo(`jogo:${novo.id}`, `WR × ${novo.adv}`, novo, user);
     await logAction(user.id, user.nome, user.role, 'Cadastrou jogo', `vs ${f.adv} — ${f.data} (${novo.camp})`);
     return res.status(201).json(novo);
   }
@@ -164,8 +166,10 @@ module.exports = withErrorHandling(async function handler(req, res) {
     if (wr !== undefined) jogo.wr = wr;
     if (advPl !== undefined) jogo.advPl = advPl;
     if (hasStats) jogo.statsJogadores = box;
+    const antes = jogos[idx];
     jogos[idx] = jogo;
     await setData('jogos', jogos);
+    if (jogo.wr === null || jogo.wr === undefined) await registrarAlteracao(`jogo:${jogo.id}`, `WR × ${jogo.adv}`, antes, jogo, user);
 
     if (hasStats) {
       recalcular(jogadores, jogos);
@@ -192,6 +196,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
       await setData('jogadores', jogadores);
     }
     await setData('jogos', restantes);
+    if (target && (target.wr === null || target.wr === undefined)) await registrarCancelamento(`jogo:${target.id}`, `WR × ${target.adv}`, target, user);
     await logAction(user.id, user.nome, user.role, 'Excluiu jogo', `vs ${target?.adv || `ID ${id}`} (${target?.data || ''})`);
     return res.json({ success: true });
   }

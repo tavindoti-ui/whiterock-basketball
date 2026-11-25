@@ -2,6 +2,7 @@ const { requireAuth } = require('../lib/auth');
 const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 const { withErrorHandling } = require('../lib/error-handler');
+const { registrarAlteracao, registrarCancelamento, registrarNovo } = require('../lib/alteracoes');
 
 // Recalculates presenca % for all players based on past/today treinos
 async function recalcPresenca(treinos) {
@@ -39,6 +40,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
     treinos.push(novo);
     await setData('treinos', treinos);
     await setData('counters', counters);
+    await registrarNovo(`treino:${novo.id}`, novo.tipo, novo, user);
     await logAction(user.id, user.nome, user.role, 'Agendou treino', `${tipo} — ${data} às ${hora || '20:00'}`);
     return res.status(201).json(novo);
   }
@@ -50,13 +52,19 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const treinos = await getData('treinos') || [];
     const idx = treinos.findIndex(t => t.id === id);
     if (idx === -1) return res.status(404).json({ error: 'Treino não encontrado' });
-    treinos[idx] = { ...treinos[idx], ...rest };
+    const antes = treinos[idx];
+    // só campos do treino (presença vem em 'presentes')
+    const campos = {};
+    for (const k of ['data', 'hora', 'local', 'tipo']) if (rest[k] !== undefined) campos[k] = String(rest[k] || '').trim().slice(0, 120);
+    treinos[idx] = { ...treinos[idx], ...campos };
     if (presentes !== undefined) {
       treinos[idx].presentes = presentes;
     }
     await setData('treinos', treinos);
     if (presentes !== undefined) {
       await recalcPresenca(treinos);
+    } else {
+      await registrarAlteracao(`treino:${treinos[idx].id}`, treinos[idx].tipo || 'Treino', antes, treinos[idx], user);
     }
     if (presentes !== undefined) {
       await logAction(user.id, user.nome, user.role, 'Marcou presença', `Treino ${treinos[idx].data}: ${presentes.length} jogador(es) presente(s)`);
@@ -74,6 +82,7 @@ module.exports = withErrorHandling(async function handler(req, res) {
     const target = treinos.find(t => t.id === id);
     const remaining = treinos.filter(t => t.id !== id);
     await setData('treinos', remaining);
+    if (target) await registrarCancelamento(`treino:${target.id}`, target.tipo || 'Treino', target, user);
     await recalcPresenca(remaining);
     await logAction(user.id, user.nome, user.role, 'Excluiu treino', `${target?.tipo || ''} — ${target?.data || `ID ${id}`}`);
     return res.json({ success: true });

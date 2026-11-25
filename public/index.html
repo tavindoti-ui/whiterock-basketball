@@ -1446,6 +1446,94 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   .pf-meters{grid-template-columns:1fr}
   .pf-game-line{font-size:11px}
 }
+
+/* ═══════════ CALENDÁRIO (fase 7) ═══════════ */
+.ag-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.ag-filtros{display:flex;gap:6px;flex-wrap:wrap}
+.ag-chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text3);font:600 12.5px/1 inherit;font-family:inherit;cursor:pointer}
+.ag-chip i{font-size:14px}
+.ag-chip.on{color:var(--text);border-color:color-mix(in srgb,var(--c) 45%,transparent);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.ag-chip.on i{color:var(--c)}
+.ag-chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.ag-pend{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ag-pend span{flex:1;color:var(--text)}
+.ag-group{font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--text3);margin:18px 0 8px}
+.ag-group:first-child{margin-top:0}
+.ag-item{display:flex;align-items:flex-start;gap:12px;width:100%;padding:12px 14px;margin-bottom:8px;text-align:left;font:inherit;color:var(--text);cursor:pointer;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--c);border-radius:var(--radius-sm,10px);transition:border-color .15s,transform .15s}
+.ag-item:hover{border-color:var(--border-hover);border-left-color:var(--c)}
+.ag-item:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.ag-item.past{opacity:.82}
+.ag-time{display:flex;flex-direction:column;align-items:center;min-width:44px;padding-top:1px}
+.ag-time b{font-size:14px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.ag-time small{font-size:10.5px;color:var(--text3);font-variant-numeric:tabular-nums}
+.ag-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c);font-size:17px}
+.ag-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ag-title{font-size:14px;font-weight:700;color:#fff}
+.ag-meta{font-size:12px;color:var(--text2)}
+.ag-meta i{font-size:11px;margin:0 2px 0 2px}
+.ag-alt{font-size:11.5px;color:var(--warning);font-weight:600}
+.ag-count{font-size:11.5px;color:var(--text3)}
+.ag-count .ok{color:var(--success);font-weight:700}.ag-count .maybe{color:var(--warning);font-weight:700}.ag-count .no{color:var(--danger);font-weight:700}
+.ag-side{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.ag-resp{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700}
+.ag-resp.ok{color:var(--success)}.ag-resp.maybe{color:var(--warning)}.ag-resp.no{color:var(--danger)}
+/* mês */
+.ag-month{padding:14px}
+.ag-month-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ag-month-title{font-size:17px;font-weight:800;color:#fff;min-width:150px;text-align:center}
+.ag-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.ag-wd{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);text-align:center;padding:4px 0}
+.ag-cell{min-height:92px;display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:6px;border-radius:8px;border:1px solid var(--border);background:rgba(5,11,22,0.35);color:var(--text);font:inherit;text-align:left;cursor:pointer;overflow:hidden}
+.ag-cell.empty{background:transparent;border-color:transparent;cursor:default}
+.ag-cell:hover:not(.empty){border-color:var(--border-hover)}
+.ag-cell.past .ag-dnum{color:var(--text3)}
+.ag-cell.today .ag-dnum{background:var(--blue);color:#fff}
+.ag-cell.sel{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.ag-cell:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.ag-dnum{align-self:flex-start;min-width:22px;height:22px;padding:0 5px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.ag-dots{display:none;gap:3px;justify-content:center}
+.ag-dots i{width:6px;height:6px;border-radius:50%}
+.ag-labels{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ag-lbl{font-size:10.5px;line-height:1.3;padding:1px 5px;border-radius:4px;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--text);border-left:2px solid var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag-more{font-size:10px;color:var(--text3);padding-left:4px}
+@media(max-width:760px){
+  .ag-cell{min-height:50px;align-items:center;padding:4px 2px}
+  .ag-dnum{align-self:center}
+  .ag-labels{display:none}
+  .ag-dots{display:flex}
+}
+@media(max-width:560px){
+  .ag-item{gap:10px;padding:11px 12px}
+  .ag-icon{display:none}
+  .ag-side{max-width:42%}
+  .ag-month-title{min-width:0;font-size:15px}
+}
+/* detalhe */
+#modal-agenda-item .modal{max-width:620px}
+.ag-det-info{display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:var(--text)}
+.ag-det-info i{color:var(--blue);margin-right:8px}
+.ag-det-desc{margin-top:12px;font-size:13px;color:var(--text2);line-height:1.6;padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+.ag-rsvp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ag-rsvp-btn{min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;border:1px solid var(--border);background:rgba(5,11,22,0.5);color:var(--text2);font:700 13px/1 inherit;font-family:inherit;cursor:pointer}
+.ag-rsvp-btn i{font-size:17px}
+.ag-rsvp-btn:hover{color:var(--text);border-color:var(--border-hover)}
+.ag-rsvp-btn.ok.on{background:rgba(0,200,122,0.14);border-color:rgba(0,200,122,0.45);color:var(--success)}
+.ag-rsvp-btn.maybe.on{background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.45);color:var(--warning)}
+.ag-rsvp-btn.no.on{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.45);color:var(--danger)}
+.ag-rsvp-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.ag-who-group{margin-bottom:10px}
+.ag-who-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.ag-who,.conv-row{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px}
+.ag-who:hover,.conv-row:hover{background:rgba(45,140,255,0.05)}
+.ag-who-name{flex:1;min-width:0;font-size:13px;font-weight:600}
+.ag-who-name small{color:var(--text3);font-weight:500}
+.ag-why{display:block;font-style:italic}
+.ag-who-sel{height:30px!important;width:auto;padding:0 8px!important;font-size:12px!important}
+.conv-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.conv-tools span{margin-left:auto;font-size:12px;color:var(--text2);font-weight:600}
+.conv-list{max-height:48vh;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:4px}
+.conv-row{cursor:pointer}
+.conv-row input{width:17px;height:17px;accent-color:var(--blue)}
 </style>
 </head>
 <body>
@@ -1688,6 +1776,26 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   <div id="proximos-jogos"></div>
   <div class="sec-title"><i class="ti ti-history"></i> Resultados</div>
   <div id="resultados-lista"></div>
+</div>
+
+<div class="page" id="page-calendario">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Principal</div>
+      <h1 class="page-title">Calendário</h1>
+    </div>
+    <button class="btn btn-primary btn-sm" id="btn-add-evento" onclick="openEventoForm()" style="display:none"><i class="ti ti-plus"></i> Novo evento</button>
+  </div>
+  <div class="ag-toolbar">
+    <div class="seg" id="ag-view" role="group" aria-label="Visualização">
+      <button type="button" class="active" data-view="agenda" onclick="setAgView('agenda')">Próximos</button>
+      <button type="button" data-view="mes" onclick="setAgView('mes')">Mês</button>
+      <button type="button" data-view="historico" onclick="setAgView('historico')">Histórico</button>
+    </div>
+    <div class="ag-filtros" id="ag-filtros" role="group" aria-label="Mostrar"></div>
+  </div>
+  <div id="ag-pend"></div>
+  <div id="ag-body"></div>
 </div>
 
 <div class="page" id="page-treinos">
@@ -2136,6 +2244,64 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-agenda-item">
+  <div class="modal">
+    <div class="modal-title"><span id="ag-item-title">Compromisso</span> <button class="modal-close" onclick="closeModal('modal-agenda-item')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <div id="ag-item-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-convocacao">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title"><span id="conv-title">Convocação</span> <button class="modal-close" onclick="closeModal('modal-convocacao')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <div id="conv-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-evento">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-title"><span id="ev-form-title">Novo evento</span> <button class="modal-close" onclick="closeModal('modal-evento')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="ev-id">
+    <div class="form-group"><label class="form-label" for="ev-titulo">Título *</label><input class="form-input" id="ev-titulo" maxlength="80" placeholder="Ex: Reunião com os atletas"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="ev-tipo">Tipo</label>
+        <select class="form-input" id="ev-tipo"><option>Evento</option><option>Reunião</option><option>Viagem</option><option>Confraternização</option><option>Avaliação física</option><option>Outro</option></select></div>
+      <div class="form-group"><label class="form-label" for="ev-local">Local</label><input class="form-input" id="ev-local" maxlength="120" placeholder="Ex: Sede do clube"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="ev-data">Data *</label><input class="form-input" id="ev-data" type="date"></div>
+      <div class="form-group"><label class="form-label" for="ev-hora">Horário</label><input class="form-input" id="ev-hora" type="time"></div>
+    </div>
+    <div class="form-group"><label class="form-label" for="ev-desc">Descrição</label><textarea class="form-input" id="ev-desc" maxlength="1000" rows="3" placeholder="Detalhes, o que levar, etc."></textarea></div>
+    <div class="alert alert-danger" id="ev-error" style="display:none;margin:4px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEvento()"><i class="ti ti-check"></i> Salvar evento</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-evento')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-treino-edit">
+  <div class="modal">
+    <div class="modal-title">Editar treino <button class="modal-close" onclick="closeModal('modal-treino-edit')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="te-id">
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="te-data">Data *</label><input class="form-input" id="te-data" type="date"></div>
+      <div class="form-group"><label class="form-label" for="te-hora">Horário</label><input class="form-input" id="te-hora" type="time"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="te-local">Local</label><input class="form-input" id="te-local" placeholder="Quadra / Ginásio"></div>
+      <div class="form-group"><label class="form-label" for="te-tipo">Tipo</label>
+        <select class="form-input" id="te-tipo"><option>Treino técnico</option><option>Treino físico</option><option>Coletivo</option><option>Tático</option></select></div>
+    </div>
+    <div class="form-hint" style="margin-top:-4px">Se mudar data, horário ou local, o calendário avisa os atletas que o treino foi alterado.</div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveTreinoEdit()"><i class="ti ti-check"></i> Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-treino-edit')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -2150,7 +2316,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2324,6 +2490,7 @@ function buildNav() {
   const groups = [
     { label: 'Principal', tabs: [
       { id:'dashboard',    label:'Dashboard',    icon:'ti-layout-dashboard', roles: ALL },
+      { id:'calendario',   label:'Calendário',   icon:'ti-calendar',         roles: ALL },
     ]},
     { label: 'Equipe', tabs: [
       { id:'jogadores',    label:'Jogadores',    icon:'ti-users',            roles: ALL },
@@ -2358,7 +2525,7 @@ function buildNav() {
   document.getElementById('nav-tabs').innerHTML = html;
 
   // Bottom nav: first 4 tabs as icons + "Mais" for the rest
-  const PRIMARY_ORDER = ['dashboard','jogos','treinos','jogadores'];
+  const PRIMARY_ORDER = ['dashboard','calendario','jogos','jogadores'];
   const primary = PRIMARY_ORDER.map(id => mobileTabs.find(t => t.id === id)).filter(Boolean);
   const overflow = mobileTabs.filter(t => !primary.includes(t));
   const bnInner = document.getElementById('bottom-nav-inner');
@@ -2421,7 +2588,7 @@ function showPage(id) {
   const moreBtn = document.getElementById('btn-more-nav');
   if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
   hideNavTip();
-  const renders = { jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
+  const renders = { calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
 
@@ -2435,6 +2602,7 @@ async function loadAll() {
     api('GET','uniformes'),
     isManager ? api('GET','pedidos-torcedor') : Promise.resolve([]),
     api('GET','jogadores?fotos=1').catch(() => ({})),
+    loadAgenda(),
   ]);
   if (fotos && typeof fotos === 'object' && !fotos.error) cache.fotos = fotos;
   if (j) cache.jogadores = j;
@@ -2784,8 +2952,9 @@ function renderDashboard() {
   const eventsEl = document.getElementById('dash-events');
   if (eventsEl) {
     const upcoming = [
-      ...cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).map(j=>({ tipo:'jogo', data:j.data, hora:j.hora, titulo:`WR × ${j.adv}`, meta: [j.local, j.camp || 'Amistoso'].filter(Boolean).join(' · ') })),
-      ...cache.treinos.filter(t=>isUpcoming(t.data)).map(t=>({ tipo:'treino', data:t.data, hora:t.hora, titulo:t.tipo, meta: t.local || 'A definir' })),
+      ...cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).map(j=>({ tipo:'jogo', data:j.data, hora:j.hora, titulo:`WR × ${j.adv}`, meta: [j.local, j.camp || 'Amistoso'].filter(Boolean).join(' · '), ref:`jogo:${j.id}` })),
+      ...cache.treinos.filter(t=>isUpcoming(t.data)).map(t=>({ tipo:'treino', data:t.data, hora:t.hora, titulo:t.tipo, meta: t.local || 'A definir', ref:`treino:${t.id}` })),
+      ...(cache.agenda.eventos || []).filter(e=>isUpcoming(e.data)).map(e=>({ tipo:'evento', data:e.data, hora:e.hora, titulo:e.titulo, meta: [e.tipo, e.local].filter(Boolean).join(' · '), ref:`evento:${e.id}` })),
     ].sort((a,b)=>(a.data+(a.hora||'')).localeCompare(b.data+(b.hora||''))).slice(0,5);
 
     if (upcoming.length) {
@@ -2795,9 +2964,9 @@ function renderDashboard() {
         const dateHeader = dateLabel !== lastDate ? `<div style="font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:6px 0 2px">${dateLabel}</div>` : '';
         lastDate = dateLabel;
         return `${dateHeader}
-          <div class="event-item">
+          <div class="event-item" role="button" tabindex="0" style="cursor:pointer" onclick="openAgendaItem('${ev.ref}')" onkeydown="if(event.key==='Enter')openAgendaItem('${ev.ref}')">
             <div class="event-dot ${ev.tipo}">
-              <i class="ti ${ev.tipo==='jogo'?'ti-ball-basketball':'ti-barbell'}" style="color:${ev.tipo==='jogo'?'var(--blue)':'var(--success)'}"></i>
+              <i class="ti ${AG_TIPOS[ev.tipo].icon}" style="color:${AG_TIPOS[ev.tipo].color}"></i>
             </div>
             <div class="event-info">
               <div class="event-title">${ev.titulo}</div>
@@ -3660,6 +3829,7 @@ function renderTreinos() {
         </div>
         <div style="display:flex;gap:8px;margin-top:10px">
           ${canEdit?`<button class="btn btn-ghost btn-sm" onclick="openPresenca(${t.id})" style="flex:1"><i class="ti ti-clipboard-check"></i> Registrar presença</button>`:''}
+          ${can(['admin','tecnico','capitao'])?`<button class="btn btn-ghost btn-sm btn-icon" onclick="openTreinoEdit(${t.id})" title="Editar treino" aria-label="Editar treino"><i class="ti ti-pencil"></i></button>`:''}
           ${canDelete?`<button class="btn btn-danger btn-sm" onclick="deleteTreino(${t.id})"><i class="ti ti-trash"></i></button>`:''}
         </div>
       </div>`).join('')
@@ -4373,6 +4543,424 @@ function exportStatsPDF() {
   doc.setFontSize(8); doc.setTextColor(120);
   doc.text('FG% = arremessos de quadra (2 e 3 pontos). Roubos, tocos e aproveitamentos contam só jogos com súmula completa.', 10, y);
   doc.save(`estatisticas-white-rock${camp ? '-' + camp.toLowerCase().replace(/[^a-z0-9]+/g, '-') : ''}.pdf`);
+}
+
+// ==================== CALENDÁRIO INTEGRADO (fase 7) ====================
+const AG_TIPOS = {
+  jogo:   { label: 'Jogo',   plural: 'Jogos',   icon: 'ti-ball-basketball', color: 'var(--blue)' },
+  treino: { label: 'Treino', plural: 'Treinos', icon: 'ti-barbell',         color: 'var(--success)' },
+  evento: { label: 'Evento', plural: 'Eventos', icon: 'ti-calendar-event',  color: '#A78BFA' },
+};
+const AG_RESP = {
+  sim:    { label: 'Vou',     icon: 'ti-circle-check', cls: 'ok' },
+  talvez: { label: 'Talvez',  icon: 'ti-help-circle',  cls: 'maybe' },
+  nao:    { label: 'Não vou', icon: 'ti-circle-x',     cls: 'no' },
+};
+const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+const DIAS_SEM = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+let _agView = 'agenda';
+let _agMes = null;              // 'YYYY-MM'
+let _agDia = null;              // dia selecionado no mês
+let _agFiltro = { jogo: true, treino: true, evento: true };
+
+async function loadAgenda() {
+  try {
+    const r = await api('GET', 'modulos?r=agenda');
+    if (r && !r.error) cache.agenda = { eventos: r.eventos || [], convocacoes: r.convocacoes || {}, confirmacoes: r.confirmacoes || {}, alteracoes: r.alteracoes || [] };
+  } catch (e) { console.warn('agenda', e); }
+}
+
+function meuJogador() {
+  if (!currentUser || currentUser.num === undefined || currentUser.num === null || currentUser.num === '') return null;
+  return cache.jogadores.find(j => Number(j.num) === Number(currentUser.num) && j.status !== 'Inativo') || null;
+}
+
+function diaSemana(d) { const [y, m, dd] = d.split('-').map(Number); return new Date(y, m - 1, dd).getDay(); }
+function fmtDiaLongo(d) {
+  const [y, m, dd] = d.split('-').map(Number);
+  return `${DIAS_SEM[new Date(y, m - 1, dd).getDay()]}, ${dd} de ${MESES[m - 1].toLowerCase()}`;
+}
+
+// Todos os compromissos num formato só
+function agendaItens() {
+  const ag = cache.agenda;
+  const it = [];
+  cache.jogos.forEach(j => it.push({ ref: `jogo:${j.id}`, tipo: 'jogo', id: j.id, data: j.data, hora: j.hora || '', local: j.local || '',
+    titulo: `WR × ${j.adv}`, sub: (j.camp || '').trim() || 'Amistoso', obj: j }));
+  cache.treinos.forEach(t => it.push({ ref: `treino:${t.id}`, tipo: 'treino', id: t.id, data: t.data, hora: t.hora || '', local: t.local || '',
+    titulo: t.tipo || 'Treino', sub: 'Treino', obj: t }));
+  ag.eventos.forEach(e => it.push({ ref: `evento:${e.id}`, tipo: 'evento', id: e.id, data: e.data, hora: e.hora || '', local: e.local || '',
+    titulo: e.titulo, sub: e.tipo || 'Evento', obj: e }));
+  return it.filter(x => x.data).sort((a, b) => (a.data + (a.hora || '99')).localeCompare(b.data + (b.hora || '99')));
+}
+
+// Quem é esperado no compromisso: convocados (se houver convocação) ou o elenco disponível
+function esperados(item) {
+  const conv = cache.agenda.convocacoes[item.ref];
+  if (conv && conv.jogadores && conv.jogadores.length) return cache.jogadores.filter(j => conv.jogadores.includes(j.id));
+  return cache.jogadores.filter(j => j.status === 'Ativo');
+}
+function respostas(item) { return cache.agenda.confirmacoes[item.ref] || {}; }
+function alteracaoRecente(item) {
+  // última mudança registrada nos últimos 14 dias, para compromissos que ainda vão acontecer
+  if (item.data < today()) return null;
+  const lim = Date.now() - 14 * 864e5;
+  return cache.agenda.alteracoes.find(a => a.ref === item.ref && a.tipo === 'alterado' && new Date(a.em).getTime() >= lim) || null;
+}
+function descAlteracao(a) {
+  const nome = { data: 'data', hora: 'horário', local: 'local' };
+  return a.mudancas.map(m => `${nome[m.campo] || m.campo}: ${m.campo === 'data' ? (m.de ? fmt(m.de) : '—') + ' → ' + fmt(m.para) : (m.de || '—') + ' → ' + (m.para || '—')}`).join(' · ');
+}
+
+function setAgView(v) {
+  _agView = v;
+  document.querySelectorAll('#ag-view button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  renderCalendario();
+}
+function toggleAgFiltro(t) {
+  _agFiltro[t] = !_agFiltro[t];
+  if (!Object.values(_agFiltro).some(Boolean)) _agFiltro[t] = true;
+  renderCalendario();
+}
+function agMover(delta) {
+  const [y, m] = (_agMes || today().slice(0, 7)).split('-').map(Number);
+  const d = new Date(y, m - 1 + delta, 1);
+  _agMes = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  _agDia = null;
+  renderCalendario();
+}
+function agHoje() { _agMes = today().slice(0, 7); _agDia = today(); renderCalendario(); }
+function agSelDia(d) { _agDia = d; renderCalendario(); }
+
+function renderCalendario() {
+  const body = document.getElementById('ag-body');
+  if (!body) return;
+  if (!_agMes) _agMes = today().slice(0, 7);
+  document.getElementById('btn-add-evento').style.display = can(['admin', 'tecnico', 'capitao']) ? 'inline-flex' : 'none';
+  document.getElementById('ag-filtros').innerHTML = Object.entries(AG_TIPOS).map(([k, t]) =>
+    `<button type="button" class="ag-chip${_agFiltro[k] ? ' on' : ''}" aria-pressed="${_agFiltro[k]}" onclick="toggleAgFiltro('${k}')" style="--c:${t.color}"><i class="ti ${t.icon}"></i>${t.plural}</button>`).join('');
+  const itens = agendaItens().filter(i => _agFiltro[i.tipo]);
+  const hoje = today();
+
+  // Aviso de pendências do atleta
+  const eu = meuJogador();
+  const pend = eu ? itens.filter(i => i.data >= hoje && esperados(i).some(j => j.id === eu.id) && !respostas(i)[eu.id]) : [];
+  document.getElementById('ag-pend').innerHTML = pend.length
+    ? `<div class="alert alert-info ag-pend"><i class="ti ti-bell"></i><span>Você tem <b>${pend.length}</b> compromisso${pend.length > 1 ? 's' : ''} sem confirmar presença.</span><button class="btn btn-primary btn-sm" onclick="openAgendaItem('${pend[0].ref}')">Responder</button></div>` : '';
+
+  if (_agView === 'mes') body.innerHTML = agMesHTML(itens, hoje);
+  else if (_agView === 'historico') body.innerHTML = agListaHTML(itens.filter(i => i.data < hoje).reverse(), true);
+  else body.innerHTML = agListaHTML(itens.filter(i => i.data >= hoje), false);
+}
+
+function agMesHTML(itens, hoje) {
+  const [y, m] = _agMes.split('-').map(Number);
+  const primeiro = new Date(y, m - 1, 1).getDay();
+  const dias = new Date(y, m, 0).getDate();
+  const porDia = {};
+  itens.forEach(i => { if (i.data.startsWith(_agMes)) (porDia[i.data] = porDia[i.data] || []).push(i); });
+  const sel = _agDia && _agDia.startsWith(_agMes) ? _agDia : (hoje.startsWith(_agMes) ? hoje : null);
+  let cells = '';
+  for (let i = 0; i < primeiro; i++) cells += '<div class="ag-cell empty" aria-hidden="true"></div>';
+  for (let d = 1; d <= dias; d++) {
+    const ds = `${_agMes}-${String(d).padStart(2, '0')}`;
+    const lst = porDia[ds] || [];
+    cells += `<button type="button" class="ag-cell${ds === hoje ? ' today' : ''}${ds === sel ? ' sel' : ''}${ds < hoje ? ' past' : ''}" onclick="agSelDia('${ds}')" aria-label="${fmtDiaLongo(ds)}: ${lst.length ? lst.length + ' compromisso(s)' : 'livre'}">
+      <span class="ag-dnum">${d}</span>
+      <span class="ag-dots">${lst.slice(0, 4).map(i => `<i style="background:${AG_TIPOS[i.tipo].color}"></i>`).join('')}</span>
+      <span class="ag-labels">${lst.slice(0, 3).map(i => `<span class="ag-lbl" style="--c:${AG_TIPOS[i.tipo].color}">${i.hora ? i.hora + ' ' : ''}${i.titulo}</span>`).join('')}${lst.length > 3 ? `<span class="ag-more">+${lst.length - 3}</span>` : ''}</span>
+    </button>`;
+  }
+  const doDia = sel ? (porDia[sel] || []) : [];
+  return `<div class="card ag-month">
+      <div class="ag-month-head">
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="agMover(-1)" aria-label="Mês anterior"><i class="ti ti-chevron-left"></i></button>
+        <div class="ag-month-title">${MESES[m - 1]} ${y}</div>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="agMover(1)" aria-label="Próximo mês"><i class="ti ti-chevron-right"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="agHoje()" style="margin-left:auto">Hoje</button>
+      </div>
+      <div class="ag-grid">${DIAS_SEM.map(d => `<div class="ag-wd">${d}</div>`).join('')}${cells}</div>
+    </div>
+    ${sel ? `<div class="sec-title" style="margin-top:18px"><i class="ti ti-calendar"></i> ${fmtDiaLongo(sel)}</div>
+      ${doDia.length ? doDia.map(i => agCardHTML(i, sel < hoje)).join('') : '<div class="card pf-empty">Nenhum compromisso neste dia.</div>'}` : ''}`;
+}
+
+function agListaHTML(lst, passado) {
+  if (!lst.length) return `<div class="card pf-empty" style="padding:18px">${passado ? 'Nenhum compromisso passado.' : 'Nenhum compromisso agendado.'}</div>`;
+  const hoje = today();
+  let html = '', ultimo = '';
+  lst.slice(0, passado ? 60 : 200).forEach(i => {
+    const grupo = passado ? `${MESES[+i.data.slice(5, 7) - 1]} ${i.data.slice(0, 4)}` : (i.data === hoje ? 'Hoje' : i.data === nextDay(hoje) ? 'Amanhã' : fmtDiaLongo(i.data));
+    if (grupo !== ultimo) { html += `<div class="ag-group">${grupo}</div>`; ultimo = grupo; }
+    html += agCardHTML(i, passado);
+  });
+  return html;
+}
+
+// Situação do atleta logado no compromisso
+function minhaSituacao(i, passado) {
+  const eu = meuJogador();
+  if (!eu) return '';
+  const esperado = esperados(i).some(j => j.id === eu.id);
+  const conv = cache.agenda.convocacoes[i.ref];
+  if (passado) {
+    if (i.tipo === 'treino') return (i.obj.presentes || []).includes(eu.id) ? '<span class="badge badge-green">Presente</span>' : ((i.obj.presentes || []).length ? '<span class="badge badge-red">Faltou</span>' : '');
+    if (i.tipo === 'jogo') { const b = typeof boxLinhaDe === 'function' && boxLinhaDe(i.obj, eu.id); if (b) return `<span class="badge badge-green">Jogou · ${b.pts || 0} pts</span>`; }
+    const r = respostas(i)[eu.id];
+    return r ? `<span class="badge ${r.status === 'sim' ? 'badge-blue' : 'badge-gray'}">${AG_RESP[r.status].label}</span>` : '';
+  }
+  const r = respostas(i)[eu.id];
+  if (conv && !esperado) return '<span class="badge badge-gray">Não convocado</span>';
+  const convTag = conv && esperado ? '<span class="badge badge-blue"><i class="ti ti-star"></i> Convocado</span>' : '';
+  if (r) return `${convTag}<span class="ag-resp ${AG_RESP[r.status].cls}"><i class="ti ${AG_RESP[r.status].icon}"></i>${AG_RESP[r.status].label}</span>`;
+  return `${convTag}<span class="badge badge-orange">Confirmar presença</span>`;
+}
+
+function agCardHTML(i, passado) {
+  const t = AG_TIPOS[i.tipo];
+  const alt = !passado && alteracaoRecente(i);
+  const staff = can(['admin', 'tecnico', 'comissao', 'capitao']);
+  let resumo = '';
+  if (staff && !passado) {
+    const esp = esperados(i), resp = respostas(i);
+    const n = s => esp.filter(j => resp[j.id] && resp[j.id].status === s).length;
+    resumo = `<span class="ag-count" title="Confirmados / talvez / não vão / sem resposta"><span class="ok">${n('sim')}</span> vão · <span class="maybe">${n('talvez')}</span> talvez · <span class="no">${n('nao')}</span> não · ${esp.filter(j => !resp[j.id]).length} sem resposta</span>`;
+  } else if (staff && passado && i.tipo === 'treino' && (i.obj.presentes || []).length) {
+    resumo = `<span class="ag-count">${i.obj.presentes.length} presentes</span>`;
+  }
+  const placar = i.tipo === 'jogo' && i.obj.wr !== null && i.obj.wr !== undefined
+    ? `<span class="badge ${i.obj.wr > i.obj.advPl ? 'badge-green' : i.obj.wr < i.obj.advPl ? 'badge-red' : 'badge-gray'}">${i.obj.wr} × ${i.obj.advPl}</span>` : '';
+  return `<button type="button" class="ag-item${passado ? ' past' : ''}" style="--c:${t.color}" onclick="openAgendaItem('${i.ref}')">
+    <span class="ag-time"><b>${i.hora || '--:--'}</b><small>${fmt(i.data).slice(0, 5)}</small></span>
+    <span class="ag-icon"><i class="ti ${t.icon}"></i></span>
+    <span class="ag-main">
+      <span class="ag-title">${i.titulo}</span>
+      <span class="ag-meta">${i.sub}${i.local ? ` · <i class="ti ti-map-pin"></i>${i.local}` : ''}</span>
+      ${alt ? `<span class="ag-alt"><i class="ti ti-alert-triangle"></i> Alterado: ${descAlteracao(alt)}</span>` : ''}
+      ${resumo}
+    </span>
+    <span class="ag-side">${placar}${minhaSituacao(i, passado)}</span>
+  </button>`;
+}
+
+// ── Detalhe do compromisso
+let _agRef = null;
+function openAgendaItem(ref) {
+  const i = agendaItens().find(x => x.ref === ref);
+  if (!i) return;
+  _agRef = ref;
+  const t = AG_TIPOS[i.tipo];
+  const hoje = today(), passado = i.data < hoje;
+  const staff = can(['admin', 'tecnico', 'comissao', 'capitao']);
+  const manage = can(['admin', 'tecnico', 'capitao']);
+  const eu = meuJogador();
+  const conv = cache.agenda.convocacoes[ref];
+  const esp = esperados(i), resp = respostas(i);
+  const alts = cache.agenda.alteracoes.filter(a => a.ref === ref && a.tipo === 'alterado').slice(0, 3);
+
+  document.getElementById('ag-item-title').innerHTML = `<i class="ti ${t.icon}" style="color:${t.color}"></i> ${i.titulo}`;
+  let html = `
+    <div class="ag-det-info">
+      <div><i class="ti ti-calendar"></i>${fmtDiaLongo(i.data)}${i.hora ? ` · ${i.hora}` : ''}</div>
+      <div><i class="ti ti-map-pin"></i>${i.local || 'Local a definir'}</div>
+      <div><i class="ti ti-tag"></i>${i.sub}${i.tipo === 'jogo' && i.obj.wr !== null && i.obj.wr !== undefined ? ` · Placar ${i.obj.wr} × ${i.obj.advPl}` : ''}</div>
+    </div>
+    ${i.tipo === 'evento' && i.obj.desc ? `<div class="ag-det-desc">${i.obj.desc.replace(/\n/g, '<br>')}</div>` : ''}
+    ${alts.length ? `<div class="alert alert-warning" style="margin:12px 0 0"><i class="ti ti-alert-triangle"></i><span>${alts.map(a => `Alterado em ${new Date(a.em).toLocaleDateString('pt-BR')}: ${descAlteracao(a)}`).join('<br>')}</span></div>` : ''}`;
+
+  // Minha resposta
+  const souEsperado = eu && esp.some(j => j.id === eu.id);
+  if (eu && !passado && (souEsperado || !conv)) {
+    const r = resp[eu.id];
+    html += `<div class="pf-section" style="margin-top:18px">
+      <div class="sec-title"><i class="ti ti-hand-finger"></i> Sua presença${conv && souEsperado ? ' · <span style="color:var(--blue)">você foi convocado</span>' : ''}</div>
+      <div class="ag-rsvp" role="group" aria-label="Confirmar presença">
+        ${Object.entries(AG_RESP).map(([k, v]) => `<button type="button" class="ag-rsvp-btn ${v.cls}${r && r.status === k ? ' on' : ''}" aria-pressed="${!!(r && r.status === k)}" onclick="confirmarPresenca('${k}')"><i class="ti ${v.icon}"></i>${v.label}</button>`).join('')}
+      </div>
+      <input class="form-input" id="ag-motivo" maxlength="200" placeholder="Motivo (opcional)" onchange="salvarMotivo(this.value)" value="${r && r.motivo ? r.motivo : ''}" style="margin-top:8px;${r && r.status !== 'sim' ? '' : 'display:none'}">
+    </div>`;
+  } else if (eu && conv && !souEsperado && !passado) {
+    html += `<div class="pf-empty" style="margin-top:16px"><i class="ti ti-info-circle"></i> Você não está na convocação deste jogo.</div>`;
+  }
+
+  // Lista de presença (todos veem quem vai; comissão pode marcar)
+  if (!passado || staff) {
+    const grupos = [['sim', 'Vão'], ['talvez', 'Talvez'], ['nao', 'Não vão'], [null, 'Sem resposta']];
+    html += `<div class="pf-section" style="margin-top:18px">
+      <div class="sec-title"><i class="ti ti-users"></i> ${conv ? `Convocados (${esp.length})` : `Elenco (${esp.length})`}</div>
+      ${grupos.map(([st, lbl]) => {
+        const l = esp.filter(j => st === null ? !resp[j.id] : resp[j.id] && resp[j.id].status === st);
+        if (!l.length) return '';
+        return `<div class="ag-who-group"><div class="ag-who-label">${lbl} · ${l.length}</div>
+          ${l.map(j => `<div class="ag-who">
+            <span class="player-avatar st-av">${avatarInner(j)}</span>
+            <span class="ag-who-name">${j.apelido || j.nome.split(' ')[0]} <small>#${j.num}</small>${staff && resp[j.id] && resp[j.id].motivo ? `<small class="ag-why">${resp[j.id].motivo}</small>` : ''}</span>
+            ${staff ? `<select class="form-input ag-who-sel" aria-label="Presença de ${j.apelido || j.nome}" onchange="confirmarPor(${j.id}, this.value)">
+              <option value="">—</option>${Object.entries(AG_RESP).map(([k, v]) => `<option value="${k}" ${resp[j.id] && resp[j.id].status === k ? 'selected' : ''}>${v.label}</option>`).join('')}
+            </select>` : ''}
+          </div>`).join('')}</div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  // Ações
+  const acoes = [];
+  if (staff && !passado && i.tipo !== 'treino') acoes.push(`<button class="btn btn-ghost btn-sm" onclick="openConvocacao('${ref}')"><i class="ti ti-users-plus"></i> ${conv ? 'Editar convocação' : 'Convocar jogadores'}</button>`);
+  if (i.tipo === 'evento' && manage) {
+    acoes.push(`<button class="btn btn-ghost btn-sm" onclick="openEventoForm(${i.id})"><i class="ti ti-pencil"></i> Editar</button>`);
+    acoes.push(`<button class="btn btn-danger btn-sm" onclick="deleteEvento(${i.id})"><i class="ti ti-trash"></i> Excluir</button>`);
+  }
+  if (i.tipo === 'treino' && manage) acoes.push(`<button class="btn btn-ghost btn-sm" onclick="openTreinoEdit(${i.id})"><i class="ti ti-pencil"></i> Editar treino</button>`);
+  if (i.tipo === 'treino' && staff) acoes.push(`<button class="btn btn-ghost btn-sm" onclick="closeModal('modal-agenda-item');openPresenca(${i.id})"><i class="ti ti-clipboard-check"></i> Registrar presença</button>`);
+  if (i.tipo === 'jogo' && manage) acoes.push(`<button class="btn btn-ghost btn-sm" onclick="closeModal('modal-agenda-item');editJogo(${i.id})"><i class="ti ti-pencil"></i> Editar jogo</button>`);
+  if (i.tipo === 'jogo' && typeof hasBox === 'function' && hasBox(i.obj)) acoes.push(`<button class="btn btn-ghost btn-sm" onclick="openBoxScore(${i.id})"><i class="ti ti-clipboard-list"></i> Súmula</button>`);
+  if (acoes.length) html += `<div class="pf-actions" style="margin-top:16px">${acoes.join('')}</div>`;
+
+  document.getElementById('ag-item-content').innerHTML = html;
+  openModal('modal-agenda-item');
+}
+
+async function enviarConfirmacao(payload) {
+  const r = await api('PUT', 'modulos?r=agenda', { acao: 'confirmar', ref: _agRef, ...payload });
+  if (r && r.success) {
+    cache.agenda.confirmacoes[_agRef] = r.confirmacoes;
+    renderCalendario(); renderDashboard();
+    return true;
+  }
+  toast((r && r.error) || 'Erro ao salvar a presença', 'error');
+  return false;
+}
+
+async function confirmarPresenca(status) {
+  const motivoEl = document.getElementById('ag-motivo');
+  const motivo = status === 'sim' ? '' : (motivoEl ? motivoEl.value : '');
+  if (await enviarConfirmacao({ status, motivo })) {
+    toast(status === 'sim' ? 'Presença confirmada!' : 'Resposta registrada');
+    openAgendaItem(_agRef);
+    const m = document.getElementById('ag-motivo');
+    if (m && status !== 'sim') m.focus();
+  }
+}
+
+async function salvarMotivo(motivo) {
+  const eu = meuJogador();
+  const r = eu && respostas({ ref: _agRef })[eu.id];
+  if (!r || r.status === 'sim') return;
+  if (await enviarConfirmacao({ status: r.status, motivo })) toast('Motivo salvo');
+}
+
+async function confirmarPor(jogadorId, status) {
+  if (await enviarConfirmacao({ jogadorId, status: status || null })) openAgendaItem(_agRef);
+}
+
+// ── Convocação
+function openConvocacao(ref) {
+  const i = agendaItens().find(x => x.ref === ref);
+  if (!i) return;
+  _agRef = ref;
+  const conv = cache.agenda.convocacoes[ref];
+  const sel = conv ? conv.jogadores : cache.jogadores.filter(j => j.status === 'Ativo').map(j => j.id);
+  const lista = cache.jogadores.filter(j => j.status !== 'Inativo' || sel.includes(j.id))
+    .sort((a, b) => (a.status === 'Ativo' ? 0 : 1) - (b.status === 'Ativo' ? 0 : 1) || (a.num || 0) - (b.num || 0));
+  document.getElementById('conv-title').textContent = `Convocação · ${i.titulo}`;
+  document.getElementById('conv-content').innerHTML = `
+    <div class="pf-empty" style="margin:-4px 0 12px">${fmtDiaLongo(i.data)}${i.hora ? ' · ' + i.hora : ''}. Os convocados recebem o pedido para confirmar presença.</div>
+    <div class="conv-tools"><button type="button" class="btn btn-ghost btn-sm" onclick="convMarcar(true)">Marcar todos</button><button type="button" class="btn btn-ghost btn-sm" onclick="convMarcar(false)">Desmarcar todos</button><span id="conv-count"></span></div>
+    <div class="conv-list">${lista.map(j => `<label class="conv-row">
+      <input type="checkbox" value="${j.id}" ${sel.includes(j.id) ? 'checked' : ''} onchange="convContar()">
+      <span class="player-avatar st-av">${avatarInner(j)}</span>
+      <span class="ag-who-name">${j.apelido || j.nome.split(' ')[0]} <small>#${j.num} · ${j.pos || ''}</small></span>
+      ${j.status !== 'Ativo' ? `<span class="badge ${statusBadgeClass(j.status)}">${j.status}</span>` : ''}
+    </label>`).join('')}</div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveConvocacao()"><i class="ti ti-check"></i> Salvar convocação</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-convocacao')">Cancelar</button>
+    </div>`;
+  convContar();
+  openModal('modal-convocacao');
+}
+function convMarcar(v) { document.querySelectorAll('#conv-content .conv-row input').forEach(c => { c.checked = v; }); convContar(); }
+function convContar() { const n = document.querySelectorAll('#conv-content .conv-row input:checked').length; document.getElementById('conv-count').textContent = `${n} convocado${n === 1 ? '' : 's'}`; }
+async function saveConvocacao() {
+  const ids = [...document.querySelectorAll('#conv-content .conv-row input:checked')].map(c => +c.value);
+  const r = await api('PUT', 'modulos?r=agenda', { acao: 'convocar', ref: _agRef, jogadores: ids });
+  if (r && r.success) {
+    if (r.convocacao) cache.agenda.convocacoes[_agRef] = r.convocacao; else delete cache.agenda.convocacoes[_agRef];
+    closeModal('modal-convocacao');
+    toast(ids.length ? `Convocação salva: ${ids.length} jogador(es)` : 'Convocação removida');
+    renderCalendario(); renderDashboard();
+    if (document.getElementById('modal-agenda-item').classList.contains('open')) openAgendaItem(_agRef);
+  } else toast((r && r.error) || 'Erro ao salvar convocação', 'error');
+}
+
+// ── Eventos
+function openEventoForm(id) {
+  const e = id ? cache.agenda.eventos.find(x => x.id === id) : null;
+  document.getElementById('ev-id').value = e ? e.id : '';
+  document.getElementById('ev-form-title').textContent = e ? 'Editar evento' : 'Novo evento';
+  document.getElementById('ev-titulo').value = e ? e.titulo : '';
+  document.getElementById('ev-tipo').value = e ? e.tipo : 'Evento';
+  document.getElementById('ev-data').value = e ? e.data : (_agDia && _agDia >= today() ? _agDia : today());
+  document.getElementById('ev-hora').value = e ? e.hora : '';
+  document.getElementById('ev-local').value = e ? e.local : '';
+  document.getElementById('ev-desc').value = e ? e.desc : '';
+  document.getElementById('ev-error').style.display = 'none';
+  closeModal('modal-agenda-item');
+  openModal('modal-evento');
+  setTimeout(() => document.getElementById('ev-titulo').focus(), 50);
+}
+async function saveEvento() {
+  const id = +document.getElementById('ev-id').value || null;
+  const payload = { acao: 'evento', titulo: document.getElementById('ev-titulo').value.trim(), tipo: document.getElementById('ev-tipo').value,
+    data: document.getElementById('ev-data').value, hora: document.getElementById('ev-hora').value,
+    local: document.getElementById('ev-local').value.trim(), desc: document.getElementById('ev-desc').value.trim() };
+  const err = document.getElementById('ev-error');
+  if (!payload.titulo || !payload.data) { err.style.display = ''; err.querySelector('span').textContent = 'Título e data são obrigatórios.'; return; }
+  const r = await api(id ? 'PUT' : 'POST', 'modulos?r=agenda', id ? { ...payload, id } : payload);
+  if (r && r.id) {
+    await loadAgenda();
+    closeModal('modal-evento');
+    toast(id ? 'Evento atualizado!' : 'Evento criado!');
+    renderCalendario(); renderDashboard();
+  } else { err.style.display = ''; err.querySelector('span').textContent = (r && r.error) || 'Erro ao salvar evento'; }
+}
+function deleteEvento(id) {
+  const e = cache.agenda.eventos.find(x => x.id === id);
+  confirmAction(`Excluir o evento "${e ? e.titulo : ''}"?`, async () => {
+    const r = await api('DELETE', 'modulos?r=agenda', { acao: 'evento', id });
+    if (r && r.success) { await loadAgenda(); closeModal('modal-agenda-item'); renderCalendario(); renderDashboard(); toast('Evento excluído!'); }
+    else toast((r && r.error) || 'Erro ao excluir evento', 'error');
+  }, { title: 'Excluir evento', label: 'Sim, excluir', icon: 'ti-calendar-off', type: 'danger' });
+}
+
+// ── Editar treino (data, horário, local, tipo)
+function openTreinoEdit(id) {
+  const t = cache.treinos.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('te-id').value = t.id;
+  document.getElementById('te-data').value = t.data;
+  document.getElementById('te-hora').value = t.hora || '';
+  document.getElementById('te-local').value = t.local || '';
+  const sel = document.getElementById('te-tipo');
+  if (![...sel.options].some(o => o.value === t.tipo)) sel.insertAdjacentHTML('beforeend', `<option>${t.tipo}</option>`);
+  sel.value = t.tipo;
+  closeModal('modal-agenda-item');
+  openModal('modal-treino-edit');
+}
+async function saveTreinoEdit() {
+  const id = +document.getElementById('te-id').value;
+  const data = document.getElementById('te-data').value;
+  if (!data) { toast('Data obrigatória', 'error'); return; }
+  const r = await api('PUT', 'treinos', { id, data, hora: document.getElementById('te-hora').value, local: document.getElementById('te-local').value, tipo: document.getElementById('te-tipo').value });
+  if (r && r.id) {
+    const idx = cache.treinos.findIndex(x => x.id === id);
+    if (idx !== -1) cache.treinos[idx] = r;
+    await loadAgenda();
+    closeModal('modal-treino-edit');
+    toast('Treino atualizado!');
+    renderTreinos(); renderCalendario(); renderDashboard();
+  } else toast((r && r.error) || 'Erro ao atualizar treino', 'error');
 }
 
 // ==================== AVISOS ====================
