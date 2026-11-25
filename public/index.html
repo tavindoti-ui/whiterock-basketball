@@ -931,9 +931,142 @@ body.sidebar-mini .btn-logout{justify-content:center}
 .destaque-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue2),rgba(77,166,255,0.3),transparent)}
 
 /* ── Dashboard mid grid ── */
-.dash-mid-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:22px}
-@media(max-width:900px){.dash-mid-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.dash-mid-grid{grid-template-columns:1fr}}
+/* ===== DASHBOARD v2 ===== */
+.dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.dash-kicker{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.dash-h1{font-size:clamp(20px,3vw,26px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin:0;line-height:1.1}
+.dash-filters{display:flex;gap:10px;flex-wrap:wrap}
+.dash-filter{display:flex;flex-direction:column;gap:4px}
+.dash-filter span{font-size:9px;font-weight:700;color:var(--text2);letter-spacing:1.2px;text-transform:uppercase}
+.dash-filter .form-input{width:auto;min-width:140px;font-size:12px;padding:7px 10px}
+
+/* Hero v2: next game + countdown */
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.hero-count{
+  text-align:center;padding:16px 22px;border-radius:16px;min-width:130px;
+  background:rgba(45,140,255,0.08);border:1px solid rgba(77,166,255,0.22);
+}
+.hero-count-num{font-size:44px;font-weight:900;color:#fff;line-height:1;letter-spacing:-1.5px;font-variant-numeric:tabular-nums}
+.hero-count-lbl{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.6px;text-transform:uppercase;margin-top:6px}
+.hero-count.today{background:rgba(0,200,122,0.1);border-color:rgba(0,200,122,0.3)}
+.hero-count.today .hero-count-lbl{color:var(--success)}
+.hero-record{display:flex;gap:18px;flex-wrap:wrap;padding:12px 28px;border-top:1px solid rgba(77,166,255,0.1);position:relative;z-index:2;background:rgba(5,11,22,0.35)}
+.hero-record-item{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.hero-record-item b{color:#fff;font-size:13px;font-variant-numeric:tabular-nums}
+
+/* Alerts row */
+.dash-alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.dash-alerts:empty{display:none}
+.dash-alert{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;font-size:13px;border:1px solid;cursor:default}
+.dash-alert i{font-size:16px;flex-shrink:0}
+.dash-alert.link{cursor:pointer;transition:background .2s}
+.dash-alert.danger{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.25);color:#FCA5A5}
+.dash-alert.warning{background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.25);color:#FCD34D}
+.dash-alert.success{background:rgba(0,200,122,0.07);border-color:rgba(0,200,122,0.25);color:#6EE7B7}
+.dash-alert.link:hover{filter:brightness(1.2)}
+.dash-alert .go{margin-left:auto;font-size:11px;font-weight:700;opacity:.8;white-space:nowrap}
+
+/* KPI row */
+.dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi-bar{height:4px;border-radius:4px;background:rgba(255,255,255,0.06);margin-top:10px;overflow:hidden}
+.kpi-bar > div{height:100%;border-radius:4px;background:var(--blue2);transition:width .6s cubic-bezier(.22,1,.36,1)}
+.kpi-value small{font-size:.5em;font-weight:800;color:var(--text2);letter-spacing:0;margin-left:2px}
+
+/* Main grids */
+.dash-main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+.dash-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.dash-col > section:last-child{flex:1}
+.mvp-runner{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(245,158,11,0.1);font-size:12px}
+.mvp-runner .pos{font-size:11px;font-weight:900;color:var(--text3);width:18px}
+.mvp-runner .nm{flex:1;color:#fff;font-weight:700}
+.mvp-runner .sc{color:var(--text2);font-variant-numeric:tabular-nums}
+.dash-panel{padding:18px 20px}
+.dash-panel:hover{transform:none}
+.dash-panel .sec-title{margin-bottom:12px}
+.dash-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.dash-panel-head .sec-title{margin-bottom:8px}
+.dash-third{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:16px}
+.dash-third > div:empty{display:none}
+.dash-empty{color:var(--text3);font-size:13px;padding:10px 0;display:flex;align-items:center;gap:8px}
+
+/* Evolution chart */
+.dash-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.dash-legend span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);font-weight:600}
+.dash-legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.dash-evo-wrap{position:relative;height:220px}
+.dash-table-toggle{margin-top:10px;font-size:11px;color:var(--text2)}
+.dash-table-toggle summary{cursor:pointer;font-weight:600;color:var(--blue);list-style:none}
+.dash-table-toggle summary::-webkit-details-marker{display:none}
+.dash-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.dash-table th,.dash-table td{padding:6px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.05)}
+.dash-table th{color:var(--text2);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+.dash-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Results */
+.dash-form{display:flex;gap:4px}
+.form-pill{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+.form-pill.v{background:rgba(0,200,122,0.14);color:var(--success)}
+.form-pill.d{background:rgba(239,68,68,0.14);color:var(--danger)}
+.form-pill.e{background:rgba(174,184,199,0.12);color:var(--text2)}
+.res-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.res-row:last-child{border:none}
+.res-score{font-size:17px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.res-score span{color:var(--text3);font-weight:700;margin:0 4px}
+.res-adv{font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.res-meta{font-size:11px;color:var(--text2)}
+
+/* Squad */
+.squad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.squad-box{border-radius:12px;padding:10px;text-align:center;border:1px solid}
+.squad-box .n{font-size:22px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.squad-box .l{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-top:4px;color:var(--text2)}
+.squad-box.ok{background:rgba(0,200,122,0.06);border-color:rgba(0,200,122,0.2)}.squad-box.ok .n{color:var(--success)}
+.squad-box.sus{background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2)}.squad-box.sus .n{color:var(--warning)}
+.squad-box.les{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2)}.squad-box.les .n{color:var(--danger)}
+.squad-out{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,0.04);font-size:12px}
+.squad-out .who{font-weight:700;color:#fff}
+.squad-out .why{color:var(--text2);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Finance mini */
+.fin-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px;color:var(--text2)}
+.fin-row b{font-size:14px;font-variant-numeric:tabular-nums}
+.fin-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:12px}
+.fin-total span{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--text2)}
+.fin-total b{font-size:24px;font-weight:900;letter-spacing:-0.5px;font-variant-numeric:tabular-nums}
+
+/* Attendance */
+.dash-presenca{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+
+/* Entrance animation */
+@keyframes dashIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#page-dashboard.active > *{animation:dashIn .45s cubic-bezier(.22,1,.36,1) both}
+#page-dashboard.active > *:nth-child(2){animation-delay:.04s}
+#page-dashboard.active > *:nth-child(4){animation-delay:.08s}
+#page-dashboard.active > *:nth-child(5){animation-delay:.12s}
+#page-dashboard.active > *:nth-child(6){animation-delay:.16s}
+@media(prefers-reduced-motion:reduce){#page-dashboard.active > *{animation:none}}
+
+@media(max-width:1000px){
+  .dash-kpis{grid-template-columns:repeat(2,1fr)}
+  .dash-main{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .dash-third{grid-template-columns:1fr}
+  .dash-presenca{grid-template-columns:1fr}
+  .hero-grid{grid-template-columns:1fr;gap:16px}
+  .hero-count{display:flex;align-items:baseline;justify-content:center;gap:10px;padding:10px 14px;min-width:0}
+  .hero-count-num{font-size:28px}
+  .hero-count-lbl{margin-top:0}
+  .hero-record{padding:10px 18px;gap:12px}
+  .dash-filters{width:100%}
+  .dash-filter{flex:1}
+  .dash-filter .form-input{min-width:0;width:100%}
+  .dash-evo-wrap{height:190px}
+}
+@media(max-width:420px){
+  .dash-kpis{gap:10px}
+  .squad-box .n{font-size:18px}
+}
 
 /* ─── FAN ORDER STATUS BADGES ─── */
 .fsb{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.3px;white-space:nowrap}
@@ -1092,44 +1225,76 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <!-- PAGES -->
 <div class="page active" id="page-dashboard">
 
-  <!-- 1. HERO: Próximo Jogo -->
+  <!-- Cabeçalho + filtros de temporada / campeonato -->
+  <div class="dash-head">
+    <div>
+      <div class="dash-kicker">White Rock Basketball</div>
+      <h1 class="dash-h1">Painel da equipe</h1>
+    </div>
+    <div class="dash-filters">
+      <label class="dash-filter"><span>Temporada</span>
+        <select class="form-input" id="dash-f-temp" onchange="setDashFilter()"></select>
+      </label>
+      <label class="dash-filter"><span>Campeonato</span>
+        <select class="form-input" id="dash-f-camp" onchange="setDashFilter()"></select>
+      </label>
+    </div>
+  </div>
+
+  <!-- 1. Próximo jogo (destaque principal) -->
   <div id="dash-hero"></div>
 
-  <!-- Art banner (latest notice with image) -->
+  <!-- 2. Alertas importantes -->
+  <div id="dash-alertas" class="dash-alerts"></div>
+
+  <!-- Aviso com imagem mais recente -->
   <div id="dash-art-banner"></div>
 
-  <!-- 2. KPI Cards -->
-  <div class="grid4" id="dash-cards" style="margin-bottom:22px"></div>
+  <!-- 3. Indicadores -->
+  <div class="dash-kpis" id="dash-cards"></div>
 
-  <!-- 3. MVP + Destaques + Destaque do Dia -->
-  <div class="dash-mid-grid" id="dash-mid-grid">
+  <!-- 4. Evolução + resultados | agenda + elenco -->
+  <div class="dash-main">
+    <div class="dash-col">
+      <section class="card dash-panel">
+        <div class="dash-panel-head">
+          <div class="sec-title"><i class="ti ti-chart-line"></i> Evolução da temporada</div>
+          <div class="dash-legend" id="dash-evo-legend"></div>
+        </div>
+        <div id="dash-evo"></div>
+      </section>
+      <section class="card dash-panel">
+        <div class="dash-panel-head">
+          <div class="sec-title"><i class="ti ti-trophy"></i> Últimos resultados</div>
+          <div class="dash-form" id="dash-form"></div>
+        </div>
+        <div id="dash-resultados"></div>
+      </section>
+    </div>
+    <div class="dash-col">
+      <section class="card dash-panel">
+        <div class="sec-title"><i class="ti ti-calendar-event"></i> Próximos compromissos</div>
+        <div id="dash-events"></div>
+      </section>
+      <section class="card dash-panel">
+        <div class="sec-title"><i class="ti ti-users"></i> Situação do elenco</div>
+        <div id="dash-elenco"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- 5. Destaques individuais + financeiro -->
+  <div class="dash-third">
     <div id="dash-mvp"></div>
     <div id="dash-top-stats"></div>
-    <div id="dash-destaque"></div>
+    <div id="dash-fin"></div>
   </div>
 
-  <!-- 4. Próximos Eventos + Status do Elenco -->
-  <div class="grid2" style="margin-bottom:22px">
-    <div>
-      <div class="sec-title"><i class="ti ti-calendar-event"></i> Próximos eventos</div>
-      <div class="card" id="dash-events" style="padding:12px 16px"></div>
-    </div>
-    <div>
-      <div class="sec-title"><i class="ti ti-users"></i> Status do elenco</div>
-      <div class="card" id="dash-elenco" style="padding:12px 16px"></div>
-    </div>
-  </div>
-
-  <!-- 5. Alertas -->
-  <div id="dash-alertas" style="margin-bottom:16px"></div>
-
-  <!-- 6. Últimos Resultados -->
-  <div class="sec-title"><i class="ti ti-trophy"></i> Últimos resultados</div>
-  <div id="dash-resultados" style="margin-bottom:22px"></div>
-
-  <!-- 7. Frequência -->
-  <div class="sec-title"><i class="ti ti-percentage"></i> Frequência nos treinos</div>
-  <div class="card" id="dash-presenca"></div>
+  <!-- 6. Frequência -->
+  <section class="card dash-panel">
+    <div class="sec-title"><i class="ti ti-percentage"></i> Frequência nos treinos</div>
+    <div id="dash-presenca" class="dash-presenca"></div>
+  </section>
 
 </div>
 
@@ -1938,52 +2103,140 @@ function calcAge(dataNasc) {
 // Presence confirmation state (session-only)
 const _presenceConfirmed = new Set();
 
+// ==================== DASHBOARD ====================
+// Filtros (temporada / campeonato) — lembrados por navegador.
+let _dashFilter = { temp: '', camp: '' };
+let _dashFilterSaved = false;
+try {
+  const saved = localStorage.getItem('wr_dash_filter');
+  if (saved) { _dashFilter = Object.assign(_dashFilter, JSON.parse(saved)); _dashFilterSaved = true; }
+} catch (e) {}
+let _dashChart = null;
+const DASH_WR_COLOR  = '#2D8CFF';  // White Rock (validado p/ daltonismo no fundo escuro)
+const DASH_ADV_COLOR = '#C0843A';  // Adversários
+
+function setDashFilter() {
+  _dashFilter.temp = document.getElementById('dash-f-temp')?.value || '';
+  _dashFilter.camp = document.getElementById('dash-f-camp')?.value || '';
+  _dashFilterSaved = true;
+  try { localStorage.setItem('wr_dash_filter', JSON.stringify(_dashFilter)); } catch (e) {}
+  renderDashboard();
+}
+
+function dashResult(j) {
+  if (j.wr === null || j.wr === undefined || j.advPl === null || j.advPl === undefined) return null;
+  return j.wr > j.advPl ? 'v' : j.wr < j.advPl ? 'd' : 'e';
+}
+
+function daysUntil(dateStr) {
+  const a = new Date(today() + 'T00:00:00'), b = new Date(dateStr + 'T00:00:00');
+  return Math.round((b - a) / 86400000);
+}
+
+function shortName(j) { return j.apelido || (j.nome || '').split(' ')[0]; }
+
+function fillDashFilters() {
+  const anos = new Set();
+  cache.jogos.forEach(j => j.data && anos.add(j.data.slice(0, 4)));
+  (cache.financeiro.lancamentos || []).forEach(f => f.data && anos.add(f.data.slice(0, 4)));
+  const anoAtual = today().slice(0, 4);
+  anos.add(anoAtual);
+  const camps = [...new Set(cache.jogos.map(j => j.camp || 'Amistoso'))].sort();
+
+  // Primeira visita: temporada atual
+  if (_dashFilter.temp === '' && !_dashFilterSaved) _dashFilter.temp = anoAtual;
+  if (_dashFilter.temp && !anos.has(_dashFilter.temp)) _dashFilter.temp = '';
+  if (_dashFilter.camp && !camps.includes(_dashFilter.camp)) _dashFilter.camp = '';
+
+  const selT = document.getElementById('dash-f-temp');
+  const selC = document.getElementById('dash-f-camp');
+  if (selT) selT.innerHTML = `<option value="">Todas</option>` +
+    [...anos].sort().reverse().map(a => `<option value="${a}" ${a === _dashFilter.temp ? 'selected' : ''}>${a}</option>`).join('');
+  if (selC) selC.innerHTML = `<option value="">Todos</option>` +
+    camps.map(c => `<option value="${c}" ${c === _dashFilter.camp ? 'selected' : ''}>${c}</option>`).join('');
+}
+
 function renderDashboard() {
   const LOGO = 'https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz';
   const todayStr = today();
+  const isManager = can(['admin','tecnico','capitao']);
+  fillDashFilters();
+  const { temp, camp } = _dashFilter;
+  const noFiltro = j => (!temp || (j.data || '').startsWith(temp)) && (!camp || (j.camp || 'Amistoso') === camp);
 
   // ── Base data ──────────────────────────────────────────────────
   const ativos     = cache.jogadores.filter(j => j.status === 'Ativo');
   const lesionados = cache.jogadores.filter(j => j.status === 'Lesão');
   const suspensos  = cache.jogadores.filter(j => j.status === 'Suspenso');
   const proxJogo   = cache.jogos.filter(j => isUpcoming(j.data) && j.wr === null)
-                       .sort((a,b) => a.data.localeCompare(b.data))[0];
-  const jogosDisp  = cache.jogos.filter(j => !isUpcoming(j.data)).length;
+                       .sort((a,b) => (a.data + (a.hora||'')).localeCompare(b.data + (b.hora||'')))[0];
+  const disputados = cache.jogos.filter(j => noFiltro(j) && dashResult(j))
+                       .sort((a,b) => a.data.localeCompare(b.data));
+  const vit = disputados.filter(j => dashResult(j) === 'v').length;
+  const der = disputados.filter(j => dashResult(j) === 'd').length;
+  const emp = disputados.length - vit - der;
+  const aprov = disputados.length ? Math.round(vit / disputados.length * 100) : 0;
+  const ptsPro = disputados.length ? disputados.reduce((s,j) => s + (+j.wr||0), 0) / disputados.length : 0;
+  const ptsCon = disputados.length ? disputados.reduce((s,j) => s + (+j.advPl||0), 0) / disputados.length : 0;
   const avgPresenca = ativos.length
-    ? Math.round(ativos.reduce((s,j) => s + (j.presenca||0), 0) / ativos.length)
-    : 0;
+    ? Math.round(ativos.reduce((s,j) => s + (j.presenca||0), 0) / ativos.length) : 0;
+
+  // Sequência atual (ex.: 3 vitórias seguidas)
+  let seqTipo = null, seqN = 0;
+  for (let i = disputados.length - 1; i >= 0; i--) {
+    const r = dashResult(disputados[i]);
+    if (seqTipo === null) seqTipo = r;
+    if (r !== seqTipo) break;
+    seqN++;
+  }
+  const seqTxt = !seqN ? '—' : `${seqN} ${seqTipo === 'v' ? (seqN > 1 ? 'vitórias' : 'vitória') : seqTipo === 'd' ? (seqN > 1 ? 'derrotas' : 'derrota') : (seqN > 1 ? 'empates' : 'empate')}`;
+  const filtroLbl = [temp || 'Todas as temporadas', camp].filter(Boolean).join(' · ');
 
   // ── 1. HERO ────────────────────────────────────────────────────
   const heroEl = document.getElementById('dash-hero');
   if (heroEl) {
+    const record = `
+      <div class="hero-record">
+        <span class="hero-record-item"><i class="ti ti-filter" style="color:var(--blue)"></i>${filtroLbl}</span>
+        <span class="hero-record-item">Campanha <b>${vit}V · ${der}D${emp ? ` · ${emp}E` : ''}</b></span>
+        <span class="hero-record-item">Aproveitamento <b>${disputados.length ? aprov + '%' : '—'}</b></span>
+        <span class="hero-record-item">Sequência <b>${seqTxt}</b></span>
+      </div>`;
     if (proxJogo) {
       const confirmed = _presenceConfirmed.has(proxJogo.data + proxJogo.adv);
       const canConfirm = can(['atleta','capitao','tecnico','comissao','admin']);
+      const dias = daysUntil(proxJogo.data);
+      const countHTML = dias <= 0
+        ? `<div class="hero-count today"><div class="hero-count-num">HOJE</div><div class="hero-count-lbl">${proxJogo.hora || ''}</div></div>`
+        : `<div class="hero-count"><div class="hero-count-num">${dias}</div><div class="hero-count-lbl">${dias === 1 ? 'dia · amanhã' : 'dias para o jogo'}</div></div>`;
       heroEl.innerHTML = `
         <div class="dash-hero">
           <img class="hero-logo-bg" src="${LOGO}" alt="">
           <div class="hero-body">
-            <div class="hero-eyebrow">
-              <i class="ti ti-basketball"></i>
-              ${proxJogo.camp || 'Próximo Jogo'}
+            <div class="hero-grid">
+              <div>
+                <div class="hero-eyebrow">Próximo jogo · ${proxJogo.camp || 'Amistoso'}</div>
+                <div class="hero-vs-row">
+                  <span class="hero-team">WHITE ROCK</span>
+                  <span class="hero-vs-sep">VS</span>
+                  <span class="hero-adv">${proxJogo.adv.toUpperCase()}</span>
+                </div>
+                <div class="hero-meta">
+                  <span class="hero-meta-item"><i class="ti ti-calendar"></i>${fmt(proxJogo.data)}</span>
+                  <span class="hero-meta-item"><i class="ti ti-clock"></i>${proxJogo.hora || '—'}</span>
+                  ${proxJogo.local ? `<span class="hero-meta-item"><i class="ti ti-map-pin"></i>${proxJogo.local}</span>` : ''}
+                </div>
+                ${canConfirm ? `
+                <button class="hero-confirm-btn${confirmed?' confirmed':''}"
+                  onclick="confirmHeroPresence('${proxJogo.data}','${proxJogo.adv}',this)">
+                  <i class="ti ti-${confirmed?'check':'user-check'}"></i>
+                  ${confirmed ? 'Presença confirmada!' : 'Confirmar presença'}
+                </button>` : ''}
+              </div>
+              ${countHTML}
             </div>
-            <div class="hero-vs-row">
-              <span class="hero-team">WHITE ROCK</span>
-              <span class="hero-vs-sep">VS</span>
-              <span class="hero-adv">${proxJogo.adv.toUpperCase()}</span>
-            </div>
-            <div class="hero-meta">
-              <span class="hero-meta-item"><i class="ti ti-calendar"></i>${fmt(proxJogo.data)}</span>
-              <span class="hero-meta-item"><i class="ti ti-clock"></i>${proxJogo.hora || '—'}</span>
-              ${proxJogo.local ? `<span class="hero-meta-item"><i class="ti ti-map-pin"></i>${proxJogo.local}</span>` : ''}
-            </div>
-            ${canConfirm ? `
-            <button class="hero-confirm-btn${confirmed?' confirmed':''}"
-              onclick="confirmHeroPresence('${proxJogo.data}','${proxJogo.adv}',this)">
-              <i class="ti ti-${confirmed?'check':'user-check'}"></i>
-              ${confirmed ? 'Presença confirmada!' : 'Confirmar presença'}
-            </button>` : ''}
           </div>
+          ${record}
           <div class="hero-accent"></div>
         </div>`;
     } else {
@@ -1991,173 +2244,181 @@ function renderDashboard() {
         <div class="dash-hero">
           <img class="hero-logo-bg" src="${LOGO}" alt="">
           <div class="hero-body">
-            <div class="hero-eyebrow"><i class="ti ti-basketball"></i> White Rock Basketball</div>
+            <div class="hero-eyebrow">White Rock Basketball</div>
             <div class="hero-vs-row">
               <span class="hero-team">TEMPORADA</span>
               <span class="hero-vs-sep">·</span>
-              <span class="hero-adv">2026</span>
+              <span class="hero-adv">${temp || todayStr.slice(0,4)}</span>
             </div>
             <div class="hero-no-game"><i class="ti ti-calendar-off" style="color:var(--text3)"></i> Nenhum jogo agendado</div>
           </div>
+          ${record}
           <div class="hero-accent"></div>
         </div>`;
     }
   }
 
-  // ── 2. KPI CARDS ───────────────────────────────────────────────
-  let kpiSaldo = '';
-  if (can(['admin','tecnico','capitao'])) {
-    const ent   = cache.financeiro.lancamentos.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+f.valor,0);
-    const sai   = cache.financeiro.lancamentos.filter(f=>f.tipo==='saida').reduce((s,f)=>s+f.valor,0);
-    const saldo = ent - sai;
-    kpiSaldo = `
+  // ── 2. ALERTAS ─────────────────────────────────────────────────
+  const alertas = [];
+  if (proxJogo && proxJogo.data === todayStr)
+    alertas.push({ tipo:'success', icon:'ti-ball-basketball', msg:`Hoje tem jogo: WR × ${proxJogo.adv}${proxJogo.hora ? ' às ' + proxJogo.hora : ''}` });
+  const treinoHoje = cache.treinos.find(t => t.data === todayStr);
+  if (treinoHoje)
+    alertas.push({ tipo:'success', icon:'ti-barbell', msg:`Treino hoje${treinoHoje.hora ? ' às ' + treinoHoje.hora : ''}${treinoHoje.local ? ' · ' + treinoHoje.local : ''}`, page:'treinos' });
+  const fora = [...lesionados, ...suspensos];
+  if (fora.length)
+    alertas.push({ tipo:'danger', icon:'ti-first-aid-kit', msg:`${fora.length} jogador(es) fora: ${fora.map(shortName).join(', ')}`, page:'jogadores' });
+  if (isManager) {
+    const inad = Object.keys(cache.financeiro.mensalidades || {}).length;
+    if (inad) alertas.push({ tipo:'warning', icon:'ti-alert-triangle', msg:`${inad} jogador(es) com mensalidade em atraso`, page:'financeiro' });
+  }
+  document.getElementById('dash-alertas').innerHTML = alertas.map(a => `
+    <div class="dash-alert ${a.tipo}${a.page ? ' link' : ''}" ${a.page ? `onclick="showPage('${a.page}')" role="button" tabindex="0"` : ''}>
+      <i class="ti ${a.icon}"></i><span>${a.msg}</span>${a.page ? '<span class="go">Ver <i class="ti ti-chevron-right" style="font-size:11px"></i></span>' : ''}
+    </div>`).join('');
+
+  // ── 3. KPI CARDS ───────────────────────────────────────────────
+  const corFreq = avgPresenca>=80?'var(--success)':avgPresenca>=60?'var(--warning)':'var(--danger)';
+  let kpi4;
+  if (isManager) {
+    const lanc = (cache.financeiro.lancamentos || []).filter(f => !temp || (f.data || '').startsWith(temp));
+    const ent = lanc.filter(f=>f.tipo==='entrada').reduce((s,f)=>s+(+f.valor||0),0);
+    const sai = lanc.filter(f=>f.tipo==='saida').reduce((s,f)=>s+(+f.valor||0),0);
+    kpi4 = `
       <div class="kpi-card">
-        <div class="kpi-icon" style="background:rgba(0,200,122,0.1);color:var(--success)"><i class="ti ti-currency-dollar"></i></div>
-        <div class="kpi-label">Saldo do caixa</div>
-        <div class="kpi-value" style="color:${saldo>=0?'var(--success)':'var(--danger)'}">${fmtBRL(saldo)}</div>
-        <div class="kpi-sub">Ent: ${fmtBRL(ent)} · Saí: ${fmtBRL(sai)}</div>
+        <div class="kpi-icon" style="background:rgba(0,200,122,0.1);color:var(--success)"><i class="ti ti-wallet"></i></div>
+        <div class="kpi-label">Saldo do caixa ${temp ? '· ' + temp : ''}</div>
+        <div class="kpi-value" style="color:${ent-sai>=0?'var(--success)':'var(--danger)'};font-size:clamp(22px,3.4vw,30px)">${fmtBRL(ent-sai)}</div>
+        <div class="kpi-sub">Entradas ${fmtBRL(ent)} · Saídas ${fmtBRL(sai)}</div>
+      </div>`;
+  } else {
+    kpi4 = `
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(77,166,255,0.1);color:var(--blue)"><i class="ti ti-users"></i></div>
+        <div class="kpi-label">Atletas aptos</div>
+        <div class="kpi-value">${ativos.length}<small>/${cache.jogadores.length}</small></div>
+        <div class="kpi-sub">${fora.length ? fora.length + ' fora (lesão/suspensão)' : 'Elenco completo'}</div>
       </div>`;
   }
-
+  const saldoPts = ptsPro - ptsCon;
   document.getElementById('dash-cards').innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:rgba(77,166,255,0.1);color:var(--blue)"><i class="ti ti-users"></i></div>
-      <div class="kpi-label">Atletas ativos</div>
-      <div class="kpi-value">${ativos.length}</div>
-      <div class="kpi-sub">${cache.jogadores.length} cadastrados</div>
+      <div class="kpi-icon" style="background:rgba(77,166,255,0.1);color:var(--blue)"><i class="ti ti-trophy"></i></div>
+      <div class="kpi-label">Campanha</div>
+      <div class="kpi-value">${vit}<small>V</small> ${der}<small>D</small></div>
+      <div class="kpi-sub">${disputados.length ? `${aprov}% de aproveitamento em ${disputados.length} jogo(s)` : 'Nenhum jogo disputado'}</div>
+      <div class="kpi-bar"><div style="width:${aprov}%"></div></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:rgba(245,158,11,0.1);color:#F59E0B"><i class="ti ti-trophy"></i></div>
-      <div class="kpi-label">Jogos disputados</div>
-      <div class="kpi-value">${jogosDisp}</div>
-      <div class="kpi-sub">${cache.jogos.filter(j=>isUpcoming(j.data)).length} agendado(s)</div>
+      <div class="kpi-icon" style="background:rgba(77,166,255,0.1);color:var(--blue)"><i class="ti ti-ball-basketball"></i></div>
+      <div class="kpi-label">Pontos por jogo</div>
+      <div class="kpi-value">${disputados.length ? ptsPro.toFixed(1).replace('.',',') : '—'}</div>
+      <div class="kpi-sub">${disputados.length ? `Sofridos ${ptsCon.toFixed(1).replace('.',',')} · Saldo <span style="color:${saldoPts>=0?'var(--success)':'var(--danger)'};font-weight:700">${saldoPts>=0?'+':''}${saldoPts.toFixed(1).replace('.',',')}</span>` : 'Sem resultados no filtro'}</div>
     </div>
-    ${kpiSaldo}
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:rgba(139,92,246,0.1);color:#8B5CF6"><i class="ti ti-trending-up"></i></div>
+      <div class="kpi-icon" style="background:rgba(77,166,255,0.1);color:var(--blue)"><i class="ti ti-calendar-check"></i></div>
       <div class="kpi-label">Frequência média</div>
-      <div class="kpi-value" style="color:${avgPresenca>=80?'var(--success)':avgPresenca>=60?'var(--warning)':'var(--danger)'}">${avgPresenca}%</div>
-      <div class="kpi-sub">nos treinos</div>
-    </div>`;
+      <div class="kpi-value" style="color:${corFreq}">${avgPresenca}%</div>
+      <div class="kpi-sub">dos ${ativos.length} atleta(s) ativo(s) nos treinos</div>
+      <div class="kpi-bar"><div style="width:${avgPresenca}%;background:${corFreq}"></div></div>
+    </div>
+    ${kpi4}`;
 
-  // ── 3. MVP ─────────────────────────────────────────────────────
-  const mvpEl = document.getElementById('dash-mvp');
-  if (mvpEl) {
-    const ranked = [...cache.jogadores]
-      .filter(j => j.jg > 0 && (j.pts > 0 || j.reb > 0 || j.ast > 0))
-      .map(j => ({ ...j, score: j.pts + j.reb * 0.6 + j.ast * 0.7 }))
-      .sort((a,b) => b.score - a.score);
-    const mvp = ranked[0];
-    if (mvp) {
-      const ini = initials(mvp.apelido || mvp.nome);
-      mvpEl.innerHTML = `
-        <div class="mvp-card" style="height:100%">
-          <div class="mvp-badge"><i class="ti ti-trophy" style="color:#F59E0B"></i> MVP do elenco</div>
-          <div class="mvp-avatar">${ini}</div>
-          <div class="mvp-name">${mvp.apelido || mvp.nome.split(' ')[0]}</div>
-          <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">${mvp.pos || '—'}</div>
-          <div class="mvp-stats">
-            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.pts}</span><span class="mvp-stat-lbl">PPG</span></div>
-            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.reb}</span><span class="mvp-stat-lbl">RPG</span></div>
-            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.ast}</span><span class="mvp-stat-lbl">APG</span></div>
-          </div>
-        </div>`;
+  // ── 4. EVOLUÇÃO DA TEMPORADA (gráfico) ─────────────────────────
+  const evoEl = document.getElementById('dash-evo');
+  const legEl = document.getElementById('dash-evo-legend');
+  if (_dashChart) { _dashChart.destroy(); _dashChart = null; }
+  if (evoEl) {
+    if (disputados.length) {
+      legEl.innerHTML = `<span><i style="background:${DASH_WR_COLOR}"></i>White Rock</span><span><i style="background:${DASH_ADV_COLOR}"></i>Adversário</span>`;
+      const resLbl = { v:'Vitória', d:'Derrota', e:'Empate' };
+      evoEl.innerHTML = `
+        <div class="dash-evo-wrap"><canvas id="dash-evo-chart" aria-label="Pontos marcados e sofridos por jogo"></canvas></div>
+        <details class="dash-table-toggle"><summary><i class="ti ti-table"></i> Ver em tabela</summary>
+          <table class="dash-table"><thead><tr><th>Data</th><th>Adversário</th><th class="num">WR</th><th class="num">Adv.</th><th>Resultado</th></tr></thead>
+          <tbody>${disputados.map(j => `<tr><td>${fmt(j.data)}</td><td>${j.adv}</td><td class="num">${j.wr}</td><td class="num">${j.advPl}</td><td>${resLbl[dashResult(j)]}</td></tr>`).join('')}</tbody></table>
+        </details>`;
+      const canvas = document.getElementById('dash-evo-chart');
+      if (canvas && typeof Chart !== 'undefined') {
+        const pointBg = disputados.map(() => DASH_WR_COLOR);
+        _dashChart = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: disputados.map(j => fmt(j.data).slice(0,5)),
+            datasets: [
+              { label:'White Rock', data: disputados.map(j => +j.wr), borderColor: DASH_WR_COLOR, backgroundColor: 'rgba(45,140,255,0.08)',
+                fill: true, borderWidth: 2, tension: 0.3, pointRadius: 4, pointHoverRadius: 6, pointBackgroundColor: pointBg,
+                pointBorderColor: '#0D1526', pointBorderWidth: 2 },
+              { label:'Adversário', data: disputados.map(j => +j.advPl), borderColor: DASH_ADV_COLOR, backgroundColor: 'transparent',
+                borderWidth: 2, borderDash: [5,4], tension: 0.3, pointRadius: 4, pointHoverRadius: 6, pointBackgroundColor: DASH_ADV_COLOR,
+                pointBorderColor: '#0D1526', pointBorderWidth: 2 },
+            ]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#0D1526', borderColor: 'rgba(77,166,255,0.25)', borderWidth: 1,
+                titleColor: '#F4F7FB', bodyColor: '#AEB8C7', footerColor: '#F4F7FB', padding: 10,
+                callbacks: {
+                  title: items => { const j = disputados[items[0].dataIndex]; return `${fmt(j.data)} · vs ${j.adv}`; },
+                  label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} pts`,
+                  footer: items => { const j = disputados[items[0].dataIndex]; return `${resLbl[dashResult(j)]} · ${j.camp || 'Amistoso'}`; },
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#AEB8C7', font: { family: 'Inter', size: 11 } }, border: { color: 'rgba(255,255,255,0.08)' } },
+              y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, border: { display: false },
+                   ticks: { color: '#AEB8C7', font: { family: 'Inter', size: 11 }, maxTicksLimit: 5 } }
+            }
+          }
+        });
+      }
     } else {
-      mvpEl.innerHTML = `<div class="mvp-card" style="height:100%;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px"><i class="ti ti-trophy" style="font-size:28px;display:block;margin:0 auto 8px;opacity:.3"></i>Sem estatísticas ainda</div>`;
+      legEl.innerHTML = '';
+      evoEl.innerHTML = `<div class="dash-empty"><i class="ti ti-chart-line"></i> Nenhum resultado registrado ${temp || camp ? 'neste filtro' : 'ainda'}.</div>`;
     }
   }
 
-  // ── 4. TOP STATS ───────────────────────────────────────────────
-  const statsEl = document.getElementById('dash-top-stats');
-  if (statsEl) {
-    const medals = ['🥇','🥈','🥉'];
-    const comJogo = j => j.jg > 0;
-    const byPts = [...cache.jogadores].filter(j => comJogo(j) && j.pts > 0).sort((a,b)=>b.pts-a.pts).slice(0,3);
-    const byAst = [...cache.jogadores].filter(j => comJogo(j) && j.ast > 0).sort((a,b)=>b.ast-a.ast).slice(0,3);
-    const mkRows = (list, key) => list.length
-      ? list.map((j,i) => `
-          <div class="top-rank-item">
-            <span class="rank-medal">${medals[i]}</span>
-            <span class="rank-name">${j.apelido||j.nome.split(' ')[0]}</span>
-            <span class="rank-val">${j[key]}</span>
-          </div>`).join('')
-      : `<div style="color:var(--text3);font-size:12px;padding:4px 0">Sem dados ainda</div>`;
-    statsEl.innerHTML = `
-      <div class="card" style="height:100%">
-        <div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px">
-          <i class="ti ti-flame" style="font-size:13px"></i> Destaques
-        </div>
-        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Pontos</div>
-        ${mkRows(byPts,'pts')}
-        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin:12px 0 6px">Assistências</div>
-        ${mkRows(byAst,'ast')}
-      </div>`;
-  }
-
-  // ── 5. DESTAQUE DO DIA ─────────────────────────────────────────
-  const destaqueEl = document.getElementById('dash-destaque');
-  if (destaqueEl) {
-    const widgets = [
-      () => {
-        const top = [...ativos].sort((a,b)=>b.presenca-a.presenca)[0];
-        return top ? { icon:'ti-percentage', color:'#8B5CF6', label:'Maior frequência', val: (top.apelido||top.nome.split(' ')[0]), num: top.num, sub: `${top.presenca}% de presença nos treinos` } : null;
-      },
-      () => {
-        const top = [...cache.jogadores].filter(j=>j.jg>0&&j.pts>0).sort((a,b)=>b.pts-a.pts)[0];
-        return top ? { icon:'ti-basketball', color:'var(--blue)', label:'Top pontuador', val: (top.apelido||top.nome.split(' ')[0]), num: top.num, sub: `${top.pts} pontos na temporada` } : null;
-      },
-      () => {
-        const top = [...cache.jogadores].filter(j=>j.jg>0&&j.ast>0).sort((a,b)=>b.ast-a.ast)[0];
-        return top ? { icon:'ti-arrows-shuffle', color:'var(--success)', label:'Mais assistências', val: (top.apelido||top.nome.split(' ')[0]), num: top.num, sub: `${top.ast} assistências` } : null;
-      },
-      () => {
-        const wins = cache.jogos.filter(j=>j.wr!==null&&j.wr>j.advPl).length;
-        const total = cache.jogos.filter(j=>j.wr!==null).length;
-        if (!total) return null;
-        return { icon:'ti-trophy', color:'#F59E0B', label:'Aproveitamento', val: `${Math.round(wins/total*100)}%`, sub: `${wins} vitória(s) em ${total} jogo(s)` };
-      },
-    ];
-    const day = new Date().getDay();
-    const widget = widgets[day % widgets.length]?.();
-    if (widget) {
-      destaqueEl.innerHTML = `
-        <div class="destaque-card" style="height:100%">
-          <div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px">
-            <i class="ti ti-sparkles"></i> Destaque do dia
-          </div>
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:20px;color:${widget.color};margin-bottom:12px">
-            <i class="ti ${widget.icon}"></i>
-          </div>
-          <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">${widget.label}</div>
-          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
-            <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px">${widget.val}</div>
-            ${widget.num != null ? `<div style="font-size:13px;font-weight:700;color:var(--blue)">#${widget.num}</div>` : ''}
-          </div>
-          <div style="font-size:12px;color:var(--text2)">${widget.sub}</div>
+  // ── 5. ÚLTIMOS RESULTADOS ──────────────────────────────────────
+  const ult = disputados.slice(-5);
+  document.getElementById('dash-form').innerHTML = ult.map(j => {
+    const r = dashResult(j);
+    return `<span class="form-pill ${r}" title="${fmt(j.data)} vs ${j.adv}">${r.toUpperCase()}</span>`;
+  }).join('');
+  document.getElementById('dash-resultados').innerHTML = ult.length
+    ? [...ult].reverse().map(j => {
+        const r = dashResult(j);
+        const bdg = r === 'v' ? 'badge-green' : r === 'd' ? 'badge-red' : 'badge-gray';
+        return `<div class="res-row">
+          <div class="res-score">${j.wr}<span>×</span>${j.advPl}</div>
+          <div style="min-width:0"><div class="res-adv">${j.adv}</div><div class="res-meta">${fmt(j.data)} · ${j.camp || 'Amistoso'}</div></div>
+          <span class="badge ${bdg}">${r === 'v' ? 'Vitória' : r === 'd' ? 'Derrota' : 'Empate'}</span>
         </div>`;
-    } else {
-      destaqueEl.innerHTML = '';
-    }
-  }
+      }).join('')
+    : `<div class="dash-empty"><i class="ti ti-trophy"></i> Nenhum resultado ${temp || camp ? 'neste filtro' : 'registrado'}.</div>`;
 
-  // ── 6. PRÓXIMOS EVENTOS ────────────────────────────────────────
+  // ── 6. PRÓXIMOS COMPROMISSOS ───────────────────────────────────
   const eventsEl = document.getElementById('dash-events');
   if (eventsEl) {
     const upcoming = [
-      ...cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).map(j=>({ tipo:'jogo', data:j.data, hora:j.hora, titulo:`WR × ${j.adv}`, meta: j.local || j.camp || 'Amistoso' })),
+      ...cache.jogos.filter(j=>isUpcoming(j.data)&&j.wr===null).map(j=>({ tipo:'jogo', data:j.data, hora:j.hora, titulo:`WR × ${j.adv}`, meta: [j.local, j.camp || 'Amistoso'].filter(Boolean).join(' · ') })),
       ...cache.treinos.filter(t=>isUpcoming(t.data)).map(t=>({ tipo:'treino', data:t.data, hora:t.hora, titulo:t.tipo, meta: t.local || 'A definir' })),
-    ].sort((a,b)=>a.data.localeCompare(b.data)).slice(0,5);
+    ].sort((a,b)=>(a.data+(a.hora||'')).localeCompare(b.data+(b.hora||''))).slice(0,5);
 
     if (upcoming.length) {
       let lastDate = '';
       eventsEl.innerHTML = upcoming.map(ev => {
         const dateLabel = ev.data === todayStr ? 'HOJE' : ev.data === nextDay(todayStr) ? 'AMANHÃ' : fmt(ev.data);
-        const dateHeader = dateLabel !== lastDate ? `<div style="font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:6px 0 4px">${dateLabel}</div>` : '';
+        const dateHeader = dateLabel !== lastDate ? `<div style="font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:6px 0 2px">${dateLabel}</div>` : '';
         lastDate = dateLabel;
         return `${dateHeader}
           <div class="event-item">
             <div class="event-dot ${ev.tipo}">
-              <i class="ti ${ev.tipo==='jogo'?'ti-basketball':'ti-barbell'}" style="color:${ev.tipo==='jogo'?'var(--blue)':'var(--success)'}"></i>
+              <i class="ti ${ev.tipo==='jogo'?'ti-ball-basketball':'ti-barbell'}" style="color:${ev.tipo==='jogo'?'var(--blue)':'var(--success)'}"></i>
             </div>
             <div class="event-info">
               <div class="event-title">${ev.titulo}</div>
@@ -2166,61 +2427,130 @@ function renderDashboard() {
           </div>`;
       }).join('');
     } else {
-      eventsEl.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:8px 0">Nenhum evento agendado.</div>';
+      eventsEl.innerHTML = '<div class="dash-empty"><i class="ti ti-calendar-off"></i> Nenhum compromisso agendado.</div>';
     }
   }
 
-  // ── 7. STATUS DO ELENCO ────────────────────────────────────────
+  // ── 7. SITUAÇÃO DO ELENCO ──────────────────────────────────────
   const elencoEl = document.getElementById('dash-elenco');
   if (elencoEl) {
     elencoEl.innerHTML = `
-      <div class="squad-stat">
-        <div class="squad-dot-wrap" style="background:rgba(0,200,122,0.1)"><i class="ti ti-circle-check" style="color:var(--success);font-size:16px"></i></div>
-        <div>
-          <div class="squad-num" style="color:var(--success)">${ativos.length}</div>
-          <div class="squad-label">Aptos</div>
-        </div>
+      <div class="squad-grid">
+        <div class="squad-box ok"><div class="n">${ativos.length}</div><div class="l">Aptos</div></div>
+        <div class="squad-box sus"><div class="n">${suspensos.length}</div><div class="l">Suspensos</div></div>
+        <div class="squad-box les"><div class="n">${lesionados.length}</div><div class="l">Lesionados</div></div>
       </div>
-      <div class="squad-stat">
-        <div class="squad-dot-wrap" style="background:rgba(245,158,11,0.1)"><i class="ti ti-alert-triangle" style="color:var(--warning);font-size:16px"></i></div>
-        <div>
-          <div class="squad-num" style="color:var(--warning)">${suspensos.length}</div>
-          <div class="squad-label">Suspensos</div>
-        </div>
-      </div>
-      <div class="squad-stat">
-        <div class="squad-dot-wrap" style="background:rgba(239,68,68,0.1)"><i class="ti ti-first-aid-kit" style="color:var(--danger);font-size:16px"></i></div>
-        <div>
-          <div class="squad-num" style="color:var(--danger)">${lesionados.length}</div>
-          <div class="squad-label">Lesionados${lesionados.length?`: ${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')}`  :''}</div>
-        </div>
+      ${fora.map(j => `
+        <div class="squad-out" style="cursor:pointer" onclick="openPlayerDetail(${j.id})">
+          <i class="ti ${j.status==='Lesão'?'ti-first-aid-kit':'ti-ban'}" style="color:${j.status==='Lesão'?'var(--danger)':'var(--warning)'};font-size:15px"></i>
+          <div style="min-width:0;flex:1"><div class="who">#${j.num} ${shortName(j)}</div><div class="why">${j.obs || j.status}</div></div>
+          <span class="badge ${j.status==='Lesão'?'badge-red':'badge-orange'}">${j.status}</span>
+        </div>`).join('') || '<div class="dash-empty" style="padding:4px 0"><i class="ti ti-circle-check" style="color:var(--success)"></i> Todos os atletas disponíveis.</div>'}`;
+  }
+
+  // ── 8. MVP ─────────────────────────────────────────────────────
+  const mvpEl = document.getElementById('dash-mvp');
+  if (mvpEl) {
+    const ranked = [...cache.jogadores]
+      .filter(j => j.jg > 0 && (j.pts > 0 || j.reb > 0 || j.ast > 0))
+      .map(j => ({ ...j, score: j.pts + j.reb * 0.6 + j.ast * 0.7 }))
+      .sort((a,b) => b.score - a.score);
+    const mvp = ranked[0];
+    if (mvp) {
+      mvpEl.innerHTML = `
+        <div class="mvp-card" style="height:100%">
+          <div class="mvp-badge"><i class="ti ti-trophy" style="color:#F59E0B"></i> MVP do elenco</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+            <div class="mvp-avatar" style="margin:0">${initials(mvp.apelido || mvp.nome)}</div>
+            <div>
+              <div class="mvp-name" style="margin:0">${shortName(mvp)}</div>
+              <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:1px;text-transform:uppercase">#${mvp.num} · ${mvp.pos || '—'}</div>
+            </div>
+          </div>
+          <div class="mvp-stats">
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.pts}</span><span class="mvp-stat-lbl">Pontos/j</span></div>
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.reb}</span><span class="mvp-stat-lbl">Reb/j</span></div>
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.ast}</span><span class="mvp-stat-lbl">Ast/j</span></div>
+            <div class="mvp-stat-item"><span class="mvp-stat-val">${mvp.jg}</span><span class="mvp-stat-lbl">Jogos</span></div>
+          </div>
+          <div style="margin:16px 0 14px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">
+              <span>Frequência nos treinos</span><span style="color:#F59E0B">${mvp.presenca ?? 0}%</span>
+            </div>
+            <div class="kpi-bar" style="margin:0"><div style="width:${mvp.presenca ?? 0}%;background:#F59E0B"></div></div>
+          </div>
+          ${ranked.slice(1,4).length ? `<div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Na disputa</div>` : ''}
+          ${ranked.slice(1,4).map((j,i) => `
+            <div class="mvp-runner"><span class="pos">${i+2}º</span><span class="nm">${shortName(j)} <span style="color:var(--text3);font-weight:600">#${j.num}</span></span>
+            <span class="sc">${j.pts} pts · ${j.reb} reb · ${j.ast} ast</span></div>`).join('')}
+        </div>`;
+    } else {
+      mvpEl.innerHTML = `<div class="mvp-card" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);font-size:13px"><i class="ti ti-trophy" style="font-size:28px;margin-bottom:8px;opacity:.3"></i>Sem estatísticas ainda</div>`;
+    }
+  }
+
+  // ── 9. LÍDERES ─────────────────────────────────────────────────
+  const statsEl = document.getElementById('dash-top-stats');
+  if (statsEl) {
+    const comJogo = j => j.jg > 0;
+    const lideres = [
+      { key:'pts', lbl:'Pontos' }, { key:'reb', lbl:'Rebotes' }, { key:'ast', lbl:'Assistências' },
+    ].map(({ key, lbl }) => {
+      const top = [...cache.jogadores].filter(j => comJogo(j) && j[key] > 0).sort((a,b)=>b[key]-a[key]).slice(0,3);
+      return `
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin:10px 0 4px">${lbl} por jogo</div>
+        ${top.length ? top.map((j,i) => `
+          <div class="top-rank-item">
+            <span class="rank-medal" style="font-size:11px;font-weight:900;color:${i===0?'#F59E0B':'var(--text3)'};width:16px">${i+1}º</span>
+            <span class="rank-name">${shortName(j)}</span>
+            <span class="rank-val">${j[key]}</span>
+          </div>`).join('') : `<div style="color:var(--text3);font-size:12px;padding:2px 0">Sem dados ainda</div>`}`;
+    }).join('');
+    statsEl.innerHTML = `
+      <div class="card dash-panel" style="height:100%">
+        <div class="sec-title" style="margin-bottom:2px"><i class="ti ti-flame"></i> Líderes</div>
+        ${lideres}
       </div>`;
   }
 
-  // ── 8. ALERTAS ─────────────────────────────────────────────────
-  const alertas = [];
-  if (lesionados.length) alertas.push({ tipo:'danger', msg:`${lesionados.length} jogador(es) afastado(s): ${lesionados.map(j=>j.apelido||j.nome.split(' ')[0]).join(', ')}` });
-  if (can(['admin','tecnico','capitao'])) {
-    const inad = Object.keys(cache.financeiro.mensalidades || {}).length;
-    if (inad) alertas.push({ tipo:'warning', msg:`${inad} jogador(es) com mensalidade em atraso` });
+  // ── 10. RESUMO FINANCEIRO (gestão) ─────────────────────────────
+  const finEl = document.getElementById('dash-fin');
+  if (finEl) {
+    if (isManager) {
+      const lanc = (cache.financeiro.lancamentos || []).filter(f => !temp || (f.data || '').startsWith(temp));
+      const mes = todayStr.slice(0,7);
+      const doMes = (cache.financeiro.lancamentos || []).filter(f => (f.data || '').startsWith(mes));
+      const soma = (arr, t) => arr.filter(f=>f.tipo===t).reduce((s,f)=>s+(+f.valor||0),0);
+      const ent = soma(lanc,'entrada'), sai = soma(lanc,'saida');
+      const mens = cache.financeiro.mensalidades || {};
+      const devedores = Object.keys(mens).map(id => cache.jogadores.find(j => String(j.id) === String(id))).filter(Boolean);
+      finEl.innerHTML = `
+        <div class="card dash-panel" style="height:100%;cursor:pointer" onclick="showPage('financeiro')">
+          <div class="sec-title" style="margin-bottom:6px"><i class="ti ti-wallet"></i> Financeiro ${temp ? '· ' + temp : ''}</div>
+          <div class="fin-row">Entradas <b style="color:var(--success)">${fmtBRL(ent)}</b></div>
+          <div class="fin-row">Saídas <b style="color:var(--danger)">${fmtBRL(sai)}</b></div>
+          <div class="fin-row">Mês atual <b style="color:#fff">${fmtBRL(soma(doMes,'entrada') - soma(doMes,'saida'))}</b></div>
+          <div class="fin-row">Inadimplentes <b style="color:${devedores.length?'var(--warning)':'var(--success)'}">${devedores.length}</b></div>
+          ${devedores.length ? `<div style="font-size:11px;color:var(--text2);padding-top:6px">${devedores.map(j => `${shortName(j)} (${mens[j.id]}m)`).join(' · ')}</div>` : ''}
+          <div class="fin-total"><span>Saldo</span><b style="color:${ent-sai>=0?'var(--success)':'var(--danger)'}">${fmtBRL(ent-sai)}</b></div>
+        </div>`;
+    } else {
+      finEl.innerHTML = '';
+    }
   }
-  document.getElementById('dash-alertas').innerHTML = alertas.length
-    ? alertas.map(a=>`<div class="alert alert-${a.tipo}"><i class="ti ti-alert-triangle"></i> ${a.msg}</div>`).join('')
-    : '';
 
-  // ── 9. ÚLTIMOS RESULTADOS ──────────────────────────────────────
-  const past = cache.jogos.filter(j=>j.wr!==null).sort((a,b)=>b.data.localeCompare(a.data)).slice(0,3);
-  document.getElementById('dash-resultados').innerHTML = past.length
-    ? past.map(j=>`<div class="game-card" style="padding:12px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px">WR <strong>${j.wr}</strong> × <strong>${j.advPl}</strong> ${j.adv}</div><span class="badge ${j.wr>j.advPl?'badge-green':'badge-red'}">${j.wr>j.advPl?'Vitória':'Derrota'}</span></div><div style="font-size:11px;color:var(--text2);margin-top:4px">${fmt(j.data)} · ${j.camp||'Amistoso'}</div></div>`).join('')
-    : '<div style="color:var(--text2);font-size:13px">Nenhum resultado registrado.</div>';
-
-  // ── 10. FREQUÊNCIA ─────────────────────────────────────────────
-  document.getElementById('dash-presenca').innerHTML = [...cache.jogadores].sort((a,b)=>b.presenca-a.presenca).map(j=>`
-    <div class="stat-row">
-      <div class="stat-name">${j.apelido||j.nome.split(' ')[0]} #${j.num}</div>
-      <div class="stat-bar-wrap"><div class="stat-bar" style="width:${j.presenca}%;background:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}"></div></div>
-      <div class="stat-val" style="color:${j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)'}">${j.presenca}%</div>
-    </div>`).join('');
+  // ── 11. FREQUÊNCIA ─────────────────────────────────────────────
+  document.getElementById('dash-presenca').innerHTML = [...cache.jogadores]
+    .filter(j => j.status !== 'Inativo')
+    .sort((a,b)=>b.presenca-a.presenca).map(j=>{
+      const cor = j.presenca>=80?'var(--success)':j.presenca>=60?'var(--warning)':'var(--danger)';
+      return `
+      <div class="stat-row">
+        <div class="stat-name">${shortName(j)} #${j.num}</div>
+        <div class="stat-bar-wrap"><div class="stat-bar" style="width:${j.presenca}%;background:${cor}"></div></div>
+        <div class="stat-val" style="color:${cor}">${j.presenca}%</div>
+      </div>`;
+    }).join('') || '<div class="dash-empty">Nenhum atleta cadastrado.</div>';
 
   // ── Art banner (latest aviso com imagem) ───────────────────────
   const bannerEl = document.getElementById('dash-art-banner');
@@ -2247,6 +2577,7 @@ function renderDashboard() {
     }
   }
 }
+
 
 function confirmHeroPresence(data, adv, btn) {
   const key = data + adv;
