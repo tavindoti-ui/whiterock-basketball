@@ -758,32 +758,87 @@ select.form-input option{background:#0D1526;color:var(--text)}
 .confirm-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px}
 .confirm-icon.danger{background:rgba(239,68,68,0.12);border:2px solid rgba(239,68,68,0.3);color:var(--danger)}
 .confirm-icon.warning{background:rgba(245,158,11,0.12);border:2px solid rgba(245,158,11,0.3);color:var(--warning)}
-/* ==================== SIDEBAR MINI + GROUPS ==================== */
+/* ==================== MENU LATERAL v2 ==================== */
+/* Os ícones ficam sempre na mesma posição; ao recolher, só o texto some
+   (por opacidade), então nada "pula" durante a animação. */
+.nav{overflow:visible}
+.nav-tabs{padding:8px 10px 12px;gap:3px;overflow-x:hidden}
+.nav-logo{padding:20px 13px 18px;white-space:nowrap}
 .nav-group-label{
-  font-size:9px;font-weight:800;color:var(--text3);letter-spacing:1.8px;
-  text-transform:uppercase;padding:20px 14px 6px;display:block;flex-shrink:0;
+  font-size:9.5px;font-weight:800;color:var(--text3);letter-spacing:1.6px;
+  text-transform:uppercase;padding:18px 13px 7px;display:block;flex-shrink:0;
+  white-space:nowrap;position:relative;
+  transition:opacity .18s ease,padding .26s cubic-bezier(.4,0,.2,1);
 }
-.nav-group-label:first-child{padding-top:10px}
+.nav-group-label:first-child{padding-top:8px}
+.nav-group-label::after{
+  content:'';position:absolute;left:12px;right:12px;bottom:50%;height:1px;
+  background:var(--border);opacity:0;transition:opacity .18s ease;
+}
+.nav-tab{
+  min-height:40px;padding:0 13px;gap:12px;font-size:13px;font-weight:500;
+  color:var(--text2);white-space:nowrap;
+}
+.nav-tab i{font-size:18px;width:18px;flex-shrink:0;text-align:center;color:var(--text3);transition:color .17s}
+.nav-tab:hover i{color:var(--text2)}
+.nav-tab:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.nav-tab.active{
+  background:linear-gradient(90deg,rgba(45,140,255,0.20),rgba(45,140,255,0.07));
+  color:#fff;font-weight:600;box-shadow:inset 0 0 0 1px rgba(77,166,255,0.16);
+}
+.nav-tab.active i{color:var(--blue)}
+.nav-tab.active::after{
+  top:9px;bottom:9px;left:0;width:3px;
+  background:var(--blue);box-shadow:0 0 10px rgba(77,166,255,0.6);
+}
+.nav-tab-txt{transition:opacity .18s ease;overflow:hidden;text-overflow:ellipsis}
 .sidebar-toggle{
-  background:transparent;border:none;color:var(--text2);cursor:pointer;
-  padding:5px 6px;border-radius:7px;font-size:16px;margin-left:auto;
-  transition:all .15s;display:flex;align-items:center;flex-shrink:0;
+  position:absolute;top:28px;right:-12px;z-index:2;
+  width:24px;height:24px;border-radius:50%;padding:0;justify-content:center;
+  background:var(--navy2);border:1px solid rgba(77,166,255,0.25);color:var(--text2);
+  cursor:pointer;font-size:14px;display:flex;align-items:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.5);transition:color .15s,background .15s,border-color .15s;
 }
-.sidebar-toggle:hover{color:var(--text);background:rgba(45,140,255,0.10)}
+.sidebar-toggle:hover{color:#fff;background:var(--gray3);border-color:var(--blue)}
+.sidebar-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.nav-title{white-space:nowrap;transition:opacity .18s ease}
+.user-badge{white-space:nowrap;overflow:hidden}
+.user-badge>div{transition:opacity .18s ease}
+.logout-txt{transition:opacity .18s ease}
 .nav{transition:width .26s cubic-bezier(.4,0,.2,1)}
 #app{transition:margin-left .26s cubic-bezier(.4,0,.2,1)}
-body.sidebar-mini .nav{width:64px}
-body.sidebar-mini #app{margin-left:64px}
-body.sidebar-mini .nav-title,
-body.sidebar-mini .nav-group-label,
-body.sidebar-mini .nav-tab-txt{display:none!important}
-body.sidebar-mini .nav-tab{justify-content:center;padding:11px;min-height:40px}
-body.sidebar-mini .nav-tab i{font-size:18px;margin:0}
-body.sidebar-mini .nav-logo{padding:14px;justify-content:center;gap:0}
-body.sidebar-mini .sidebar-toggle{margin-left:0}
-body.sidebar-mini .user-badge>div{display:none}
-body.sidebar-mini .user-badge{justify-content:center;padding:10px}
-body.sidebar-mini .btn-logout{justify-content:center}
+/* Dica com o nome do módulo quando o menu está recolhido */
+#nav-tip{
+  position:fixed;z-index:400;pointer-events:none;
+  background:var(--gray3);color:#fff;border:1px solid rgba(77,166,255,0.25);
+  font-size:12px;font-weight:600;padding:6px 10px;border-radius:8px;white-space:nowrap;
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);opacity:0;transform:translateX(-4px);
+  transition:opacity .12s ease,transform .12s ease;
+}
+#nav-tip.show{opacity:1;transform:none}
+@media(min-width:701px){
+  body.sidebar-mini .nav{width:64px}
+  body.sidebar-mini #app{margin-left:64px}
+  body.sidebar-mini .nav-title,
+  body.sidebar-mini .nav-tab-txt,
+  body.sidebar-mini .user-badge>div,
+  body.sidebar-mini .logout-txt{opacity:0;pointer-events:none}
+  body.sidebar-mini .nav-group-label{color:transparent;padding:12px 13px}
+  body.sidebar-mini .nav-group-label:first-child{padding-top:4px}
+  body.sidebar-mini .nav-group-label::after{opacity:1}
+  body.sidebar-mini .nav-group-label:first-child::after{opacity:0}
+  body.sidebar-mini .nav-logo{padding:20px 13px 18px}
+  body.sidebar-mini .user-badge{padding:10px 12px}
+  body.sidebar-mini .btn-logout{gap:0}
+  body.sidebar-mini .logout-txt{display:inline-block;width:0;overflow:hidden}
+}
+@media(prefers-reduced-motion:reduce){
+  .nav,#app,.nav-tab-txt,.nav-title,.nav-group-label,#nav-tip{transition:none!important}
+}
+/* Barra inferior (celular): destaque em "pílula" no item atual */
+.bottom-nav-btn i{padding:3px 16px;border-radius:14px;transition:background .15s,color .15s}
+.bottom-nav-btn.active i{background:rgba(45,140,255,0.16);transform:none}
+.bottom-more-sheet{box-shadow:0 -10px 30px rgba(0,0,0,0.45)}
 
 /* ==================== PLAYER CARD ANIMATION ==================== */
 .player-card{animation:cardIn .2s ease both}
@@ -1202,11 +1257,11 @@ body.sidebar-mini .btn-logout{justify-content:center}
 <!-- ======== APP ======== -->
 <div id="app">
 <!-- NAV DESKTOP -->
-<nav class="nav">
+<nav class="nav" aria-label="Menu principal">
   <div class="nav-logo" onclick="showPage('dashboard')">
     <div class="logo-circle" style="overflow:hidden;padding:0;background:#0A1B33"><img src="https://lh3.googleusercontent.com/d/1dUPhU78smTOD9FtKyEV4TOJ-NnQHlTlz" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.textContent='WR'"></div>
     <div class="nav-title">White Rock <span id="nav-role-label">Basketball</span></div>
-    <button class="sidebar-toggle" onclick="event.stopPropagation();toggleSidebar()" title="Recolher sidebar"><i class="ti ti-layout-sidebar-left-collapse" id="sidebar-toggle-icon"></i></button>
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="event.stopPropagation();toggleSidebar()" title="Recolher menu" aria-label="Recolher menu" aria-expanded="true"><i class="ti ti-chevron-left" id="sidebar-toggle-icon" aria-hidden="true"></i></button>
   </div>
   <div class="nav-tabs" id="nav-tabs"></div>
   <div class="nav-right">
@@ -1923,11 +1978,39 @@ function openAddUser() {
   openModal('modal-add-user');
 }
 
-function toggleSidebar() {
-  const mini = document.body.classList.toggle('sidebar-mini');
+function setSidebarMini(mini) {
+  document.body.classList.toggle('sidebar-mini', mini);
   const icon = document.getElementById('sidebar-toggle-icon');
-  if (icon) icon.className = mini ? 'ti ti-layout-sidebar-left-expand' : 'ti ti-layout-sidebar-left-collapse';
-  localStorage.setItem('wr_sidebar_mini', mini);
+  if (icon) icon.className = mini ? 'ti ti-chevron-right' : 'ti ti-chevron-left';
+  const btn = document.getElementById('sidebar-toggle');
+  if (btn) {
+    const txt = mini ? 'Expandir menu' : 'Recolher menu';
+    btn.title = txt; btn.setAttribute('aria-label', txt);
+    btn.setAttribute('aria-expanded', String(!mini));
+  }
+  hideNavTip();
+}
+
+function toggleSidebar() {
+  const mini = !document.body.classList.contains('sidebar-mini');
+  setSidebarMini(mini);
+  try { localStorage.setItem('wr_sidebar_mini', mini); } catch (e) {}
+}
+
+// Nome do módulo ao lado do ícone quando o menu está recolhido
+function showNavTip(btn) {
+  if (!document.body.classList.contains('sidebar-mini') || window.innerWidth <= 700) return;
+  let tip = document.getElementById('nav-tip');
+  if (!tip) { tip = document.createElement('div'); tip.id = 'nav-tip'; tip.setAttribute('aria-hidden', 'true'); document.body.appendChild(tip); }
+  const r = btn.getBoundingClientRect();
+  tip.textContent = btn.dataset.label || '';
+  tip.style.left = (r.right + 10) + 'px';
+  tip.style.top = (r.top + r.height / 2 - 15) + 'px';
+  tip.classList.add('show');
+}
+function hideNavTip() {
+  const tip = document.getElementById('nav-tip');
+  if (tip) tip.classList.remove('show');
 }
 
 // ==================== INIT APP ====================
@@ -1941,35 +2024,36 @@ function initApp() {
 
   buildNav();
 
-  // Restore sidebar collapse preference
-  if (localStorage.getItem('wr_sidebar_mini') === 'true') {
-    document.body.classList.add('sidebar-mini');
-    const icon = document.getElementById('sidebar-toggle-icon');
-    if (icon) icon.className = 'ti ti-layout-sidebar-left-expand';
-  }
+  // Restore sidebar collapse preference (sem preferência salva: recolhido em tablets)
+  let miniPref = null;
+  try { miniPref = localStorage.getItem('wr_sidebar_mini'); } catch (e) {}
+  setSidebarMini(miniPref === null ? window.innerWidth < 1100 : miniPref === 'true');
 
   loadAll();
 }
 
 function buildNav() {
   const ALL = ['admin','tecnico','comissao','capitao','atleta'];
+  // Ícones: todos do mesmo conjunto (Tabler, contorno), um por assunto.
   const groups = [
-    { label: 'Time', tabs: [
-      { id:'dashboard',    label:'Dashboard',    icon:'ti-home',      roles: ALL },
-      { id:'jogadores',    label:'Jogadores',    icon:'ti-users',     roles: ALL },
+    { label: 'Principal', tabs: [
+      { id:'dashboard',    label:'Dashboard',    icon:'ti-layout-dashboard', roles: ALL },
+    ]},
+    { label: 'Equipe', tabs: [
+      { id:'jogadores',    label:'Jogadores',    icon:'ti-users',            roles: ALL },
+      { id:'uniformes',    label:'Uniformes',    icon:'ti-shirt',            roles: ALL },
     ]},
     { label: 'Competição', tabs: [
-      { id:'jogos',        label:'Jogos',        icon:'ti-trophy',    roles: ALL },
-      { id:'treinos',      label:'Treinos',      icon:'ti-calendar',  roles: ALL },
-      { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar', roles: ALL },
+      { id:'jogos',        label:'Jogos',        icon:'ti-ball-basketball',  roles: ALL },
+      { id:'treinos',      label:'Treinos',      icon:'ti-run',              roles: ALL },
+      { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar',        roles: ALL },
     ]},
     { label: 'Gestão', tabs: [
-      { id:'financeiro',   label:'Financeiro',   icon:'ti-cash',      roles:['admin','tecnico','capitao'] },
-      { id:'comunicacao',  label:'Avisos',       icon:'ti-bell',      roles: ALL },
-      { id:'uniformes',    label:'Uniformes',    icon:'ti-shirt',     roles: ALL },
+      { id:'financeiro',   label:'Financeiro',   icon:'ti-wallet',           roles:['admin','tecnico','capitao'] },
+      { id:'comunicacao',  label:'Avisos',       icon:'ti-speakerphone',     roles: ALL },
     ]},
     { label: 'Sistema', tabs: [
-      { id:'usuarios',     label:'Usuários',     icon:'ti-settings',  roles:['admin'] },
+      { id:'usuarios',     label:'Usuários',     icon:'ti-user-cog',         roles:['admin'] },
     ]},
   ];
 
@@ -1980,7 +2064,7 @@ function buildNav() {
     if (!visible.length) return;
     html += `<div class="nav-group-label">${g.label}</div>`;
     html += visible.map(t =>
-      `<button class="nav-tab ${t.id==='dashboard'?'active':''}" onclick="showPage('${t.id}')"><i class="ti ${t.icon}"></i><span class="nav-tab-txt"> ${t.label}</span></button>`
+      `<button class="nav-tab ${t.id==='dashboard'?'active':''}" data-page="${t.id}" data-label="${t.label}"${t.id==='dashboard'?' aria-current="page"':''} onclick="showPage('${t.id}')" onmouseenter="showNavTip(this)" onmouseleave="hideNavTip()" onfocus="showNavTip(this)" onblur="hideNavTip()"><i class="ti ${t.icon}" aria-hidden="true"></i><span class="nav-tab-txt">${t.label}</span></button>`
     ).join('');
     mobileTabs.push(...visible);
   });
@@ -1988,9 +2072,9 @@ function buildNav() {
   document.getElementById('nav-tabs').innerHTML = html;
 
   // Bottom nav: first 4 tabs as icons + "Mais" for the rest
-  const PRIMARY_MAX = 4;
-  const primary = mobileTabs.slice(0, PRIMARY_MAX);
-  const overflow = mobileTabs.slice(PRIMARY_MAX);
+  const PRIMARY_ORDER = ['dashboard','jogos','treinos','jogadores'];
+  const primary = PRIMARY_ORDER.map(id => mobileTabs.find(t => t.id === id)).filter(Boolean);
+  const overflow = mobileTabs.filter(t => !primary.includes(t));
   const bnInner = document.getElementById('bottom-nav-inner');
   if (bnInner) {
     let bnHtml = primary.map(t =>
@@ -2043,7 +2127,14 @@ function showPage(id) {
   // Sync bottom nav
   document.querySelectorAll('.bottom-nav-btn[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === id));
   document.querySelectorAll('.bottom-more-btn[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  document.querySelectorAll('.nav-tab[data-page]').forEach(b => {
+    if (b.dataset.page === id) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
   toggleMoreSheet(false);
+  // "Mais" fica aceso quando a página atual está dentro dele
+  const moreBtn = document.getElementById('btn-more-nav');
+  if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
+  hideNavTip();
   const renders = { jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
@@ -4627,9 +4718,11 @@ document.addEventListener('pointerdown', e => {
 });
 
 // ==================== AUTO-LOGIN ====================
-if (loadSession()) {
-  initApp();
-}
+// A barra inferior e os modais ficam depois deste script no HTML: espera a
+// página inteira carregar antes de montar o menu.
+function startApp() { if (loadSession()) initApp(); }
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startApp);
+else startApp();
 </script>
 
 
