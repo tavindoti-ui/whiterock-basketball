@@ -8,6 +8,7 @@ const { withErrorHandling } = require('../lib/error-handler');
 const MODULOS = {
   agenda: () => require('../lib/mod/agenda'),
   medico: () => require('../lib/mod/medico'),
+  campeonatos: () => require('../lib/mod/campeonatos'),
 };
 
 module.exports = withErrorHandling(async function handler(req, res) {

@@ -1566,6 +1566,43 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
 .med-range b{min-width:44px;text-align:right;color:#fff;font-variant-numeric:tabular-nums}
 @media(max-width:900px){.med-kpis{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.med-kpis{gap:10px}.med-grid{grid-template-columns:1fr}}
+
+/* barras de rolagem discretas nas tabelas */
+.tbl-wrap{scrollbar-width:thin;scrollbar-color:rgba(77,166,255,0.35) transparent}
+.tbl-wrap::-webkit-scrollbar{height:6px;width:6px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:rgba(77,166,255,0.35);border-radius:6px}
+.tbl-wrap::-webkit-scrollbar-track{background:transparent}
+/* ═══════════ CAMPEONATOS (fase 9) ═══════════ */
+.camp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.camp-card{display:flex;flex-direction:column;gap:6px;padding:16px;text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%}
+.camp-card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.camp-ghost{cursor:default;border-style:dashed!important;background:transparent!important}
+.camp-ghost .btn{align-self:flex-start;margin-top:6px}
+.camp-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.camp-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(45,140,255,0.12);color:var(--blue);font-size:19px;flex-shrink:0}
+.camp-ico.lg{width:52px;height:52px;font-size:26px;border-radius:14px}
+.camp-name{font-size:16px;font-weight:800;color:#fff;line-height:1.25}
+.camp-sub{font-size:12px;color:var(--text2)}
+.camp-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-top:6px;padding-top:10px;border-top:1px solid var(--border)}
+.camp-stats b{color:#fff;font-size:15px;font-variant-numeric:tabular-nums}
+.camp-foot{font-size:11.5px;color:var(--text3)}
+.camp-head{padding:18px}
+.camp-head-main{display:flex;gap:14px;align-items:center}
+.camp-title{font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.3px;line-height:1.15}
+.camp-head-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.camp-head-nums div{background:rgba(5,11,22,0.5);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center}
+.camp-head-nums b{display:block;font-size:20px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.camp-head-nums b.pos{color:var(--success)}.camp-head-nums b.neg{color:var(--danger)}
+.camp-head-nums span{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
+.camp-obs{margin-top:12px;font-size:12.5px;color:var(--text2);line-height:1.55}
+.camp-game{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:6px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.camp-score{font-size:15px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.camp-tbl td,.camp-tbl th{padding-left:12px;padding-right:12px}
+@media(max-width:560px){
+  .camp-head-nums{grid-template-columns:repeat(2,1fr)}
+  .camp-title{font-size:19px}
+  .camp-game{gap:8px;padding:9px 10px;flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
@@ -1839,6 +1876,17 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
     <button class="btn btn-primary btn-sm" id="btn-add-caso" onclick="openCasoForm()" style="display:none"><i class="ti ti-plus"></i> Registrar afastamento</button>
   </div>
   <div id="med-body"></div>
+</div>
+
+<div class="page" id="page-campeonatos">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Competição</div>
+      <h1 class="page-title">Campeonatos</h1>
+    </div>
+    <button class="btn btn-primary btn-sm" id="btn-add-camp" onclick="openCampForm()" style="display:none"><i class="ti ti-plus"></i> Novo campeonato</button>
+  </div>
+  <div id="camp-body"></div>
 </div>
 
 <div class="page" id="page-treinos">
@@ -2415,6 +2463,72 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-camp-form">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-title"><span id="cp-form-title">Novo campeonato</span> <button class="modal-close" onclick="closeModal('modal-camp-form')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="cp-id">
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="cp-nome">Nome *</label><input class="form-input" id="cp-nome" maxlength="80" placeholder="Ex: Liga Carioca"></div>
+      <div class="form-row" style="gap:10px">
+        <div class="form-group"><label class="form-label" for="cp-temporada">Temporada</label><input class="form-input" id="cp-temporada" type="number" min="1990" max="2100"></div>
+        <div class="form-group"><label class="form-label" for="cp-status">Situação</label><select class="form-input" id="cp-status"><option>Previsto</option><option>Em andamento</option><option>Encerrado</option></select></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="cp-formato">Formato</label><select class="form-input" id="cp-formato"><option>Pontos corridos</option><option>Grupos + mata-mata</option><option>Mata-mata</option><option>Torneio / festival</option><option>Amistosos</option></select></div>
+      <div class="form-group"><label class="form-label" for="cp-categoria">Categoria</label><input class="form-input" id="cp-categoria" maxlength="40" placeholder="Ex: Adulto masculino"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="cp-inicio">Início</label><input class="form-input" id="cp-inicio" type="date"></div>
+      <div class="form-group"><label class="form-label" for="cp-fim">Término</label><input class="form-input" id="cp-fim" type="date"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="cp-organizador">Organizador</label><input class="form-input" id="cp-organizador" maxlength="80" placeholder="Ex: Federação de Basketball do RJ"></div>
+      <div class="form-row" style="gap:10px">
+        <div class="form-group"><label class="form-label" for="cp-pv">Pts vitória</label><input class="form-input" id="cp-pv" type="number" min="0" max="10"></div>
+        <div class="form-group"><label class="form-label" for="cp-pd">Pts derrota</label><input class="form-input" id="cp-pd" type="number" min="0" max="10"></div>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label" for="cp-equipes">Equipes participantes <span class="form-opt">(uma por linha, sem o White Rock)</span></label><textarea class="form-input" id="cp-equipes" rows="4" placeholder="Vasco BC&#10;Regatas BC&#10;Flamengo Masters"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="cp-colocacao">Colocação final</label><input class="form-input" id="cp-colocacao" maxlength="60" placeholder="Ex: Campeão, 3º lugar"></div>
+      <div class="form-group"><label class="form-label" for="cp-obs">Observações</label><input class="form-input" id="cp-obs" maxlength="500" placeholder="Regulamento, premiação..."></div>
+    </div>
+    <div class="form-hint"><i class="ti ti-info-circle"></i> Os jogos do White Rock entram no campeonato pelo nome escolhido no campo "Campeonato" do jogo. Se renomear aqui, os jogos são atualizados juntos.</div>
+    <div class="alert alert-danger" id="cp-error" style="display:none;margin:10px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveCamp()"><i class="ti ti-check"></i> Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-camp-form')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-camp-resultado">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title"><span id="rx-title">Resultado</span> <button class="modal-close" onclick="closeModal('modal-camp-resultado')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="rx-camp">
+    <datalist id="rx-equipes"></datalist>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="rx-casa">Equipe *</label><input class="form-input" id="rx-casa" list="rx-equipes" maxlength="60" placeholder="Ex: Vasco BC"></div>
+      <div class="form-group"><label class="form-label" for="rx-pc">Pontos *</label><input class="form-input" id="rx-pc" type="number" min="0" max="300"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="rx-fora">Equipe *</label><input class="form-input" id="rx-fora" list="rx-equipes" maxlength="60" placeholder="Ex: Regatas BC"></div>
+      <div class="form-group"><label class="form-label" for="rx-pf">Pontos *</label><input class="form-input" id="rx-pf" type="number" min="0" max="300"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="rx-data">Data</label><input class="form-input" id="rx-data" type="date"></div>
+      <div class="form-group"><label class="form-label" for="rx-fase">Fase / rodada</label><input class="form-input" id="rx-fase" maxlength="40" placeholder="Ex: 3ª rodada"></div>
+    </div>
+    <div class="form-hint">Use para jogos entre outras equipes. Jogos do White Rock são lançados na página Jogos.</div>
+    <div class="alert alert-danger" id="rx-error" style="display:none;margin:10px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveResultado()"><i class="ti ti-check"></i> Lançar resultado</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-camp-resultado')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -2429,7 +2543,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2612,6 +2726,7 @@ function buildNav() {
     ]},
     { label: 'Competição', tabs: [
       { id:'jogos',        label:'Jogos',        icon:'ti-ball-basketball',  roles: ALL },
+      { id:'campeonatos',  label:'Campeonatos',  icon:'ti-trophy',           roles: ALL },
       { id:'treinos',      label:'Treinos',      icon:'ti-run',              roles: ALL },
       { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar',        roles: ALL },
     ]},
@@ -2702,7 +2817,7 @@ function showPage(id) {
   const moreBtn = document.getElementById('btn-more-nav');
   if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
   hideNavTip();
-  const renders = { medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
+  const renders = { campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
 
@@ -2718,6 +2833,7 @@ async function loadAll() {
     api('GET','jogadores?fotos=1').catch(() => ({})),
     loadAgenda(),
     loadMedico(),
+    loadCampeonatos(),
   ]);
   if (fotos && typeof fotos === 'object' && !fotos.error) cache.fotos = fotos;
   if (j) cache.jogadores = j;
@@ -5337,6 +5453,314 @@ function deleteCaso(id) {
       closeModal('modal-med-caso'); toast('Caso excluído');
     } else toast((r && r.error) || 'Erro ao excluir', 'error');
   }, { title: 'Excluir caso médico', label: 'Sim, excluir', icon: 'ti-trash', type: 'danger' });
+}
+
+// ==================== CAMPEONATOS (fase 9) ====================
+const CAMP_STATUS = { 'Previsto': 'badge-gray', 'Em andamento': 'badge-blue', 'Encerrado': 'badge-green' };
+let _campSel = null;       // id do campeonato aberto
+let _campTab = 'tabela';
+
+async function loadCampeonatos() {
+  try {
+    const r = await api('GET', 'modulos?r=campeonatos');
+    if (Array.isArray(r)) cache.campeonatos = r;
+  } catch (e) { console.warn('campeonatos', e); }
+  campDatalist();
+}
+
+const campNorm = s => String(s || '').trim().toLowerCase();
+function campJogos(c) { return cache.jogos.filter(g => campNorm(campDoJogo(g)) === campNorm(c.nome)); }
+
+// Lista de sugestões nos campos "Campeonato" dos jogos
+function campDatalist() {
+  let dl = document.getElementById('camp-opts');
+  if (!dl) { dl = document.createElement('datalist'); dl.id = 'camp-opts'; document.body.appendChild(dl); }
+  const nomes = [...new Set([...(cache.campeonatos || []).map(c => c.nome), ...cache.jogos.map(campDoJogo)])].sort((a, b) => a.localeCompare(b));
+  dl.innerHTML = nomes.map(n => `<option value="${n}"></option>`).join('');
+  ['jo-camp', 'ej-jo-camp'].forEach(id => { const el = document.getElementById(id); if (el) el.setAttribute('list', 'camp-opts'); });
+}
+
+function classificacao(c) {
+  const pv = c.pontosVitoria ?? 2, pd = c.pontosDerrota ?? 1;
+  const t = new Map();
+  const add = nome => {
+    const k = campNorm(nome);
+    if (!t.has(k)) t.set(k, { nome, j: 0, v: 0, d: 0, e: 0, pf: 0, pc: 0, wr: k === 'white rock' });
+    return t.get(k);
+  };
+  add('White Rock');
+  (c.equipes || []).forEach(add);
+  const jogos = campJogos(c);
+  jogos.forEach(g => add(g.adv));
+  const partidas = [
+    ...jogos.filter(g => g.wr !== null && g.advPl !== null).map(g => ({ a: 'White Rock', b: g.adv, pa: g.wr, pb: g.advPl })),
+    ...(c.resultados || []).map(r => ({ a: r.casa, b: r.fora, pa: r.pc, pb: r.pf })),
+  ];
+  partidas.forEach(({ a, b, pa, pb }) => {
+    const A = add(a), B = add(b);
+    A.j++; B.j++; A.pf += pa; A.pc += pb; B.pf += pb; B.pc += pa;
+    if (pa > pb) { A.v++; B.d++; } else if (pb > pa) { B.v++; A.d++; } else { A.e++; B.e++; }
+  });
+  return [...t.values()].map(r => ({ ...r, saldo: r.pf - r.pc, pts: r.v * pv + (r.d + r.e) * pd }))
+    .sort((x, y) => y.pts - x.pts || y.v - x.v || y.saldo - x.saldo || y.pf - x.pf || x.nome.localeCompare(y.nome));
+}
+
+function campResumo(c) {
+  const js = campJogos(c).filter(g => g.wr !== null && g.advPl !== null);
+  const v = js.filter(g => g.wr > g.advPl).length, d = js.filter(g => g.wr < g.advPl).length;
+  const tab = classificacao(c);
+  const pos = tab.findIndex(r => r.wr) + 1;
+  const prox = campJogos(c).filter(g => g.wr === null && g.data >= today()).sort((a, b) => a.data.localeCompare(b.data))[0];
+  return { js, v, d, pos, total: tab.length, prox, pro: js.reduce((s, g) => s + g.wr, 0), contra: js.reduce((s, g) => s + g.advPl, 0) };
+}
+
+function renderCampeonatos() {
+  const el = document.getElementById('camp-body');
+  if (!el) return;
+  const manage = can(['admin', 'tecnico', 'capitao']);
+  document.getElementById('btn-add-camp').style.display = manage && !_campSel ? 'inline-flex' : 'none';
+  campDatalist();
+  const camps = cache.campeonatos || [];
+  if (_campSel && camps.some(c => c.id === _campSel)) { el.innerHTML = campDetalheHTML(camps.find(c => c.id === _campSel)); return; }
+  _campSel = null;
+
+  const ordem = { 'Em andamento': 0, 'Previsto': 1, 'Encerrado': 2 };
+  const lst = camps.slice().sort((a, b) => (ordem[a.status] - ordem[b.status]) || (b.temporada - a.temporada) || a.nome.localeCompare(b.nome));
+  const semCadastro = [...new Set(cache.jogos.map(campDoJogo))]
+    .filter(n => campNorm(n) !== 'amistoso' && !camps.some(c => campNorm(c.nome) === campNorm(n)));
+  el.innerHTML = `
+    ${lst.length ? `<div class="camp-grid">${lst.map(c => {
+      const r = campResumo(c);
+      return `<button type="button" class="card camp-card" onclick="openCamp(${c.id})">
+        <span class="camp-card-top"><span class="camp-ico"><i class="ti ti-trophy"></i></span><span class="badge ${CAMP_STATUS[c.status] || 'badge-gray'}">${c.status}</span></span>
+        <span class="camp-name">${c.nome}</span>
+        <span class="camp-sub">${c.temporada} · ${c.formato}${c.categoria ? ' · ' + c.categoria : ''}</span>
+        <span class="camp-stats">
+          <span><b>${r.v}</b>V <b>${r.d}</b>D</span>
+          <span>${r.total > 1 && r.js.length + (c.resultados || []).length ? `<b>${r.pos}º</b> de ${r.total}` : '—'}</span>
+          <span>${r.js.length ? `<b>${Math.round(r.v / r.js.length * 100)}%</b> aprov.` : 'sem jogos'}</span>
+        </span>
+        <span class="camp-foot">${c.status === 'Encerrado' && c.colocacao ? `<i class="ti ti-medal"></i> ${c.colocacao}` : r.prox ? `<i class="ti ti-calendar"></i> Próximo: ${fmt(r.prox.data)} × ${r.prox.adv}` : `<i class="ti ti-calendar"></i> ${c.inicio ? fmt(c.inicio) : 'Datas a definir'}${c.fim ? ' a ' + fmt(c.fim) : ''}`}</span>
+      </button>`;
+    }).join('')}</div>` : `<div class="card pf-empty" style="padding:20px">Nenhum campeonato cadastrado.${manage ? ' Use "Novo campeonato" para começar.' : ''}</div>`}
+    ${semCadastro.length ? `<div class="sec-title" style="margin-top:22px"><i class="ti ti-help-circle"></i> Campeonatos dos jogos sem cadastro</div>
+      <div class="camp-grid">${semCadastro.map(n => {
+        const js = cache.jogos.filter(g => campNorm(campDoJogo(g)) === campNorm(n));
+        return `<div class="card camp-card camp-ghost">
+          <span class="camp-name">${n}</span><span class="camp-sub">${js.length} jogo(s) registrados com esse nome</span>
+          ${manage ? `<button class="btn btn-ghost btn-sm" onclick="openCampForm(null, '${n.replace(/'/g, "\\'")}')"><i class="ti ti-plus"></i> Cadastrar campeonato</button>` : ''}
+        </div>`;
+      }).join('')}</div>` : ''}`;
+}
+
+function openCamp(id) { _campSel = id; _campTab = 'tabela'; renderCampeonatos(); window.scrollTo({ top: 0 }); }
+function closeCamp() { _campSel = null; renderCampeonatos(); }
+function setCampTab(t) { _campTab = t; renderCampeonatos(); }
+
+function campDetalheHTML(c) {
+  const manage = can(['admin', 'tecnico', 'capitao']);
+  const r = campResumo(c);
+  const tabs = [['tabela', 'Classificação'], ['jogos', 'Jogos'], ['stats', 'Estatísticas']];
+  let corpo = '';
+  if (_campTab === 'tabela') corpo = campTabelaHTML(c, manage);
+  else if (_campTab === 'jogos') corpo = campJogosHTML(c, manage);
+  else corpo = campStatsHTML(c, r);
+  return `
+    <button class="btn btn-ghost btn-sm" onclick="closeCamp()" style="margin-bottom:14px"><i class="ti ti-arrow-left"></i> Todos os campeonatos</button>
+    <div class="card camp-head">
+      <div class="camp-head-main">
+        <span class="camp-ico lg"><i class="ti ti-trophy"></i></span>
+        <div style="min-width:0">
+          <div class="camp-title">${c.nome}</div>
+          <div class="camp-sub">${c.temporada} · ${c.formato}${c.categoria ? ' · ' + c.categoria : ''}${c.organizador ? ' · ' + c.organizador : ''}</div>
+          <div class="pf-chips"><span class="badge ${CAMP_STATUS[c.status] || 'badge-gray'}">${c.status}</span>${c.inicio ? `<span class="badge badge-gray">${fmt(c.inicio)}${c.fim ? ' a ' + fmt(c.fim) : ''}</span>` : ''}${c.colocacao ? `<span class="badge badge-blue"><i class="ti ti-medal"></i> ${c.colocacao}</span>` : ''}</div>
+        </div>
+      </div>
+      <div class="camp-head-nums">
+        <div><b>${r.total > 1 ? r.pos + 'º' : '—'}</b><span>posição</span></div>
+        <div><b>${r.v}-${r.d}</b><span>V-D</span></div>
+        <div><b>${r.js.length ? fmtN(r.pro / r.js.length) : '—'}</b><span>pts/jogo</span></div>
+        <div><b class="${r.pro - r.contra >= 0 ? 'pos' : 'neg'}">${r.js.length ? (r.pro - r.contra > 0 ? '+' : '') + (r.pro - r.contra) : '—'}</b><span>saldo</span></div>
+      </div>
+      ${c.obs ? `<div class="camp-obs">${c.obs.replace(/\n/g, '<br>')}</div>` : ''}
+      ${manage ? `<div class="pf-actions" style="margin-top:14px">
+        <button class="btn btn-ghost btn-sm" onclick="campNovoJogo(${c.id})"><i class="ti ti-plus"></i> Jogo do White Rock</button>
+        <button class="btn btn-ghost btn-sm" onclick="openResultadoForm(${c.id})"><i class="ti ti-scoreboard"></i> Resultado de outras equipes</button>
+        <button class="btn btn-ghost btn-sm" onclick="openCampForm(${c.id})"><i class="ti ti-pencil"></i> Editar</button>
+        ${can(['admin']) ? `<button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="deleteCamp(${c.id})"><i class="ti ti-trash"></i> Excluir</button>` : ''}
+      </div>` : ''}
+    </div>
+    <div class="seg" role="tablist" style="margin:18px 0 14px">${tabs.map(([k, l]) => `<button type="button" role="tab" aria-selected="${_campTab === k}" class="${_campTab === k ? 'active' : ''}" onclick="setCampTab('${k}')">${l}</button>`).join('')}</div>
+    ${corpo}`;
+}
+
+function campTabelaHTML(c, manage) {
+  const tab = classificacao(c);
+  const temJogos = tab.some(t => t.j > 0);
+  return `<div class="tbl-wrap"><table class="tbl st-table camp-tbl">
+      <thead><tr><th class="num">#</th><th>Equipe</th><th class="num">Pts</th><th class="num">J</th><th class="num">V</th><th class="num">D</th><th class="num">PF</th><th class="num">PC</th><th class="num">Saldo</th></tr></thead>
+      <tbody>${tab.map((t, i) => `<tr class="${t.wr ? 'st-me' : ''}">
+        <td class="num" style="color:var(--text2)">${i + 1}</td><td><b>${t.nome}</b></td><td class="num st-main">${t.pts}</td>
+        <td class="num">${t.j}</td><td class="num">${t.v}</td><td class="num">${t.d}</td><td class="num">${t.pf}</td><td class="num">${t.pc}</td>
+        <td class="num" style="color:${t.saldo > 0 ? 'var(--success)' : t.saldo < 0 ? 'var(--danger)' : 'var(--text2)'}">${t.saldo > 0 ? '+' : ''}${t.saldo}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <div class="form-hint">Vitória vale ${c.pontosVitoria ?? 2} ponto(s) e derrota ${c.pontosDerrota ?? 1}. Desempate: vitórias, saldo e pontos feitos.
+      ${temJogos ? '' : ' A tabela é montada com os jogos do White Rock e com os resultados das outras equipes.'}
+      ${manage && !(c.resultados || []).length ? ' Para a tabela ficar completa, lance também os resultados entre as outras equipes.' : ''}</div>`;
+}
+
+function campJogosHTML(c, manage) {
+  const js = campJogos(c).sort((a, b) => b.data.localeCompare(a.data));
+  const prox = js.filter(g => g.wr === null).reverse(), feitos = js.filter(g => g.wr !== null);
+  const outros = (c.resultados || []).slice().sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+  const linha = g => {
+    const res = g.wr === null ? '' : g.wr > g.advPl ? 'v' : g.wr < g.advPl ? 'd' : '';
+    return `<div class="camp-game">
+      <span class="pf-game-res ${res}">${g.wr === null ? '<i class="ti ti-clock"></i>' : res === 'v' ? 'V' : res === 'd' ? 'D' : 'E'}</span>
+      <span class="pf-game-adv">WR × ${g.adv}<small>${fmt(g.data)} ${g.hora || ''}${g.local ? ' · ' + g.local : ''}</small></span>
+      <span class="camp-score">${g.wr === null ? 'a jogar' : `${g.wr} × ${g.advPl}`}</span>
+      ${g.wr !== null && hasBox(g) ? `<button class="btn btn-ghost btn-sm" onclick="openBoxScore(${g.id})">Súmula</button>` : ''}
+    </div>`;
+  };
+  return `
+    <div class="sec-title"><i class="ti ti-ball-basketball"></i> Jogos do White Rock</div>
+    ${js.length ? `${prox.map(linha).join('')}${feitos.map(linha).join('')}` : `<div class="card pf-empty" style="padding:16px">Nenhum jogo do White Rock neste campeonato.${manage ? ' Use "Jogo do White Rock" para cadastrar.' : ''}</div>`}
+    <div class="sec-title" style="margin-top:20px"><i class="ti ti-scoreboard"></i> Outros resultados do campeonato</div>
+    ${outros.length ? outros.map(r => `<div class="camp-game">
+      <span class="pf-game-res"><i class="ti ti-scoreboard"></i></span>
+      <span class="pf-game-adv">${r.casa} × ${r.fora}<small>${r.data ? fmt(r.data) : 'Sem data'}${r.fase ? ' · ' + r.fase : ''}</small></span>
+      <span class="camp-score">${r.pc} × ${r.pf}</span>
+      ${manage ? `<button class="btn btn-ghost btn-sm btn-icon" onclick="deleteResultado(${c.id}, ${r.id})" aria-label="Excluir resultado"><i class="ti ti-trash"></i></button>` : ''}
+    </div>`).join('') : '<div class="card pf-empty" style="padding:16px">Nenhum resultado de outras equipes lançado.</div>'}`;
+}
+
+function campStatsHTML(c, r) {
+  const rows = aggregateStats(campDoJogo({ camp: c.nome })).filter(x => x.jgS > 0 || x.jg > 0);
+  const lider = (k, lbl) => {
+    const top = rows.slice().sort((a, b) => b.avg[k] - a.avg[k])[0];
+    return top && top.avg[k] > 0 ? `<div class="card st-tile"><div class="card-title">${lbl}</div><div class="card-value" style="font-size:20px">${top.p.apelido || top.p.nome.split(' ')[0]}</div><div class="st-sub">${fmtN(top.avg[k])} por jogo</div></div>` : '';
+  };
+  const team = rows.reduce((a, x) => { a.fgm += x.fgm; a.fga += x.fga; a.p3m += x.sh.p3m; a.p3a += x.sh.p3a; return a; }, { fgm: 0, fga: 0, p3m: 0, p3a: 0 });
+  return `
+    <div class="st-team" style="margin-bottom:16px">
+      <div class="card st-tile"><div class="card-title">Jogos</div><div class="card-value">${r.js.length}</div><div class="st-sub">${r.v}V · ${r.d}D</div></div>
+      <div class="card st-tile"><div class="card-title">Aproveitamento</div><div class="card-value">${r.js.length ? Math.round(r.v / r.js.length * 100) + '%' : '—'}</div></div>
+      <div class="card st-tile"><div class="card-title">Pontos por jogo</div><div class="card-value" style="color:var(--blue)">${r.js.length ? fmtN(r.pro / r.js.length) : '—'}</div><div class="st-sub">${r.js.length ? 'sofre ' + fmtN(r.contra / r.js.length) : ''}</div></div>
+      <div class="card st-tile"><div class="card-title">Arremessos</div><div class="card-value">${team.fga ? Math.round(team.fgm / team.fga * 100) + '%' : '—'}</div><div class="st-sub">${team.fga ? `${team.fgm}/${team.fga}` : 'sem tentativas anotadas'}</div></div>
+      ${lider('pts', 'Cestinha')}${lider('reb', 'Reboteiro')}
+    </div>
+    ${rows.length ? `<div class="tbl-wrap"><table class="tbl st-table">
+      <thead><tr><th>#</th><th>Jogador</th><th class="num">JG</th><th class="num">PTS</th><th class="num">REB</th><th class="num">AST</th><th class="num">ROU</th><th class="num">TOC</th><th class="num">FG%</th><th class="num">3P%</th></tr></thead>
+      <tbody>${rows.sort((a, b) => b.avg.pts - a.avg.pts).map(x => `<tr><td style="color:var(--text2)">#${x.p.num}</td><td><button type="button" class="st-player" onclick="openPlayerDetail(${x.p.id})">${x.p.apelido || x.p.nome.split(' ')[0]}</button></td>
+        <td class="num">${x.jg}</td><td class="num st-main">${fmtN(x.avg.pts)}</td><td class="num">${fmtN(x.avg.reb)}</td><td class="num">${fmtN(x.avg.ast)}</td>
+        <td class="num">${x.jgS ? fmtN(x.avg.stl) : '—'}</td><td class="num">${x.jgS ? fmtN(x.avg.blk) : '—'}</td><td class="num">${fmtPct(x.fgPct)}</td><td class="num">${fmtPct(x.p3Pct)}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <button class="btn btn-ghost btn-sm" onclick="campVerStats('${c.nome.replace(/'/g, "\\'")}')"><i class="ti ti-chart-bar"></i> Ver gráficos e ranking completo</button>`
+    : '<div class="card pf-empty" style="padding:16px">As estatísticas aparecem quando os jogos deste campeonato tiverem súmula.</div>'}`;
+}
+
+function campVerStats(nome) {
+  showPage('estatisticas');
+  const sel = document.getElementById('stat-camp');
+  if (sel) { sel.value = nome; renderStats(); }
+}
+
+function campNovoJogo(id) {
+  const c = cache.campeonatos.find(x => x.id === id);
+  ['jo-adv', 'jo-local'].forEach(k => { const e = document.getElementById(k); if (e) e.value = ''; });
+  document.getElementById('jo-camp').value = c ? c.nome : '';
+  document.getElementById('jo-data').value = '';
+  openModal('modal-add-jogo');
+}
+
+// ── Formulários
+function campErr(id, msg) { const e = document.getElementById(id); e.style.display = msg ? '' : 'none'; e.querySelector('span').textContent = msg || ''; }
+
+function openCampForm(id, nomeSugerido) {
+  const c = id ? cache.campeonatos.find(x => x.id === id) : null;
+  const js = nomeSugerido ? cache.jogos.filter(g => campNorm(campDoJogo(g)) === campNorm(nomeSugerido)) : [];
+  const v = (k, d) => c ? (c[k] ?? d) : d;
+  document.getElementById('cp-id').value = c ? c.id : '';
+  document.getElementById('cp-form-title').textContent = c ? 'Editar campeonato' : 'Novo campeonato';
+  document.getElementById('cp-nome').value = c ? c.nome : (nomeSugerido || '');
+  document.getElementById('cp-temporada').value = v('temporada', (js[0] ? js[0].data.slice(0, 4) : '') || new Date().getFullYear());
+  document.getElementById('cp-formato').value = v('formato', 'Pontos corridos');
+  document.getElementById('cp-status').value = v('status', 'Em andamento');
+  document.getElementById('cp-categoria').value = v('categoria', '');
+  document.getElementById('cp-organizador').value = v('organizador', '');
+  const datas = js.map(g => g.data).sort();
+  document.getElementById('cp-inicio').value = v('inicio', datas[0] || '');
+  document.getElementById('cp-fim').value = v('fim', '');
+  document.getElementById('cp-pv').value = v('pontosVitoria', 2);
+  document.getElementById('cp-pd').value = v('pontosDerrota', 1);
+  document.getElementById('cp-equipes').value = c ? (c.equipes || []).join('\n') : [...new Set(js.map(g => g.adv))].join('\n');
+  document.getElementById('cp-colocacao').value = v('colocacao', '');
+  document.getElementById('cp-obs').value = v('obs', '');
+  campErr('cp-error', '');
+  openModal('modal-camp-form');
+  setTimeout(() => document.getElementById('cp-nome').focus(), 50);
+}
+
+async function saveCamp() {
+  const id = +document.getElementById('cp-id').value || null;
+  const g = k => document.getElementById(k).value;
+  const payload = { acao: 'camp', nome: g('cp-nome').trim(), temporada: +g('cp-temporada'), formato: g('cp-formato'), status: g('cp-status'),
+    categoria: g('cp-categoria').trim(), organizador: g('cp-organizador').trim(), inicio: g('cp-inicio'), fim: g('cp-fim'),
+    pontosVitoria: +g('cp-pv'), pontosDerrota: +g('cp-pd'), equipes: g('cp-equipes').split('\n').map(x => x.trim()).filter(Boolean),
+    colocacao: g('cp-colocacao').trim(), obs: g('cp-obs').trim() };
+  if (!payload.nome) { campErr('cp-error', 'Informe o nome do campeonato.'); return; }
+  if (payload.inicio && payload.fim && payload.fim < payload.inicio) { campErr('cp-error', 'O término não pode ser antes do início.'); return; }
+  const r = await api(id ? 'PUT' : 'POST', 'modulos?r=campeonatos', id ? { ...payload, id } : payload);
+  if (r && r.id) {
+    await loadCampeonatos();
+    if (r.renomeados) { const j2 = await api('GET', 'jogos'); if (Array.isArray(j2)) cache.jogos = j2; }
+    closeModal('modal-camp-form');
+    _campSel = r.id;
+    toast(id ? (r.renomeados ? `Campeonato atualizado (${r.renomeados} jogo(s) renomeado(s))` : 'Campeonato atualizado!') : 'Campeonato cadastrado!');
+    renderCampeonatos(); renderJogos();
+  } else campErr('cp-error', (r && r.error) || 'Erro ao salvar');
+}
+
+function deleteCamp(id) {
+  const c = cache.campeonatos.find(x => x.id === id);
+  confirmAction(`Excluir o campeonato "${c ? c.nome : ''}"? Os jogos do White Rock continuam salvos; só o cadastro, as equipes e os resultados das outras equipes são apagados.`, async () => {
+    const r = await api('DELETE', 'modulos?r=campeonatos', { acao: 'camp', id });
+    if (r && r.success) { await loadCampeonatos(); _campSel = null; renderCampeonatos(); toast('Campeonato excluído'); }
+    else toast((r && r.error) || 'Erro ao excluir', 'error');
+  }, { title: 'Excluir campeonato', label: 'Sim, excluir', icon: 'ti-trophy-off', type: 'danger' });
+}
+
+function openResultadoForm(id) {
+  const c = cache.campeonatos.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('rx-camp').value = id;
+  document.getElementById('rx-title').textContent = `Resultado · ${c.nome}`;
+  const eq = [...new Set([...(c.equipes || []), ...campJogos(c).map(g => g.adv)])].sort((a, b) => a.localeCompare(b));
+  document.getElementById('rx-equipes').innerHTML = eq.map(e => `<option value="${e}"></option>`).join('');
+  ['rx-casa', 'rx-fora', 'rx-pc', 'rx-pf', 'rx-fase'].forEach(k => { document.getElementById(k).value = ''; });
+  document.getElementById('rx-data').value = today();
+  campErr('rx-error', '');
+  openModal('modal-camp-resultado');
+}
+
+async function saveResultado() {
+  const g = k => document.getElementById(k).value;
+  const payload = { acao: 'resultado', campId: +g('rx-camp'), data: g('rx-data'), casa: g('rx-casa').trim(), fora: g('rx-fora').trim(), pc: g('rx-pc'), pf: g('rx-pf'), fase: g('rx-fase').trim() };
+  if (!payload.casa || !payload.fora) { campErr('rx-error', 'Informe as duas equipes.'); return; }
+  if (payload.pc === '' || payload.pf === '') { campErr('rx-error', 'Informe o placar.'); return; }
+  const r = await api('POST', 'modulos?r=campeonatos', payload);
+  if (r && r.id) {
+    const i = cache.campeonatos.findIndex(x => x.id === r.id); if (i !== -1) cache.campeonatos[i] = r;
+    closeModal('modal-camp-resultado'); toast('Resultado lançado!'); renderCampeonatos();
+  } else campErr('rx-error', (r && r.error) || 'Erro ao salvar');
+}
+
+function deleteResultado(campId, resultadoId) {
+  confirmAction('Excluir este resultado?', async () => {
+    const r = await api('DELETE', 'modulos?r=campeonatos', { acao: 'resultado', campId, resultadoId });
+    if (r && r.id) { const i = cache.campeonatos.findIndex(x => x.id === r.id); if (i !== -1) cache.campeonatos[i] = r; renderCampeonatos(); toast('Resultado excluído'); }
+    else toast((r && r.error) || 'Erro ao excluir', 'error');
+  }, { title: 'Excluir resultado', label: 'Sim, excluir', icon: 'ti-trash', type: 'danger' });
 }
 
 // ==================== AVISOS ====================

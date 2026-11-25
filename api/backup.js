@@ -6,7 +6,7 @@ const { withErrorHandling } = require('../lib/error-handler');
 // Every data key the system stores. Password hashes are left out of the file.
 const KEYS = [
   'users', 'jogadores', 'jogos', 'treinos', 'financeiro', 'mensalidades',
-  'avisos', 'uniformes', 'pedidos-torcedor', 'fotos-jogadores', 'eventos', 'agenda-convocacoes', 'agenda-confirmacoes', 'agenda-alteracoes', 'medico-casos',
+  'avisos', 'uniformes', 'pedidos-torcedor', 'fotos-jogadores', 'eventos', 'agenda-convocacoes', 'agenda-confirmacoes', 'agenda-alteracoes', 'medico-casos', 'campeonatos',
   'counters', 'logs',
 ];
 
