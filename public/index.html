@@ -28,9 +28,16 @@
   --danger:  #EF4444;
   --text:    #F4F7FB;
   --text2:   #AEB8C7;
-  --text3:   #4A5A72;
+  --text3:   #7686A0; /* era #4A5A72 — subiu para ficar legível (contraste 4.9:1) */
   --border:  rgba(77,166,255,0.12);
   --card-shadow: 0 0 0 1px rgba(77,166,255,0.04),0 10px 40px rgba(0,0,0,0.5);
+  /* Componentes padrão (cartões, painéis, tabelas, botões) */
+  --surface: linear-gradient(180deg,#0E1729 0%,#091326 100%);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 0 0 1px rgba(77,166,255,0.03),0 8px 28px rgba(0,0,0,0.42);
+  --shadow-hover: 0 0 0 1px rgba(77,166,255,0.06),0 12px 34px rgba(0,0,0,0.5),0 0 22px rgba(45,140,255,0.08);
+  --border-hover: rgba(77,166,255,0.28);
 }
 body{
   background:var(--navy);
@@ -1151,6 +1158,108 @@ select.form-input option{background:#0D1526;color:var(--text)}
 .utbl-empty{color:var(--text3);font-size:13px}
 .utbl-date{color:var(--text2);font-size:12px;border-left:1px solid var(--border)!important;padding-left:12px!important}
 .utbl-sel{padding:3px 6px!important;font-size:11px!important;width:auto!important}
+
+/* ═══════════ COMPONENTES PADRÃO (fase 4) ═══════════ */
+/* Cabeçalho de página: mesmo modelo do dashboard em todas as telas */
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 16px;flex-wrap:wrap;margin-bottom:20px}
+.page-kicker{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.page-title{font-size:clamp(20px,3vw,26px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin:0;line-height:1.1}
+.page-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.page-actions .form-input{width:auto;height:32px;padding:0 12px;font-size:12px}
+
+/* Campo de busca com ícone */
+.search-box{position:relative;display:inline-flex;align-items:center}
+.search-box>i{position:absolute;left:11px;color:var(--text3);font-size:15px;pointer-events:none}
+.search-box .form-input{padding-left:33px!important}
+
+/* Superfície única: mesma borda, sombra e arredondamento */
+.card,.player-card,.game-card,.aviso-card,.tbl-wrap{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.card::after{display:none}
+.card:hover,.game-card:hover,.aviso-card:hover,.tbl-wrap:hover{
+  transform:none;border-color:var(--border-hover);box-shadow:var(--shadow-hover);
+}
+/* Só o que é clicável "levanta" ao passar o mouse */
+.card[onclick],.card.clickable{cursor:pointer}
+.card[onclick]:hover,.card.clickable:hover,.player-card:hover{
+  transform:translateY(-2px);border-color:rgba(77,166,255,0.34);box-shadow:var(--shadow-hover);
+}
+.player-card:hover .player-avatar{transform:none}
+.card-value,.ps-val,.stat-val{font-variant-numeric:tabular-nums}
+.card-title{color:var(--text2)}
+
+/* Botões: duas alturas, mesmo arredondamento, foco visível */
+.btn{
+  min-height:38px;padding:0 16px;justify-content:center;border-radius:var(--radius-sm);
+  font-family:inherit;white-space:nowrap;line-height:1.2;
+}
+.btn i{font-size:15px}
+.btn-sm{min-height:32px;padding:0 12px;font-size:12px;border-radius:8px;gap:5px}
+.btn-sm i{font-size:14px}
+.btn-icon{padding:0!important;width:38px;flex-shrink:0}
+.btn-sm.btn-icon{width:32px}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.btn-primary{box-shadow:0 0 0 1px rgba(77,166,255,0.25),0 4px 14px rgba(45,140,255,0.22)}
+.btn-primary:hover{
+  filter:brightness(1.08);transform:translateY(-1px);
+  box-shadow:0 0 0 1px rgba(77,166,255,0.4),0 6px 20px rgba(45,140,255,0.32);
+}
+.btn-ghost{background:rgba(255,255,255,0.03);border:1px solid rgba(174,184,199,0.14);color:var(--text)}
+.btn-ghost:hover{background:rgba(45,140,255,0.08);border-color:rgba(45,140,255,0.3)}
+.btn-danger:hover{box-shadow:none;border-color:rgba(239,68,68,0.4)}
+.btn-success:hover{border-color:rgba(0,200,122,0.4)}
+/* Rodapé dos modais: Salvar (principal, ocupa o espaço) + Cancelar */
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions .btn-primary{flex:1}
+/* Ações dentro de uma linha de tabela */
+.row-actions{display:flex;gap:6px;justify-content:flex-end;align-items:center;flex-wrap:nowrap}
+
+/* Etiquetas de status: formato de pílula + bolinha (não depende só da cor) */
+.badge{border-radius:999px;padding:3px 10px;line-height:1.4;white-space:nowrap}
+.badge-green::before,.badge-orange::before,.badge-red::before,.badge-gray::before{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:currentColor;margin-right:6px;vertical-align:1px;
+}
+
+/* Tabelas: mais respiro, linha destacada ao passar o mouse */
+.tbl{font-variant-numeric:tabular-nums}
+.tbl th{padding:12px 16px;white-space:nowrap;background:rgba(5,11,22,0.55)}
+.tbl td{padding:13px 16px;border-bottom:1px solid rgba(77,166,255,0.06);vertical-align:middle}
+.tbl tbody tr:last-child td{border-bottom:none}
+.tbl tbody tr td{transition:background .15s}
+.tbl tbody tr:hover td{background:rgba(45,140,255,0.07)}
+.tbl th.num,.tbl td.num{text-align:right}
+@media(max-width:700px){
+  .tbl th{padding:10px 12px}
+  .tbl td{padding:10px 12px}
+}
+/* Celular: tabelas marcadas com .tbl-stack viram cartões (rótulo à esquerda, valor à direita) */
+@media(max-width:640px){
+  .tbl-stack thead{display:none}
+  .tbl-stack,.tbl-stack tbody,.tbl-stack tr{display:block;width:100%}
+  .tbl-stack tr{padding:10px 14px;border-bottom:1px solid var(--border)}
+  .tbl-stack tbody tr:last-child{border-bottom:none}
+  .tbl-stack td{
+    display:flex!important;justify-content:space-between;align-items:center;gap:12px;
+    padding:5px 0!important;border:none!important;text-align:right;
+    max-width:none!important;white-space:normal!important;background:none!important;
+  }
+  .tbl-stack td::before{
+    content:attr(data-label);flex-shrink:0;text-align:left;
+    font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);
+  }
+  .tbl-stack td[data-label=""]::before,.tbl-stack td[colspan]::before{content:none}
+  .tbl-stack td[data-label=""]{justify-content:flex-end;flex-wrap:wrap}
+  .tbl-stack td[colspan]{display:block!important;text-align:center}
+  .tbl-stack tbody tr:hover{background:rgba(45,140,255,0.05)}
+}
+@media(prefers-reduced-motion:reduce){
+  .card,.player-card,.game-card,.aviso-card,.tbl-wrap,.btn{transition:none!important}
+  .card:hover,.player-card:hover,.btn-primary:hover{transform:none!important}
+}
 </style>
 </head>
 <body>
@@ -1354,11 +1463,14 @@ select.form-input option{background:#0D1526;color:var(--text)}
 </div>
 
 <div class="page" id="page-jogadores">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-users"></i> Elenco</div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <input class="form-input" id="busca-jogador" placeholder="🔍 Nome, apelido ou nº..." style="width:190px;font-size:12px" oninput="renderJogadores()">
-      <select class="form-input" style="width:auto;font-size:12px" id="filtro-status" onchange="renderJogadores()">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Equipe</div>
+      <h1 class="page-title">Elenco</h1>
+    </div>
+    <div class="page-actions">
+      <label class="search-box"><i class="ti ti-search" aria-hidden="true"></i><input class="form-input" id="busca-jogador" placeholder="Nome, apelido ou nº" aria-label="Buscar jogador" style="width:200px" oninput="renderJogadores()"></label>
+      <select class="form-input" id="filtro-status" aria-label="Filtrar por situação" onchange="renderJogadores()">
         <option value="">Todos</option>
         <option value="Ativo">Ativos</option>
         <option value="Lesão">Lesionados</option>
@@ -1378,8 +1490,11 @@ select.form-input option{background:#0D1526;color:var(--text)}
 </div>
 
 <div class="page" id="page-jogos">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-trophy"></i> Jogos</div>
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Competição</div>
+      <h1 class="page-title">Jogos</h1>
+    </div>
     <button class="btn btn-primary btn-sm" id="btn-add-jogo" onclick="openModal('modal-add-jogo')" style="display:none"><i class="ti ti-plus"></i> Cadastrar jogo</button>
   </div>
   <div class="grid3" id="jogos-stats"></div>
@@ -1390,8 +1505,11 @@ select.form-input option{background:#0D1526;color:var(--text)}
 </div>
 
 <div class="page" id="page-treinos">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-calendar"></i> Treinos</div>
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Competição</div>
+      <h1 class="page-title">Treinos</h1>
+    </div>
     <button class="btn btn-primary btn-sm" id="btn-add-treino" onclick="openModal('modal-add-treino')" style="display:none"><i class="ti ti-plus"></i> Agendar</button>
   </div>
   <div class="grid2" style="margin-bottom:20px">
@@ -1409,9 +1527,12 @@ select.form-input option{background:#0D1526;color:var(--text)}
 </div>
 
 <div class="page" id="page-financeiro">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-cash"></i> Financeiro</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Gestão</div>
+      <h1 class="page-title">Financeiro</h1>
+    </div>
+    <div class="page-actions">
       <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-lancamento')"><i class="ti ti-plus"></i> Lançamento</button>
       <button id="btn-zerar-caixa" class="btn btn-danger btn-sm" onclick="zerarCaixa()" style="display:none"><i class="ti ti-trash"></i> Zerar caixa</button>
     </div>
@@ -1425,7 +1546,7 @@ select.form-input option{background:#0D1526;color:var(--text)}
     <div>
       <div class="sec-title"><i class="ti ti-users"></i> Situação das mensalidades</div>
       <div class="tbl-wrap">
-        <table class="tbl">
+        <table class="tbl tbl-stack">
           <thead><tr><th>Jogador</th><th>Atraso</th><th>Status</th><th></th></tr></thead>
           <tbody id="mens-body"></tbody>
         </table>
@@ -1435,7 +1556,12 @@ select.form-input option{background:#0D1526;color:var(--text)}
 </div>
 
 <div class="page" id="page-estatisticas">
-  <div class="sec-title"><i class="ti ti-chart-bar"></i> Estatísticas</div>
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Competição</div>
+      <h1 class="page-title">Estatísticas</h1>
+    </div>
+  </div>
   <div class="grid2" style="margin-bottom:16px">
     <div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Categoria</div>
@@ -1455,31 +1581,43 @@ select.form-input option{background:#0D1526;color:var(--text)}
   <div class="sec-title"><i class="ti ti-table"></i> Tabela completa</div>
   <div class="tbl-wrap">
     <table class="tbl">
-      <thead><tr><th>#</th><th>Jogador</th><th>JG</th><th>PTS</th><th>AST</th><th>REB</th><th>3PT</th><th>FLT</th></tr></thead>
+      <thead><tr><th>#</th><th>Jogador</th><th class="num">JG</th><th class="num">PTS</th><th class="num">AST</th><th class="num">REB</th><th class="num">3PT</th><th class="num">FLT</th></tr></thead>
       <tbody id="stats-tbl"></tbody>
     </table>
   </div>
 </div>
 
 <div class="page" id="page-comunicacao">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-bell"></i> Mural de avisos</div>
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Gestão</div>
+      <h1 class="page-title">Mural de avisos</h1>
+    </div>
     <button class="btn btn-primary btn-sm" id="btn-add-aviso" onclick="openModal('modal-add-aviso')" style="display:none"><i class="ti ti-plus"></i> Publicar aviso</button>
   </div>
   <div id="avisos-lista"></div>
 </div>
 
 <div class="page" id="page-uniformes">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Equipe</div>
+      <h1 class="page-title">Uniformes</h1>
+    </div>
+  </div>
   <div id="unif-content"><div class="loading"><div class="spinner"></div>Carregando...</div></div>
 </div>
 
 <div class="page" id="page-usuarios">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="sec-title" style="margin:0"><i class="ti ti-settings"></i> Usuários do sistema</div>
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Sistema</div>
+      <h1 class="page-title">Usuários do sistema</h1>
+    </div>
     <button class="btn btn-primary btn-sm" onclick="openAddUser()"><i class="ti ti-plus"></i> Criar usuário</button>
   </div>
   <div class="tbl-wrap">
-    <table class="tbl">
+    <table class="tbl tbl-stack">
       <thead><tr><th>Nome</th><th>Email</th><th>Função</th><th>Nº</th><th>Status</th><th></th></tr></thead>
       <tbody id="users-body"></tbody>
     </table>
@@ -1488,13 +1626,13 @@ select.form-input option{background:#0D1526;color:var(--text)}
   <div style="display:flex;justify-content:space-between;align-items:center;margin-top:28px;margin-bottom:14px;flex-wrap:wrap;gap:10px">
     <div class="sec-title" style="margin:0"><i class="ti ti-clipboard-list"></i> Log de atividades</div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <input class="form-input" id="log-search" placeholder="Filtrar..." style="width:180px;font-size:12px" oninput="renderLog()">
+      <label class="search-box"><i class="ti ti-search" aria-hidden="true"></i><input class="form-input" id="log-search" placeholder="Filtrar registros" aria-label="Filtrar log" style="width:190px;height:32px;padding:0 12px;font-size:12px" oninput="renderLog()"></label>
       <button class="btn btn-ghost btn-sm" onclick="downloadBackup()"><i class="ti ti-database-export"></i> Baixar backup</button>
       <button class="btn btn-danger btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i> Limpar log</button>
     </div>
   </div>
   <div class="tbl-wrap">
-    <table class="tbl">
+    <table class="tbl tbl-stack">
       <thead><tr><th>Data / Hora</th><th>Usuário</th><th>Função</th><th>Ação</th><th>Detalhes</th></tr></thead>
       <tbody id="log-body"></tbody>
     </table>
@@ -1565,8 +1703,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
       </div>
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addJogador()">Cadastrar</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addJogador()"><i class="ti ti-check"></i> Cadastrar</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-jogador')">Cancelar</button>
     </div>
   </div>
@@ -1584,8 +1722,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
       <div class="form-group"><label class="form-label">Local</label><input class="form-input" id="jo-local" placeholder="Ginásio / Quadra"></div>
       <div class="form-group"><label class="form-label">Campeonato</label><input class="form-input" id="jo-camp" placeholder="Ex: Liga Carioca"></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addJogo()">Salvar</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addJogo()"><i class="ti ti-check"></i> Salvar jogo</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-jogo')">Cancelar</button>
     </div>
   </div>
@@ -1604,8 +1742,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
         <select class="form-input" id="tr-tipo"><option>Treino técnico</option><option>Treino físico</option><option>Coletivo</option><option>Tático</option></select>
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addTreino()">Agendar</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addTreino()"><i class="ti ti-check"></i> Agendar treino</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-treino')">Cancelar</button>
     </div>
   </div>
@@ -1630,8 +1768,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
     </div>
     <div class="form-group"><label class="form-label">Descrição *</label><input class="form-input" id="lan-desc" placeholder="Ex: Mensalidade João, Aluguel quadra..."></div>
     <div class="form-group"><label class="form-label">Valor (R$) *</label><input class="form-input" id="lan-valor" type="number" placeholder="0,00"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addLancamento()">Registrar</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addLancamento()"><i class="ti ti-check"></i> Registrar</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-lancamento')">Cancelar</button>
     </div>
   </div>
@@ -1650,8 +1788,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
       <input class="form-input" id="av-imagem" placeholder="https://drive.google.com/file/d/... ou https://i.imgur.com/...">
       <div style="font-size:11px;color:var(--text3);margin-top:4px"><i class="ti ti-info-circle"></i> Cole o link de compartilhamento do Drive ou qualquer URL direta de imagem (1920×1080 recomendado)</div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addAviso()"><i class="ti ti-send"></i> Publicar</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addAviso()"><i class="ti ti-send"></i> Publicar</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-aviso')">Cancelar</button>
     </div>
   </div>
@@ -1676,8 +1814,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
       </div>
     </div>
     <div class="form-group"><label class="form-label">Nº da camisa (se atleta)</label><input class="form-input" id="u-num" type="number" placeholder="Ex: 10"></div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="addUser()">Criar usuário</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="addUser()"><i class="ti ti-check"></i> Criar usuário</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-add-user')">Cancelar</button>
     </div>
   </div>
@@ -1728,8 +1866,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
         </select>
       </div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="saveEditUser()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditUser()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-edit-user')">Cancelar</button>
     </div>
   </div>
@@ -1800,8 +1938,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
       </div>
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-primary" style="flex:1" onclick="saveEditJogador()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditJogador()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogador')">Cancelar</button>
     </div>
   </div>
@@ -1829,8 +1967,8 @@ select.form-input option{background:#0D1526;color:var(--text)}
     </div>
     <!-- Score + player stats injected by editJogo() -->
     <div id="ej-stats-section"></div>
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn btn-primary" style="flex:1" onclick="saveEditJogo()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditJogo()"><i class="ti ti-device-floppy"></i> Salvar alterações</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-edit-jogo')">Cancelar</button>
     </div>
   </div>
@@ -3324,7 +3462,7 @@ function renderFinanceiro() {
       <div style="flex:1;min-width:0"><div style="font-size:13px">${f.desc}</div><div style="font-size:11px;color:var(--text2)">${fmt(f.data)} · ${f.cat}</div></div>
       <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
         <span class="fin-val ${f.tipo}" style="font-size:14px;font-weight:600">${f.tipo==='entrada'?'+':'-'}${fmtBRL(f.valor)}</span>
-        ${canDelFin ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px" onclick="deleteLancamento(${f.id})" title="Excluir lançamento"><i class="ti ti-trash"></i></button>` : ''}
+        ${canDelFin ? `<button class="btn btn-danger btn-sm btn-icon" onclick="deleteLancamento(${f.id})" title="Excluir lançamento" aria-label="Excluir lançamento"><i class="ti ti-trash"></i></button>` : ''}
       </div>
     </div>
   `).join('') || '<div style="color:var(--text2);font-size:13px;padding:16px">Nenhum lançamento registrado.</div>';
@@ -3513,9 +3651,9 @@ function renderStats() {
     <tr>
       <td style="color:var(--text2)">#${j.num}</td>
       <td style="font-weight:500">${j.apelido||j.nome.split(' ')[0]}</td>
-      <td>${jogosReais}</td>
-      <td style="font-weight:600;color:var(--blue)">${j.pts}</td>
-      <td>${j.ast}</td><td>${j.reb}</td><td>${j.tpt}</td><td>${j.flt}</td>
+      <td class="num">${jogosReais}</td>
+      <td class="num" style="font-weight:700;color:var(--blue)">${j.pts}</td>
+      <td class="num">${j.ast}</td><td class="num">${j.reb}</td><td class="num">${j.tpt}</td><td class="num">${j.flt}</td>
     </tr>
   `).join('');
 }
@@ -3539,7 +3677,7 @@ function renderAvisos() {
             <div class="aviso-title">${a.titulo}</div>
             <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
               <span class="badge ${bdg(a)}">${bdgl(a)}</span>
-              ${canDel ? `<button class="btn btn-danger btn-sm" style="padding:3px 7px" onclick="deleteAviso(${a.id})"><i class="ti ti-trash"></i></button>` : ''}
+              ${canDel ? `<button class="btn btn-danger btn-sm btn-icon" onclick="deleteAviso(${a.id})" title="Excluir aviso" aria-label="Excluir aviso"><i class="ti ti-trash"></i></button>` : ''}
             </div>
           </div>
           <div class="aviso-body">${a.msg}</div>
@@ -3602,11 +3740,11 @@ async function renderUsers() {
       <td><span class="role-tag role-${u.role}">${ROLES[u.role]||u.role}</span></td>
       <td>${u.num||'—'}</td>
       <td><span class="badge ${u.ativo?'badge-green':'badge-gray'}">${u.ativo?'Ativo':'Inativo'}</span></td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap">
+      <td><div class="row-actions">
         <button class="btn btn-ghost btn-sm" onclick="editUser(${u.id})"><i class="ti ti-pencil"></i> Editar</button>
-        ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="toggleUser(${u.id},${!u.ativo})">${u.ativo?'Desativar':'Ativar'}</button>`:''}
-        ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})" title="Excluir permanentemente"><i class="ti ti-trash"></i></button>`:''}
-      </td>
+        ${u.id!==currentUser.id?`<button class="btn ${u.ativo?'btn-ghost':'btn-success'} btn-sm" onclick="toggleUser(${u.id},${!u.ativo})"><i class="ti ${u.ativo?'ti-user-off':'ti-user-check'}"></i> ${u.ativo?'Desativar':'Ativar'}</button>`:''}
+        ${u.id!==currentUser.id?`<button class="btn btn-danger btn-sm btn-icon" onclick="deleteUser(${u.id})" title="Excluir permanentemente" aria-label="Excluir usuário"><i class="ti ti-trash"></i></button>`:''}
+      </div></td>
     </tr>
   `).join('');
 }
@@ -4022,7 +4160,7 @@ function buildManagementSection(pedidos) {
               <td class="utbl-border-c">${tamCell(p.tamCity,'utbl-tam-c')}</td>
               <td>${sel(p.tamCity,p.statusCity,p.id,'city')}</td>
               <td class="utbl-date">${fmt(p.dataPedido)}</td>
-              ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteUniformOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
+              ${canDel ? `<td><button class="btn btn-danger btn-sm btn-icon" onclick="deleteUniformOrder(${p.id})" title="Excluir pedido" aria-label="Excluir pedido"><i class="ti ti-trash"></i></button></td>` : ''}
             </tr>`).join('')}
           </tbody>
         </table>
@@ -4163,7 +4301,7 @@ function buildFanOrdersSection(pedidos) {
               </select>
             </td>
             <td style="color:var(--text2);font-size:11px">${fmt(p.dataPedido)}</td>
-            ${canDel ? `<td><button class="btn btn-danger btn-sm" onclick="deleteFanOrder(${p.id})"><i class="ti ti-trash"></i></button></td>` : ''}
+            ${canDel ? `<td><button class="btn btn-danger btn-sm btn-icon" onclick="deleteFanOrder(${p.id})" title="Excluir pedido" aria-label="Excluir pedido"><i class="ti ti-trash"></i></button></td>` : ''}
           </tr>`).join('') : `
           <tr><td colspan="${canDel?12:11}" style="text-align:center;color:var(--text2);padding:24px">
             ${total ? 'Nenhum pedido corresponde ao filtro.' : 'Nenhum pedido recebido ainda. <a href="/pedido.html" target="_blank" style="color:var(--blue)">Abrir página de pedidos →</a>'}
@@ -4720,7 +4858,22 @@ document.addEventListener('pointerdown', e => {
 // ==================== AUTO-LOGIN ====================
 // A barra inferior e os modais ficam depois deste script no HTML: espera a
 // página inteira carregar antes de montar o menu.
-function startApp() { if (loadSession()) initApp(); }
+// Cada célula das tabelas .tbl-stack recebe o nome da coluna (data-label),
+// usado no celular quando a tabela vira uma lista de cartões.
+function labelStackTable(tbl) {
+  const heads = [...tbl.querySelectorAll('thead th')].map(th => th.textContent.trim());
+  tbl.querySelectorAll('tbody tr').forEach(tr => {
+    [...tr.children].forEach((td, i) => { if (!td.hasAttribute('data-label')) td.setAttribute('data-label', heads[i] || ''); });
+  });
+}
+function watchStackTables() {
+  document.querySelectorAll('table.tbl-stack').forEach(tbl => {
+    labelStackTable(tbl);
+    const body = tbl.querySelector('tbody');
+    if (body) new MutationObserver(() => labelStackTable(tbl)).observe(body, { childList: true });
+  });
+}
+function startApp() { watchStackTables(); if (loadSession()) initApp(); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startApp);
 else startApp();
 </script>
