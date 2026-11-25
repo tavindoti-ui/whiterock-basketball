@@ -1714,6 +1714,61 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
 .ma-aviso span{font-size:12.5px;color:var(--text2);line-height:1.45}
 @media(max-width:900px){.ma-grid{grid-template-columns:1fr}}
 @media(max-width:560px){.ma-hero{padding:14px}.ma-av{width:58px;height:58px;font-size:20px}.ma-hello{font-size:19px}.ma-hero-actions{width:100%}.ma-hero-actions .btn{flex:1;justify-content:center}.ma-pend{grid-template-columns:1fr}}
+
+/* ═══════════ CENTRAL DE NOTIFICAÇÕES (fase 12) ═══════════ */
+.nt-bell{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:8px 14px;border-radius:9px;border:1px solid var(--border);background:rgba(45,140,255,0.06);color:var(--text);font:600 13px/1 inherit;font-family:inherit;cursor:pointer;white-space:nowrap}
+.nt-bell i{font-size:17px;color:var(--blue)}
+.nt-bell:hover{border-color:var(--border-hover)}
+.nt-bell:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.nt-badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--danger);color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.nt-panel{position:fixed;left:242px;bottom:16px;width:380px;max-height:min(560px,78vh);display:none;flex-direction:column;z-index:1200;background:#0B1528;border:1px solid var(--border-hover);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,0.55);overflow:hidden}
+.nt-panel.open{display:flex;animation:pageFadeIn .16s ease}
+body.sidebar-mini .nt-panel{left:76px}
+.nt-panel-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.nt-panel-head b{font-size:15px;color:#fff}
+.nt-panel-head .pf-link{font-size:12px;margin:0}
+.nt-panel-list{overflow:auto;flex:1}
+.nt-panel-foot{border:none;border-top:1px solid var(--border);background:transparent;color:var(--blue);font:600 12.5px/1 inherit;font-family:inherit;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px}
+.nt-panel-foot:hover{background:rgba(45,140,255,0.06)}
+.nt-item{display:flex;align-items:stretch;border-bottom:1px solid var(--border);position:relative}
+.nt-item:last-child{border-bottom:none}
+.nt-item.unread{background:rgba(45,140,255,0.06)}
+.nt-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
+.nt-open{flex:1;min-width:0;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:none;background:none;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.nt-open:hover{background:rgba(255,255,255,0.02)}
+.nt-open:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.nt-ico{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c);font-size:16px}
+.nt-main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.nt-main b{font-size:13px;color:#fff;line-height:1.35}
+.nt-item:not(.unread) .nt-main b{font-weight:600;color:var(--text)}
+.nt-main span{font-size:12px;color:var(--text2);line-height:1.4}
+.nt-main small{font-size:10.5px;color:var(--text3);margin-top:2px}
+.nt-hide{border:none;background:none;color:var(--text3);padding:0 14px;cursor:pointer}
+.nt-hide:hover{color:var(--danger)}
+.nt-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.nt-list{padding:0;overflow:hidden;margin-bottom:8px}
+.nt-prefs{padding:16px;position:sticky;top:16px}
+.nt-pref{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;font-size:13px;cursor:pointer}
+.nt-pref span{display:flex;align-items:center;gap:8px}
+.nt-pref-sep{height:1px;background:var(--border);margin:6px 0}
+.nt-switch{appearance:none;-webkit-appearance:none;width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.12);position:relative;cursor:pointer;flex-shrink:0;transition:background .15s}
+.nt-switch::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.nt-switch:checked{background:var(--blue)}
+.nt-switch:checked::after{transform:translateX(16px)}
+.nt-switch:disabled{opacity:.4;cursor:default}
+.nt-switch:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media(min-width:701px){
+  body.sidebar-mini .nt-bell-txt{display:none}
+  body.sidebar-mini .nt-bell{padding:8px 0}
+  body.sidebar-mini .nt-badge{position:absolute;top:-5px;right:2px}
+}
+@media(max-width:1000px){.nt-layout{grid-template-columns:1fr}.nt-prefs{position:static}}
+@media(max-width:700px){
+  .nt-bell{width:auto;padding:5px 8px;border-radius:20px}
+  .nt-bell-txt{display:none}
+  .nt-badge{position:absolute;top:-4px;right:-4px}
+  .nt-panel,body.sidebar-mini .nt-panel{left:8px;right:8px;top:58px;bottom:auto;width:auto;max-height:calc(100vh - 140px)}
+}
 </style>
 </head>
 <body>
@@ -1828,6 +1883,7 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   </div>
   <div class="nav-tabs" id="nav-tabs"></div>
   <div class="nav-right">
+    <button type="button" class="nt-bell" onclick="event.stopPropagation();ntTogglePanel()" aria-label="Notificações" aria-expanded="false" aria-controls="nt-panel"><i class="ti ti-bell" aria-hidden="true"></i><span class="nt-bell-txt">Notificações</span><span class="nt-badge" style="display:none">0</span></button>
     <div class="user-badge">
       <i class="ti ti-user" style="color:var(--blue)"></i>
       <div>
@@ -1839,6 +1895,7 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu"></div>
+<div class="nt-panel" id="nt-panel" role="dialog" aria-label="Notificações"></div>
 
 <!-- PAGES -->
 <div class="page active" id="page-dashboard">
@@ -2018,6 +2075,16 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
     </div>
   </div>
   <div id="ma-body"></div>
+</div>
+
+<div class="page" id="page-notificacoes">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Principal</div>
+      <h1 class="page-title">Notificações</h1>
+    </div>
+  </div>
+  <div id="nt-body"></div>
 </div>
 
 <div class="page" id="page-treinos">
@@ -2674,7 +2741,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { minhaMensalidade: null, jogadas: [], campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { notifEstado: null, minhaMensalidade: null, jogadas: [], campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2733,6 +2800,9 @@ function showLoginError(msg) {
 }
 function doLogout() {
   clearSession();
+  if (_ntTimer) { clearInterval(_ntTimer); _ntTimer = null; }
+  const ntp = document.getElementById('nt-panel'); if (ntp) ntp.classList.remove('open');
+  cache.notifEstado = null; cache.minhaMensalidade = null;
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
 }
@@ -2951,8 +3021,9 @@ function showPage(id) {
   const moreBtn = document.getElementById('btn-more-nav');
   if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
   hideNavTip();
-  const renders = { minha:() => { renderMinhaArea(); loadMinhaMensalidade().then(() => { if (document.getElementById('page-minha').classList.contains('active')) renderMinhaArea(); }); }, quadro:() => { renderQuadro(); loadJogadas().then(() => { if (document.getElementById('page-quadro').classList.contains('active')) qtRenderLista(); }); }, campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
+  const renders = { notificacoes:() => { renderNotificacoes(); loadNotifEstado().then(renderNotifBadge); }, minha:() => { renderMinhaArea(); loadMinhaMensalidade().then(() => { if (document.getElementById('page-minha').classList.contains('active')) renderMinhaArea(); }); }, quadro:() => { renderQuadro(); loadJogadas().then(() => { if (document.getElementById('page-quadro').classList.contains('active')) qtRenderLista(); }); }, campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
+  if (typeof renderNotifBadge === 'function' && cache.notifEstado) renderNotifBadge();
 }
 
 // ==================== LOAD ALL ====================
@@ -2970,6 +3041,7 @@ async function loadAll() {
     loadCampeonatos(),
     loadJogadas(),
     maTemArea() ? loadMinhaMensalidade() : Promise.resolve(),
+    loadNotifEstado(),
   ]);
   if (fotos && typeof fotos === 'object' && !fotos.error) cache.fotos = fotos;
   if (j) cache.jogadores = j;
@@ -2982,6 +3054,8 @@ async function loadAll() {
   renderDashboard();
   renderJogadores();
   if (currentUser && currentUser.role === 'atleta' && maTemArea() && document.getElementById('page-dashboard').classList.contains('active')) showPage('minha');
+  renderNotifBadge();
+  ntIniciar();
 }
 
 // ==================== UTILS ====================
@@ -5193,7 +5267,7 @@ async function enviarConfirmacao(payload) {
   const r = await api('PUT', 'modulos?r=agenda', { acao: 'confirmar', ref: _agRef, ...payload });
   if (r && r.success) {
     cache.agenda.confirmacoes[_agRef] = r.confirmacoes;
-    renderCalendario(); renderDashboard();
+    renderCalendario(); renderDashboard(); renderNotifBadge();
     return true;
   }
   toast((r && r.error) || 'Erro ao salvar a presença', 'error');
@@ -6582,6 +6656,264 @@ function renderMinhaArea() {
           : '<div class="pf-empty">A comissão ainda não salvou jogadas.</div>'}
       </section>
     </div>`;
+}
+
+// ==================== CENTRAL DE NOTIFICAÇÕES (fase 12) ====================
+const NT_CATS = {
+  jogos:        { label: 'Jogos',             icon: 'ti-ball-basketball', color: 'var(--blue)' },
+  treinos:      { label: 'Treinos e eventos', icon: 'ti-barbell',         color: 'var(--success)' },
+  alteracoes:   { label: 'Alterações',        icon: 'ti-clock-edit',      color: 'var(--warning)' },
+  convocacoes:  { label: 'Convocações',       icon: 'ti-star',            color: '#A78BFA' },
+  comunicados:  { label: 'Comunicados',       icon: 'ti-speakerphone',    color: 'var(--blue)' },
+  mensalidades: { label: 'Mensalidades',      icon: 'ti-wallet',          color: 'var(--danger)' },
+};
+let _ntFiltro = '';
+let _ntTimer = null;
+
+async function loadNotifEstado() {
+  try {
+    const r = await api('GET', 'modulos?r=notificacoes');
+    if (r && !r.error) cache.notifEstado = r;
+  } catch (e) { console.warn('notificacoes', e); }
+}
+
+function ntDiasAte(d) { return diasEntre(today(), d); }
+function ntQuando(d, h) {
+  const n = ntDiasAte(d);
+  const dia = n === 0 ? 'hoje' : n === 1 ? 'amanhã' : `em ${n} dias (${fmt(d).slice(0, 5)})`;
+  return `${dia}${h ? ' às ' + h : ''}`;
+}
+function ntIso(d, hora) { return `${d}T${hora || '09:00'}:00`; }
+function ntAgora() { return new Date().toISOString().slice(0, 19); }
+
+// Monta todas as notificações a partir dos dados já carregados
+function notifGerar() {
+  const out = [];
+  const agora = ntAgora();
+  const hoje = today();
+  const eu = meuJogador();
+  const staff = can(['admin', 'tecnico', 'comissao', 'capitao']);
+  const lim30 = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 19);
+  const ag = cache.agenda || { alteracoes: [], convocacoes: {}, eventos: [] };
+  const add = n => { if (n.em <= agora && n.em >= lim30) out.push(n); };
+  const souEsperado = item => !eu || esperados(item).some(j => j.id === eu.id);
+  const itens = agendaItens();
+  const itemDe = ref => itens.find(i => i.ref === ref);
+
+  // Próximos jogos (a partir de 7 dias antes)
+  cache.jogos.filter(g => g.wr === null && g.data >= hoje && ntDiasAte(g.data) <= 7).forEach(g => {
+    const ini = new Date(new Date(g.data + 'T12:00:00').getTime() - 7 * 864e5).toISOString().slice(0, 19);
+    const it = itemDe(`jogo:${g.id}`);
+    const pend = eu && it && souEsperado(it) && !respostas(it)[eu.id];
+    add({ id: `jogo:${g.id}:${g.data}`, cat: 'jogos', titulo: `WR × ${g.adv} ${ntQuando(g.data, g.hora)}`,
+      texto: [(g.camp || '').trim() || 'Amistoso', g.local].filter(Boolean).join(' · ') + (pend ? ' · Confirme sua presença' : ''),
+      em: ini, go: { ref: `jogo:${g.id}` }, ref: `jogo:${g.id}`, lembrete: true });
+  });
+  // Próximos treinos e eventos (a partir de 2 dias antes)
+  itens.filter(i => (i.tipo === 'treino' || i.tipo === 'evento') && i.data >= hoje && ntDiasAte(i.data) <= 2 && souEsperado(i)).forEach(i => {
+    const ini = new Date(new Date(i.data + 'T12:00:00').getTime() - 2 * 864e5).toISOString().slice(0, 19);
+    const pend = eu && !respostas(i)[eu.id];
+    add({ id: `prox:${i.ref}:${i.data}`, cat: 'treinos', titulo: `${i.titulo} ${ntQuando(i.data, i.hora)}`,
+      texto: (i.local || 'Local a definir') + (pend ? ' · Confirme sua presença' : ''), em: ini, go: { ref: i.ref }, ref: i.ref, lembrete: true });
+  });
+  // Novos compromissos, alterações e cancelamentos
+  (ag.alteracoes || []).forEach(a => {
+    const tipo = a.ref.split(':')[0];
+    const em = String(a.em).slice(0, 19);
+    if (a.tipo === 'novo') {
+      const it = itemDe(a.ref);
+      if (!it || it.data < hoje || !souEsperado(it)) return;
+      add({ id: `alt:${a.id}`, cat: tipo === 'jogo' ? 'jogos' : 'treinos', titulo: tipo === 'jogo' ? `Novo jogo marcado: ${a.titulo}` : tipo === 'treino' ? `Novo treino: ${a.titulo}` : `Novo evento: ${a.titulo}`,
+        texto: `${fmtDiaLongo(it.data)}${it.hora ? ' às ' + it.hora : ''}${it.local ? ' · ' + it.local : ''}`, em, go: { ref: a.ref }, ref: a.ref, novo: true });
+    } else if (a.tipo === 'alterado') {
+      add({ id: `alt:${a.id}`, cat: 'alteracoes', titulo: `${a.titulo}: ${a.mudancas.some(m => m.campo === 'hora' || m.campo === 'data') ? 'horário alterado' : 'local alterado'}`,
+        texto: descAlteracao(a), em, go: { ref: a.ref } });
+    } else if (a.tipo === 'cancelado') {
+      add({ id: `alt:${a.id}`, cat: 'alteracoes', titulo: `Cancelado: ${a.titulo}`, texto: `Estava marcado para ${a.data ? fmt(a.data) : '—'}`, em, go: { page: 'calendario' } });
+    }
+  });
+  // Convocações
+  Object.entries(ag.convocacoes || {}).forEach(([ref, c]) => {
+    const it = itemDe(ref);
+    if (!it || it.data < hoje || !c || !c.em) return;
+    if (eu && c.jogadores.includes(eu.id)) {
+      const pend = !respostas(it)[eu.id];
+      add({ id: `conv:${ref}:${c.em}`, cat: 'convocacoes', titulo: `Você foi convocado: ${it.titulo}`,
+        texto: `${fmtDiaLongo(it.data)}${it.hora ? ' às ' + it.hora : ''}${pend ? ' · Confirme sua presença' : ''}`, em: String(c.em).slice(0, 19), go: { ref }, ref, lembrete: true });
+    } else if (staff && !eu) {
+      add({ id: `conv:${ref}:${c.em}`, cat: 'convocacoes', titulo: `Convocação publicada: ${it.titulo}`, texto: `${c.jogadores.length} jogador(es) · por ${c.por || '—'}`, em: String(c.em).slice(0, 19), go: { ref } });
+    }
+  });
+  // Comunicados
+  (cache.avisos || []).forEach(a => {
+    add({ id: `aviso:${a.id}`, cat: 'comunicados', titulo: a.titulo, texto: String(a.msg || '').slice(0, 140), em: ntIso(a.data, '08:00'), go: { page: 'comunicacao' } });
+  });
+  // Mensalidades
+  const mes = hoje.slice(0, 7);
+  const m = cache.minhaMensalidade;
+  if (m && m.vinculado && m.mesesEmAtraso > 0) {
+    add({ id: `mens:${mes}:${m.mesesEmAtraso}`, cat: 'mensalidades', titulo: `Mensalidade em aberto: ${m.mesesEmAtraso} ${m.mesesEmAtraso > 1 ? 'meses' : 'mês'}`,
+      texto: `Total de ${fmtBRL(m.mesesEmAtraso * m.valorMensal)}. Fale com a comissão para acertar.`, em: `${mes}-01T09:00:00` > agora ? agora : `${mes}-01T09:00:00`, go: { page: 'minha' } });
+  }
+  if (can(['admin', 'tecnico', 'capitao'])) {
+    const n = Object.keys((cache.financeiro && cache.financeiro.mensalidades) || {}).length;
+    if (n) add({ id: `mens-staff:${mes}:${n}`, cat: 'mensalidades', titulo: `${n} jogador${n > 1 ? 'es' : ''} com mensalidade em atraso`, texto: 'Veja os detalhes no Financeiro.', em: `${mes}-01T09:00:00`, go: { page: 'financeiro' } });
+  }
+
+  // 'novo compromisso' some quando já há lembrete ou convocação do mesmo compromisso
+  const comAviso = new Set(out.filter(n => n.lembrete).map(n => n.ref));
+  const st = cache.notifEstado || { ocultas: [], prefs: {} };
+  return out
+    .filter(n => !(n.novo && comAviso.has(n.ref)))
+    .filter(n => !st.ocultas.includes(n.id) && (!st.prefs || st.prefs[n.cat] !== false))
+    .sort((a, b) => b.em.localeCompare(a.em));
+}
+
+function ntNaoLida(n) { const st = cache.notifEstado; return !st || !st.lidoAte || n.em > st.lidoAte; }
+
+function ntTempo(iso) {
+  const diff = (Date.now() - new Date(iso + (iso.endsWith('Z') ? '' : 'Z')).getTime()) / 1000;
+  if (diff < 60) return 'agora';
+  if (diff < 3600) return `há ${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `há ${Math.floor(diff / 3600)} h`;
+  const d = Math.floor(diff / 86400);
+  return d === 1 ? 'ontem' : `há ${d} dias`;
+}
+
+function ntItemHTML(n, compacto) {
+  const c = NT_CATS[n.cat];
+  return `<div class="nt-item${ntNaoLida(n) ? ' unread' : ''}" style="--c:${c.color}">
+    <button type="button" class="nt-open" onclick="ntAbrir('${n.id.replace(/'/g, "\\'")}')">
+      <span class="nt-ico"><i class="ti ${c.icon}"></i></span>
+      <span class="nt-main"><b>${n.titulo}</b>${n.texto ? `<span>${n.texto}</span>` : ''}<small>${c.label} · ${ntTempo(n.em)}</small></span>
+    </button>
+    ${compacto ? '' : `<button type="button" class="nt-hide" title="Ocultar" aria-label="Ocultar notificação" onclick="ntOcultar('${n.id.replace(/'/g, "\\'")}')"><i class="ti ti-x"></i></button>`}
+  </div>`;
+}
+
+function renderNotifBadge() {
+  const lst = notifGerar();
+  const n = lst.filter(ntNaoLida).length;
+  document.querySelectorAll('.nt-badge').forEach(b => { b.textContent = n > 9 ? '9+' : n; b.style.display = n ? '' : 'none'; });
+  document.querySelectorAll('.nt-bell').forEach(b => b.setAttribute('aria-label', n ? `Notificações: ${n} nova${n > 1 ? 's' : ''}` : 'Notificações'));
+  if (document.getElementById('nt-panel')?.classList.contains('open')) renderNotifPanel();
+  if (document.getElementById('page-notificacoes')?.classList.contains('active')) renderNotificacoes();
+  ntAvisarNavegador(lst);
+  return n;
+}
+
+function renderNotifPanel() {
+  const p = document.getElementById('nt-panel');
+  const lst = notifGerar();
+  const novas = lst.filter(ntNaoLida);
+  p.innerHTML = `
+    <div class="nt-panel-head"><b>Notificações</b>${novas.length ? `<button class="pf-link" onclick="ntMarcarLidas()">Marcar todas como lidas</button>` : ''}</div>
+    <div class="nt-panel-list">${lst.length ? lst.slice(0, 12).map(n => ntItemHTML(n, true)).join('') : '<div class="pf-empty" style="padding:18px;text-align:center"><i class="ti ti-bell-off"></i> Nenhuma notificação.</div>'}</div>
+    <button class="nt-panel-foot" onclick="ntTogglePanel(false);showPage('notificacoes')">Ver todas e preferências <i class="ti ti-chevron-right"></i></button>`;
+}
+
+function ntTogglePanel(force) {
+  const p = document.getElementById('nt-panel');
+  const abrir = force === undefined ? !p.classList.contains('open') : force;
+  p.classList.toggle('open', abrir);
+  document.querySelectorAll('.nt-bell').forEach(b => b.setAttribute('aria-expanded', String(abrir)));
+  if (abrir) renderNotifPanel();
+}
+document.addEventListener('click', e => {
+  const p = document.getElementById('nt-panel');
+  if (p && p.classList.contains('open') && !e.target.closest('#nt-panel') && !e.target.closest('.nt-bell')) ntTogglePanel(false);
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { const p = document.getElementById('nt-panel'); if (p && p.classList.contains('open')) ntTogglePanel(false); } });
+
+function ntAbrir(id) {
+  const n = notifGerar().find(x => x.id === id);
+  ntTogglePanel(false);
+  if (!n) return;
+  if (n.go.ref) { showPage('calendario'); openAgendaItem(n.go.ref); }
+  else if (n.go.page) showPage(n.go.page);
+}
+
+async function ntSalvarEstado(payload) {
+  const r = await api('PUT', 'modulos?r=notificacoes', payload);
+  if (r && !r.error) cache.notifEstado = r;
+  renderNotifBadge();
+}
+function ntMarcarLidas() { ntSalvarEstado({ lidoAte: ntAgora() }); }
+function ntOcultar(id) { ntSalvarEstado({ ocultar: id }); }
+function ntPref(cat, v) { ntSalvarEstado({ prefs: { [cat]: v } }); }
+
+// Página com o histórico completo e as preferências
+function renderNotificacoes() {
+  const el = document.getElementById('nt-body');
+  if (!el) return;
+  const st = cache.notifEstado || { prefs: {} };
+  const todas = notifGerar();
+  const lst = todas.filter(n => !_ntFiltro || n.cat === _ntFiltro);
+  const novas = lst.filter(ntNaoLida), antigas = lst.filter(n => !ntNaoLida(n));
+  const suporte = typeof Notification !== 'undefined';
+  el.innerHTML = `
+    <div class="nt-layout">
+      <div>
+        <div class="ag-toolbar">
+          <div class="ag-filtros">
+            <button type="button" class="ag-chip${!_ntFiltro ? ' on' : ''}" style="--c:var(--blue)" onclick="_ntFiltro='';renderNotificacoes()">Todas (${todas.length})</button>
+            ${Object.entries(NT_CATS).map(([k, c]) => { const q = todas.filter(n => n.cat === k).length; return q ? `<button type="button" class="ag-chip${_ntFiltro === k ? ' on' : ''}" style="--c:${c.color}" onclick="_ntFiltro='${k}';renderNotificacoes()"><i class="ti ${c.icon}"></i>${c.label} (${q})</button>` : ''; }).join('')}
+          </div>
+          ${todas.some(ntNaoLida) ? `<button class="btn btn-ghost btn-sm" onclick="ntMarcarLidas()" style="margin-left:auto"><i class="ti ti-checks"></i> Marcar todas como lidas</button>` : ''}
+        </div>
+        ${novas.length ? `<div class="ag-group">Novas</div><div class="card nt-list">${novas.map(n => ntItemHTML(n)).join('')}</div>` : ''}
+        ${antigas.length ? `<div class="ag-group">Anteriores</div><div class="card nt-list">${antigas.map(n => ntItemHTML(n)).join('')}</div>` : ''}
+        ${!lst.length ? '<div class="card pf-empty" style="padding:22px;text-align:center"><i class="ti ti-bell-off" style="font-size:22px"></i><br>Nenhuma notificação por aqui.</div>' : ''}
+      </div>
+      <aside class="card nt-prefs">
+        <div class="sec-title" style="margin-bottom:10px"><i class="ti ti-adjustments"></i> O que você quer receber</div>
+        ${Object.entries(NT_CATS).map(([k, c]) => `<label class="nt-pref"><span><i class="ti ${c.icon}" style="color:${c.color}"></i>${c.label}</span>
+          <input type="checkbox" role="switch" class="nt-switch" ${st.prefs && st.prefs[k] === false ? '' : 'checked'} onchange="ntPref('${k}', this.checked)"></label>`).join('')}
+        <div class="nt-pref-sep"></div>
+        <label class="nt-pref"><span><i class="ti ti-device-desktop" style="color:var(--text2)"></i>Avisar também no navegador</span>
+          <input type="checkbox" role="switch" class="nt-switch" ${st.navegador ? 'checked' : ''} ${suporte ? '' : 'disabled'} onchange="ntNavegador(this.checked)"></label>
+        <div class="form-hint">${suporte ? 'Mostra um aviso do navegador quando chegar algo novo enquanto o sistema estiver aberto.' : 'Este navegador não permite avisos.'}${suporte && typeof Notification !== 'undefined' && Notification.permission === 'denied' ? ' Os avisos estão bloqueados nas configurações do navegador.' : ''}</div>
+        <div class="form-hint" style="margin-top:10px"><i class="ti ti-refresh"></i> A lista se atualiza sozinha a cada 5 minutos.</div>
+      </aside>
+    </div>`;
+}
+
+async function ntNavegador(v) {
+  if (v && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+    const p = await Notification.requestPermission();
+    if (p !== 'granted') { toast('O navegador não permitiu os avisos', 'error'); renderNotificacoes(); return; }
+  }
+  await ntSalvarEstado({ navegador: v });
+  if (v) ntMarcarAvisadas(notifGerar());
+}
+
+// Avisos do navegador: só para o que chegou depois de abrir o sistema
+function ntAvisadas() { try { return new Set(JSON.parse(localStorage.getItem('wr_nt_avisadas') || '[]')); } catch (e) { return new Set(); } }
+function ntMarcarAvisadas(lst) { try { localStorage.setItem('wr_nt_avisadas', JSON.stringify(lst.map(n => n.id).slice(0, 300))); } catch (e) {} }
+function ntAvisarNavegador(lst) {
+  const st = cache.notifEstado;
+  if (!st || !st.navegador || typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+  const ja = ntAvisadas();
+  if (!ja.size) { ntMarcarAvisadas(lst); return; }
+  lst.filter(n => ntNaoLida(n) && !ja.has(n.id)).slice(0, 3).forEach(n => {
+    try { new Notification(n.titulo, { body: n.texto || NT_CATS[n.cat].label, tag: n.id }); } catch (e) {}
+  });
+  ntMarcarAvisadas(lst);
+}
+
+// Atualização periódica (5 min) enquanto o sistema está aberto
+function ntIniciar() {
+  if (_ntTimer) clearInterval(_ntTimer);
+  _ntTimer = setInterval(async () => {
+    if (!token || document.hidden) return;
+    try {
+      const [jo, tr, av] = await Promise.all([api('GET', 'jogos'), api('GET', 'treinos'), api('GET', 'avisos'), loadAgenda(), loadNotifEstado()]);
+      if (Array.isArray(jo)) cache.jogos = jo;
+      if (Array.isArray(tr)) cache.treinos = tr;
+      if (Array.isArray(av)) cache.avisos = av;
+      renderNotifBadge();
+    } catch (e) { /* sem conexão: tenta de novo depois */ }
+  }, 5 * 60 * 1000);
 }
 
 // ==================== AVISOS ====================

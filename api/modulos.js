@@ -10,6 +10,7 @@ const MODULOS = {
   medico: () => require('../lib/mod/medico'),
   campeonatos: () => require('../lib/mod/campeonatos'),
   jogadas: () => require('../lib/mod/jogadas'),
+  notificacoes: () => require('../lib/mod/notificacoes'),
 };
 
 module.exports = withErrorHandling(async function handler(req, res) {
