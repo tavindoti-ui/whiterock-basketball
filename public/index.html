@@ -1628,6 +1628,7 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
 .qt-name{font:700 11px Inter,sans-serif;fill:#F4F7FB;paint-order:stroke;stroke:#0B1A33;stroke-width:3px;pointer-events:none}
 .qt-frames{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin:12px auto 0;max-width:620px}
 .qt-frame-list{display:flex;gap:5px;flex-wrap:wrap}
+.qt-play-btns{display:flex;gap:6px}
 .qt-frame{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:rgba(5,11,22,0.5);color:var(--text2);font:700 13px/1 inherit;font-family:inherit;cursor:pointer}
 .qt-frame.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .qt-frame.add{border-style:dashed;color:var(--blue)}
@@ -1769,6 +1770,24 @@ body.sidebar-mini .nt-panel{left:76px}
   .nt-badge{position:absolute;top:-4px;right:-4px}
   .nt-panel,body.sidebar-mini .nt-panel{left:8px;right:8px;top:58px;bottom:auto;width:auto;max-height:calc(100vh - 140px)}
 }
+
+/* ═══════════ VÍDEO DA JOGADA ═══════════ */
+#modal-qt-video .modal{max-width:560px}
+.qv-formats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qv-format{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:1px solid var(--border);border-radius:12px;cursor:pointer;text-align:center;background:rgba(5,11,22,0.4)}
+.qv-format input{position:absolute;opacity:0;pointer-events:none}
+.qv-format:has(input:checked){border-color:var(--blue);background:rgba(45,140,255,0.1);box-shadow:inset 0 0 0 1px var(--blue)}
+.qv-format:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:2px}
+.qv-format b{font-size:12.5px;color:#fff}
+.qv-format small{font-size:10.5px;color:var(--text3);line-height:1.3}
+.qv-shape{display:block;border:2px solid var(--blue);border-radius:4px;background:rgba(45,140,255,0.15)}
+.qv-shape.vertical{width:22px;height:38px}.qv-shape.horizontal{width:44px;height:25px}.qv-shape.quadrado{width:32px;height:32px}
+.qv-stage{display:flex;flex-direction:column;align-items:center;gap:10px}
+#qv-canvas{max-width:100%;max-height:56vh;width:auto;height:auto;border-radius:12px;border:1px solid var(--border);background:#050B16}
+.qv-prog{width:100%;height:6px;border-radius:3px;background:rgba(255,255,255,0.1);overflow:hidden}
+#qv-bar{height:100%;width:0;background:linear-gradient(90deg,#2D8CFF,#4DA6FF)}
+.qv-status{font-size:12.5px;color:var(--text2);text-align:center}
+@media(max-width:560px){.qv-formats{grid-template-columns:1fr}.qv-format{flex-direction:row;text-align:left;gap:12px}.qv-format small{margin-left:auto}}
 </style>
 </head>
 <body>
@@ -2724,6 +2743,13 @@ body.sidebar-mini .nt-panel{left:76px}
       <button class="btn btn-primary" onclick="saveResultado()"><i class="ti ti-check"></i> Lançar resultado</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-camp-resultado')">Cancelar</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-qt-video">
+  <div class="modal">
+    <div class="modal-title"><span><i class="ti ti-movie" style="color:var(--blue)"></i> Vídeo da jogada</span> <button class="modal-close" onclick="pararVideoJogada();closeModal('modal-qt-video')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <div id="qv-content"></div>
   </div>
 </div>
 
@@ -6188,7 +6214,10 @@ function renderQuadro() {
           ${j.frames.map((_, i) => `<button type="button" role="tab" aria-selected="${i === qt.frame}" class="qt-frame${i === qt.frame ? ' on' : ''}" onclick="qtIrEtapa(${i})">${i + 1}</button>`).join('')}
           ${edit && j.frames.length < 12 ? `<button type="button" class="qt-frame add" onclick="qtNovaEtapa()" title="Nova etapa a partir desta"><i class="ti ti-plus"></i></button>` : ''}
         </div>
-        <button class="btn btn-primary btn-sm" onclick="qtPlay()" ${j.frames.length < 2 ? 'disabled title="Crie pelo menos 2 etapas"' : ''}><i class="ti ${_qtPlay ? 'ti-player-stop' : 'ti-player-play'}"></i> ${_qtPlay ? 'Parar' : 'Reproduzir'}</button>
+        <div class="qt-play-btns">
+          <button class="btn btn-ghost btn-sm" onclick="openVideoJogada()" title="Gerar e baixar um vídeo animado da jogada"><i class="ti ti-movie"></i> Baixar vídeo</button>
+          <button class="btn btn-primary btn-sm" onclick="qtPlay()" ${j.frames.length < 2 ? 'disabled title="Crie pelo menos 2 etapas"' : ''}><i class="ti ${_qtPlay ? 'ti-player-stop' : 'ti-player-play'}"></i> ${_qtPlay ? 'Parar' : 'Reproduzir'}</button>
+        </div>
       </div>
       ${edit ? `<div class="qt-frame-tools">
         <input class="form-input" id="qt-nota" maxlength="200" placeholder="Anotação da etapa ${qt.frame + 1} (ex: 5 faz corta-luz para o 1)" value="${qtEsc(f.nota)}" onchange="qtSetNota(this.value)">
@@ -6914,6 +6943,545 @@ function ntIniciar() {
       renderNotifBadge();
     } catch (e) { /* sem conexão: tenta de novo depois */ }
   }, 5 * 60 * 1000);
+}
+
+// ==================== VÍDEO DA JOGADA (quadro tático) ====================
+// Gera um vídeo animado da jogada no próprio navegador (canvas + MediaRecorder).
+const QV_FORMATOS = {
+  vertical:   { w: 1080, h: 1920, label: 'Vertical 9:16', dica: 'Reels, Stories, TikTok, WhatsApp' },
+  horizontal: { w: 1920, h: 1080, label: 'Horizontal 16:9', dica: 'YouTube, TV, apresentação' },
+  quadrado:   { w: 1080, h: 1080, label: 'Quadrado 1:1', dica: 'Feed do Instagram' },
+};
+let _qv = null; // gravação em andamento
+
+// Formatos de gravação: MP4 (melhor para Instagram/WhatsApp) e WEBM (o que todo navegador grava bem).
+function qvMimes() {
+  if (typeof MediaRecorder === 'undefined') return null;
+  const ok = t => { try { return MediaRecorder.isTypeSupported(t); } catch (e) { return false; } };
+  const mp4 = ['video/mp4;codecs=avc1.640028,mp4a.40.2', 'video/mp4;codecs=avc1.640028', 'video/mp4'].find(ok) || null;
+  const webm = ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8', 'video/webm'].find(ok) || null;
+  return { mp4, webm };
+}
+function qvMime() { const m = qvMimes(); return m === null ? null : (m.mp4 || m.webm || ''); }
+
+// Confere se o arquivo gravado tem imagem (alguns computadores gravam MP4 vazio)
+function qvTemImagem(blob) {
+  return new Promise(res => {
+    if (!blob || blob.size < 2000) { res(false); return; }
+    const v = document.createElement('video');
+    v.muted = true; v.preload = 'auto';
+    const fim = ok => { clearTimeout(tm); URL.revokeObjectURL(v.src); res(ok); };
+    const tm = setTimeout(() => fim(false), 5000);
+    v.onloadeddata = () => fim(v.videoWidth > 0);
+    v.onerror = () => fim(false);
+    v.src = URL.createObjectURL(blob);
+  });
+}
+
+function openVideoJogada() {
+  if (!qt || !qt.jogada) return;
+  qtStop();
+  const j = qt.jogada;
+  const mime = qvMime();
+  const el = document.getElementById('qv-content');
+  if (mime === null || !HTMLCanvasElement.prototype.captureStream) {
+    el.innerHTML = '<div class="alert alert-warning"><i class="ti ti-alert-triangle"></i><span>Este navegador não consegue gravar vídeo. Use o Chrome, o Edge ou o Firefox atualizados.</span></div>';
+    openModal('modal-qt-video');
+    return;
+  }
+  el.innerHTML = `
+    <div class="qv-opts">
+      <div class="form-label">Formato</div>
+      <div class="qv-formats">${Object.entries(QV_FORMATOS).map(([k, f], i) => `<label class="qv-format"><input type="radio" name="qv-fmt" value="${k}" ${i === 0 ? 'checked' : ''}><span class="qv-shape ${k}"></span><b>${f.label}</b><small>${f.dica}</small></label>`).join('')}</div>
+      <div class="form-row" style="margin-top:12px">
+        <div class="form-group"><label class="form-label" for="qv-vel">Velocidade</label><select class="form-input" id="qv-vel"><option value="1">Normal</option><option value="1.5">Lenta (para explicar)</option><option value="0.75">Rápida</option></select></div>
+        <div class="form-group"><label class="form-label" for="qv-titulo">Título no vídeo</label><input class="form-input" id="qv-titulo" maxlength="40" value="${qtEsc(j.nome || 'Jogada')}"></div>
+      </div>
+      <label class="qt-check"><input type="checkbox" id="qv-som" checked> Com som (apito e batida)</label>
+      <label class="qt-check" style="margin-top:6px"><input type="checkbox" id="qv-notas" checked> Mostrar as anotações de cada etapa</label>
+      ${j.frames.length < 2 ? '<div class="form-hint"><i class="ti ti-info-circle"></i> A jogada tem só 1 etapa: o vídeo mostra os desenhos sendo traçados. Com mais etapas, os jogadores correm pela quadra.</div>' : ''}
+    </div>
+    <div class="qv-stage" id="qv-stage" style="display:none"><canvas id="qv-canvas"></canvas><div class="qv-prog"><div id="qv-bar"></div></div><div class="qv-status" id="qv-status"></div></div>
+    <div class="modal-actions" id="qv-actions">
+      <button class="btn btn-primary" id="qv-go" onclick="gerarVideoJogada()"><i class="ti ti-movie"></i> Gerar vídeo</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-qt-video')">Cancelar</button>
+    </div>`;
+  openModal('modal-qt-video');
+}
+
+// ── Geometria auxiliar
+function qvChaikin(p, it) {
+  let pts = p;
+  for (let k = 0; k < it; k++) {
+    if (pts.length < 3) break;
+    const out = [pts[0]];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x0, y0] = pts[i], [x1, y1] = pts[i + 1];
+      out.push([x0 * 0.75 + x1 * 0.25, y0 * 0.75 + y1 * 0.25], [x0 * 0.25 + x1 * 0.75, y0 * 0.25 + y1 * 0.75]);
+    }
+    out.push(pts[pts.length - 1]);
+    pts = out;
+  }
+  return pts;
+}
+function qvZig(p) {
+  const pts = qtResample(p, 9);
+  const out = [pts[0]];
+  for (let i = 1; i < pts.length - 1; i++) {
+    const [x0, y0] = pts[i - 1], [x1, y1] = pts[i + 1];
+    const nx = -(y1 - y0), ny = x1 - x0, l = Math.hypot(nx, ny) || 1, s = (i % 2 ? 1 : -1) * 6;
+    out.push([pts[i][0] + nx / l * s, pts[i][1] + ny / l * s]);
+  }
+  out.push(pts[pts.length - 1]);
+  return out;
+}
+function qvPontos(d) {
+  if (d.t === 'passe') return [d.p[0], d.p[d.p.length - 1]];
+  if (d.t === 'drible') return qvZig(d.p);
+  return qvChaikin(d.p, 2);
+}
+function qvComp(pts) { let c = 0; for (let i = 1; i < pts.length; i++) c += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); return c; }
+function qvParcial(pts, frac) {
+  if (frac >= 1) return pts;
+  const alvo = qvComp(pts) * Math.max(0, frac);
+  const out = [pts[0]]; let acc = 0;
+  for (let i = 1; i < pts.length; i++) {
+    const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    if (acc + l >= alvo) { const r = l ? (alvo - acc) / l : 0; out.push([pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * r, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * r]); return out; }
+    acc += l; out.push(pts[i]);
+  }
+  return out;
+}
+const qvEase = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const qvOut = t => 1 - Math.pow(1 - t, 3);
+const qvClamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+// ── Desenho da quadra no canvas (mesmas medidas do SVG)
+function qvQuadra(ctx, quadra) {
+  const H = QT_H[quadra];
+  const meia = () => {
+    ctx.fillStyle = 'rgba(45,140,255,0.13)'; ctx.fillRect(168.3, 0, 163.4, 193.3);
+    ctx.strokeRect(168.3, 0, 163.4, 193.3);
+    ctx.beginPath(); ctx.arc(250, 193.3, 60, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(30, 0); ctx.lineTo(30, 99.7);
+    const a0 = Math.atan2(99.7 - 52.5, 30 - 250), a1 = Math.atan2(99.7 - 52.5, 470 - 250);
+    ctx.arc(250, 52.5, 225, a0, a1, true); ctx.lineTo(470, 0); ctx.stroke();
+    ctx.beginPath(); ctx.arc(250, 52.5, 41.7, Math.PI, 0, true); ctx.stroke();
+    [70, 100, 130, 160].forEach(y => { ctx.beginPath(); ctx.moveTo(162, y); ctx.lineTo(168.3, y); ctx.moveTo(331.7, y); ctx.lineTo(338, y); ctx.stroke(); });
+    ctx.save(); ctx.strokeStyle = 'rgba(244,247,251,0.95)'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(220, 40); ctx.lineTo(280, 40); ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.strokeStyle = '#FF8A3D'; ctx.lineWidth = 3; ctx.shadowColor = '#FF8A3D'; ctx.shadowBlur = 10; ctx.beginPath(); ctx.arc(250, 52.5, 7.5, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  };
+  // piso com leve brilho
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#0E2245'); g.addColorStop(1, '#0A1730');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, QT_W, H);
+  ctx.strokeStyle = 'rgba(214,228,255,0.6)'; ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, QT_W - 2, H - 2);
+  meia();
+  if (quadra === 'inteira') {
+    ctx.beginPath(); ctx.moveTo(0, 470); ctx.lineTo(500, 470); ctx.stroke();
+    ctx.beginPath(); ctx.arc(250, 470, 60, 0, Math.PI * 2); ctx.stroke();
+    ctx.save(); ctx.translate(0, 940); ctx.scale(1, -1); meia(); ctx.restore();
+  } else {
+    ctx.beginPath(); ctx.arc(250, 470, 60, Math.PI, 0); ctx.stroke();
+  }
+  // marca d'água no centro da quadra
+  ctx.save(); ctx.globalAlpha = 0.07; ctx.fillStyle = '#fff'; ctx.font = '900 64px Inter, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('WR', 250, quadra === 'inteira' ? 492 : 330); ctx.restore();
+}
+
+function qvSeta(ctx, pts, cor, larg) {
+  const z = pts[pts.length - 1], a = pts[Math.max(0, pts.length - 3)];
+  const ang = Math.atan2(z[1] - a[1], z[0] - a[0]);
+  ctx.save(); ctx.fillStyle = cor; ctx.translate(z[0], z[1]); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(larg * 2.4, 0); ctx.lineTo(-larg * 1.2, -larg * 2); ctx.lineTo(-larg * 1.2, larg * 2); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+
+function qvDesenho(ctx, d, frac) {
+  if (frac <= 0) return;
+  const pts = qvParcial(qvPontos(d), frac);
+  if (pts.length < 2) return;
+  const cor = d.t === 'passe' ? '#FFD166' : '#F4F7FB';
+  ctx.save();
+  ctx.strokeStyle = cor; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.shadowColor = d.t === 'passe' ? 'rgba(255,209,102,0.7)' : 'rgba(120,180,255,0.7)'; ctx.shadowBlur = 8;
+  if (d.t === 'passe') ctx.setLineDash([9, 8]);
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); pts.slice(1).forEach(p => ctx.lineTo(p[0], p[1])); ctx.stroke();
+  ctx.setLineDash([]);
+  if (d.t === 'bloqueio') {
+    if (frac >= 1) {
+      const z = pts[pts.length - 1], a = pts[Math.max(0, pts.length - 3)];
+      const ang = Math.atan2(z[1] - a[1], z[0] - a[0]) + Math.PI / 2;
+      ctx.lineWidth = 4.5; ctx.beginPath(); ctx.moveTo(z[0] - Math.cos(ang) * 12, z[1] - Math.sin(ang) * 12); ctx.lineTo(z[0] + Math.cos(ang) * 12, z[1] + Math.sin(ang) * 12); ctx.stroke();
+    }
+  } else qvSeta(ctx, pts, cor, 3);
+  ctx.restore();
+}
+
+function qvJogador(ctx, k, pos, nome, brilho) {
+  const of = k[0] === 'o';
+  ctx.save(); ctx.translate(pos.x, pos.y);
+  if (of) {
+    ctx.shadowColor = 'rgba(45,140,255,0.95)'; ctx.shadowBlur = 10 + brilho * 18;
+    ctx.fillStyle = '#2D8CFF'; ctx.beginPath(); ctx.arc(0, 0, 15.5, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0; ctx.lineWidth = 2.5; ctx.strokeStyle = '#E8F2FF'; ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.font = '800 16px Inter, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(k.slice(1), 0, 1);
+    if (nome) { ctx.font = '700 12px Inter, sans-serif'; ctx.lineWidth = 4; ctx.strokeStyle = '#0A1730'; ctx.strokeText(nome, 0, 30); ctx.fillStyle = '#F4F7FB'; ctx.fillText(nome, 0, 30); }
+  } else {
+    ctx.strokeStyle = '#E7EDF7'; ctx.lineWidth = 3.6; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-9, -9); ctx.lineTo(9, 9); ctx.moveTo(9, -9); ctx.lineTo(-9, 9); ctx.stroke();
+    ctx.fillStyle = '#AEB8C7'; ctx.font = '700 10px Inter, sans-serif'; ctx.fillText(k.slice(1), 12, -8);
+  }
+  ctx.restore();
+}
+
+function qvBola(ctx, b, giro) {
+  ctx.save(); ctx.translate(b.x, b.y);
+  ctx.shadowColor = 'rgba(255,138,61,0.95)'; ctx.shadowBlur = 16;
+  ctx.fillStyle = '#FF8A3D'; ctx.beginPath(); ctx.arc(0, 0, 8.5, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0; ctx.rotate(giro); ctx.strokeStyle = '#3A1A05'; ctx.lineWidth = 1.3;
+  ctx.beginPath(); ctx.moveTo(-8.5, 0); ctx.lineTo(8.5, 0); ctx.moveTo(0, -8.5); ctx.lineTo(0, 8.5); ctx.stroke();
+  ctx.beginPath(); ctx.arc(-9, 0, 6, -0.9, 0.9); ctx.stroke(); ctx.beginPath(); ctx.arc(9, 0, 6, Math.PI - 0.9, Math.PI + 0.9); ctx.stroke();
+  ctx.restore();
+}
+
+// Texto com quebra de linha simples
+function qvTexto(ctx, txt, x, y, maxW, lh, maxL) {
+  const pal = String(txt || '').split(/\s+/); let linha = '', n = 0;
+  for (let i = 0; i < pal.length; i++) {
+    const t = linha ? linha + ' ' + pal[i] : pal[i];
+    if (ctx.measureText(t).width > maxW && linha) {
+      ctx.fillText(n === maxL - 1 ? linha + '…' : linha, x, y + n * lh); n++; linha = pal[i];
+      if (n >= maxL) return n;
+    } else linha = t;
+  }
+  if (linha) { ctx.fillText(linha, x, y + n * lh); n++; }
+  return n;
+}
+
+function qvMonograma(ctx, cx, cy, r, alpha) {
+  ctx.save(); ctx.globalAlpha = alpha;
+  const g = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r);
+  g.addColorStop(0, '#163A73'); g.addColorStop(1, '#0A1B33');
+  ctx.fillStyle = g; ctx.shadowColor = 'rgba(45,140,255,0.8)'; ctx.shadowBlur = r * 0.6;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0; ctx.lineWidth = r * 0.06; ctx.strokeStyle = '#4DA6FF'; ctx.stroke();
+  ctx.fillStyle = '#F4F7FB'; ctx.font = `900 ${r * 0.9}px Inter, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('WR', cx, cy + r * 0.05);
+  ctx.restore();
+}
+
+// Linha do tempo do vídeo (segundos)
+function qvRoteiro(j, vel) {
+  const seg = [];
+  let t = 0;
+  const add = (tipo, dur, extra) => { seg.push({ tipo, t0: t, t1: t + dur, ...extra }); t += dur; };
+  add('intro', 2.4);
+  j.frames.forEach((f, i) => {
+    const temDes = (f.desenhos || []).length;
+    add('desenho', (temDes ? 1.1 : 0.5) * vel, { i });
+    if (i < j.frames.length - 1) add('mov', 1.6 * vel, { i });
+    else add('final', 1.4 * vel, { i });
+  });
+  add('outro', 2.2);
+  return { seg, total: t };
+}
+
+// Desenha um instante do vídeo
+function qvRender(ctx, W, H, j, rot, t, opts, estado) {
+  const seg = rot.seg.find(s => t >= s.t0 && t < s.t1) || rot.seg[rot.seg.length - 1];
+  const p = qvClamp((t - seg.t0) / (seg.t1 - seg.t0));
+  // fundo
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#050B16'); bg.addColorStop(0.55, '#081831'); bg.addColorStop(1, '#03070F');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  // feixes de luz discretos
+  ctx.save(); ctx.globalAlpha = 0.18;
+  const lx = W * (0.2 + 0.1 * Math.sin(t * 0.6));
+  const luz = ctx.createRadialGradient(lx, H * 0.1, 10, lx, H * 0.1, Math.max(W, H) * 0.7);
+  luz.addColorStop(0, '#2D8CFF'); luz.addColorStop(1, 'rgba(45,140,255,0)');
+  ctx.fillStyle = luz; ctx.fillRect(0, 0, W, H); ctx.restore();
+
+  const U = Math.min(W, H) / 1080; // unidade de escala
+  const pad = 60 * U;
+  const kicker = (y, a) => { ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = '#4DA6FF'; ctx.font = `800 ${30 * U}px Inter, sans-serif`; ctx.textAlign = 'center'; ctx.letterSpacing = `${6 * U}px`; ctx.fillText('WHITE ROCK BASKETBALL', W / 2, y); ctx.restore(); };
+
+  if (seg.tipo === 'intro' || seg.tipo === 'outro') {
+    const a = seg.tipo === 'intro' ? qvOut(qvClamp(p * 2.2)) : qvOut(qvClamp(p * 2));
+    const sai = seg.tipo === 'intro' ? 1 - qvClamp((p - 0.82) / 0.18) : 1;
+    ctx.save(); ctx.globalAlpha = sai;
+    const r = 150 * U * (0.85 + 0.15 * a);
+    qvMonograma(ctx, W / 2, H / 2 - 210 * U, r, a);
+    kicker(H / 2 + 20 * U, a);
+    ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'center'; ctx.globalAlpha = sai * a;
+    ctx.font = `900 ${(seg.tipo === 'intro' ? 92 : 70) * U}px Inter, sans-serif`;
+    const dy = (1 - a) * 40 * U;
+    qvTexto(ctx, seg.tipo === 'intro' ? opts.titulo : 'Bora pra quadra!', W / 2, H / 2 + 130 * U + dy, W - pad * 2, 100 * U, 2);
+    ctx.font = `600 ${34 * U}px Inter, sans-serif`; ctx.fillStyle = '#AEB8C7';
+    ctx.fillText(seg.tipo === 'intro' ? `${j.categoria} · ${j.frames.length} etapa${j.frames.length > 1 ? 's' : ''}` : opts.titulo, W / 2, H / 2 + (seg.tipo === 'intro' ? 300 : 230) * U + dy);
+    // linha de luz
+    ctx.globalAlpha = sai * a; const lw = (W * 0.5) * a;
+    const lg = ctx.createLinearGradient(W / 2 - lw / 2, 0, W / 2 + lw / 2, 0);
+    lg.addColorStop(0, 'rgba(45,140,255,0)'); lg.addColorStop(0.5, '#2D8CFF'); lg.addColorStop(1, 'rgba(45,140,255,0)');
+    ctx.fillStyle = lg; ctx.fillRect(W / 2 - lw / 2, H / 2 + 55 * U, lw, 4 * U);
+    ctx.restore();
+    return seg;
+  }
+
+  // ── Quadra
+  const vertical = H > W;
+  const topo = vertical ? 250 * U : 150 * U;
+  const ladoInfo = !vertical && W / H > 1.5 ? 560 * U : 0;
+  const base = vertical ? 330 * U : ladoInfo ? 170 * U : 240 * U;
+  const areaW = W - pad * 2 - ladoInfo, areaH = H - topo - base;
+  const CH = QT_H[j.quadra];
+  const esc = Math.min(areaW / QT_W, areaH / CH);
+  const cw = QT_W * esc, chh = CH * esc;
+  const ox = pad + (areaW - cw) / 2, oy = topo + (areaH - chh) / 2;
+  const entra = qvOut(qvClamp((t - rot.seg[1].t0) / 0.5));
+
+  // cabeçalho
+  ctx.save(); ctx.textAlign = vertical ? 'center' : 'left';
+  const hx = vertical ? W / 2 : pad;
+  ctx.fillStyle = '#4DA6FF'; ctx.font = `800 ${(vertical ? 30 : 26) * U}px Inter, sans-serif`;
+  ctx.fillText('WHITE ROCK BASKETBALL', hx, (vertical ? 120 : 70) * U);
+  ctx.fillStyle = '#fff'; ctx.font = `900 ${(vertical ? 64 : 52) * U}px Inter, sans-serif`;
+  ctx.fillText(opts.titulo, hx, (vertical ? 195 : 128) * U);
+  ctx.restore();
+
+  // sombra da quadra + quadra
+  ctx.save(); ctx.globalAlpha = entra;
+  ctx.shadowColor = 'rgba(45,140,255,0.45)'; ctx.shadowBlur = 50 * U; ctx.fillStyle = '#0A1730';
+  ctx.fillRect(ox, oy + (1 - entra) * 30 * U, cw, chh); ctx.restore();
+  ctx.save(); ctx.globalAlpha = entra;
+  ctx.translate(ox, oy + (1 - entra) * 30 * U); ctx.scale(esc, esc);
+  ctx.beginPath(); ctx.rect(0, 0, QT_W, CH); ctx.clip();
+  qvQuadra(ctx, j.quadra);
+
+  // estado do instante
+  const i = seg.i;
+  const f = j.frames[i];
+  const prox = j.frames[i + 1];
+  let fracDes = 1, e = 0;
+  if (seg.tipo === 'desenho') fracDes = qvEase(p);
+  if (seg.tipo === 'mov') e = qvEase(p);
+  const visiveis = Object.keys(f.tokens).filter(k => k[0] === 'o' || j.defesa);
+  const pos = {};
+  visiveis.forEach(k => { pos[k] = seg.tipo === 'mov' && prox && prox.tokens[k] ? qtInterp(f, k, f.tokens[k], prox.tokens[k], e) : f.tokens[k]; });
+  // desenhos: somem durante o movimento
+  ctx.save(); ctx.globalAlpha = seg.tipo === 'mov' ? 1 - qvClamp(p * 1.4) * 0.75 : 1;
+  (f.desenhos || []).forEach(d => qvDesenho(ctx, d, fracDes));
+  ctx.restore();
+  // rastros
+  estado.rastro = estado.rastro || {};
+  if (seg.tipo === 'mov') {
+    visiveis.forEach(k => {
+      const r = estado.rastro[k] = estado.rastro[k] || [];
+      const u = r[r.length - 1];
+      if (!u || Math.hypot(u.x - pos[k].x, u.y - pos[k].y) > 1.5) r.push({ x: pos[k].x, y: pos[k].y, t });
+      while (r.length && t - r[0].t > 0.45) r.shift();
+    });
+  } else estado.rastro = {};
+  Object.entries(estado.rastro).forEach(([k, r]) => {
+    if (r.length < 2) return;
+    ctx.save(); ctx.lineCap = 'round';
+    for (let n = 1; n < r.length; n++) {
+      const a = n / r.length;
+      ctx.strokeStyle = k[0] === 'o' ? `rgba(77,166,255,${0.55 * a})` : `rgba(231,237,247,${0.3 * a})`;
+      ctx.lineWidth = (k[0] === 'o' ? 12 : 6) * a;
+      ctx.beginPath(); ctx.moveTo(r[n - 1].x, r[n - 1].y); ctx.lineTo(r[n].x, r[n].y); ctx.stroke();
+    }
+    ctx.restore();
+  });
+  // jogadores (defesa por baixo)
+  visiveis.sort((a, b) => (a[0] === 'd' ? -1 : 1) - (b[0] === 'd' ? -1 : 1)).forEach(k => {
+    const andando = seg.tipo === 'mov' && prox && prox.tokens[k] && Math.hypot(prox.tokens[k].x - f.tokens[k].x, prox.tokens[k].y - f.tokens[k].y) > 4;
+    qvJogador(ctx, k, pos[k], k[0] === 'o' && opts.nomes ? qtNomeToken(k) : '', andando ? Math.sin(p * Math.PI) : 0);
+  });
+  // bola
+  let bola = null;
+  if (seg.tipo === 'mov' && prox) {
+    const pa = qtBolaPosAnim(f, f, 0), pb = qtBolaPosAnim(prox, f, e);
+    if (pa && pb) {
+      // passe: a bola faz um arco
+      const passe = f.bola && prox.bola && f.bola.at !== prox.bola.at;
+      const arco = passe ? Math.sin(e * Math.PI) * 22 : 0;
+      bola = { x: pa.x + (pb.x - pa.x) * e, y: pa.y + (pb.y - pa.y) * e - arco };
+    }
+  } else bola = qtBolaPos(f);
+  if (bola) qvBola(ctx, bola, t * 7);
+  ctx.restore();
+
+  // legenda e progresso
+  const etapa = i + 1, total = j.frames.length;
+  const nota = (seg.tipo === 'mov' || seg.tipo === 'desenho' || seg.tipo === 'final') ? (f.nota || '') : '';
+  ctx.save();
+  if (ladoInfo) {
+    const x = W - pad - ladoInfo + 40 * U, y0 = topo + 30 * U;
+    ctx.fillStyle = '#4DA6FF'; ctx.font = `800 ${28 * U}px Inter, sans-serif`; ctx.fillText(`ETAPA ${etapa} DE ${total}`, x, y0);
+    ctx.fillStyle = '#F4F7FB'; ctx.font = `700 ${40 * U}px Inter, sans-serif`;
+    if (opts.notas && nota) qvTexto(ctx, nota, x, y0 + 70 * U, ladoInfo - 60 * U, 54 * U, 6);
+    // marcadores das etapas
+    for (let n = 0; n < total; n++) { ctx.fillStyle = n <= i ? '#2D8CFF' : 'rgba(255,255,255,0.15)'; ctx.fillRect(x + n * 46 * U, y0 + 20 * U, 36 * U, 8 * U); }
+  } else {
+    const yb = H - base + 45 * U;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#4DA6FF'; ctx.font = `800 ${28 * U}px Inter, sans-serif`; ctx.fillText(`ETAPA ${etapa} DE ${total}`, W / 2, yb);
+    if (opts.notas && nota) { ctx.fillStyle = '#F4F7FB'; ctx.font = `700 ${(vertical ? 42 : 34) * U}px Inter, sans-serif`; qvTexto(ctx, nota, W / 2, yb + 58 * U, W - pad * 2, 54 * U, vertical ? 3 : 1); }
+    const bw = Math.min(W - pad * 2, 700 * U), bx = (W - bw) / 2, by = H - 50 * U, seg1 = bw / total;
+    for (let n = 0; n < total; n++) {
+      ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(bx + n * seg1 + 4 * U, by, seg1 - 8 * U, 8 * U);
+      const fill = n < i ? 1 : n === i ? (seg.tipo === 'desenho' ? p * 0.4 : seg.tipo === 'mov' || seg.tipo === 'final' ? 0.4 + p * 0.6 : 0) : 0;
+      ctx.fillStyle = '#2D8CFF'; ctx.fillRect(bx + n * seg1 + 4 * U, by, (seg1 - 8 * U) * fill, 8 * U);
+    }
+  }
+  ctx.restore();
+  return seg;
+}
+
+// Trilha: apito na abertura, batida durante a jogada e um "swish" no final
+function qvTrilha(ac, dest, rot, vel) {
+  const agora = ac.currentTime + 0.05;
+  const mestre = ac.createGain(); mestre.gain.value = 0.55; mestre.connect(dest);
+  const apito = (t0, dur) => {
+    const o = ac.createOscillator(), g = ac.createGain(), lfo = ac.createOscillator(), lg = ac.createGain();
+    o.type = 'sine'; o.frequency.value = 2650; lfo.frequency.value = 38; lg.gain.value = 140;
+    lfo.connect(lg); lg.connect(o.frequency); o.connect(g); g.connect(mestre);
+    g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.28, t0 + 0.03); g.gain.setValueAtTime(0.28, t0 + dur - 0.05); g.gain.linearRampToValueAtTime(0, t0 + dur);
+    o.start(t0); lfo.start(t0); o.stop(t0 + dur + 0.05); lfo.stop(t0 + dur + 0.05);
+  };
+  const bumbo = t0 => {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.frequency.setValueAtTime(130, t0); o.frequency.exponentialRampToValueAtTime(42, t0 + 0.18);
+    g.gain.setValueAtTime(0.9, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.28);
+    o.connect(g); g.connect(mestre); o.start(t0); o.stop(t0 + 0.3);
+  };
+  const ruido = (t0, dur, vol, freq) => {
+    const b = ac.createBuffer(1, Math.floor(ac.sampleRate * dur), ac.sampleRate), d = b.getChannelData(0);
+    for (let k = 0; k < d.length; k++) d[k] = (Math.random() * 2 - 1) * (1 - k / d.length);
+    const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    f.type = 'highpass'; f.frequency.value = freq; g.gain.value = vol;
+    s.buffer = b; s.connect(f); f.connect(g); g.connect(mestre); s.start(t0);
+  };
+  const baixo = (t0, nota) => {
+    const o = ac.createOscillator(), g = ac.createGain(), fl = ac.createBiquadFilter();
+    o.type = 'sawtooth'; o.frequency.value = nota; fl.type = 'lowpass'; fl.frequency.value = 420;
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.16, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.42);
+    o.connect(fl); fl.connect(g); g.connect(mestre); o.start(t0); o.stop(t0 + 0.45);
+  };
+  apito(agora + 0.25, 0.55);
+  const ini = rot.seg[1].t0, fim = rot.seg[rot.seg.length - 1].t0;
+  const bpm = 104 / vel, passo = 60 / bpm;
+  const notas = [55, 55, 65.4, 49];
+  let n = 0;
+  for (let tt = ini; tt < fim; tt += passo / 2, n++) {
+    const tAbs = agora + tt;
+    if (n % 2 === 0) bumbo(tAbs);
+    if (n % 4 === 2) ruido(tAbs, 0.12, 0.25, 1800);
+    ruido(tAbs, 0.03, 0.06, 7000);
+    if (n % 2 === 0) baixo(tAbs, notas[Math.floor(n / 8) % notas.length]);
+  }
+  ruido(agora + fim + 0.1, 0.6, 0.35, 900);
+  apito(agora + fim + 1.2, 0.35);
+}
+
+async function gerarVideoJogada() {
+  if (_qv) return;
+  const j = JSON.parse(JSON.stringify(qt.jogada));
+  const fmt = document.querySelector('input[name="qv-fmt"]:checked').value;
+  const { w: W, h: H } = QV_FORMATOS[fmt];
+  const vel = +document.getElementById('qv-vel').value || 1;
+  const opts = { titulo: (document.getElementById('qv-titulo').value || j.nome || 'Jogada').trim(), notas: document.getElementById('qv-notas').checked, nomes: true };
+  const som = document.getElementById('qv-som').checked;
+  const canvas = document.getElementById('qv-canvas');
+  canvas.width = W; canvas.height = H;
+  canvas.style.aspectRatio = `${W} / ${H}`;
+  document.querySelector('.qv-opts').style.display = 'none';
+  document.getElementById('qv-stage').style.display = '';
+  document.getElementById('qv-actions').innerHTML = `<button class="btn btn-ghost" onclick="pararVideoJogada()"><i class="ti ti-player-stop"></i> Cancelar gravação</button>`;
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+
+  const ctx = canvas.getContext('2d');
+  const rot = qvRoteiro(j, vel);
+  const stream = canvas.captureStream(30);
+  let ac = null;
+  if (som) {
+    try {
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      if (ac.state === 'suspended') await Promise.race([ac.resume(), new Promise(r => setTimeout(r, 600))]);
+      const dest = ac.createMediaStreamDestination();
+      qvTrilha(ac, dest, rot, vel);
+      dest.stream.getAudioTracks().forEach(tr => stream.addTrack(tr));
+    } catch (e) { ac = null; }
+  }
+  // grava em MP4 e WEBM ao mesmo tempo e entrega o melhor que saiu com imagem
+  const ms = qvMimes() || {};
+  const formatos = [ms.mp4, ms.webm].filter(Boolean);
+  const recs = (formatos.length ? formatos : ['']).map(mt => {
+    let r;
+    try { r = new MediaRecorder(stream, { mimeType: mt || undefined, videoBitsPerSecond: 10_000_000, audioBitsPerSecond: 160_000 }); }
+    catch (e) { try { r = new MediaRecorder(stream); } catch (e2) { return null; } }
+    const partes = [];
+    r.ondataavailable = ev => { if (ev.data && ev.data.size) partes.push(ev.data); };
+    return { r, partes, mt: mt || r.mimeType, fim: new Promise(res => { r.onstop = res; }) };
+  }).filter(Boolean);
+  const estado = {};
+  _qv = { recs, ac, raf: 0, cancelado: false, motivo: '' };
+  const status = document.getElementById('qv-status'), barra = document.getElementById('qv-bar');
+  recs.forEach(x => x.r.start(250));
+  const t0 = performance.now();
+  let ultimo = t0;
+  const loop = () => {
+    if (!_qv || _qv.cancelado) return;
+    const agora = performance.now();
+    // se o navegador parou de desenhar (aba escondida/minimizada), o vídeo sairia travado
+    if (agora - ultimo > 700) { _qv.motivo = 'A gravação foi cancelada porque a tela parou de atualizar (a aba foi trocada ou minimizada). Deixe o sistema aberto e visível enquanto o vídeo é gravado.'; pararVideoJogada(); return; }
+    ultimo = agora;
+    const t = (agora - t0) / 1000;
+    qvRender(ctx, W, H, j, rot, Math.min(t, rot.total - 0.001), opts, estado);
+    barra.style.width = `${Math.min(100, t / rot.total * 100)}%`;
+    status.textContent = `Gravando… ${Math.min(rot.total, t).toFixed(1)} de ${rot.total.toFixed(1)} s. Não troque de aba.`;
+    if (t >= rot.total) { recs.forEach(x => { try { x.r.stop(); } catch (e) {} }); return; }
+    _qv.raf = requestAnimationFrame(loop);
+  };
+  _qv.raf = requestAnimationFrame(loop);
+  await Promise.all(recs.map(x => x.fim));
+  const cancelado = _qv && _qv.cancelado, motivo = _qv && _qv.motivo;
+  if (ac) ac.close().catch(() => {});
+  stream.getTracks().forEach(tr => tr.stop());
+  _qv = null;
+  if (cancelado) { openVideoJogada(); if (motivo) document.getElementById('qv-content').insertAdjacentHTML('afterbegin', `<div class="alert alert-warning" style="margin-bottom:12px"><i class="ti ti-alert-triangle"></i><span>${motivo}</span></div>`); return; }
+
+  status.textContent = 'Finalizando o arquivo…';
+  let escolhido = null;
+  for (const x of recs) {
+    const tipo = (x.mt || x.r.mimeType || 'video/webm').split(';')[0];
+    const blob = new Blob(x.partes, { type: tipo });
+    if (await qvTemImagem(blob)) { escolhido = { blob, tipo }; break; }
+  }
+  if (!escolhido) {
+    status.innerHTML = '<div class="alert alert-danger"><i class="ti ti-alert-circle"></i><span>Este navegador não conseguiu gravar a imagem do vídeo. Tente pelo Chrome ou Edge atualizados no computador.</span></div>';
+    document.getElementById('qv-actions').innerHTML = `<button class="btn btn-ghost" onclick="openVideoJogada()"><i class="ti ti-refresh"></i> Tentar de novo</button>`;
+    return;
+  }
+  const { blob, tipo } = escolhido;
+  const ext = tipo.includes('mp4') ? 'mp4' : 'webm';
+  const url = URL.createObjectURL(blob);
+  const nomeArq = `jogada-${(opts.titulo || 'white-rock').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'white-rock'}.${ext}`;
+  const a = document.createElement('a'); a.href = url; a.download = nomeArq; document.body.appendChild(a); a.click(); a.remove();
+  status.innerHTML = `<i class="ti ti-circle-check" style="color:var(--success)"></i> Vídeo pronto (${(blob.size / 1048576).toFixed(1)} MB, ${ext.toUpperCase()}). O download começou.`;
+  document.getElementById('qv-actions').innerHTML = `
+    <a class="btn btn-primary" href="${url}" download="${nomeArq}"><i class="ti ti-download"></i> Baixar de novo</a>
+    <button class="btn btn-ghost" onclick="openVideoJogada()"><i class="ti ti-refresh"></i> Gerar outro</button>
+    <button class="btn btn-ghost" onclick="closeModal('modal-qt-video')">Fechar</button>`;
+  if (ext === 'webm') status.innerHTML += '<div class="form-hint">Saiu em WEBM, que abre no navegador, no YouTube e no WhatsApp. Para postar no Instagram, converta para MP4 (por exemplo, no CapCut) ou gere pelo Chrome/Edge atualizados no computador, que costumam gravar MP4.</div>';
+}
+
+function pararVideoJogada() {
+  if (!_qv) return;
+  _qv.cancelado = true;
+  cancelAnimationFrame(_qv.raf);
+  (_qv.recs || []).forEach(x => { try { x.r.stop(); } catch (e) {} });
 }
 
 // ==================== AVISOS ====================
