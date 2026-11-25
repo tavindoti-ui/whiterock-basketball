@@ -1603,6 +1603,73 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   .camp-title{font-size:19px}
   .camp-game{gap:8px;padding:9px 10px;flex-wrap:wrap}
 }
+
+/* ═══════════ QUADRO TÁTICO (fase 10) ═══════════ */
+.qt-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+.qt-main{min-width:0}
+.qt-tools{display:flex;gap:4px;flex-wrap:wrap;padding:4px;margin-bottom:10px;background:rgba(5,11,22,0.6);border:1px solid var(--border);border-radius:11px}
+.qt-tool{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 11px;border:none;border-radius:8px;background:transparent;color:var(--text2);font:600 12.5px/1 inherit;font-family:inherit;cursor:pointer}
+.qt-tool i{font-size:17px}
+.qt-tool:hover:not(:disabled){color:#fff}
+.qt-tool.on{background:rgba(45,140,255,0.18);color:#fff;box-shadow:inset 0 0 0 1px rgba(77,166,255,0.3)}
+.qt-tool.on i{color:var(--blue)}
+.qt-tool:disabled{opacity:.4;cursor:default}
+.qt-tool:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.qt-sep{width:1px;background:var(--border);margin:4px 4px}
+.qt-court-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#0B1A33;max-width:620px;margin:0 auto}
+.qt-court-wrap.inteira{max-width:440px}
+.qt-svg{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.qt-svg.tool-mover .qt-token,.qt-svg.tool-mover .qt-ball{cursor:grab}
+.qt-svg[class*="tool-mov"],.qt-svg.tool-passe,.qt-svg.tool-drible,.qt-svg.tool-bloqueio{cursor:crosshair}
+.qt-svg.tool-apagar .qt-draw{cursor:pointer}
+.qt-svg.tool-apagar .qt-draw:hover path{stroke:var(--danger)}
+.qt-num{font:800 15px Inter,sans-serif;fill:#fff;pointer-events:none}
+.qt-dnum{font:700 10px Inter,sans-serif;fill:#AEB8C7;pointer-events:none}
+.qt-name{font:700 11px Inter,sans-serif;fill:#F4F7FB;paint-order:stroke;stroke:#0B1A33;stroke-width:3px;pointer-events:none}
+.qt-frames{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin:12px auto 0;max-width:620px}
+.qt-frame-list{display:flex;gap:5px;flex-wrap:wrap}
+.qt-frame{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:rgba(5,11,22,0.5);color:var(--text2);font:700 13px/1 inherit;font-family:inherit;cursor:pointer}
+.qt-frame.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.qt-frame.add{border-style:dashed;color:var(--blue)}
+.qt-frame:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qt-frame-tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px auto 0;max-width:620px}
+.qt-frame-tools .form-input{flex:1;min-width:200px;height:34px;font-size:12.5px}
+.qt-note{max-width:620px;margin:10px auto 0;font-size:13px;color:var(--text);padding:10px 12px;border:1px solid var(--border);border-radius:10px}
+.qt-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:11.5px;color:var(--text2);margin:12px auto 0;max-width:620px}
+.qt-legend span{display:inline-flex;align-items:center;gap:6px}
+.qt-lg{display:inline-block;width:22px;height:0;border-top:2.5px solid #F4F7FB}
+.qt-lg.passe{border-top:2.5px dashed #FFD166}
+.qt-lg.drible{height:6px;border:none;background:repeating-linear-gradient(60deg,transparent 0 3px,#F4F7FB 3px 5px)}
+.qt-lg.bloqueio{position:relative}
+.qt-lg.bloqueio::after{content:'';position:absolute;right:-1px;top:-6px;height:10px;border-right:3px solid #F4F7FB}
+.qt-lg-o{width:12px;height:12px;border-radius:50%;background:#2D8CFF;display:inline-block}
+.qt-lg-x{font-size:15px;color:#E7EDF7}
+.qt-side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.qt-panel{padding:14px}
+.qt-check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);cursor:pointer}
+.qt-check input{width:16px;height:16px;accent-color:var(--blue)}
+.qt-escala{margin-top:4px;font-size:13px}
+.qt-escala summary{cursor:pointer;color:var(--blue);font-weight:600;font-size:12.5px;padding:4px 0}
+.qt-escala-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qt-escala-row .form-input{height:32px;font-size:12.5px;padding:0 8px}
+.qt-pos{width:24px;height:24px;border-radius:50%;background:#2D8CFF;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qt-save{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qt-save .btn-primary{flex:1;justify-content:center}
+.qt-view-title{font-size:17px;font-weight:800;color:#fff}
+.qt-filter{display:flex;gap:6px;margin-bottom:8px}
+.qt-filter .form-input{height:32px;font-size:12.5px;padding:0 8px;min-width:0}
+.qt-filter .form-input:first-child{flex:1}
+#qt-lista{display:flex;flex-direction:column;gap:4px;max-height:360px;overflow:auto}
+.qt-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.qt-item:hover{background:rgba(45,140,255,0.06)}
+.qt-item.on{border-color:rgba(77,166,255,0.35);background:rgba(45,140,255,0.08)}
+.qt-item:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.qt-item-ico{width:30px;height:30px;border-radius:8px;background:rgba(45,140,255,0.12);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qt-item-main{display:flex;flex-direction:column;min-width:0}
+.qt-item-main b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qt-item-main small{font-size:11px;color:var(--text3)}
+@media(max-width:1100px){.qt-layout{grid-template-columns:1fr}.qt-side{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+@media(max-width:700px){.qt-side{grid-template-columns:1fr}.qt-tools{flex-wrap:nowrap;overflow-x:auto}.qt-tool span{display:none}.qt-tool{flex:1;padding:0 6px;min-width:38px;justify-content:center}.qt-sep{display:none}}
 </style>
 </head>
 <body>
@@ -1887,6 +1954,16 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
     <button class="btn btn-primary btn-sm" id="btn-add-camp" onclick="openCampForm()" style="display:none"><i class="ti ti-plus"></i> Novo campeonato</button>
   </div>
   <div id="camp-body"></div>
+</div>
+
+<div class="page" id="page-quadro">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Competição</div>
+      <h1 class="page-title">Quadro tático</h1>
+    </div>
+  </div>
+  <div id="qt-body"></div>
 </div>
 
 <div class="page" id="page-treinos">
@@ -2543,7 +2620,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { jogadas: [], campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2729,6 +2806,7 @@ function buildNav() {
       { id:'campeonatos',  label:'Campeonatos',  icon:'ti-trophy',           roles: ALL },
       { id:'treinos',      label:'Treinos',      icon:'ti-run',              roles: ALL },
       { id:'estatisticas', label:'Estatísticas', icon:'ti-chart-bar',        roles: ALL },
+      { id:'quadro',       label:'Quadro tático',icon:'ti-chalkboard',       roles: ALL },
     ]},
     { label: 'Gestão', tabs: [
       { id:'financeiro',   label:'Financeiro',   icon:'ti-wallet',           roles:['admin','tecnico','capitao'] },
@@ -2802,6 +2880,7 @@ function toggleMoreSheet(forceClose) {
 }
 
 function showPage(id) {
+  if (typeof qtStop === 'function') qtStop();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab,.mobile-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -2817,7 +2896,7 @@ function showPage(id) {
   const moreBtn = document.getElementById('btn-more-nav');
   if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
   hideNavTip();
-  const renders = { campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
+  const renders = { quadro:() => { renderQuadro(); loadJogadas().then(() => { if (document.getElementById('page-quadro').classList.contains('active')) qtRenderLista(); }); }, campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
 
@@ -5761,6 +5840,562 @@ function deleteResultado(campId, resultadoId) {
     if (r && r.id) { const i = cache.campeonatos.findIndex(x => x.id === r.id); if (i !== -1) cache.campeonatos[i] = r; renderCampeonatos(); toast('Resultado excluído'); }
     else toast((r && r.error) || 'Erro ao excluir', 'error');
   }, { title: 'Excluir resultado', label: 'Sim, excluir', icon: 'ti-trash', type: 'danger' });
+}
+
+// ==================== QUADRO TÁTICO (fase 10) ====================
+// Quadra em SVG (FIBA, 1 m = 33,3 unidades). Cesta no topo; quadra inteira espelha embaixo.
+const QT_W = 500, QT_H = { meia: 470, inteira: 940 };
+const QT_TOOLS = [
+  { k: 'mover',    label: 'Mover',     icon: 'ti-hand-move',          dica: 'Arraste jogadores e bola' },
+  { k: 'mov',      label: 'Movimento', icon: 'ti-arrow-narrow-right', dica: 'Desenhe o caminho do jogador' },
+  { k: 'passe',    label: 'Passe',     icon: 'ti-line-dashed', dica: 'Linha tracejada de passe' },
+  { k: 'drible',   label: 'Drible',    icon: 'ti-wave-sine',          dica: 'Condução de bola' },
+  { k: 'bloqueio', label: 'Corta-luz', icon: 'ti-line',               dica: 'Bloqueio (linha com traço no fim)' },
+  { k: 'apagar',   label: 'Apagar',    icon: 'ti-eraser',             dica: 'Toque num desenho para apagar' },
+];
+const QT_CATS = ['Ataque', 'Defesa', 'Lateral / fundo', 'Contra-ataque', 'Saída de pressão', 'Outro'];
+
+// texto digitado volta para atributos/campos: escapar
+function qtEsc(v) { return String(v || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+let qt = null;          // estado do editor
+let _qtPlay = null;     // animação em andamento
+
+function qtDefaultTokens(quadra) {
+  const o = { o1: [250, 410], o2: [420, 255], o3: [80, 255], o4: [345, 160], o5: [155, 135] };
+  const t = {};
+  Object.entries(o).forEach(([k, [x, y]]) => {
+    t[k] = { x, y };
+    // defensor entre o atacante e a cesta
+    const dx = 250 - x, dy = 52 - y, len = Math.hypot(dx, dy) || 1;
+    t['d' + k.slice(1)] = { x: Math.round(x + dx / len * 38), y: Math.round(y + dy / len * 38) };
+  });
+  return t;
+}
+
+function qtNova() {
+  return { id: null, nome: '', categoria: 'Ataque', descricao: '', quadra: 'meia', defesa: false, escalacao: {},
+    frames: [{ tokens: qtDefaultTokens('meia'), bola: { at: 'o1' }, desenhos: [], nota: '' }] };
+}
+
+function qtInit() {
+  if (qt) return;
+  qt = { jogada: qtNova(), frame: 0, tool: 'mover', undo: [], sujo: false, busca: '', cat: '' };
+}
+
+async function loadJogadas() {
+  try {
+    const r = await api('GET', 'modulos?r=jogadas');
+    if (Array.isArray(r)) cache.jogadas = r;
+  } catch (e) { console.warn('jogadas', e); }
+}
+
+function qtPodeEditar() { return can(['admin', 'tecnico', 'comissao', 'capitao']); }
+function qtFrame() { return qt.jogada.frames[qt.frame]; }
+function qtSnapshot() {
+  qt.undo.push(JSON.stringify({ frames: qt.jogada.frames, frame: qt.frame, quadra: qt.jogada.quadra }));
+  if (qt.undo.length > 40) qt.undo.shift();
+  qt.sujo = true;
+}
+function qtDesfazer() {
+  const s = qt.undo.pop();
+  if (!s) return;
+  const o = JSON.parse(s);
+  qt.jogada.frames = o.frames; qt.frame = Math.min(o.frame, o.frames.length - 1); qt.jogada.quadra = o.quadra;
+  qtRender();
+}
+
+// ── Desenho da quadra
+function qtCourtSVG(quadra) {
+  const L = 'stroke="rgba(214,228,255,0.55)" stroke-width="2" fill="none"';
+  const meia = `
+    <rect x="168.3" y="0" width="163.4" height="193.3" fill="rgba(45,140,255,0.10)" ${L}/>
+    <circle cx="250" cy="193.3" r="60" ${L}/>
+    <path d="M30 0 V99.7 A225 225 0 0 0 470 99.7 V0" ${L}/>
+    <path d="M208.3 52.5 A41.7 41.7 0 0 0 291.7 52.5" ${L}/>
+    <line x1="220" y1="40" x2="280" y2="40" stroke="rgba(244,247,251,0.9)" stroke-width="3"/>
+    <circle cx="250" cy="52.5" r="7.5" stroke="#FF8A3D" stroke-width="2.5" fill="none"/>
+    ${[70, 100, 130, 160].map(y => `<line x1="162" y1="${y}" x2="168.3" y2="${y}" ${L}/><line x1="331.7" y1="${y}" x2="338" y2="${y}" ${L}/>`).join('')}`;
+  const H = QT_H[quadra];
+  return `
+    <rect x="0" y="0" width="${QT_W}" height="${H}" fill="#0B1A33" rx="4"/>
+    <rect x="1" y="1" width="${QT_W - 2}" height="${H - 2}" ${L}/>
+    <g>${meia}</g>
+    ${quadra === 'inteira'
+      ? `<line x1="0" y1="470" x2="500" y2="470" ${L}/><circle cx="250" cy="470" r="60" ${L}/><g transform="translate(0 940) scale(1 -1)">${meia}</g>`
+      : `<path d="M190 470 A60 60 0 0 1 310 470" ${L}/>`}`;
+}
+
+// Caminho suave a partir dos pontos
+function qtPath(p) {
+  if (p.length < 3) return `M${p[0][0]} ${p[0][1]} L${p[p.length - 1][0]} ${p[p.length - 1][1]}`;
+  let d = `M${p[0][0]} ${p[0][1]}`;
+  for (let i = 1; i < p.length - 1; i++) {
+    const mx = (p[i][0] + p[i + 1][0]) / 2, my = (p[i][1] + p[i + 1][1]) / 2;
+    d += ` Q${p[i][0]} ${p[i][1]} ${mx} ${my}`;
+  }
+  const z = p[p.length - 1];
+  return d + ` L${z[0]} ${z[1]}`;
+}
+// Zigue-zague ao longo do caminho (drible)
+function qtZigzag(p) {
+  const pts = qtResample(p, 9);
+  if (pts.length < 3) return qtPath(p);
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const [x0, y0] = pts[i - 1], [x1, y1] = pts[i + 1];
+    const nx = -(y1 - y0), ny = x1 - x0, len = Math.hypot(nx, ny) || 1;
+    const s = (i % 2 ? 1 : -1) * 6;
+    d += ` L${(pts[i][0] + nx / len * s).toFixed(1)} ${(pts[i][1] + ny / len * s).toFixed(1)}`;
+  }
+  const z = pts[pts.length - 1];
+  return d + ` L${z[0]} ${z[1]}`;
+}
+function qtResample(p, passo) {
+  const out = [p[0]];
+  let acc = 0;
+  for (let i = 1; i < p.length; i++) {
+    let [ax, ay] = out[out.length - 1];
+    const [bx, by] = p[i];
+    let seg = Math.hypot(bx - ax, by - ay);
+    while (acc + seg >= passo) {
+      const t = (passo - acc) / seg;
+      ax = ax + (bx - ax) * t; ay = ay + (by - ay) * t;
+      out.push([ax, ay]); seg = Math.hypot(bx - ax, by - ay); acc = 0;
+    }
+    acc += seg;
+  }
+  out.push(p[p.length - 1]);
+  return out;
+}
+
+function qtDesenhoSVG(d, i, editavel) {
+  const p = d.p, z = p[p.length - 1], a = p[Math.max(0, p.length - 4)];
+  const cor = d.t === 'passe' ? '#FFD166' : '#F4F7FB';
+  let path, extra = '';
+  if (d.t === 'passe') path = `M${p[0][0]} ${p[0][1]} L${z[0]} ${z[1]}`;
+  else if (d.t === 'drible') path = qtZigzag(p);
+  else path = qtPath(p);
+  const marker = d.t === 'bloqueio' ? '' : `marker-end="url(#qt-arrow-${d.t === 'passe' ? 'y' : 'w'})"`;
+  if (d.t === 'bloqueio') {
+    const ang = Math.atan2(z[1] - a[1], z[0] - a[0]) + Math.PI / 2;
+    const dx = Math.cos(ang) * 11, dy = Math.sin(ang) * 11;
+    extra = `<line x1="${z[0] - dx}" y1="${z[1] - dy}" x2="${z[0] + dx}" y2="${z[1] + dy}" stroke="${cor}" stroke-width="3.5" stroke-linecap="round"/>`;
+  }
+  return `<g class="qt-draw" data-i="${i}">
+    ${editavel ? `<path d="${d.t === 'passe' ? path : qtPath(p)}" stroke="transparent" stroke-width="16" fill="none" class="qt-hit"/>` : ''}
+    <path d="${path}" stroke="${cor}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" ${d.t === 'passe' ? 'stroke-dasharray="8 7"' : ''} ${marker}/>
+    ${extra}
+  </g>`;
+}
+
+function qtNomeToken(k) {
+  const id = qt.jogada.escalacao && qt.jogada.escalacao[k];
+  const j = id && cache.jogadores.find(x => x.id === id);
+  return j ? (j.apelido || j.nome.split(' ')[0]) : '';
+}
+
+function qtTokenSVG(k, t) {
+  const of = k[0] === 'o';
+  const n = k.slice(1);
+  const nome = of ? qtNomeToken(k) : '';
+  return `<g class="qt-token ${of ? 'of' : 'df'}" data-k="${k}" transform="translate(${t.x} ${t.y})">
+    <circle r="17" class="qt-hit-token" fill="transparent"/>
+    ${of ? `<circle r="15" fill="#2D8CFF" stroke="#0B1A33" stroke-width="2.5"/><text y="5.5" text-anchor="middle" class="qt-num">${n}</text>`
+         : `<g stroke="#E7EDF7" stroke-width="3.2" stroke-linecap="round"><line x1="-9" y1="-9" x2="9" y2="9"/><line x1="9" y1="-9" x2="-9" y2="9"/></g><text x="12" y="-8" class="qt-dnum">${n}</text>`}
+    ${nome ? `<text y="31" text-anchor="middle" class="qt-name">${nome}</text>` : ''}
+  </g>`;
+}
+
+function qtBolaPos(f) {
+  if (!f.bola) return null;
+  if (f.bola.at && f.tokens[f.bola.at]) { const t = f.tokens[f.bola.at]; return { x: t.x + 13, y: t.y - 13 }; }
+  if (f.bola.x !== undefined) return { x: f.bola.x, y: f.bola.y };
+  return null;
+}
+
+function qtSVG(f, opts) {
+  const editavel = opts && opts.editavel;
+  const H = QT_H[qt.jogada.quadra];
+  const tokens = Object.entries(f.tokens).filter(([k]) => k[0] === 'o' || qt.jogada.defesa);
+  const b = qtBolaPos(f);
+  return `<svg id="qt-svg" viewBox="0 0 ${QT_W} ${H}" class="qt-svg ${editavel ? 'tool-' + qt.tool : ''}" role="img" aria-label="Quadra com a jogada">
+    <defs>
+      <marker id="qt-arrow-w" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#F4F7FB"/></marker>
+      <marker id="qt-arrow-y" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#FFD166"/></marker>
+    </defs>
+    ${qtCourtSVG(qt.jogada.quadra)}
+    <g id="qt-draws">${(f.desenhos || []).map((d, i) => qtDesenhoSVG(d, i, editavel)).join('')}</g>
+    <path id="qt-live" d="" stroke="#4DA6FF" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-dasharray="${qt.tool === 'passe' ? '8 7' : ''}"/>
+    <g id="qt-tokens">${tokens.map(([k, t]) => qtTokenSVG(k, t)).join('')}</g>
+    ${b ? `<g class="qt-ball" data-k="bola" transform="translate(${b.x} ${b.y})"><circle r="14" fill="transparent"/><circle r="7.5" fill="#FF8A3D" stroke="#0B1A33" stroke-width="2"/><path d="M-7.5 0 H7.5 M0 -7.5 V7.5" stroke="#0B1A33" stroke-width="1.2"/></g>` : ''}
+  </svg>`;
+}
+
+// ── Página
+function renderQuadro() {
+  const el = document.getElementById('qt-body');
+  if (!el) return;
+  qtInit();
+  const edit = qtPodeEditar();
+  const j = qt.jogada, f = qtFrame();
+  const lista = (cache.jogadas || []).filter(x => (!qt.cat || x.categoria === qt.cat) && (!qt.busca || x.nome.toLowerCase().includes(qt.busca.toLowerCase())))
+    .sort((a, b) => (b.atualizadoEm || '').localeCompare(a.atualizadoEm || ''));
+  const elenco = cache.jogadores.filter(p => p.status !== 'Inativo').sort((a, b) => (a.num || 0) - (b.num || 0));
+
+  el.innerHTML = `
+  <div class="qt-layout">
+    <div class="qt-main">
+      ${edit ? `<div class="qt-tools" role="toolbar" aria-label="Ferramentas">
+        ${QT_TOOLS.map(t => `<button type="button" class="qt-tool${qt.tool === t.k ? ' on' : ''}" aria-pressed="${qt.tool === t.k}" title="${t.dica}" onclick="qtSetTool('${t.k}')"><i class="ti ${t.icon}"></i><span>${t.label}</span></button>`).join('')}
+        <span class="qt-sep"></span>
+        <button type="button" class="qt-tool" title="Desfazer" onclick="qtDesfazer()" ${qt.undo.length ? '' : 'disabled'}><i class="ti ti-arrow-back-up"></i><span>Desfazer</span></button>
+      </div>` : ''}
+      <div class="qt-court-wrap ${j.quadra}">${qtSVG(f, { editavel: edit })}</div>
+      <div class="qt-frames">
+        <div class="qt-frame-list" role="tablist" aria-label="Etapas">
+          ${j.frames.map((_, i) => `<button type="button" role="tab" aria-selected="${i === qt.frame}" class="qt-frame${i === qt.frame ? ' on' : ''}" onclick="qtIrEtapa(${i})">${i + 1}</button>`).join('')}
+          ${edit && j.frames.length < 12 ? `<button type="button" class="qt-frame add" onclick="qtNovaEtapa()" title="Nova etapa a partir desta"><i class="ti ti-plus"></i></button>` : ''}
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="qtPlay()" ${j.frames.length < 2 ? 'disabled title="Crie pelo menos 2 etapas"' : ''}><i class="ti ${_qtPlay ? 'ti-player-stop' : 'ti-player-play'}"></i> ${_qtPlay ? 'Parar' : 'Reproduzir'}</button>
+      </div>
+      ${edit ? `<div class="qt-frame-tools">
+        <input class="form-input" id="qt-nota" maxlength="200" placeholder="Anotação da etapa ${qt.frame + 1} (ex: 5 faz corta-luz para o 1)" value="${qtEsc(f.nota)}" onchange="qtSetNota(this.value)">
+        <button class="btn btn-ghost btn-sm" onclick="qtLimparEtapa()" title="Apagar os desenhos desta etapa"><i class="ti ti-eraser"></i> Limpar desenhos</button>
+        ${j.frames.length > 1 ? `<button class="btn btn-ghost btn-sm" onclick="qtExcluirEtapa()"><i class="ti ti-trash"></i> Excluir etapa</button>` : ''}
+      </div>` : (f.nota ? `<div class="qt-note"><b>Etapa ${qt.frame + 1}:</b> ${f.nota}</div>` : '')}
+      <div class="qt-legend"><span><i class="qt-lg mov"></i>Movimento</span><span><i class="qt-lg passe"></i>Passe</span><span><i class="qt-lg drible"></i>Drible</span><span><i class="qt-lg bloqueio"></i>Corta-luz</span><span><i class="qt-lg-o"></i>Ataque</span>${j.defesa ? '<span><b class="qt-lg-x">×</b>Defesa</span>' : ''}</div>
+    </div>
+
+    <aside class="qt-side">
+      <div class="card qt-panel">
+        ${edit ? `
+        <div class="form-group"><label class="form-label" for="qt-nome">Nome da jogada *</label><input class="form-input" id="qt-nome" maxlength="60" value="${qtEsc(j.nome)}" placeholder="Ex: Chifre com corta-luz" oninput="qt.jogada.nome=this.value;qt.sujo=true"></div>
+        <div class="form-row" style="gap:10px">
+          <div class="form-group"><label class="form-label" for="qt-cat">Tipo</label><select class="form-input" id="qt-cat" onchange="qt.jogada.categoria=this.value;qt.sujo=true">${QT_CATS.map(c => `<option ${j.categoria === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+          <div class="form-group"><label class="form-label" for="qt-quadra">Quadra</label><select class="form-input" id="qt-quadra" onchange="qtSetQuadra(this.value)"><option value="meia" ${j.quadra === 'meia' ? 'selected' : ''}>Meia quadra</option><option value="inteira" ${j.quadra === 'inteira' ? 'selected' : ''}>Quadra inteira</option></select></div>
+        </div>
+        <label class="qt-check"><input type="checkbox" ${j.defesa ? 'checked' : ''} onchange="qt.jogada.defesa=this.checked;qt.sujo=true;qtRender()"> Mostrar defensores</label>
+        <div class="form-group" style="margin-top:10px"><label class="form-label" for="qt-desc">Descrição</label><textarea class="form-input" id="qt-desc" rows="3" maxlength="600" placeholder="Objetivo, quando usar, leitura..." oninput="qt.jogada.descricao=this.value;qt.sujo=true">${qtEsc(j.descricao)}</textarea></div>
+        <details class="qt-escala"${Object.keys(j.escalacao || {}).length ? ' open' : ''}><summary>Escalar jogadores nas posições</summary>
+          ${[1, 2, 3, 4, 5].map(n => `<div class="qt-escala-row"><span class="qt-pos">${n}</span><select class="form-input" onchange="qtEscalar('o${n}', this.value)"><option value="">—</option>${elenco.map(p => `<option value="${p.id}" ${j.escalacao && j.escalacao['o' + n] === p.id ? 'selected' : ''}>#${p.num} ${p.apelido || p.nome.split(' ')[0]}</option>`).join('')}</select></div>`).join('')}
+        </details>
+        <div class="alert alert-danger" id="qt-error" style="display:none;margin:10px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+        <div class="qt-save">
+          <button class="btn btn-primary" onclick="qtSalvar(false)"><i class="ti ti-device-floppy"></i> ${j.id ? 'Salvar' : 'Salvar jogada'}</button>
+          ${j.id ? `<button class="btn btn-ghost" onclick="qtSalvar(true)" title="Salvar uma cópia com outro nome"><i class="ti ti-copy"></i> Salvar cópia</button>` : ''}
+          <button class="btn btn-ghost" onclick="qtNovaJogada()"><i class="ti ti-file-plus"></i> Nova</button>
+        </div>
+        ${j.id ? `<button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="qtExcluir(${j.id})"><i class="ti ti-trash"></i> Excluir jogada</button>` : ''}
+        ` : `
+        <div class="qt-view-title">${j.id ? j.nome : 'Escolha uma jogada'}</div>
+        ${j.id ? `<div class="pf-chips" style="margin:6px 0 10px"><span class="badge badge-blue">${j.categoria}</span><span class="badge badge-gray">${j.frames.length} etapa${j.frames.length > 1 ? 's' : ''}</span></div>${j.descricao ? `<div class="med-desc">${j.descricao.replace(/\n/g, '<br>')}</div>` : ''}` : '<div class="pf-empty">As jogadas criadas pela comissão aparecem na lista abaixo. Toque em uma para estudar e use "Reproduzir".</div>'}`}
+      </div>
+
+      <div class="card qt-panel">
+        <div class="sec-title" style="margin-bottom:10px"><i class="ti ti-books"></i> Jogadas salvas (${(cache.jogadas || []).length})</div>
+        <div class="qt-filter">
+          <input class="form-input" placeholder="Buscar..." value="${qtEsc(qt.busca)}" oninput="qt.busca=this.value;qtRenderLista()" aria-label="Buscar jogada">
+          <select class="form-input" onchange="qt.cat=this.value;qtRenderLista()" aria-label="Tipo"><option value="">Todos</option>${QT_CATS.map(c => `<option ${qt.cat === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
+        </div>
+        <div id="qt-lista">${qtListaHTML(lista)}</div>
+      </div>
+    </aside>
+  </div>`;
+  if (edit) qtBind();
+  else qtBindView();
+}
+
+function qtListaHTML(lista) {
+  if (!lista.length) return `<div class="pf-empty" style="padding:6px 0">${(cache.jogadas || []).length ? 'Nenhuma jogada encontrada.' : 'Nenhuma jogada salva ainda.'}</div>`;
+  return lista.map(x => `<button type="button" class="qt-item${qt.jogada.id === x.id ? ' on' : ''}" onclick="qtAbrir(${x.id})">
+    <span class="qt-item-ico"><i class="ti ti-chalkboard"></i></span>
+    <span class="qt-item-main"><b>${x.nome}</b><small>${x.categoria} · ${x.frames.length} etapa${x.frames.length > 1 ? 's' : ''} · ${x.quadra === 'inteira' ? 'quadra inteira' : 'meia quadra'}</small></span>
+  </button>`).join('');
+}
+function qtRenderLista() {
+  const lista = (cache.jogadas || []).filter(x => (!qt.cat || x.categoria === qt.cat) && (!qt.busca || x.nome.toLowerCase().includes(qt.busca.toLowerCase())))
+    .sort((a, b) => (b.atualizadoEm || '').localeCompare(a.atualizadoEm || ''));
+  document.getElementById('qt-lista').innerHTML = qtListaHTML(lista);
+}
+
+function qtRender() {
+  // re-renderiza só a quadra e as etapas quando possível (mantém o foco do painel)
+  const wrap = document.querySelector('#qt-body .qt-court-wrap');
+  if (!wrap) { renderQuadro(); return; }
+  renderQuadro();
+}
+
+// ── Interação
+function qtPonto(svg, ev) {
+  const pt = svg.createSVGPoint();
+  pt.x = ev.clientX; pt.y = ev.clientY;
+  const r = pt.matrixTransform(svg.getScreenCTM().inverse());
+  return [Math.round(Math.min(QT_W, Math.max(0, r.x)) * 10) / 10, Math.round(Math.min(QT_H[qt.jogada.quadra], Math.max(0, r.y)) * 10) / 10];
+}
+
+function qtBind() {
+  const svg = document.getElementById('qt-svg');
+  if (!svg) return;
+  let drag = null, draw = null;
+  svg.addEventListener('pointerdown', ev => {
+    if (_qtPlay) return;
+    const tok = ev.target.closest('.qt-token, .qt-ball');
+    const desenho = ev.target.closest('.qt-draw');
+    if (qt.tool === 'apagar') {
+      if (desenho) { qtSnapshot(); qtFrame().desenhos.splice(+desenho.dataset.i, 1); qtRender(); }
+      return;
+    }
+    if (tok && (qt.tool === 'mover' || !tok.classList.contains('qt-ball'))) {
+      if (qt.tool !== 'mover' && tok.classList.contains('qt-token')) {
+        // em ferramenta de desenho, começar no jogador desenha a partir dele
+        const t = qtFrame().tokens[tok.dataset.k];
+        draw = { p: [[t.x, t.y]] };
+        svg.setPointerCapture(ev.pointerId);
+        ev.preventDefault();
+        return;
+      }
+      drag = { k: tok.dataset.k, el: tok };
+      qtSnapshot();
+      svg.setPointerCapture(ev.pointerId);
+      ev.preventDefault();
+      return;
+    }
+    if (qt.tool !== 'mover') {
+      draw = { p: [qtPonto(svg, ev)] };
+      svg.setPointerCapture(ev.pointerId);
+      ev.preventDefault();
+    }
+  });
+  svg.addEventListener('pointermove', ev => {
+    if (drag) {
+      const [x, y] = qtPonto(svg, ev);
+      drag.el.setAttribute('transform', `translate(${x} ${y})`);
+      drag.pos = { x, y };
+      if (drag.k !== 'bola') {
+        const f = qtFrame();
+        if (f.bola && f.bola.at === drag.k) { const b = svg.querySelector('.qt-ball'); if (b) b.setAttribute('transform', `translate(${x + 13} ${y - 13})`); }
+      }
+    } else if (draw) {
+      const p = qtPonto(svg, ev), last = draw.p[draw.p.length - 1];
+      if (Math.hypot(p[0] - last[0], p[1] - last[1]) < 6) return;
+      draw.p.push(p);
+      const live = document.getElementById('qt-live');
+      live.setAttribute('d', qt.tool === 'passe' ? `M${draw.p[0][0]} ${draw.p[0][1]} L${p[0]} ${p[1]}` : qtPath(draw.p));
+    }
+  });
+  const fim = () => {
+    if (drag) {
+      const f = qtFrame();
+      if (drag.pos) {
+        if (drag.k === 'bola') {
+          // solta perto de um atacante: a bola fica com ele
+          const perto = Object.entries(f.tokens).filter(([k]) => k[0] === 'o').map(([k, t]) => [k, Math.hypot(t.x - drag.pos.x, t.y - drag.pos.y)]).sort((a, b) => a[1] - b[1])[0];
+          f.bola = perto && perto[1] < 30 ? { at: perto[0] } : { x: drag.pos.x, y: drag.pos.y };
+        } else f.tokens[drag.k] = drag.pos;
+      } else qt.undo.pop();
+      drag = null;
+      qtRender();
+    } else if (draw) {
+      if (draw.p.length >= 2) {
+        const [a, z] = [draw.p[0], draw.p[draw.p.length - 1]];
+        let comp = 0;
+        for (let i = 1; i < draw.p.length; i++) comp += Math.hypot(draw.p[i][0] - draw.p[i - 1][0], draw.p[i][1] - draw.p[i - 1][1]);
+        if (comp > 18) {
+          qtSnapshot();
+          const pts = qt.tool === 'passe' ? [a, z] : qtSimplificar(draw.p);
+          if (qtFrame().desenhos.length >= 40) toast('Limite de 40 desenhos por etapa', 'error');
+          else qtFrame().desenhos.push({ t: qt.tool, p: pts });
+        }
+      }
+      draw = null;
+      qtRender();
+    }
+  };
+  svg.addEventListener('pointerup', fim);
+  svg.addEventListener('pointercancel', fim);
+}
+
+function qtBindView() { /* só leitura: nada a ligar */ }
+
+// Reduz pontos do traço mantendo a forma
+function qtSimplificar(p) {
+  if (p.length <= 3) return p;
+  const out = [p[0]];
+  for (let i = 1; i < p.length - 1; i++) {
+    const l = out[out.length - 1];
+    if (Math.hypot(p[i][0] - l[0], p[i][1] - l[1]) >= 14) out.push(p[i]);
+  }
+  out.push(p[p.length - 1]);
+  return out.slice(0, 150);
+}
+
+function qtSetTool(k) { qt.tool = k; qtRender(); }
+function qtIrEtapa(i) { qtStop(); qt.frame = i; qtRender(); }
+function qtSetNota(v) { qtFrame().nota = v.slice(0, 200); qt.sujo = true; }
+function qtNovaEtapa() {
+  qtSnapshot();
+  const f = qtFrame();
+  // a nova etapa começa onde os jogadores terminam os movimentos desenhados
+  const tokens = JSON.parse(JSON.stringify(f.tokens));
+  (f.desenhos || []).forEach(d => {
+    if (d.t !== 'mov' && d.t !== 'drible' && d.t !== 'bloqueio') return;
+    const k = qtTokenNoInicio(f, d.p[0]);
+    if (k) tokens[k] = { x: d.p[d.p.length - 1][0], y: d.p[d.p.length - 1][1] };
+  });
+  let bola = f.bola ? { ...f.bola } : null;
+  const passe = (f.desenhos || []).filter(d => d.t === 'passe').slice(-1)[0];
+  if (passe) {
+    const z = passe.p[passe.p.length - 1];
+    const rec = Object.entries(tokens).filter(([k]) => k[0] === 'o').map(([k, t]) => [k, Math.hypot(t.x - z[0], t.y - z[1])]).sort((a, b) => a[1] - b[1])[0];
+    bola = rec && rec[1] < 40 ? { at: rec[0] } : { x: z[0], y: z[1] };
+  }
+  qt.jogada.frames.splice(qt.frame + 1, 0, { tokens, bola, desenhos: [], nota: '' });
+  qt.frame++;
+  qtRender();
+}
+function qtTokenNoInicio(f, p0) {
+  const c = Object.entries(f.tokens).map(([k, t]) => [k, Math.hypot(t.x - p0[0], t.y - p0[1])]).sort((a, b) => a[1] - b[1])[0];
+  return c && c[1] < 24 ? c[0] : null;
+}
+function qtExcluirEtapa() {
+  if (qt.jogada.frames.length < 2) return;
+  qtSnapshot();
+  qt.jogada.frames.splice(qt.frame, 1);
+  qt.frame = Math.max(0, qt.frame - 1);
+  qtRender();
+}
+function qtLimparEtapa() { if (!qtFrame().desenhos.length) return; qtSnapshot(); qtFrame().desenhos = []; qtRender(); }
+function qtSetQuadra(v) {
+  qtSnapshot();
+  const antes = qt.jogada.quadra;
+  qt.jogada.quadra = v;
+  if (antes === 'inteira' && v === 'meia') {
+    // traz para a meia quadra o que estava na outra metade
+    qt.jogada.frames.forEach(f => {
+      Object.values(f.tokens).forEach(t => { t.y = Math.min(t.y, 460); });
+      if (f.bola && f.bola.y !== undefined) f.bola.y = Math.min(f.bola.y, 460);
+      f.desenhos = f.desenhos.filter(d => d.p.every(pt => pt[1] <= 470));
+    });
+  }
+  qtRender();
+}
+function qtEscalar(k, v) { qt.jogada.escalacao = qt.jogada.escalacao || {}; if (v) qt.jogada.escalacao[k] = +v; else delete qt.jogada.escalacao[k]; qt.sujo = true; qtRender(); }
+
+function qtConfirmarDescartar(acao) {
+  if (!qt.sujo || !qtPodeEditar()) { acao(); return; }
+  confirmAction('Há alterações não salvas nesta jogada. Descartar?', acao, { title: 'Descartar alterações', label: 'Descartar', icon: 'ti-alert-triangle', type: 'danger' });
+}
+function qtNovaJogada() { qtConfirmarDescartar(() => { qtStop(); qt.jogada = qtNova(); qt.frame = 0; qt.undo = []; qt.sujo = false; qtRender(); }); }
+function qtAbrir(id) {
+  const x = (cache.jogadas || []).find(j => j.id === id);
+  if (!x) return;
+  qtConfirmarDescartar(() => {
+    qtStop();
+    qt.jogada = JSON.parse(JSON.stringify(x));
+    qt.jogada.escalacao = qt.jogada.escalacao || {};
+    qt.frame = 0; qt.undo = []; qt.sujo = false;
+    qtRender();
+    if (window.innerWidth < 900) document.querySelector('#qt-body .qt-court-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+async function qtSalvar(copia) {
+  const j = qt.jogada;
+  const err = document.getElementById('qt-error');
+  const nome = (document.getElementById('qt-nome').value || '').trim();
+  if (!nome) { err.style.display = ''; err.querySelector('span').textContent = 'Dê um nome para a jogada.'; document.getElementById('qt-nome').focus(); return; }
+  const payload = { nome: copia ? `${nome} (cópia)`.slice(0, 60) : nome, categoria: j.categoria, descricao: j.descricao, quadra: j.quadra, defesa: j.defesa, escalacao: j.escalacao, frames: j.frames };
+  const editando = j.id && !copia;
+  const r = await api(editando ? 'PUT' : 'POST', 'modulos?r=jogadas', editando ? { ...payload, id: j.id } : payload);
+  if (r && r.id) {
+    const i = cache.jogadas.findIndex(x => x.id === r.id);
+    if (i === -1) cache.jogadas.push(r); else cache.jogadas[i] = r;
+    qt.jogada = JSON.parse(JSON.stringify(r)); qt.jogada.escalacao = qt.jogada.escalacao || {};
+    qt.sujo = false;
+    toast(copia ? 'Cópia salva!' : 'Jogada salva!');
+    qtRender();
+  } else { err.style.display = ''; err.querySelector('span').textContent = (r && r.error) || 'Erro ao salvar'; }
+}
+
+function qtExcluir(id) {
+  const x = cache.jogadas.find(j => j.id === id);
+  confirmAction(`Excluir a jogada "${x ? x.nome : ''}"?`, async () => {
+    const r = await api('DELETE', 'modulos?r=jogadas', { id });
+    if (r && r.success) { cache.jogadas = cache.jogadas.filter(j => j.id !== id); qt.jogada = qtNova(); qt.frame = 0; qt.sujo = false; qtRender(); toast('Jogada excluída'); }
+    else toast((r && r.error) || 'Erro ao excluir', 'error');
+  }, { title: 'Excluir jogada', label: 'Sim, excluir', icon: 'ti-trash', type: 'danger' });
+}
+
+// ── Reprodução: os jogadores seguem os caminhos desenhados até a próxima etapa
+function qtStop() { if (_qtPlay) { cancelAnimationFrame(_qtPlay.raf); _qtPlay = null; } }
+function qtPlay() {
+  if (_qtPlay) { qtStop(); qtRender(); return; }
+  const frames = qt.jogada.frames;
+  if (frames.length < 2) return;
+  const reduzido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  qt.frame = 0;
+  _qtPlay = { i: 0, t0: 0, raf: 0 };
+  qtRender();
+  const DUR = reduzido ? 1 : 1300, PAUSA = reduzido ? 1100 : 450;
+  const passo = ts => {
+    if (!_qtPlay) return;
+    if (!_qtPlay.t0) _qtPlay.t0 = ts;
+    const i = _qtPlay.i, a = frames[i], b = frames[i + 1];
+    const el = ts - _qtPlay.t0;
+    const t = Math.min(1, Math.max(0, (el - PAUSA) / DUR));
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const svg = document.getElementById('qt-svg');
+    if (svg) {
+      Object.keys(b.tokens).forEach(k => {
+        const g = svg.querySelector(`.qt-token[data-k="${k}"]`);
+        if (!g || !a.tokens[k]) return;
+        const pos = qtInterp(a, k, a.tokens[k], b.tokens[k], e);
+        g.setAttribute('transform', `translate(${pos.x} ${pos.y})`);
+      });
+      const ball = svg.querySelector('.qt-ball');
+      const pa = qtBolaPosAnim(a, a, 0), pb = qtBolaPosAnim(b, a, e);
+      if (ball && pa && pb) {
+        const bx = pa.x + (pb.x - pa.x) * e, by = pa.y + (pb.y - pa.y) * e;
+        ball.setAttribute('transform', `translate(${bx} ${by})`);
+      }
+    }
+    if (el >= PAUSA + DUR) {
+      _qtPlay.i++;
+      _qtPlay.t0 = 0;
+      qt.frame = _qtPlay.i;
+      if (_qtPlay.i >= frames.length - 1) { _qtPlay = null; qtRender(); return; }
+      qtRender();
+    }
+    if (_qtPlay) _qtPlay.raf = requestAnimationFrame(passo);
+  };
+  _qtPlay.raf = requestAnimationFrame(passo);
+}
+// posição da bola durante a transição (se está com um jogador, acompanha o jogador)
+function qtBolaPosAnim(f, origem, e) {
+  if (!f.bola) return null;
+  if (f.bola.at && f.tokens[f.bola.at]) {
+    const k = f.bola.at;
+    const p = f === origem ? f.tokens[k] : qtInterp(origem, k, origem.tokens[k] || f.tokens[k], f.tokens[k], e);
+    return { x: p.x + 13, y: p.y - 13 };
+  }
+  return { x: f.bola.x, y: f.bola.y };
+}
+function qtInterp(fa, k, pa, pb, e) {
+  const d = (fa.desenhos || []).find(x => x.t !== 'passe' && qtTokenNoInicio({ tokens: { [k]: pa } }, x.p[0]) === k);
+  if (d) {
+    const pts = [...d.p, [pb.x, pb.y]];
+    const segs = []; let total = 0;
+    for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); segs.push(l); total += l; }
+    let alvo = total * e;
+    for (let i = 0; i < segs.length; i++) {
+      if (alvo <= segs[i] || i === segs.length - 1) {
+        const r = segs[i] ? Math.min(1, alvo / segs[i]) : 1;
+        return { x: pts[i][0] + (pts[i + 1][0] - pts[i][0]) * r, y: pts[i][1] + (pts[i + 1][1] - pts[i][1]) * r };
+      }
+      alvo -= segs[i];
+    }
+  }
+  return { x: pa.x + (pb.x - pa.x) * e, y: pa.y + (pb.y - pa.y) * e };
 }
 
 // ==================== AVISOS ====================

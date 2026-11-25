@@ -9,6 +9,7 @@ const MODULOS = {
   agenda: () => require('../lib/mod/agenda'),
   medico: () => require('../lib/mod/medico'),
   campeonatos: () => require('../lib/mod/campeonatos'),
+  jogadas: () => require('../lib/mod/jogadas'),
 };
 
 module.exports = withErrorHandling(async function handler(req, res) {
