@@ -1670,6 +1670,50 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
 .qt-item-main small{font-size:11px;color:var(--text3)}
 @media(max-width:1100px){.qt-layout{grid-template-columns:1fr}.qt-side{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
 @media(max-width:700px){.qt-side{grid-template-columns:1fr}.qt-tools{flex-wrap:nowrap;overflow-x:auto}.qt-tool span{display:none}.qt-tool{flex:1;padding:0 6px;min-width:38px;justify-content:center}.qt-sep{display:none}}
+
+/* ═══════════ ÁREA DO ATLETA (fase 11) ═══════════ */
+.ma-hero{display:flex;align-items:center;gap:16px;padding:18px;margin-bottom:14px;flex-wrap:wrap}
+.ma-av{width:72px;height:72px;font-size:24px;margin:0;flex-shrink:0}
+.ma-hero-main{flex:1;min-width:180px}
+.ma-hello{font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.3px}
+.ma-hero-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ma-pend{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:20px}
+.ma-pend-item{padding:12px;border-left:3px solid var(--c)!important;display:flex;flex-direction:column;gap:10px}
+.ma-pend-info{display:flex;align-items:center;gap:10px;border:none;background:none;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ma-pend-info b{display:block;font-size:14px;color:#fff}
+.ma-pend-info small{font-size:12px;color:var(--text2)}
+.ma-pend-btns{display:flex;gap:6px}
+.ma-pend-btns .btn{flex:1;justify-content:center}
+.ma-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ma-panel{padding:16px;min-width:0}
+.ma-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.ma-panel-head .sec-title{margin:0}
+.ma-panel .ag-item{margin-bottom:6px}
+.ma-nums{grid-template-columns:repeat(4,1fr)}
+.ma-shoot{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:12.5px;color:var(--text2);margin-top:10px}
+.ma-shoot b{color:#fff}
+.ma-rank{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--blue);font-weight:600;margin-top:10px}
+.ma-pres{display:flex;align-items:baseline;gap:8px}
+.ma-pres b{font-size:30px;font-weight:900;font-variant-numeric:tabular-nums}
+.ma-pres span{font-size:12.5px;color:var(--text2)}
+.ma-next{display:flex;gap:8px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:12.5px;color:var(--text2);cursor:pointer}
+.ma-next i{color:var(--success);margin-top:2px}
+.ma-next b{color:#fff}
+.ma-mens{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;border:1px solid var(--border)}
+.ma-mens i{font-size:22px}
+.ma-mens.ok i{color:var(--success)}.ma-mens.late i{color:var(--warning)}
+.ma-mens.late{border-color:rgba(245,158,11,0.35);background:rgba(245,158,11,0.06)}
+.ma-mens b{display:block;font-size:15px;color:#fff}
+.ma-mens span{font-size:12.5px;color:var(--text2)}
+.ma-pay{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
+.ma-pay:last-child{border-bottom:none}
+.ma-aviso{display:flex;flex-direction:column;gap:2px;width:100%;padding:9px 0;border:none;border-bottom:1px solid var(--border);background:none;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.ma-aviso:last-child{border-bottom:none}
+.ma-aviso b{font-size:13.5px}
+.ma-aviso small{font-size:11px;color:var(--text3)}
+.ma-aviso span{font-size:12.5px;color:var(--text2);line-height:1.45}
+@media(max-width:900px){.ma-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.ma-hero{padding:14px}.ma-av{width:58px;height:58px;font-size:20px}.ma-hello{font-size:19px}.ma-hero-actions{width:100%}.ma-hero-actions .btn{flex:1;justify-content:center}.ma-pend{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1964,6 +2008,16 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
     </div>
   </div>
   <div id="qt-body"></div>
+</div>
+
+<div class="page" id="page-minha">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Principal</div>
+      <h1 class="page-title">Minha área</h1>
+    </div>
+  </div>
+  <div id="ma-body"></div>
 </div>
 
 <div class="page" id="page-treinos">
@@ -2620,7 +2674,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { jogadas: [], campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { minhaMensalidade: null, jogadas: [], campeonatos: [], medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2793,6 +2847,7 @@ function buildNav() {
   // Ícones: todos do mesmo conjunto (Tabler, contorno), um por assunto.
   const groups = [
     { label: 'Principal', tabs: [
+      { id:'minha',        label:'Minha área',   icon:'ti-user-circle',      roles: ALL, show: () => maTemArea() },
       { id:'dashboard',    label:'Dashboard',    icon:'ti-layout-dashboard', roles: ALL },
       { id:'calendario',   label:'Calendário',   icon:'ti-calendar',         roles: ALL },
     ]},
@@ -2820,7 +2875,7 @@ function buildNav() {
   let html = '';
   let mobileTabs = [];
   groups.forEach(g => {
-    const visible = g.tabs.filter(t => can(t.roles));
+    const visible = g.tabs.filter(t => can(t.roles) && (!t.show || t.show()));
     if (!visible.length) return;
     html += `<div class="nav-group-label">${g.label}</div>`;
     html += visible.map(t =>
@@ -2832,7 +2887,7 @@ function buildNav() {
   document.getElementById('nav-tabs').innerHTML = html;
 
   // Bottom nav: first 4 tabs as icons + "Mais" for the rest
-  const PRIMARY_ORDER = ['dashboard','calendario','jogos','jogadores'];
+  const PRIMARY_ORDER = currentUser.role === 'atleta' && maTemArea() ? ['minha','calendario','jogos','estatisticas'] : ['dashboard','calendario','jogos','jogadores'];
   const primary = PRIMARY_ORDER.map(id => mobileTabs.find(t => t.id === id)).filter(Boolean);
   const overflow = mobileTabs.filter(t => !primary.includes(t));
   const bnInner = document.getElementById('bottom-nav-inner');
@@ -2896,7 +2951,7 @@ function showPage(id) {
   const moreBtn = document.getElementById('btn-more-nav');
   if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
   hideNavTip();
-  const renders = { quadro:() => { renderQuadro(); loadJogadas().then(() => { if (document.getElementById('page-quadro').classList.contains('active')) qtRenderLista(); }); }, campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
+  const renders = { minha:() => { renderMinhaArea(); loadMinhaMensalidade().then(() => { if (document.getElementById('page-minha').classList.contains('active')) renderMinhaArea(); }); }, quadro:() => { renderQuadro(); loadJogadas().then(() => { if (document.getElementById('page-quadro').classList.contains('active')) qtRenderLista(); }); }, campeonatos:() => { renderCampeonatos(); loadCampeonatos().then(renderCampeonatos); }, medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
 
@@ -2913,6 +2968,8 @@ async function loadAll() {
     loadAgenda(),
     loadMedico(),
     loadCampeonatos(),
+    loadJogadas(),
+    maTemArea() ? loadMinhaMensalidade() : Promise.resolve(),
   ]);
   if (fotos && typeof fotos === 'object' && !fotos.error) cache.fotos = fotos;
   if (j) cache.jogadores = j;
@@ -2924,6 +2981,7 @@ async function loadAll() {
   if (Array.isArray(fant)) cache.pedidosTorcedor = fant;
   renderDashboard();
   renderJogadores();
+  if (currentUser && currentUser.role === 'atleta' && maTemArea() && document.getElementById('page-dashboard').classList.contains('active')) showPage('minha');
 }
 
 // ==================== UTILS ====================
@@ -6396,6 +6454,134 @@ function qtInterp(fa, k, pa, pb, e) {
     }
   }
   return { x: pa.x + (pb.x - pa.x) * e, y: pa.y + (pb.y - pa.y) * e };
+}
+
+// ==================== ÁREA DO ATLETA (fase 11) ====================
+async function loadMinhaMensalidade() {
+  try {
+    const r = await api('GET', 'financeiro?minhas=1');
+    if (r && !r.error) cache.minhaMensalidade = r;
+  } catch (e) { console.warn('mensalidade', e); }
+}
+
+function maTemArea() { return !!(currentUser && currentUser.num !== undefined && currentUser.num !== null && currentUser.num !== ''); }
+
+async function maRsvp(ref, status) {
+  _agRef = ref;
+  if (await enviarConfirmacao({ status, motivo: '' })) {
+    toast(status === 'sim' ? 'Presença confirmada!' : 'Resposta registrada');
+    renderMinhaArea();
+  }
+}
+
+function renderMinhaArea() {
+  const el = document.getElementById('ma-body');
+  if (!el) return;
+  const eu = meuJogador();
+  if (!eu) {
+    el.innerHTML = `<div class="card pf-empty" style="padding:22px"><i class="ti ti-user-question" style="font-size:22px;color:var(--blue)"></i><br>Seu usuário ainda não está ligado a um jogador do elenco. Peça à comissão para informar o seu número de camisa no cadastro de usuários.</div>`;
+    return;
+  }
+  const hoje = today();
+  const itens = agendaItens().filter(i => i.data >= hoje && esperados(i).some(j => j.id === eu.id));
+  const pend = itens.filter(i => !respostas(i)[eu.id]);
+  const prox = itens.slice(0, 5);
+  const caso = (cache.medico || []).filter(c => c.jogadorId === eu.id && c.status !== 'Liberado')[0];
+  const st = typeof statsDoJogador === 'function' ? statsDoJogador(eu.id) : null;
+  const todos = aggregateStats('').sort((a, b) => b.avg.pts - a.avg.pts);
+  const rankPts = todos.findIndex(r => r.p.id === eu.id) + 1;
+  const ult = ultimosJogosDo(eu.id, 3);
+  const treinos = treinosDoJogador(eu, 10);
+  const proxTreino = cache.treinos.filter(t => t.data >= hoje).sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora))[0];
+  const presColor = eu.presenca >= 80 ? 'var(--success)' : eu.presenca >= 60 ? 'var(--warning)' : 'var(--danger)';
+  const mens = cache.minhaMensalidade;
+  const avisos = (cache.avisos || []).slice(0, 3);
+  const jogadas = (cache.jogadas || []).slice().sort((a, b) => (b.atualizadoEm || '').localeCompare(a.atualizadoEm || '')).slice(0, 3);
+  const minhasJogadas = (cache.jogadas || []).filter(x => Object.values(x.escalacao || {}).includes(eu.id)).length;
+
+  el.innerHTML = `
+    <div class="card ma-hero">
+      <div class="player-avatar ma-av">${avatarInner(eu)}</div>
+      <div class="ma-hero-main">
+        <div class="ma-hello">Olá, ${(eu.apelido || eu.nome.split(' ')[0])}</div>
+        <div class="pf-sub">#${eu.num} · ${eu.pos || '—'}${eu.nome !== eu.apelido ? ' · ' + eu.nome : ''}</div>
+        <div class="pf-chips"><span class="badge ${statusBadgeClass(eu.status)}">${eu.status}</span>${pend.length ? `<span class="badge badge-orange">${pend.length} resposta${pend.length > 1 ? 's' : ''} pendente${pend.length > 1 ? 's' : ''}</span>` : ''}</div>
+      </div>
+      <div class="ma-hero-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openPlayerDetail(${eu.id})"><i class="ti ti-id-badge-2"></i> Minha ficha</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportFichaPDF(${eu.id})"><i class="ti ti-file-download"></i> PDF</button>
+      </div>
+    </div>
+    ${caso ? `<div class="alert alert-warning" style="margin-bottom:14px;cursor:pointer" onclick="showPage('medico')"><i class="ti ti-first-aid-kit"></i><span><b>${caso.status}</b> · ${caso.tipo}${caso.regiao ? ' (' + caso.regiao + ')' : ''}. ${caso.previsao ? 'Retorno previsto para ' + fmt(caso.previsao) + '.' : ''} Toque para ver o acompanhamento.</span></div>` : ''}
+
+    ${pend.length ? `<div class="sec-title"><i class="ti ti-bell-ringing"></i> Precisa da sua resposta</div>
+      <div class="ma-pend">${pend.slice(0, 4).map(i => `<div class="card ma-pend-item" style="--c:${AG_TIPOS[i.tipo].color}">
+        <button type="button" class="ma-pend-info" onclick="openAgendaItem('${i.ref}')">
+          <span class="ag-icon"><i class="ti ${AG_TIPOS[i.tipo].icon}"></i></span>
+          <span><b>${i.titulo}</b><small>${fmtDiaLongo(i.data)}${i.hora ? ' · ' + i.hora : ''}${i.local ? ' · ' + i.local : ''}</small></span>
+        </button>
+        <div class="ma-pend-btns">
+          <button class="btn btn-success btn-sm" onclick="maRsvp('${i.ref}','sim')"><i class="ti ti-check"></i> Vou</button>
+          <button class="btn btn-ghost btn-sm" onclick="maRsvp('${i.ref}','talvez')">Talvez</button>
+          <button class="btn btn-ghost btn-sm" onclick="openAgendaItem('${i.ref}')">Não vou</button>
+        </div>
+      </div>`).join('')}</div>` : ''}
+
+    <div class="ma-grid">
+      <section class="card ma-panel">
+        <div class="ma-panel-head"><div class="sec-title"><i class="ti ti-calendar"></i> Meus próximos compromissos</div><button class="pf-link" onclick="showPage('calendario')">Calendário</button></div>
+        ${prox.length ? prox.map(i => agCardHTML(i, false)).join('') : '<div class="pf-empty">Nenhum compromisso agendado para você.</div>'}
+      </section>
+
+      <section class="card ma-panel">
+        <div class="ma-panel-head"><div class="sec-title"><i class="ti ti-chart-bar"></i> Meus números</div><button class="pf-link" onclick="showPage('estatisticas')">Estatísticas</button></div>
+        ${st ? `<div class="pf-stats ma-nums">
+            <div class="pf-stat"><b>${st.jg}</b><span>Jogos</span></div>
+            <div class="pf-stat"><b>${fmtN(st.avg.pts)}</b><span>PTS</span></div>
+            <div class="pf-stat"><b>${fmtN(st.avg.reb)}</b><span>REB</span></div>
+            <div class="pf-stat"><b>${fmtN(st.avg.ast)}</b><span>AST</span></div>
+          </div>
+          <div class="ma-shoot"><span>Arremessos <b>${fmtPct(st.fgPct)}</b></span><span>3 pontos <b>${fmtPct(st.p3Pct)}</b></span><span>Lances livres <b>${fmtPct(st.ftPct)}</b></span></div>
+          ${rankPts ? `<div class="ma-rank"><i class="ti ti-trophy"></i> ${rankPts}º do time em pontos por jogo, entre ${todos.length}</div>` : ''}
+          ${ult.length ? `<div class="pf-sub-title">Últimos jogos</div><div class="pf-games">${ult.map(({ g, s }) => `<button type="button" class="pf-game" onclick="openBoxScore(${g.id})">
+            <span class="pf-game-res ${g.wr > g.advPl ? 'v' : g.wr < g.advPl ? 'd' : ''}">${g.wr > g.advPl ? 'V' : g.wr < g.advPl ? 'D' : 'E'}</span>
+            <span class="pf-game-adv">${g.adv}<small>${fmt(g.data)}</small></span>
+            <span class="pf-game-line"><b>${s.pts || 0}</b> pts · ${s.reb || 0} reb · ${s.ast || 0} ast</span></button>`).join('')}</div>` : ''}`
+          : '<div class="pf-empty">Você ainda não tem jogos registrados.</div>'}
+      </section>
+
+      <section class="card ma-panel">
+        <div class="ma-panel-head"><div class="sec-title"><i class="ti ti-run"></i> Meus treinos</div><button class="pf-link" onclick="showPage('treinos')">Treinos</button></div>
+        <div class="ma-pres"><b style="color:${presColor}">${eu.presenca ?? 0}%</b><span>de presença</span></div>
+        <div class="prog-bar" style="height:7px;margin:8px 0 10px"><div class="prog-fill" style="width:${eu.presenca || 0}%;background:${presColor}"></div></div>
+        ${treinos.length ? `<div class="pf-train">${treinos.map(t => `<span class="pf-dot ${t.presente ? 'ok' : 'no'}" title="${fmt(t.data)} · ${t.tipo || 'Treino'} · ${t.presente ? 'Presente' : 'Faltou'}"><i class="ti ${t.presente ? 'ti-check' : 'ti-x'}"></i></span>`).join('')}</div>
+          <div class="pf-empty" style="margin-top:6px">Últimos ${treinos.length} treinos: ${treinos.filter(t => t.presente).length} presença(s).</div>` : '<div class="pf-empty">Nenhum treino realizado ainda.</div>'}
+        ${proxTreino ? `<div class="ma-next" onclick="openAgendaItem('treino:${proxTreino.id}')" role="button" tabindex="0"><i class="ti ti-calendar-event"></i><span>Próximo: <b>${proxTreino.tipo}</b> · ${fmtDiaLongo(proxTreino.data)} às ${proxTreino.hora}${proxTreino.local ? ' · ' + proxTreino.local : ''}</span></div>` : ''}
+      </section>
+
+      <section class="card ma-panel">
+        <div class="ma-panel-head"><div class="sec-title"><i class="ti ti-wallet"></i> Minha mensalidade</div></div>
+        ${!mens ? '<div class="pf-empty">Carregando…</div>' : !mens.vinculado ? '<div class="pf-empty">Sem informação de mensalidade.</div>' : `
+          <div class="ma-mens ${mens.mesesEmAtraso ? 'late' : 'ok'}">
+            <i class="ti ${mens.mesesEmAtraso ? 'ti-alert-triangle' : 'ti-circle-check'}"></i>
+            <div><b>${mens.mesesEmAtraso ? `${mens.mesesEmAtraso} ${mens.mesesEmAtraso > 1 ? 'meses' : 'mês'} em aberto` : 'Em dia'}</b>
+            <span>${mens.mesesEmAtraso ? `Total de ${fmtBRL(mens.mesesEmAtraso * mens.valorMensal)}. Fale com a comissão para acertar.` : 'Nenhuma mensalidade em atraso.'}</span></div>
+          </div>
+          ${mens.pagamentos.length ? `<div class="pf-sub-title">Pagamentos registrados</div>${mens.pagamentos.slice(0, 4).map(p => `<div class="ma-pay"><span>${fmt(p.data)}</span><span>${fmtBRL(p.valor)}</span></div>`).join('')}` : '<div class="pf-empty" style="margin-top:8px">Nenhum pagamento registrado no seu nome ainda.</div>'}`}
+      </section>
+
+      <section class="card ma-panel">
+        <div class="ma-panel-head"><div class="sec-title"><i class="ti ti-speakerphone"></i> Comunicados</div><button class="pf-link" onclick="showPage('comunicacao')">Ver todos</button></div>
+        ${avisos.length ? avisos.map(a => `<button type="button" class="ma-aviso" onclick="showPage('comunicacao')"><b>${a.titulo}</b><small>${fmt(a.data)} · ${a.autor || ''}</small><span>${String(a.msg || '').slice(0, 120)}${String(a.msg || '').length > 120 ? '…' : ''}</span></button>`).join('') : '<div class="pf-empty">Nenhum comunicado.</div>'}
+      </section>
+
+      <section class="card ma-panel">
+        <div class="ma-panel-head"><div class="sec-title"><i class="ti ti-chalkboard"></i> Jogadas da equipe</div><button class="pf-link" onclick="showPage('quadro')">Quadro tático</button></div>
+        ${jogadas.length ? `${minhasJogadas ? `<div class="ma-rank" style="margin:0 0 8px"><i class="ti ti-star"></i> Você está escalado em ${minhasJogadas} jogada${minhasJogadas > 1 ? 's' : ''}</div>` : ''}
+          ${jogadas.map(x => `<button type="button" class="qt-item" onclick="showPage('quadro');qtAbrir(${x.id})"><span class="qt-item-ico"><i class="ti ti-chalkboard"></i></span><span class="qt-item-main"><b>${x.nome}</b><small>${x.categoria} · ${x.frames.length} etapa${x.frames.length > 1 ? 's' : ''}</small></span></button>`).join('')}`
+          : '<div class="pf-empty">A comissão ainda não salvou jogadas.</div>'}
+      </section>
+    </div>`;
 }
 
 // ==================== AVISOS ====================

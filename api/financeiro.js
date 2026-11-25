@@ -6,6 +6,25 @@ const { withErrorHandling } = require('../lib/error-handler');
 module.exports = withErrorHandling(async function handler(req, res) {
   if (cors(req, res)) return;
 
+  // GET ?minhas=1 — o próprio atleta consulta a sua mensalidade (área do atleta)
+  if (req.method === 'GET' && (req.query || {}).minhas) {
+    const user = requireAuth(req, res, ['admin', 'tecnico', 'comissao', 'capitao', 'atleta']);
+    if (!user) return;
+    const jogadores = await getData('jogadores') || [];
+    const eu = user.num !== undefined && user.num !== null && user.num !== ''
+      ? jogadores.find(j => Number(j.num) === Number(user.num)) : null;
+    if (!eu) return res.json({ vinculado: false });
+    const fin = await getData('financeiro') || [];
+    const mens = await getData('mensalidades') || {};
+    const nome = String(eu.nome || '').toLowerCase();
+    const pagamentos = fin
+      .filter(f => f.tipo === 'entrada' && f.cat === 'Mensalidade' && (Number(f.jogadorId) === eu.id || (nome && String(f.desc || '').toLowerCase().includes(nome))))
+      .sort((x, y) => String(y.data).localeCompare(String(x.data)))
+      .slice(0, 12)
+      .map(f => ({ data: f.data, valor: f.valor, desc: f.desc }));
+    return res.json({ vinculado: true, jogadorId: eu.id, mesesEmAtraso: Number(mens[eu.id]) || 0, valorMensal: 80, pagamentos });
+  }
+
   if (req.method === 'GET') {
     const user = requireAuth(req, res, ['admin', 'tecnico', 'capitao']);
     if (!user) return;
