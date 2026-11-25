@@ -1534,6 +1534,38 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
 .conv-list{max-height:48vh;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:4px}
 .conv-row{cursor:pointer}
 .conv-row input{width:17px;height:17px;accent-color:var(--blue)}
+
+/* ═══════════ DEPARTAMENTO MÉDICO (fase 8) ═══════════ */
+.med-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.med-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.med-card{padding:14px;display:flex;flex-direction:column;gap:9px}
+.med-card-head{display:flex;align-items:center;gap:10px;width:100%;padding:0;border:none;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.med-card-head:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:8px}
+.med-av{width:40px;height:40px;font-size:14px;margin:0;flex-shrink:0}
+.med-who{flex:1;min-width:0;display:flex;flex-direction:column}
+.med-who b{font-size:14.5px;color:#fff}
+.med-who small{font-size:12px;color:var(--text2)}
+.med-desc{font-size:12.5px;color:var(--text2);line-height:1.45}
+.med-line{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--text2);flex-wrap:wrap}
+.med-line b{color:#fff}
+.med-line i{color:var(--text3)}
+.med-prev{font-size:12px;color:var(--text2)}
+.med-prev.soon{color:var(--success)}
+.med-prev.late{color:var(--warning);font-weight:600}
+.med-prog .prog-bar{height:6px;margin:6px 0 4px}
+.med-prog small{font-size:11px;color:var(--text3)}
+.med-actions{display:flex;gap:8px;margin-top:2px}
+.med-actions .btn{flex:1;justify-content:center}
+.med-del{position:absolute;right:0;top:0;border:none;background:none;color:var(--text3);cursor:pointer;padding:2px 4px;border-radius:6px}
+.med-del:hover{color:var(--danger)}
+#modal-med-caso .timeline li{padding-right:28px}
+.pf-link{margin-left:auto;border:none;background:none;color:var(--blue);font:600 11px/1 inherit;font-family:inherit;letter-spacing:0;text-transform:none;cursor:pointer;padding:0}
+.pf-link:hover{text-decoration:underline}
+.med-range{display:flex;align-items:center;gap:10px}
+.med-range input{flex:1;accent-color:var(--blue)}
+.med-range b{min-width:44px;text-align:right;color:#fff;font-variant-numeric:tabular-nums}
+@media(max-width:900px){.med-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.med-kpis{gap:10px}.med-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1796,6 +1828,17 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   </div>
   <div id="ag-pend"></div>
   <div id="ag-body"></div>
+</div>
+
+<div class="page" id="page-medico">
+  <div class="page-head">
+    <div>
+      <div class="page-kicker">Equipe</div>
+      <h1 class="page-title">Departamento médico</h1>
+    </div>
+    <button class="btn btn-primary btn-sm" id="btn-add-caso" onclick="openCasoForm()" style="display:none"><i class="ti ti-plus"></i> Registrar afastamento</button>
+  </div>
+  <div id="med-body"></div>
 </div>
 
 <div class="page" id="page-treinos">
@@ -2302,6 +2345,76 @@ textarea.form-input{resize:vertical;min-height:92px;line-height:1.5}
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-med-caso">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-title"><span id="med-caso-title">Caso</span> <button class="modal-close" onclick="closeModal('modal-med-caso')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <div id="med-caso-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-med-form">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-title"><span id="mc-form-title">Registrar afastamento</span> <button class="modal-close" onclick="closeModal('modal-med-form')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <input type="hidden" id="mc-id">
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="mc-jogador">Jogador *</label><select class="form-input" id="mc-jogador"></select></div>
+      <div class="form-group"><label class="form-label" for="mc-tipo">Tipo</label><select class="form-input" id="mc-tipo"><option>Lesão</option><option>Doença</option><option>Cirurgia</option><option>Outro afastamento</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="mc-regiao">Região do corpo</label><select class="form-input" id="mc-regiao"></select></div>
+      <div class="form-group"><label class="form-label" for="mc-gravidade">Gravidade</label><select class="form-input" id="mc-gravidade"><option>Leve</option><option>Moderada</option><option>Grave</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="mc-inicio">Início do afastamento *</label><input class="form-input" id="mc-inicio" type="date"></div>
+      <div class="form-group"><label class="form-label" for="mc-previsao">Previsão de retorno</label><input class="form-input" id="mc-previsao" type="date"></div>
+    </div>
+    <div class="form-group" id="mc-fase-wrap"><label class="form-label" for="mc-fase">Fase</label><select class="form-input" id="mc-fase"><option>Em tratamento</option><option>Em recuperação</option></select></div>
+    <div class="form-group"><label class="form-label" for="mc-descricao">Descrição</label><input class="form-input" id="mc-descricao" maxlength="300" placeholder="Ex: Entorse grau 2 no tornozelo esquerdo"></div>
+    <div class="form-hint"><i class="ti ti-info-circle"></i> Ao registrar, o jogador passa a aparecer como "Lesão" e a lesão entra no histórico da ficha dele.</div>
+    <div class="alert alert-danger" id="mc-error" style="display:none;margin:10px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveCaso()"><i class="ti ti-check"></i> Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-med-form')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-med-atend">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title"><span id="ma-title">Atendimento</span> <button class="modal-close" onclick="closeModal('modal-med-atend')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="ma-data">Data *</label><input class="form-input" id="ma-data" type="date"></div>
+      <div class="form-group"><label class="form-label" for="ma-tipo">Tipo</label><select class="form-input" id="ma-tipo"><option>Avaliação</option><option>Fisioterapia</option><option>Consulta médica</option><option>Exame</option><option>Treino adaptado</option><option>Retorno</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label" for="ma-prof">Profissional</label><input class="form-input" id="ma-prof" maxlength="80" placeholder="Ex: Dra. Ana (fisioterapeuta)"></div>
+      <div class="form-group"><label class="form-label" for="ma-fase">Fase</label><select class="form-input" id="ma-fase"><option>Em tratamento</option><option>Em recuperação</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label" for="ma-prog">Recuperação</label>
+      <div class="med-range"><input type="range" id="ma-prog" min="0" max="100" step="5" oninput="document.getElementById('ma-prog-val').textContent=this.value+'%'"><b id="ma-prog-val">0%</b></div></div>
+    <div class="form-group"><label class="form-label" for="ma-nota">Anotação</label><textarea class="form-input" id="ma-nota" maxlength="600" rows="3" placeholder="Evolução, exercícios, orientações..."></textarea></div>
+    <div class="alert alert-danger" id="ma-error" style="display:none;margin:4px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveAtendimento()"><i class="ti ti-check"></i> Registrar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-med-atend')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-med-liberar">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title"><span id="ml-title">Liberar para os jogos</span> <button class="modal-close" onclick="closeModal('modal-med-liberar')" aria-label="Fechar"><i class="ti ti-x"></i></button></div>
+    <div class="form-group"><label class="form-label" for="ml-data">Data da liberação *</label><input class="form-input" id="ml-data" type="date"></div>
+    <div class="form-group"><label class="form-label" for="ml-obs">Observação</label><input class="form-input" id="ml-obs" maxlength="300" placeholder="Ex: Liberado após avaliação, sem restrições"></div>
+    <div class="form-hint"><i class="ti ti-info-circle"></i> O jogador volta a "Ativo" e pode ser convocado e escalado.</div>
+    <div class="alert alert-danger" id="ml-error" style="display:none;margin:10px 0 0"><i class="ti ti-alert-circle"></i><span></span></div>
+    <div class="modal-actions">
+      <button class="btn btn-success" onclick="saveLiberar()"><i class="ti ti-circle-check"></i> Liberar</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-med-liberar')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -2316,7 +2429,7 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // ==================== STATE ====================
 let currentUser = null;
 let token = null;
-let cache = { agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
+let cache = { medico: [], agenda: { eventos: [], convocacoes: {}, confirmacoes: {}, alteracoes: [] }, fotos: {}, jogadores: [], jogos: [], treinos: [], financeiro: { lancamentos: [], mensalidades: {} }, avisos: [], users: [], uniformes: [], pedidosTorcedor: [] };
 let _logCache = [];
 let _statsChart = null;
 
@@ -2494,6 +2607,7 @@ function buildNav() {
     ]},
     { label: 'Equipe', tabs: [
       { id:'jogadores',    label:'Jogadores',    icon:'ti-users',            roles: ALL },
+      { id:'medico',       label:'Médico',       icon:'ti-first-aid-kit',    roles: ALL },
       { id:'uniformes',    label:'Uniformes',    icon:'ti-shirt',            roles: ALL },
     ]},
     { label: 'Competição', tabs: [
@@ -2588,7 +2702,7 @@ function showPage(id) {
   const moreBtn = document.getElementById('btn-more-nav');
   if (moreBtn) moreBtn.classList.toggle('active', !!document.querySelector('.bottom-more-btn.active'));
   hideNavTip();
-  const renders = { calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
+  const renders = { medico:() => { renderMedico(); loadMedico().then(renderMedico); }, calendario:() => { renderCalendario(); loadAgenda().then(renderCalendario); }, jogadores:renderJogadores, jogos:renderJogos, treinos:renderTreinos, financeiro:renderFinanceiro, estatisticas:renderStats, comunicacao:renderAvisos, dashboard:renderDashboard, usuarios:renderUsers, uniformes:renderUniformes };
   if (renders[id]) renders[id]();
 }
 
@@ -2603,6 +2717,7 @@ async function loadAll() {
     isManager ? api('GET','pedidos-torcedor') : Promise.resolve([]),
     api('GET','jogadores?fotos=1').catch(() => ({})),
     loadAgenda(),
+    loadMedico(),
   ]);
   if (fotos && typeof fotos === 'object' && !fotos.error) cache.fotos = fotos;
   if (j) cache.jogadores = j;
@@ -3326,7 +3441,7 @@ function openPlayerDetail(id) {
         ${hist.length ? `<ul class="timeline">${hist.map(h => `<li>${h.ano ? `<small>${h.ano}</small>` : ''}${h.texto}</li>`).join('')}</ul>` : `<div class="pf-empty">Nada registrado.</div>`}
       </div>
       <div class="pf-section">
-        <div class="sec-title"><i class="ti ti-first-aid-kit"></i> Histórico de lesões</div>
+        <div class="sec-title"><i class="ti ti-first-aid-kit"></i> Histórico de lesões${(cache.medico || []).some(c => c.jogadorId === j.id) ? ` <button type="button" class="pf-link" onclick="closeModal('modal-jogador-detail');showPage('medico')">Ver no departamento médico</button>` : ''}</div>
         ${lesoes.length ? `<ul class="timeline">${lesoes.map(l => `<li class="injury${l.fim ? ' closed' : ''}"><small>${fmt(l.inicio)} → ${l.fim ? fmt(l.fim) : 'em recuperação'}</small>${l.descricao}</li>`).join('')}</ul>` : `<div class="pf-empty">Nenhuma lesão registrada.</div>`}
       </div>
     </div>
@@ -4963,6 +5078,267 @@ async function saveTreinoEdit() {
   } else toast((r && r.error) || 'Erro ao atualizar treino', 'error');
 }
 
+// ==================== DEPARTAMENTO MÉDICO (fase 8) ====================
+const MED_REGIOES = ['Tornozelo', 'Joelho', 'Coxa', 'Panturrilha', 'Pé', 'Quadril', 'Costas / lombar', 'Ombro', 'Cotovelo', 'Punho', 'Mão / dedo', 'Cabeça', 'Outro'];
+const MED_GRAV = { Leve: 'badge-green', Moderada: 'badge-orange', Grave: 'badge-red' };
+const MED_FASE = { 'Em tratamento': 'badge-red', 'Em recuperação': 'badge-orange', 'Liberado': 'badge-green' };
+let _medCaso = null;
+
+async function loadMedico() {
+  try {
+    const r = await api('GET', 'modulos?r=medico');
+    if (Array.isArray(r)) cache.medico = r;
+  } catch (e) { console.warn('medico', e); }
+}
+
+function diasEntre(a, b) {
+  const [y1, m1, d1] = a.split('-').map(Number), [y2, m2, d2] = b.split('-').map(Number);
+  return Math.round((Date.UTC(y2, m2 - 1, d2) - Date.UTC(y1, m1 - 1, d1)) / 864e5);
+}
+function medProgresso(c) {
+  const at = (c.atendimentos || []).filter(a => a.progresso !== null && a.progresso !== undefined);
+  return at.length ? at[at.length - 1].progresso : (c.status === 'Liberado' ? 100 : null);
+}
+function medJog(c) { return cache.jogadores.find(j => j.id === c.jogadorId); }
+function medNome(j) { return j ? (j.apelido || j.nome.split(' ')[0]) : 'Jogador removido'; }
+function medPrevisao(c) {
+  if (!c.previsao) return '<span class="med-prev">Sem previsão de retorno</span>';
+  const d = diasEntre(today(), c.previsao);
+  if (d < 0) return `<span class="med-prev late"><i class="ti ti-alert-triangle"></i> Previsão passou há ${-d} dia${d === -1 ? '' : 's'} (${fmt(c.previsao)})</span>`;
+  if (d === 0) return `<span class="med-prev soon">Previsão de retorno: hoje</span>`;
+  return `<span class="med-prev${d <= 7 ? ' soon' : ''}">Retorno previsto em ${d} dia${d === 1 ? '' : 's'} (${fmt(c.previsao)})</span>`;
+}
+
+function renderMedico() {
+  const el = document.getElementById('med-body');
+  if (!el) return;
+  const staff = can(['admin', 'tecnico', 'comissao', 'capitao']);
+  document.getElementById('btn-add-caso').style.display = staff ? 'inline-flex' : 'none';
+  const casos = cache.medico || [];
+  const hoje = today();
+  const abertos = casos.filter(c => c.status !== 'Liberado').sort((a, b) => (a.previsao || '9999').localeCompare(b.previsao || '9999'));
+  const fechados = casos.filter(c => c.status === 'Liberado').sort((a, b) => (b.fim || '').localeCompare(a.fim || ''));
+
+  if (!staff) {
+    // atleta: só os próprios registros
+    el.innerHTML = `
+      <div class="alert alert-info" style="margin-bottom:16px"><i class="ti ti-lock"></i><span>Aqui aparecem só os seus registros médicos. Eles são vistos apenas por você e pela comissão.</span></div>
+      ${abertos.length ? `<div class="sec-title"><i class="ti ti-first-aid-kit"></i> Em acompanhamento</div><div class="med-grid">${abertos.map(medCardHTML).join('')}</div>` : '<div class="card pf-empty" style="padding:18px;margin-bottom:18px"><i class="ti ti-circle-check" style="color:var(--success)"></i> Você não tem nenhum afastamento em aberto.</div>'}
+      ${fechados.length ? `<div class="sec-title" style="margin-top:20px"><i class="ti ti-history"></i> Histórico</div>${medHistHTML(fechados)}` : ''}`;
+    return;
+  }
+
+  const lib30 = fechados.filter(c => c.fim && diasEntre(c.fim, hoje) <= 30).length;
+  const dur = fechados.filter(c => c.fim).map(c => Math.max(0, diasEntre(c.inicio, c.fim)));
+  const media = dur.length ? Math.round(dur.reduce((s, d) => s + d, 0) / dur.length) : null;
+  const semFicha = cache.jogadores.filter(j => j.status === 'Lesão' && !abertos.some(c => c.jogadorId === j.id));
+  const tile = (lbl, val, sub, color) => `<div class="card st-tile"><div class="card-title">${lbl}</div><div class="card-value"${color ? ` style="color:${color}"` : ''}>${val}</div>${sub ? `<div class="st-sub">${sub}</div>` : ''}</div>`;
+  el.innerHTML = `
+    <div class="med-kpis">
+      ${tile('Afastados agora', abertos.length, abertos.length ? abertos.map(c => medNome(medJog(c))).slice(0, 3).join(', ') + (abertos.length > 3 ? '…' : '') : 'elenco sem afastamentos', abertos.length ? 'var(--danger)' : 'var(--success)')}
+      ${tile('Em recuperação', abertos.filter(c => c.status === 'Em recuperação').length, 'perto de voltar', 'var(--warning)')}
+      ${tile('Liberados (30 dias)', lib30, 'voltaram aos jogos')}
+      ${tile('Tempo médio afastado', media === null ? '—' : media + ' dias', dur.length ? `em ${dur.length} caso(s) encerrado(s)` : 'sem casos encerrados')}
+    </div>
+    ${semFicha.length ? `<div class="alert alert-warning" style="margin-bottom:16px"><i class="ti ti-alert-triangle"></i><span>${semFicha.map(j => `<b>${medNome(j)}</b>`).join(', ')} ${semFicha.length > 1 ? 'estão' : 'está'} como "Lesão" no cadastro, sem ficha médica.</span>${semFicha.map(j => `<button class="btn btn-ghost btn-sm" onclick="openCasoForm(null, ${j.id})">Abrir ficha de ${medNome(j)}</button>`).join('')}</div>` : ''}
+    <div class="sec-title"><i class="ti ti-first-aid-kit"></i> Afastados e em recuperação</div>
+    ${abertos.length ? `<div class="med-grid">${abertos.map(medCardHTML).join('')}</div>` : '<div class="card pf-empty" style="padding:18px;margin-bottom:18px"><i class="ti ti-circle-check" style="color:var(--success)"></i> Nenhum jogador afastado.</div>'}
+    <div class="sec-title" style="margin-top:22px"><i class="ti ti-history"></i> Histórico de casos</div>
+    ${fechados.length ? medHistHTML(fechados) : '<div class="card pf-empty" style="padding:18px">Nenhum caso encerrado ainda.</div>'}`;
+}
+
+function medCardHTML(c) {
+  const j = medJog(c), p = medProgresso(c);
+  const dias = Math.max(0, diasEntre(c.inicio, today()));
+  const ult = (c.atendimentos || []).slice(-1)[0];
+  const staff = can(['admin', 'tecnico', 'comissao', 'capitao']);
+  return `<div class="card med-card">
+    <button type="button" class="med-card-head" onclick="openCaso(${c.id})">
+      <span class="player-avatar med-av">${j ? avatarInner(j) : '?'}</span>
+      <span class="med-who"><b>${medNome(j)}</b><small>${c.tipo}${c.regiao ? ' · ' + c.regiao : ''}</small></span>
+      <span class="badge ${MED_FASE[c.status]}">${c.status}</span>
+    </button>
+    ${c.descricao ? `<div class="med-desc">${c.descricao}</div>` : ''}
+    <div class="med-line"><span><i class="ti ti-calendar"></i> Afastado há <b>${dias}</b> dia${dias === 1 ? '' : 's'} (desde ${fmt(c.inicio)})</span><span class="badge ${MED_GRAV[c.gravidade]}">${c.gravidade}</span></div>
+    <div class="med-line">${medPrevisao(c)}</div>
+    <div class="med-prog"><div class="pf-meter-top"><span>Recuperação</span><b>${p === null ? '—' : p + '%'}</b></div><div class="prog-bar"><div class="prog-fill" style="width:${p || 0}%"></div></div>
+      <small>${ult ? `Último atendimento: ${ult.tipo} em ${fmt(ult.data)}` : 'Nenhum atendimento registrado'}</small></div>
+    ${staff ? `<div class="med-actions">
+      <button class="btn btn-ghost btn-sm" onclick="openAtendimento(${c.id})"><i class="ti ti-stethoscope"></i> Atendimento</button>
+      <button class="btn btn-success btn-sm" onclick="openLiberar(${c.id})"><i class="ti ti-circle-check"></i> Liberar</button>
+    </div>` : ''}
+  </div>`;
+}
+
+function medHistHTML(lst) {
+  return `<div class="tbl-wrap"><table class="tbl tbl-stack">
+    <thead><tr><th>Jogador</th><th>Ocorrência</th><th>Gravidade</th><th>Período</th><th class="num">Dias</th><th class="num">Atend.</th><th>Liberado por</th></tr></thead>
+    <tbody>${lst.map(c => { const j = medJog(c); return `<tr style="cursor:pointer" onclick="openCaso(${c.id})">
+      <td><b>${medNome(j)}</b></td><td>${c.tipo}${c.regiao ? ' · ' + c.regiao : ''}${c.descricao ? `<div class="pf-empty">${c.descricao}</div>` : ''}</td>
+      <td><span class="badge ${MED_GRAV[c.gravidade]}">${c.gravidade}</span></td>
+      <td>${fmt(c.inicio)} a ${fmt(c.fim)}</td><td class="num">${c.fim ? Math.max(0, diasEntre(c.inicio, c.fim)) : '—'}</td>
+      <td class="num">${(c.atendimentos || []).length}</td><td>${c.liberadoPor || '—'}</td></tr>`; }).join('')}</tbody>
+  </table></div>`;
+}
+
+// ── Ficha do caso
+function openCaso(id) {
+  const c = (cache.medico || []).find(x => x.id === id);
+  if (!c) return;
+  _medCaso = id;
+  const j = medJog(c), p = medProgresso(c);
+  const staff = can(['admin', 'tecnico', 'comissao', 'capitao']);
+  const ats = (c.atendimentos || []).slice().reverse();
+  document.getElementById('med-caso-title').textContent = `${medNome(j)} · ${c.tipo}`;
+  document.getElementById('med-caso-content').innerHTML = `
+    <div class="pf-chips" style="margin:0 0 12px"><span class="badge ${MED_FASE[c.status]}">${c.status}</span><span class="badge ${MED_GRAV[c.gravidade]}">${c.gravidade}</span>${c.regiao ? `<span class="badge badge-blue">${c.regiao}</span>` : ''}</div>
+    ${c.descricao ? `<div class="ag-det-desc" style="margin:0 0 12px">${c.descricao}</div>` : ''}
+    <div class="ag-det-info">
+      <div><i class="ti ti-calendar"></i>Início: ${fmt(c.inicio)}${c.fim ? ` · Liberado em ${fmt(c.fim)} (${Math.max(0, diasEntre(c.inicio, c.fim))} dias)` : ` · ${Math.max(0, diasEntre(c.inicio, today()))} dias afastado`}</div>
+      ${c.status !== 'Liberado' ? `<div><i class="ti ti-flag"></i>${medPrevisao(c)}</div>` : ''}
+      ${c.status === 'Liberado' ? `<div><i class="ti ti-user-check"></i>Liberado por ${c.liberadoPor || '—'}${c.obsLiberacao ? ` · ${c.obsLiberacao}` : ''}</div>` : ''}
+    </div>
+    <div class="med-prog" style="margin-top:14px"><div class="pf-meter-top"><span>Recuperação</span><b>${p === null ? '—' : p + '%'}</b></div><div class="prog-bar"><div class="prog-fill" style="width:${p || 0}%"></div></div></div>
+    <div class="sec-title" style="margin-top:18px"><i class="ti ti-stethoscope"></i> Atendimentos (${ats.length})</div>
+    ${ats.length ? `<ul class="timeline">${ats.map(a => `<li><small>${fmt(a.data)} · ${a.tipo}${a.profissional ? ' · ' + a.profissional : ''}${a.progresso !== null && a.progresso !== undefined ? ` · ${a.progresso}%` : ''}</small>${a.nota || '<span class="pf-empty">Sem anotação</span>'}
+      ${staff ? `<button type="button" class="med-del" onclick="deleteAtendimento(${c.id}, ${a.id})" aria-label="Excluir atendimento"><i class="ti ti-trash"></i></button>` : ''}</li>`).join('')}</ul>` : '<div class="pf-empty">Nenhum atendimento registrado.</div>'}
+    ${staff ? `<div class="pf-actions" style="margin-top:16px">
+      ${c.status !== 'Liberado' ? `<button class="btn btn-ghost btn-sm" onclick="openAtendimento(${c.id})"><i class="ti ti-stethoscope"></i> Registrar atendimento</button>
+      <button class="btn btn-success btn-sm" onclick="openLiberar(${c.id})"><i class="ti ti-circle-check"></i> Liberar para jogos</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="openCasoForm(${c.id})"><i class="ti ti-pencil"></i> Editar</button>
+      ${can(['admin']) ? `<button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="deleteCaso(${c.id})"><i class="ti ti-trash"></i> Excluir</button>` : ''}
+    </div>` : ''}`;
+  openModal('modal-med-caso');
+}
+
+// ── Formulários
+function medShowErr(id, msg) { const e = document.getElementById(id); e.style.display = msg ? '' : 'none'; e.querySelector('span').textContent = msg || ''; }
+
+function openCasoForm(id, jogadorId) {
+  const c = id ? cache.medico.find(x => x.id === id) : null;
+  const sel = document.getElementById('mc-jogador');
+  sel.innerHTML = cache.jogadores.filter(j => j.status !== 'Inativo' || (c && c.jogadorId === j.id))
+    .sort((a, b) => (a.num || 0) - (b.num || 0)).map(j => `<option value="${j.id}">#${j.num} ${j.apelido || j.nome}</option>`).join('');
+  const reg = document.getElementById('mc-regiao');
+  reg.innerHTML = '<option value="">—</option>' + MED_REGIOES.map(r => `<option>${r}</option>`).join('');
+  const pj = jogadorId ? cache.jogadores.find(j => j.id === jogadorId) : null;
+  document.getElementById('mc-id').value = c ? c.id : '';
+  document.getElementById('mc-form-title').textContent = c ? 'Editar caso' : 'Registrar lesão / afastamento';
+  sel.value = c ? c.jogadorId : (jogadorId || sel.options[0]?.value || '');
+  sel.disabled = !!c;
+  document.getElementById('mc-tipo').value = c ? c.tipo : 'Lesão';
+  if (c && c.regiao && !MED_REGIOES.includes(c.regiao)) reg.insertAdjacentHTML('beforeend', `<option>${c.regiao}</option>`);
+  reg.value = c ? (c.regiao || '') : '';
+  document.getElementById('mc-gravidade').value = c ? c.gravidade : 'Leve';
+  document.getElementById('mc-inicio').value = c ? c.inicio : today();
+  document.getElementById('mc-previsao').value = c ? (c.previsao || '') : '';
+  document.getElementById('mc-descricao').value = c ? (c.descricao || '') : (pj && pj.obs ? pj.obs : '');
+  const fase = document.getElementById('mc-fase-wrap');
+  fase.style.display = c && c.status !== 'Liberado' ? '' : 'none';
+  if (c) document.getElementById('mc-fase').value = c.status === 'Liberado' ? 'Em recuperação' : c.status;
+  medShowErr('mc-error', '');
+  closeModal('modal-med-caso');
+  openModal('modal-med-form');
+}
+
+async function saveCaso() {
+  const id = +document.getElementById('mc-id').value || null;
+  const payload = {
+    acao: 'caso', tipo: document.getElementById('mc-tipo').value, regiao: document.getElementById('mc-regiao').value,
+    gravidade: document.getElementById('mc-gravidade').value, inicio: document.getElementById('mc-inicio').value,
+    previsao: document.getElementById('mc-previsao').value, descricao: document.getElementById('mc-descricao').value.trim(),
+  };
+  if (!payload.inicio) { medShowErr('mc-error', 'Informe a data de início.'); return; }
+  if (payload.previsao && payload.previsao < payload.inicio) { medShowErr('mc-error', 'A previsão de retorno não pode ser antes do início.'); return; }
+  if (id) { payload.id = id; if (document.getElementById('mc-fase-wrap').style.display !== 'none') payload.fase = document.getElementById('mc-fase').value; }
+  else payload.jogadorId = +document.getElementById('mc-jogador').value;
+  const r = await api(id ? 'PUT' : 'POST', 'modulos?r=medico', payload);
+  if (r && r.caso) {
+    medAplicar(r);
+    closeModal('modal-med-form');
+    toast(id ? 'Caso atualizado!' : 'Afastamento registrado. O jogador agora aparece como "Lesão".');
+    openCaso(r.caso.id);
+  } else medShowErr('mc-error', (r && r.error) || 'Erro ao salvar');
+}
+
+// Atualiza caches com a resposta do servidor
+function medAplicar(r) {
+  if (r.caso) {
+    const i = cache.medico.findIndex(x => x.id === r.caso.id);
+    if (i === -1) cache.medico.push(r.caso); else cache.medico[i] = r.caso;
+  }
+  if (r.jogador) {
+    const k = cache.jogadores.findIndex(x => x.id === r.jogador.id);
+    if (k !== -1) cache.jogadores[k] = r.jogador;
+  }
+  renderMedico(); renderJogadores(); renderDashboard();
+}
+
+function openAtendimento(id) {
+  const c = cache.medico.find(x => x.id === id);
+  if (!c) return;
+  _medCaso = id;
+  document.getElementById('ma-title').textContent = `Atendimento · ${medNome(medJog(c))}`;
+  document.getElementById('ma-data').value = today();
+  document.getElementById('ma-tipo').value = 'Fisioterapia';
+  document.getElementById('ma-prof').value = '';
+  const p = medProgresso(c);
+  document.getElementById('ma-prog').value = p === null ? 0 : p;
+  document.getElementById('ma-prog-val').textContent = (p === null ? 0 : p) + '%';
+  document.getElementById('ma-fase').value = c.status === 'Liberado' ? 'Em recuperação' : c.status;
+  document.getElementById('ma-nota').value = '';
+  medShowErr('ma-error', '');
+  closeModal('modal-med-caso');
+  openModal('modal-med-atend');
+}
+
+async function saveAtendimento() {
+  const payload = { acao: 'atendimento', casoId: _medCaso, data: document.getElementById('ma-data').value, tipo: document.getElementById('ma-tipo').value,
+    profissional: document.getElementById('ma-prof').value.trim(), progresso: +document.getElementById('ma-prog').value,
+    fase: document.getElementById('ma-fase').value, nota: document.getElementById('ma-nota').value.trim() };
+  if (!payload.data) { medShowErr('ma-error', 'Informe a data.'); return; }
+  const r = await api('POST', 'modulos?r=medico', payload);
+  if (r && r.caso) { medAplicar(r); closeModal('modal-med-atend'); toast('Atendimento registrado!'); openCaso(r.caso.id); }
+  else medShowErr('ma-error', (r && r.error) || 'Erro ao salvar');
+}
+
+function deleteAtendimento(casoId, atId) {
+  confirmAction('Excluir este atendimento?', async () => {
+    const r = await api('DELETE', 'modulos?r=medico', { acao: 'atendimento', casoId, atendimentoId: atId });
+    if (r && r.caso) { medAplicar(r); openCaso(casoId); toast('Atendimento excluído'); }
+    else toast((r && r.error) || 'Erro ao excluir', 'error');
+  }, { title: 'Excluir atendimento', label: 'Sim, excluir', icon: 'ti-trash', type: 'danger' });
+}
+
+function openLiberar(id) {
+  const c = cache.medico.find(x => x.id === id);
+  if (!c) return;
+  _medCaso = id;
+  document.getElementById('ml-title').textContent = `Liberar ${medNome(medJog(c))} para os jogos`;
+  document.getElementById('ml-data').value = today();
+  document.getElementById('ml-obs').value = '';
+  medShowErr('ml-error', '');
+  closeModal('modal-med-caso');
+  openModal('modal-med-liberar');
+}
+
+async function saveLiberar() {
+  const r = await api('PUT', 'modulos?r=medico', { acao: 'liberar', id: _medCaso, data: document.getElementById('ml-data').value, obs: document.getElementById('ml-obs').value.trim() });
+  if (r && r.caso) { medAplicar(r); closeModal('modal-med-liberar'); toast(`${medNome(medJog(r.caso))} liberado para os jogos!`); }
+  else medShowErr('ml-error', (r && r.error) || 'Erro ao liberar');
+}
+
+function deleteCaso(id) {
+  confirmAction('Excluir este caso? Use só para registros feitos por engano.', async () => {
+    const r = await api('DELETE', 'modulos?r=medico', { acao: 'caso', id });
+    if (r && r.success) {
+      cache.medico = cache.medico.filter(x => x.id !== id);
+      medAplicar({ jogador: r.jogador });
+      closeModal('modal-med-caso'); toast('Caso excluído');
+    } else toast((r && r.error) || 'Erro ao excluir', 'error');
+  }, { title: 'Excluir caso médico', label: 'Sim, excluir', icon: 'ti-trash', type: 'danger' });
+}
+
 // ==================== AVISOS ====================
 function renderAvisos() {
   const cor  = a => a.tipo==='danger'?'var(--danger)':a.tipo==='warning'?'var(--warning)':'var(--blue)';
@@ -6172,11 +6548,11 @@ function labelStackTable(tbl) {
   });
 }
 function watchStackTables() {
-  document.querySelectorAll('table.tbl-stack').forEach(tbl => {
-    labelStackTable(tbl);
-    const body = tbl.querySelector('tbody');
-    if (body) new MutationObserver(() => labelStackTable(tbl)).observe(body, { childList: true });
-  });
+  // vale também para tabelas criadas depois (páginas e janelas montadas na hora)
+  const all = () => document.querySelectorAll('table.tbl-stack').forEach(labelStackTable);
+  all();
+  let t = null;
+  new MutationObserver(() => { clearTimeout(t); t = setTimeout(all, 30); }).observe(document.body, { childList: true, subtree: true });
 }
 function startApp() { watchStackTables(); if (loadSession()) initApp(); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startApp);

@@ -7,6 +7,7 @@ const { withErrorHandling } = require('../lib/error-handler');
 
 const MODULOS = {
   agenda: () => require('../lib/mod/agenda'),
+  medico: () => require('../lib/mod/medico'),
 };
 
 module.exports = withErrorHandling(async function handler(req, res) {

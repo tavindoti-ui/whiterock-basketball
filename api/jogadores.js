@@ -2,6 +2,7 @@ const { requireAuth } = require('../lib/auth');
 const { getData, setData, logAction } = require('../lib/db');
 const cors = require('../lib/cors');
 const { withErrorHandling } = require('../lib/error-handler');
+const { trackInjury } = require('../lib/lesoes');
 
 const STAFF = ['admin', 'tecnico', 'capitao'];
 const ALL = ['admin', 'tecnico', 'comissao', 'capitao', 'atleta'];
@@ -42,20 +43,6 @@ function pickFields(body) {
   }
   if (out.status !== undefined && !STATUS_VALIDOS.includes(out.status)) throw badRequest('Status inválido.');
   return out;
-}
-
-// Mantém o histórico de lesões automaticamente quando o status muda.
-function trackInjury(prev, next) {
-  const hoje = new Date().toISOString().split('T')[0];
-  const lesoes = Array.isArray(prev.lesoes) ? prev.lesoes.map(l => ({ ...l })) : [];
-  const aberta = lesoes.find(l => !l.fim);
-  if (next.status === 'Lesão') {
-    if (!aberta) lesoes.push({ inicio: hoje, descricao: next.obs || 'Lesão', fim: null });
-    else if (next.obs && next.obs !== aberta.descricao) aberta.descricao = next.obs;
-  } else if (aberta) {
-    aberta.fim = hoje;
-  }
-  return lesoes;
 }
 
 function isOwnRecord(user, j) {
@@ -142,6 +129,14 @@ module.exports = withErrorHandling(async function handler(req, res) {
     next.lesoes = trackInjury(prev, next);
     jogadores[idx] = next;
     await setData('jogadores', jogadores);
+    // saiu de Lesão pelo cadastro: casos abertos no departamento médico são encerrados
+    if (prev.status === 'Lesão' && next.status !== 'Lesão') {
+      const casos = await getData('medico-casos') || [];
+      const hoje = new Date().toISOString().split('T')[0];
+      let mudou = false;
+      casos.forEach(c => { if (c.jogadorId === id && c.status !== 'Liberado') { c.status = 'Liberado'; c.fim = hoje; c.liberadoPor = user.nome; c.obsLiberacao = 'Situação alterada no cadastro do jogador'; mudou = true; } });
+      if (mudou) await setData('medico-casos', casos);
+    }
     await logAction(user.id, user.nome, user.role, 'Editou jogador', `${next.nome} (#${next.num})`);
     return res.json(next);
   }
